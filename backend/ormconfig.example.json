@@ -1,0 +1,15 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "nest",
+  "password": "nest",
+  "database": "nest",
+  "entities": ["dist/**/*.entity{.ts,.js}"],
+  "migrationsTableName": "custom_migration_table",
+  "migrations": ["dist/migration/*{.ts,.js}"],
+  "cli": {
+      "migrationsDir": "migration"
+  },
+  "synchronize": false
+}
