@@ -14,8 +14,8 @@ export class MessagesService {
   ) {}
 
   async create(data: NewMessageInput): Promise<Message> {
-    const message = new Message();
     const room = await this.roomsService.findOneById(data.roomId);
+    const message = new Message();
     message.room = room;
     message.body = data.body;
 

@@ -1,5 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { MaxLength } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { Length } from 'class-validator';
 
 @InputType()
 export class NewMessageInput {
@@ -7,6 +8,7 @@ export class NewMessageInput {
   roomId: number;
 
   @Field()
-  @MaxLength(255)
+  @Length(1, 255)
+  @Transform(({ value }) => value.trim())
   body: string;
 }
