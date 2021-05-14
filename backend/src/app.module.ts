@@ -25,6 +25,7 @@ import { MessagesModule } from './messages/messages.module';
       },
       uploads: false,
       validationRules: [depthLimit(3)],
+      installSubscriptionHandlers: true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     RoomsModule,

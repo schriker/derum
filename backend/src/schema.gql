@@ -40,3 +40,7 @@ input NewMessageInput {
   roomId: Int!
   body: String!
 }
+
+type Subscription {
+  messageAdded: Message!
+}
