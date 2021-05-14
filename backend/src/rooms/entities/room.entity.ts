@@ -18,12 +18,12 @@ export class Room {
   id: number;
 
   @Field()
-  @CreateDateColumn()
-  createdAt: Date;
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: string;
 
   @Field()
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: string;
 
   @Field()
   @Column()

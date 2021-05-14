@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { Args, Mutation, Resolver, Subscription } from '@nestjs/graphql';
+import { Args, Int, Mutation, Resolver, Subscription } from '@nestjs/graphql';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { NewMessageInput } from './dto/new-message.input';
 import { Message } from './entities/message.entity';
@@ -18,12 +18,22 @@ export class MessagesResolver {
     @Args('newMessageData') newMessageData: NewMessageInput,
   ): Promise<Message> {
     const message = await this.messagesService.create(newMessageData);
-    this.pubSub.publish('messageAdded', { messageAdded: message });
+    this.pubSub.publish('messageAdded', {
+      messageAdded: message,
+    });
     return message;
   }
 
-  @Subscription(() => Message)
-  messageAdded() {
+  @Subscription(() => Message, {
+    filter: (
+      payload: { messageAdded: Message },
+      variables: { roomId: number },
+    ) => {
+      return payload.messageAdded.room.id === variables.roomId;
+    },
+  })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  messageAdded(@Args('roomId', { type: () => Int }) _roomId: number) {
     return this.pubSub.asyncIterator('messageAdded');
   }
 }

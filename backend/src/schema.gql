@@ -4,20 +4,14 @@
 
 type Message {
   id: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: String!
   body: String!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type Room {
   id: Int!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: String!
+  updatedAt: String!
   name: String!
   description: String!
 }
@@ -42,5 +36,5 @@ input NewMessageInput {
 }
 
 type Subscription {
-  messageAdded: Message!
+  messageAdded(roomId: Int!): Message!
 }

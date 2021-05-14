@@ -17,12 +17,11 @@ export class Message {
   id: number;
 
   @Field()
-  @CreateDateColumn()
-  createdAt: Date;
+  @CreateDateColumn({ type: 'timestamptz' })
+  createdAt: string;
 
-  @Field()
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: string;
 
   @ManyToOne(() => Room, (room) => room.messages)
   room: Room;
