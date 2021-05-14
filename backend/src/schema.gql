@@ -2,19 +2,41 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Message {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  body: String!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
 
+type Room {
+  id: Int!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  description: String!
+}
+
 type Query {
   room(name: String!): Room!
 }
 
-type Room {
-  createdAt: DateTime!
-  description: String!
-  id: Int!
+type Mutation {
+  createRoom(newRoomData: NewRoomInput!): Room!
+  createMessage(newMessageData: NewMessageInput!): Message!
+}
+
+input NewRoomInput {
   name: String!
-  updatedAt: DateTime!
+  description: String!
+}
+
+input NewMessageInput {
+  roomId: Int!
+  body: String!
 }

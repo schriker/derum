@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import * as depthLimit from 'graphql-depth-limit';
 import { join } from 'path';
 import { RoomsModule } from './rooms/rooms.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -23,11 +24,11 @@ import { RoomsModule } from './rooms/rooms.module';
         origin: true,
       },
       uploads: false,
-      sortSchema: true,
       validationRules: [depthLimit(3)],
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
     }),
     RoomsModule,
+    MessagesModule,
   ],
 })
 export class AppModule {}

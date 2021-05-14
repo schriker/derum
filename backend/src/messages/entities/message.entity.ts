@@ -1,18 +1,17 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Message } from 'src/messages/entities/message.entity';
+import { Room } from 'src/rooms/entities/room.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @ObjectType()
-@Entity('room')
-export class Room {
+@Entity('message')
+export class Message {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;
@@ -25,15 +24,10 @@ export class Room {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Field()
-  @Column()
-  @Index({ unique: true })
-  name: string;
+  @ManyToOne(() => Room, (room) => room.messages)
+  room: Room;
 
   @Field()
   @Column()
-  description: string;
-
-  @OneToMany(() => Message, (message) => message.room)
-  messages: Message[];
+  body: string;
 }

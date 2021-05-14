@@ -1,4 +1,5 @@
-import { Resolver, Query, Args } from '@nestjs/graphql';
+import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { NewRoomInput } from './dto/new-room.input';
 import { Room } from './entities/room.entity';
 import { RoomsService } from './rooms.service';
 
@@ -8,6 +9,11 @@ export class RoomsResolver {
 
   @Query(() => Room)
   room(@Args('name') name: string): Promise<Room> {
-    return this.roomsService.findRoomByName(name);
+    return this.roomsService.findOneByName(name);
+  }
+
+  @Mutation(() => Room)
+  createRoom(@Args('newRoomData') newRoomData: NewRoomInput): Promise<Room> {
+    return this.roomsService.create(newRoomData);
   }
 }
