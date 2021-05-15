@@ -8,7 +8,6 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          {/* PWA primary color */}
           <meta name="theme-color" content={theme.palette.primary.main} />
           <link
             href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;700&display=swap"
