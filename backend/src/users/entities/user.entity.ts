@@ -24,7 +24,7 @@ export class User {
   updatedAt: string;
 
   @Field()
-  @Column()
+  @Column({ nullable: true })
   @Index({ unique: true })
   displayName: string;
 

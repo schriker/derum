@@ -1,5 +1,5 @@
 import * as FacebookTokenStrategy from 'passport-facebook-token';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { use } from 'passport';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
@@ -13,7 +13,7 @@ export class FacebookStrategy {
     this.init();
   }
 
-  init() {
+  async init() {
     use(
       new FacebookTokenStrategy(
         {
@@ -27,14 +27,21 @@ export class FacebookStrategy {
           profile: any,
           done: any,
         ) => {
-          const user = await this.usersService.loginWithAuthProvider({
-            authId: profile.id,
-            authProvider: profile.provider,
-            email: profile.emails[0].value,
-            photo: profile.photos[0].value,
-            displayName: profile.displayName,
-          });
-          return done(null, user);
+          try {
+            if (!profile.emails[0].value) {
+              throw new BadRequestException('Email is required');
+            }
+            const user = await this.usersService.loginWithAuthProvider({
+              authId: profile.id,
+              authProvider: profile.provider,
+              email: profile.emails[0].value,
+              photo: profile.photos[0].value,
+              displayName: profile.displayName,
+            });
+            return done(null, user);
+          } catch (err) {
+            return done(err, null);
+          }
         },
       ),
     );
