@@ -1,6 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { NewRoomInput } from './dto/new-room.input';
 import { Room } from './entities/room.entity';
 
@@ -27,7 +31,13 @@ export class RoomsService {
     return room;
   }
 
-  create(data: NewRoomInput): Promise<Room> {
+  async create(data: NewRoomInput): Promise<Room> {
+    const roomExists = await this.roomsRepository.find({
+      name: ILike(data.name),
+    });
+    if (roomExists.length) {
+      throw new BadRequestException(data.name);
+    }
     const room = new Room();
     room.name = data.name;
     room.description = data.description;

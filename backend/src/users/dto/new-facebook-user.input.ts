@@ -3,14 +3,12 @@ import { Transform } from 'class-transformer';
 import { Length } from 'class-validator';
 
 @InputType()
-export class NewRoomInput {
+export class NewFacebookUserInput {
   @Field()
   @Length(3, 255)
   @Transform(({ value }) => value.trim())
-  name: string;
+  displayName: string;
 
   @Field()
-  @Length(15, 255)
-  @Transform(({ value }) => value.trim())
-  description: string;
+  accessToken: string;
 }

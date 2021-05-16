@@ -23,6 +23,8 @@ type Query {
 type Mutation {
   createRoom(newRoomData: NewRoomInput!): Room!
   createMessage(newMessageData: NewMessageInput!): Message!
+  createUserWithFacebook(newUserData: NewFacebookUserInput!): Boolean!
+  loginUserWithFacebook: Boolean!
 }
 
 input NewRoomInput {
@@ -33,6 +35,11 @@ input NewRoomInput {
 input NewMessageInput {
   roomId: Int!
   body: String!
+}
+
+input NewFacebookUserInput {
+  displayName: String!
+  accessToken: String!
 }
 
 type Subscription {

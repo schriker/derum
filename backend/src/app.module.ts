@@ -6,6 +6,7 @@ import * as depthLimit from 'graphql-depth-limit';
 import { join } from 'path';
 import { RoomsModule } from './rooms/rooms.module';
 import { MessagesModule } from './messages/messages.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { MessagesModule } from './messages/messages.module';
     }),
     RoomsModule,
     MessagesModule,
+    UsersModule,
   ],
 })
 export class AppModule {}
