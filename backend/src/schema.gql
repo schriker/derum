@@ -16,15 +16,25 @@ type Room {
   description: String!
 }
 
+type User {
+  id: Int!
+  createdAt: String!
+  updatedAt: String!
+  displayName: String!
+  email: String!
+  photo: String!
+}
+
 type Query {
   room(name: String!): Room!
+  me: User!
 }
 
 type Mutation {
   createRoom(newRoomData: NewRoomInput!): Room!
   createMessage(newMessageData: NewMessageInput!): Message!
-  createUserWithFacebook(newUserData: NewFacebookUserInput!): Boolean!
-  loginUserWithFacebook: Boolean!
+  loginUserWithFacebook(access_token: String!): Boolean!
+  logout: Boolean!
 }
 
 input NewRoomInput {
@@ -35,11 +45,6 @@ input NewRoomInput {
 input NewMessageInput {
   roomId: Int!
   body: String!
-}
-
-input NewFacebookUserInput {
-  displayName: String!
-  accessToken: String!
 }
 
 type Subscription {

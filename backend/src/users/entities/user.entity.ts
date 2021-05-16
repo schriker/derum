@@ -33,6 +33,10 @@ export class User {
   @Index({ unique: true })
   email: string;
 
+  @Field()
+  @Column()
+  photo: string;
+
   @Column()
   authProvider: string;
 

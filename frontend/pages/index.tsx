@@ -4,9 +4,12 @@ import React from 'react';
 export default function Home() {
   const handleFacebookLogin = () => {
     if (window.FB) {
-      window.FB.login((response) => {
-        console.log(response);
-      });
+      window.FB.login(
+        (response) => {
+          console.log(response);
+        },
+        { scope: 'email' }
+      );
     }
   };
 
