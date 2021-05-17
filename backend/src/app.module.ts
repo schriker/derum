@@ -8,6 +8,8 @@ import { RoomsModule } from './rooms/rooms.module';
 import { MessagesModule } from './messages/messages.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { EntriesService } from './entries/entries.service';
+import { EntriesModule } from './entries/entries.module';
 
 @Module({
   imports: [
@@ -34,6 +36,8 @@ import { AuthModule } from './auth/auth.module';
     MessagesModule,
     UsersModule,
     AuthModule,
+    EntriesModule,
   ],
+  providers: [EntriesService],
 })
 export class AppModule {}

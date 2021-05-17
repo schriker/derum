@@ -1,4 +1,6 @@
+import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { NewRoomInput } from './dto/new-room.input';
@@ -15,6 +17,7 @@ export class RoomsResolver {
   }
 
   @Mutation(() => Room)
+  @UseGuards(GQLSessionGuard)
   createRoom(
     @Args('newRoomData') newRoomData: NewRoomInput,
     @CurrentUser() user: User,
