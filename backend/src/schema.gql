@@ -2,9 +2,19 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: Int!
+  createdAt: String!
+  updatedAt: String!
+  displayName: String!
+  email: String!
+  photo: String!
+}
+
 type Message {
   id: Int!
   createdAt: String!
+  author: User!
   body: String!
 }
 
@@ -14,15 +24,6 @@ type Room {
   updatedAt: String!
   name: String!
   description: String!
-}
-
-type User {
-  id: Int!
-  createdAt: String!
-  updatedAt: String!
-  displayName: String!
-  email: String!
-  photo: String!
 }
 
 type Query {
@@ -35,7 +36,7 @@ type Mutation {
   createMessage(newMessageData: NewMessageInput!): Message!
   loginUserWithFacebook(access_token: String!): Boolean!
   logout: Boolean!
-  changeUserDisplayName(displayName: String!): User!
+  changeUserDisplayName(name: String!): User!
 }
 
 input NewRoomInput {

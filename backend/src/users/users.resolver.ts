@@ -3,7 +3,7 @@ import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { FacebookAuthGuard } from 'src/auth/guards/facebook-auth.guard';
 import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
 import { CurrentUser } from './decorators/currentUser.decorator';
-import { NewDisplayName } from './dto/new-display-name';
+import { NewDisplayNameData } from './dto/new-display-name';
 import { ProviderUserInput } from './dto/provider-user.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -35,10 +35,16 @@ export class UsersResolver {
 
   @Mutation(() => User)
   @UseGuards(GQLSessionGuard)
-  changeUserDisplayName(
+  async changeUserDisplayName(
     @CurrentUser() user: User,
-    @Args() displayName: NewDisplayName,
+    @Args() displayName: NewDisplayNameData,
+    @Context() ctx,
   ): Promise<User> {
-    return this.usersService.changeDisplayName(user, displayName);
+    const savedUser = await this.usersService.changeDisplayName(
+      user,
+      displayName,
+    );
+    this.usersService.updateSession(ctx, savedUser);
+    return savedUser;
   }
 }

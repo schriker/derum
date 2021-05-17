@@ -36,7 +36,7 @@ export class RoomsService {
       name: ILike(data.name),
     });
     if (roomExists.length) {
-      throw new BadRequestException(data.name);
+      throw new BadRequestException('Room with that name already exists.');
     }
     const room = new Room();
     room.name = data.name;

@@ -1,9 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Message } from 'src/messages/entities/message.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -42,4 +44,7 @@ export class User {
 
   @Column()
   authId: string;
+
+  @OneToMany(() => Message, (message) => message.author)
+  messages: Message[];
 }

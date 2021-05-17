@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Room } from 'src/rooms/entities/room.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -22,6 +23,10 @@ export class Message {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: string;
+
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.messages)
+  author: User;
 
   @ManyToOne(() => Room, (room) => room.messages)
   room: Room;

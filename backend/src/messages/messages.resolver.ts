@@ -1,6 +1,9 @@
-import { Inject } from '@nestjs/common';
+import { Inject, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Resolver, Subscription } from '@nestjs/graphql';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
+import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
+import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
+import { User } from 'src/users/entities/user.entity';
 import { NewMessageInput } from './dto/new-message.input';
 import { Message } from './entities/message.entity';
 import { MessagesService } from './messages.service';
@@ -14,10 +17,12 @@ export class MessagesResolver {
   ) {}
 
   @Mutation(() => Message)
+  @UseGuards(GQLSessionGuard)
   async createMessage(
     @Args('newMessageData') newMessageData: NewMessageInput,
+    @CurrentUser() user: User,
   ): Promise<Message> {
-    const message = await this.messagesService.create(newMessageData);
+    const message = await this.messagesService.create(newMessageData, user);
     this.pubSub.publish('messageAdded', {
       messageAdded: message,
     });

@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { NewDisplayName } from './dto/new-display-name';
+import { NewDisplayNameData } from './dto/new-display-name';
 import { ProviderUser } from './dto/provider-user.interface';
 import { User } from './entities/user.entity';
 
@@ -11,6 +11,15 @@ export class UsersService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
+
+  findById(user: User): Promise<User> {
+    return this.usersRepository.findOne({ id: user.id });
+  }
+
+  updateSession(ctx, user: User) {
+    ctx.req.session.passport.user = user;
+    ctx.req.session.save();
+  }
 
   async checkIfDisplayNameIsTaken(displayName: string): Promise<boolean> {
     const displayNameTaken = await this.usersRepository.find({
@@ -45,14 +54,14 @@ export class UsersService {
 
   async changeDisplayName(
     user: User,
-    { displayName }: NewDisplayName,
+    { name }: NewDisplayNameData,
   ): Promise<User> {
-    const displayNameTaken = await this.checkIfDisplayNameIsTaken(displayName);
+    const displayNameTaken = await this.checkIfDisplayNameIsTaken(name);
     if (displayNameTaken)
       throw new BadRequestException('Display name is already taken.');
     return this.usersRepository.save({
       ...user,
-      displayName: displayName,
+      displayName: name,
     });
   }
 
