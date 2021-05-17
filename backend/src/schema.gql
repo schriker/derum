@@ -35,6 +35,7 @@ type Mutation {
   createMessage(newMessageData: NewMessageInput!): Message!
   loginUserWithFacebook(access_token: String!): Boolean!
   logout: Boolean!
+  changeUserDisplayName(displayName: String!): User!
 }
 
 input NewRoomInput {
