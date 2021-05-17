@@ -1,4 +1,6 @@
 import { Resolver, Query, Args, Mutation } from '@nestjs/graphql';
+import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
+import { User } from 'src/users/entities/user.entity';
 import { NewRoomInput } from './dto/new-room.input';
 import { Room } from './entities/room.entity';
 import { RoomsService } from './rooms.service';
@@ -13,7 +15,10 @@ export class RoomsResolver {
   }
 
   @Mutation(() => Room)
-  createRoom(@Args('newRoomData') newRoomData: NewRoomInput): Promise<Room> {
-    return this.roomsService.create(newRoomData);
+  createRoom(
+    @Args('newRoomData') newRoomData: NewRoomInput,
+    @CurrentUser() user: User,
+  ): Promise<Room> {
+    return this.roomsService.create(newRoomData, user);
   }
 }

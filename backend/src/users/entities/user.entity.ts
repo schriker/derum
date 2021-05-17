@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Message } from 'src/messages/entities/message.entity';
+import { Room } from 'src/rooms/entities/room.entity';
 import {
   Column,
   CreateDateColumn,
@@ -47,4 +48,7 @@ export class User {
 
   @OneToMany(() => Message, (message) => message.author)
   messages: Message[];
+
+  @OneToMany(() => Room, (room) => room.author)
+  createdRooms: Room[];
 }

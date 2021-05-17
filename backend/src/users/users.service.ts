@@ -58,7 +58,7 @@ export class UsersService {
   ): Promise<User> {
     const displayNameTaken = await this.checkIfDisplayNameIsTaken(name);
     if (displayNameTaken)
-      throw new BadRequestException('Display name is already taken.');
+      throw new BadRequestException(ERROR_MESSAGES.DISPLAY_NAME_TAKEN);
     return this.usersRepository.save({
       ...user,
       displayName: name,

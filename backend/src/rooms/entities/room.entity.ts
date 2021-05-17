@@ -1,10 +1,12 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Message } from 'src/messages/entities/message.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   Index,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -33,6 +35,10 @@ export class Room {
   @Field()
   @Column()
   description: string;
+
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.createdRooms)
+  author: User;
 
   @OneToMany(() => Message, (message) => message.room)
   messages: Message[];

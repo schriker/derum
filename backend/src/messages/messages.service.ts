@@ -23,4 +23,14 @@ export class MessagesService {
 
     return this.messagesRepository.save(message);
   }
+
+  getByRoomId(roomId: number): Promise<Message[]> {
+    return this.messagesRepository
+      .createQueryBuilder('message')
+      .where('message.roomId = :roomId', { roomId })
+      .leftJoinAndSelect('message.author', 'author')
+      .orderBy('message.createdAt', 'DESC')
+      .limit(3)
+      .getMany();
+  }
 }

@@ -29,7 +29,7 @@ export class FacebookStrategy {
         ) => {
           try {
             if (!profile.emails[0].value) {
-              throw new BadRequestException('Email is required');
+              throw new BadRequestException(ERROR_MESSAGES.EMAIL_REQUIRED);
             }
             const user = await this.usersService.loginWithAuthProvider({
               authId: profile.id,

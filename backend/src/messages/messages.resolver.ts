@@ -1,5 +1,12 @@
 import { Inject, UseGuards } from '@nestjs/common';
-import { Args, Int, Mutation, Resolver, Subscription } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Mutation,
+  Resolver,
+  Subscription,
+  Query,
+} from '@nestjs/graphql';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
@@ -27,6 +34,11 @@ export class MessagesResolver {
       messageAdded: message,
     });
     return message;
+  }
+
+  @Query(() => [Message])
+  initialMessages(@Args('roomId') roomId: number) {
+    return this.messagesService.getByRoomId(roomId);
   }
 
   @Subscription(() => Message, {
