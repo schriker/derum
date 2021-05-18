@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { ILike, Repository } from 'typeorm';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { ProviderUser } from './dto/provider-user.interface';

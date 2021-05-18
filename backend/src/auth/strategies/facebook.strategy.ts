@@ -3,6 +3,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { use } from 'passport';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
+import { ERROR_MESSAGES } from 'src/consts/error-messages';
 
 @Injectable()
 export class FacebookStrategy {

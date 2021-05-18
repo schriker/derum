@@ -9,6 +9,8 @@ type User {
   displayName: String!
   email: String!
   photo: String!
+  isAdmin: Boolean!
+  isModerator: Boolean!
 }
 
 type Message {
@@ -36,6 +38,7 @@ type Query {
 type Mutation {
   createRoom(newRoomData: NewRoomInput!): Room!
   createMessage(newMessageData: NewMessageInput!): Message!
+  deleteMessage(id: Float!): Boolean!
   loginUserWithFacebook(access_token: String!): Boolean!
   logout: Boolean!
   changeUserDisplayName(name: String!): User!
@@ -53,4 +56,5 @@ input NewMessageInput {
 
 type Subscription {
   messageAdded(roomId: Int!): Message!
+  messageDeleted(roomId: Int!): Message!
 }

@@ -51,4 +51,12 @@ export class User {
 
   @OneToMany(() => Room, (room) => room.author)
   createdRooms: Room[];
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  isAdmin: boolean;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  isModerator: boolean;
 }

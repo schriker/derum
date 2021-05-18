@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { EntriesService } from './entries/entries.service';
 import { EntriesModule } from './entries/entries.module';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { EntriesModule } from './entries/entries.module';
     UsersModule,
     AuthModule,
     EntriesModule,
+    CaslModule,
   ],
   providers: [EntriesService],
 })
