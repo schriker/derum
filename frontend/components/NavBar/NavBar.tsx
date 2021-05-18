@@ -1,8 +1,8 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
-import { ButtonIcon } from '../Buttons/ButtonIcon';
-import { ButtonPrimary } from '../Buttons/ButtonPrimary';
+import { ButtonMenu } from '../Buttons/ButtonMenu';
 import MenuIcon from '../Icons/MenuIcon';
+import LoginModal from '../Login/Login';
 import Logo from '../Logo/Logo';
 
 const NavBar = () => {
@@ -16,11 +16,11 @@ const NavBar = () => {
       pr={2}
       pl={1}
     >
-      <ButtonIcon aria-label="menu" color="secondary">
+      <ButtonMenu aria-label="menu" color="secondary">
         <MenuIcon />
-      </ButtonIcon>
+      </ButtonMenu>
       <Logo />
-      <ButtonPrimary color="primary">Zaloguj</ButtonPrimary>
+      <LoginModal />
     </Box>
   );
 };

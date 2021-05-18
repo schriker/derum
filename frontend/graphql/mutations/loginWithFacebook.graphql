@@ -1,0 +1,3 @@
+mutation LoginUserWithFacebook($access_token: String!) {
+  loginUserWithFacebook(access_token: $access_token) 
+}

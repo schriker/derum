@@ -1,11 +1,11 @@
 import { IconButton, Theme, withStyles } from '@material-ui/core';
 
-export const ButtonIcon = withStyles((theme: Theme) => ({
+export const ButtonMenu = withStyles((theme: Theme) => ({
   root: {
-    backgroundColor: theme.palette.divider,
+    textTransform: 'initial',
     color: theme.palette.text.primary,
     '&:hover': {
-      backgroundColor: theme.palette.grey['800'],
+      backgroundColor: theme.palette.divider,
     },
   },
 }))(IconButton);

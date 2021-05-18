@@ -7,17 +7,21 @@ const styles = (theme: Theme) =>
     root: {
       fontSize: 16,
       fontWeight: 700,
+      width: '100%',
+      margin: '5px 0',
       textTransform: 'initial',
       color: theme.palette.text.primary,
-      backgroundColor: styledBy('color', {
-        primary: theme.palette.primary['A700'],
-        secondary: theme.palette.secondary['800'],
+      backgroundColor: styledBy('provider', {
+        facebook: '#3B5998',
+        google: '#EA4335',
+        twitter: '#00ACEE',
       }),
       padding: '4px 16px',
       '&:hover': {
-        backgroundColor: styledBy('color', {
-          primary: theme.palette.primary['A400'],
-          secondary: theme.palette.secondary['700'],
+        backgroundColor: styledBy('provider', {
+          facebook: 'rgb(74, 109, 183)',
+          google: 'rgb(219, 87, 76)',
+          twitter: 'rgb(64, 188, 236)',
         }),
       },
     },
@@ -26,4 +30,4 @@ const styles = (theme: Theme) =>
     },
   });
 
-export const ButtonPrimary = withStyles(styles)(Button);
+export const ButtonSocialLogin = withStyles(styles)(Button);

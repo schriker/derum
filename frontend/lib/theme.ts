@@ -36,6 +36,10 @@ const theme = createMuiTheme({
   },
   typography: {
     fontFamily: ['Source Sans Pro', 'sans-serif'].join(', '),
+    h5: {
+      fontSize: 18,
+      fontWeight: 700,
+    },
   },
   shape: {
     borderRadius: 3,
