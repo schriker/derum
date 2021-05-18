@@ -9,6 +9,7 @@ import { Injectable } from '@nestjs/common';
 import { Message } from 'src/messages/entities/message.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Action } from './action.enum';
+import { FlatMessage } from './flatTypes';
 
 type Subjects = InferSubjects<typeof Message | typeof User> | 'all';
 
@@ -28,6 +29,10 @@ export class CaslAbilityFactory {
     if (user.isModerator) {
       can(Action.Manage, Message);
     }
+
+    can<FlatMessage>(Action.Manage, Message, {
+      'room.author.id': user.id,
+    });
 
     return build({
       detectSubjectType: (item) =>

@@ -30,6 +30,7 @@ export class MessagesService {
       .where('message.id = :messageId', { messageId })
       .leftJoinAndSelect('message.author', 'author')
       .leftJoinAndSelect('message.room', 'room')
+      .leftJoinAndSelect('room.author', 'roomAuthor')
       .getOne();
     if (!message) throw new NotFoundException(messageId);
     return message;
