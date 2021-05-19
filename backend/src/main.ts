@@ -15,6 +15,10 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const RedisStore = connectRedis(session);
   redisClient = new Redis(configService.get('REDIS_PORT'));
+  app.enableCors({
+    origin: configService.get('ORIGIN'),
+    credentials: true,
+  });
   app.use(
     session({
       secret: configService.get('SESSION_SECRECT'),

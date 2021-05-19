@@ -4,9 +4,40 @@ import {
   HttpLink,
   InMemoryCache,
   NormalizedCacheObject,
+  split,
 } from '@apollo/client';
 import merge from 'deepmerge';
 import isEqual from 'lodash/isEqual';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import { getMainDefinition } from '@apollo/client/utilities';
+
+const httpLink = new HttpLink({
+  uri: process.env.NEXT_PUBLIC_GRAPHQL,
+  credentials: 'include',
+});
+
+const wsLink = process.browser
+  ? new WebSocketLink({
+      uri: process.env.NEXT_PUBLIC_GRAPHQL_WS,
+      options: {
+        reconnect: true,
+      },
+    })
+  : null;
+
+const splitLink = process.browser
+  ? split(
+      ({ query }) => {
+        const definition = getMainDefinition(query);
+        return (
+          definition.kind === 'OperationDefinition' &&
+          definition.operation === 'subscription'
+        );
+      },
+      wsLink,
+      httpLink
+    )
+  : httpLink;
 
 export const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
@@ -15,10 +46,7 @@ let apolloClient;
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: new HttpLink({
-      uri: process.env.NEXT_PUBLIC_GRAPHQL,
-      credentials: 'include', // Additional fetch() options like `credentials` or `headers`
-    }),
+    link: splitLink,
     cache: new InMemoryCache(),
   });
 }

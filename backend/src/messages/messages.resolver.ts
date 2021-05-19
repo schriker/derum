@@ -27,7 +27,7 @@ export class MessagesResolver {
   ) {}
 
   @Query(() => [Message])
-  initialMessages(@Args('roomId') roomId: number) {
+  initialMessages(@Args('roomId', { type: () => Int }) roomId: number) {
     return this.messagesService.getByRoomId(roomId);
   }
 

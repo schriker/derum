@@ -31,7 +31,7 @@ type Room {
 
 type Query {
   room(name: String!): Room!
-  initialMessages(roomId: Float!): [Message!]!
+  initialMessages(roomId: Int!): [Message!]!
   me: User!
 }
 

@@ -1,0 +1,10 @@
+query Room($name: String!) {
+  room(name: $name) {
+    id
+    name
+    description
+    author {
+      ...AuthorFragment
+    }
+  }
+}

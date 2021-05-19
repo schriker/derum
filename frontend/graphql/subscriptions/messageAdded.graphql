@@ -1,0 +1,10 @@
+subscription MessageAdded($roomId: Int!) {
+  messageAdded(roomId: $roomId) {
+    id
+    body
+    createdAt
+    author {
+      ...AuthorFragment
+    }
+  }
+}

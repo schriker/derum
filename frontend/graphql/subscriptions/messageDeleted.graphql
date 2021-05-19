@@ -1,0 +1,8 @@
+subscription MessageDeleted($roomId: Int!) {
+  messageDeleted(roomId: $roomId) {
+    id
+    author {
+      ...AuthorFragment
+    }
+  }
+}

@@ -1,0 +1,10 @@
+query InitialMessages($roomId: Int!) {
+  initialMessages(roomId: $roomId) {
+    id
+    createdAt
+    author {
+      ...AuthorFragment
+    }
+    body
+  }
+}

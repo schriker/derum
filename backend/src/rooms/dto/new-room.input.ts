@@ -10,7 +10,7 @@ export class NewRoomInput {
   name: string;
 
   @Field()
-  @Length(15, 255)
+  @Length(10, 255)
   @Transform(({ value }) => value.trim())
   description: string;
 }

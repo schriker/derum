@@ -10,6 +10,7 @@ export class GQLSessionGuard implements CanActivate {
     const ctx = GqlExecutionContext.create(context);
     const request = ctx.getContext().req;
     try {
+      if (!request.session.passport) throw new UnauthorizedException();
       if (request.session.passport.user) {
         return true;
       }

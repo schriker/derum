@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ExecutionContext,
   Injectable,
   UnauthorizedException,
@@ -9,15 +10,19 @@ import { AuthGuard } from '@nestjs/passport';
 @Injectable()
 export class FacebookAuthGuard extends AuthGuard('facebook-token') {
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const ctx = GqlExecutionContext.create(context);
-    const request = ctx.getContext().req;
-    request.body = {
-      ...request.body,
-      ...ctx.getArgs(),
-    };
-    const result = (await super.canActivate(context)) as boolean;
-    await super.logIn(request);
-    return result;
+    try {
+      const ctx = GqlExecutionContext.create(context);
+      const request = ctx.getContext().req;
+      request.body = {
+        ...request.body,
+        ...ctx.getArgs(),
+      };
+      const result = (await super.canActivate(context)) as boolean;
+      await super.logIn(request);
+      return result;
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
   }
 
   getRequest(context: ExecutionContext) {

@@ -81,7 +81,7 @@ export type QueryRoomArgs = {
 
 
 export type QueryInitialMessagesArgs = {
-  roomId: Scalars['Float'];
+  roomId: Scalars['Int'];
 };
 
 export type Room = {
@@ -122,6 +122,11 @@ export type User = {
   isModerator: Scalars['Boolean'];
 };
 
+export type AuthorFragmentFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'displayName' | 'photo' | 'isAdmin' | 'isModerator'>
+);
+
 export type LoginUserWithFacebookMutationVariables = Exact<{
   access_token: Scalars['String'];
 }>;
@@ -140,6 +145,23 @@ export type LogoutMutation = (
   & Pick<Mutation, 'logout'>
 );
 
+export type InitialMessagesQueryVariables = Exact<{
+  roomId: Scalars['Int'];
+}>;
+
+
+export type InitialMessagesQuery = (
+  { __typename?: 'Query' }
+  & { initialMessages: Array<(
+    { __typename?: 'Message' }
+    & Pick<Message, 'id' | 'createdAt' | 'body'>
+    & { author: (
+      { __typename?: 'User' }
+      & AuthorFragmentFragment
+    ) }
+  )> }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -151,7 +173,66 @@ export type MeQuery = (
   ) }
 );
 
+export type RoomQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
 
+
+export type RoomQuery = (
+  { __typename?: 'Query' }
+  & { room: (
+    { __typename?: 'Room' }
+    & Pick<Room, 'id' | 'name' | 'description'>
+    & { author: (
+      { __typename?: 'User' }
+      & AuthorFragmentFragment
+    ) }
+  ) }
+);
+
+export type MessageAddedSubscriptionVariables = Exact<{
+  roomId: Scalars['Int'];
+}>;
+
+
+export type MessageAddedSubscription = (
+  { __typename?: 'Subscription' }
+  & { messageAdded: (
+    { __typename?: 'Message' }
+    & Pick<Message, 'id' | 'body' | 'createdAt'>
+    & { author: (
+      { __typename?: 'User' }
+      & AuthorFragmentFragment
+    ) }
+  ) }
+);
+
+export type MessageDeletedSubscriptionVariables = Exact<{
+  roomId: Scalars['Int'];
+}>;
+
+
+export type MessageDeletedSubscription = (
+  { __typename?: 'Subscription' }
+  & { messageDeleted: (
+    { __typename?: 'Message' }
+    & Pick<Message, 'id'>
+    & { author: (
+      { __typename?: 'User' }
+      & AuthorFragmentFragment
+    ) }
+  ) }
+);
+
+export const AuthorFragmentFragmentDoc = gql`
+    fragment AuthorFragment on User {
+  id
+  displayName
+  photo
+  isAdmin
+  isModerator
+}
+    `;
 export const LoginUserWithFacebookDocument = gql`
     mutation LoginUserWithFacebook($access_token: String!) {
   loginUserWithFacebook(access_token: $access_token)
@@ -213,6 +294,46 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const InitialMessagesDocument = gql`
+    query InitialMessages($roomId: Int!) {
+  initialMessages(roomId: $roomId) {
+    id
+    createdAt
+    author {
+      ...AuthorFragment
+    }
+    body
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+
+/**
+ * __useInitialMessagesQuery__
+ *
+ * To run a query within a React component, call `useInitialMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInitialMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInitialMessagesQuery({
+ *   variables: {
+ *      roomId: // value for 'roomId'
+ *   },
+ * });
+ */
+export function useInitialMessagesQuery(baseOptions: Apollo.QueryHookOptions<InitialMessagesQuery, InitialMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InitialMessagesQuery, InitialMessagesQueryVariables>(InitialMessagesDocument, options);
+      }
+export function useInitialMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InitialMessagesQuery, InitialMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InitialMessagesQuery, InitialMessagesQueryVariables>(InitialMessagesDocument, options);
+        }
+export type InitialMessagesQueryHookResult = ReturnType<typeof useInitialMessagesQuery>;
+export type InitialMessagesLazyQueryHookResult = ReturnType<typeof useInitialMessagesLazyQuery>;
+export type InitialMessagesQueryResult = Apollo.QueryResult<InitialMessagesQuery, InitialMessagesQueryVariables>;
 export const MeDocument = gql`
     query Me {
   me {
@@ -252,3 +373,111 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const RoomDocument = gql`
+    query Room($name: String!) {
+  room(name: $name) {
+    id
+    name
+    description
+    author {
+      ...AuthorFragment
+    }
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+
+/**
+ * __useRoomQuery__
+ *
+ * To run a query within a React component, call `useRoomQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRoomQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRoomQuery({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useRoomQuery(baseOptions: Apollo.QueryHookOptions<RoomQuery, RoomQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<RoomQuery, RoomQueryVariables>(RoomDocument, options);
+      }
+export function useRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RoomQuery, RoomQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<RoomQuery, RoomQueryVariables>(RoomDocument, options);
+        }
+export type RoomQueryHookResult = ReturnType<typeof useRoomQuery>;
+export type RoomLazyQueryHookResult = ReturnType<typeof useRoomLazyQuery>;
+export type RoomQueryResult = Apollo.QueryResult<RoomQuery, RoomQueryVariables>;
+export const MessageAddedDocument = gql`
+    subscription MessageAdded($roomId: Int!) {
+  messageAdded(roomId: $roomId) {
+    id
+    body
+    createdAt
+    author {
+      ...AuthorFragment
+    }
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+
+/**
+ * __useMessageAddedSubscription__
+ *
+ * To run a query within a React component, call `useMessageAddedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMessageAddedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMessageAddedSubscription({
+ *   variables: {
+ *      roomId: // value for 'roomId'
+ *   },
+ * });
+ */
+export function useMessageAddedSubscription(baseOptions: Apollo.SubscriptionHookOptions<MessageAddedSubscription, MessageAddedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<MessageAddedSubscription, MessageAddedSubscriptionVariables>(MessageAddedDocument, options);
+      }
+export type MessageAddedSubscriptionHookResult = ReturnType<typeof useMessageAddedSubscription>;
+export type MessageAddedSubscriptionResult = Apollo.SubscriptionResult<MessageAddedSubscription>;
+export const MessageDeletedDocument = gql`
+    subscription MessageDeleted($roomId: Int!) {
+  messageDeleted(roomId: $roomId) {
+    id
+    author {
+      ...AuthorFragment
+    }
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+
+/**
+ * __useMessageDeletedSubscription__
+ *
+ * To run a query within a React component, call `useMessageDeletedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useMessageDeletedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMessageDeletedSubscription({
+ *   variables: {
+ *      roomId: // value for 'roomId'
+ *   },
+ * });
+ */
+export function useMessageDeletedSubscription(baseOptions: Apollo.SubscriptionHookOptions<MessageDeletedSubscription, MessageDeletedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<MessageDeletedSubscription, MessageDeletedSubscriptionVariables>(MessageDeletedDocument, options);
+      }
+export type MessageDeletedSubscriptionHookResult = ReturnType<typeof useMessageDeletedSubscription>;
+export type MessageDeletedSubscriptionResult = Apollo.SubscriptionResult<MessageDeletedSubscription>;
