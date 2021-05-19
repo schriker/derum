@@ -1,5 +1,5 @@
 import { Snackbar } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import { ButtonSocialLogin } from '../Buttons/ButtonSocialLogin';
 import UserIcon from '../Icons/UserIcon';
@@ -62,7 +62,7 @@ const LoginModal = () => {
         </ButtonSocialLogin>
       </Modal>
       <ButtonPrimary
-        startIcon={<UserIcon />}
+        startIcon={<UserIcon style={{ fontSize: 16 }} />}
         onClick={handleOpen}
         color="primary"
       >

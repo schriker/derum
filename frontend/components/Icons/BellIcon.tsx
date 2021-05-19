@@ -1,7 +1,7 @@
 import { SvgIcon } from '@material-ui/core';
 import React from 'react';
 
-const MenuIcon = (props) => {
+const BellIcon = (props) => {
   return (
     <SvgIcon {...props}>
       <svg
@@ -11,10 +11,10 @@ const MenuIcon = (props) => {
         height="24"
       >
         <path fill="none" d="M0 0h24v24H0z" />
-        <path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" />
+        <path d="M20 17h2v2H2v-2h2v-7a8 8 0 1 1 16 0v7zM9 21h6v2H9v-2z" />
       </svg>
     </SvgIcon>
   );
 };
 
-export default MenuIcon;
+export default BellIcon;

@@ -1,7 +1,7 @@
 import { SvgIcon } from '@material-ui/core';
 import React from 'react';
 
-const MenuIcon = (props) => {
+const ArrowDropdown = (props) => {
   return (
     <SvgIcon {...props}>
       <svg
@@ -11,10 +11,10 @@ const MenuIcon = (props) => {
         height="24"
       >
         <path fill="none" d="M0 0h24v24H0z" />
-        <path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z" />
+        <path d="M12 15l-4.243-4.243 1.415-1.414L12 12.172l2.828-2.829 1.415 1.414z" />
       </svg>
     </SvgIcon>
   );
 };
 
-export default MenuIcon;
+export default ArrowDropdown;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   useLoginUserWithFacebookMutation,
   useMeLazyQuery,
@@ -8,28 +8,23 @@ import { ButtonSocialLogin } from '../Buttons/ButtonSocialLogin';
 import FacebookIcon from '../Icons/FacebookIcon';
 
 const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
-  const [login, { data: loginData, error: loginError }] =
-    useLoginUserWithFacebookMutation();
-  const [fetchUser, { data: userData, error: userError }] = useMeLazyQuery();
+  const hadleError = () => {
+    onLoading(false);
+    onError(true);
+  };
 
-  useEffect(() => {
-    if (loginError || userError) {
-      onLoading(false);
-      onError(true);
-    }
-  }, [loginError, userError]);
+  const [fetchUser] = useMeLazyQuery({
+    onError: hadleError,
+    onCompleted: (data) => {
+      if (data.me) onSuccess();
+    },
+  });
 
-  useEffect(() => {
-    if (loginData?.loginUserWithFacebook) {
-      fetchUser();
-    }
-  }, [loginData]);
-
-  useEffect(() => {
-    if (userData) {
-      onSuccess();
-    }
-  }, [userData]);
+  const [login] = useLoginUserWithFacebookMutation({
+    onCompleted: (data) => {
+      if (data.loginUserWithFacebook) fetchUser();
+    },
+  });
 
   const handleFacebookLogin = () => {
     onLoading(true);

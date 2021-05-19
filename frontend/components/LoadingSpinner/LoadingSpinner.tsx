@@ -9,7 +9,7 @@ const LoadingSpinner = () => {
       position="absolute"
       zIndex="999"
       borderRadius={3}
-      bgcolor="rgba(0,0,0, 0.4)"
+      bgcolor="rgba(0,0,0, 0.5)"
       width="100%"
       height="100%"
     >

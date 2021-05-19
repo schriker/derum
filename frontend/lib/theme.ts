@@ -40,6 +40,14 @@ const theme = createMuiTheme({
       fontSize: 18,
       fontWeight: 700,
     },
+    body1: {
+      fontSize: 16,
+      fontWeight: 600,
+    },
+    body2: {
+      fontSize: 16,
+      fontWeight: 400,
+    },
   },
   shape: {
     borderRadius: 3,

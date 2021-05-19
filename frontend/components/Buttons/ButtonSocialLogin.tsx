@@ -8,7 +8,7 @@ const styles = (theme: Theme) =>
       fontSize: 16,
       fontWeight: 700,
       width: '100%',
-      margin: '5px 0',
+      margin: '0 0 10px 0',
       textTransform: 'initial',
       color: theme.palette.text.primary,
       backgroundColor: styledBy('provider', {
