@@ -1,4 +1,5 @@
 import { Box } from '@material-ui/core';
+import { Skeleton } from '@material-ui/lab';
 import React, { useEffect } from 'react';
 import {
   MessageAddedDocument,
@@ -6,6 +7,7 @@ import {
   useInitialMessagesQuery,
 } from '../../generated/graphql';
 import ChatMessages from '../ChatMessages/ChatMessages';
+import ChatMessagesSkeleton from '../ChatMessages/ChatMessagesSkeleton';
 
 const Chat = ({ roomId }: { roomId: number }) => {
   const { data, subscribeToMore } = useInitialMessagesQuery({
@@ -33,8 +35,10 @@ const Chat = ({ roomId }: { roomId: number }) => {
 
   return (
     <Box width={400} display="flex" flexDirection="column">
-      {data?.initialMessages && (
+      {data?.initialMessages ? (
         <ChatMessages messages={data.initialMessages} />
+      ) : (
+        <ChatMessagesSkeleton />
       )}
       <Box height={70}>Input</Box>
     </Box>

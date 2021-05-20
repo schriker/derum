@@ -32,11 +32,15 @@ const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
     if (window.FB) {
       window.FB.login(
         (response: any) => {
-          login({
-            variables: {
-              access_token: response.authResponse.accessToken,
-            },
-          });
+          if (!response.authResponse) {
+            onLoading(false);
+          } else {
+            login({
+              variables: {
+                access_token: response.authResponse.accessToken,
+              },
+            });
+          }
         },
         { scope: 'email' }
       );

@@ -1,18 +1,13 @@
 import { Avatar } from '@material-ui/core';
 import React from 'react';
+import { AvatarProps } from '../../types/avatar';
 
-const UserAvatar = ({
-  src,
-  name,
-  color,
-}: {
-  src: string | null;
-  name: string;
-  color: string;
-}) => {
+const UserAvatar = ({ src, name, styles, onClick, className }: AvatarProps) => {
   return (
     <Avatar
-      style={{ width: 30, height: 30, backgroundColor: color }}
+      onClick={onClick}
+      className={className}
+      style={styles}
       alt={name}
       src={src ? src : null}
     >

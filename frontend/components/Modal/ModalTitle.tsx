@@ -37,6 +37,7 @@ const ModalTitle = withStyles(styles)((props: Props & DialogTitleProps) => {
         {children}
       </Typography>
       <ButtonIcon
+        color="secondary"
         size="small"
         aria-label="close"
         className={classes.closeButton}

@@ -17,17 +17,17 @@ const NavBarUser = () => {
       <UserDropdown />
       <Box display="flex">
         <Box mx="5px">
-          <ButtonIcon>
+          <ButtonIcon color="secondary">
             <BellIcon style={{ fontSize: 18 }} />
           </ButtonIcon>
         </Box>
         <Box mx="5px">
-          <ButtonIcon>
+          <ButtonIcon color="secondary">
             <UserIcon style={{ fontSize: 18 }} />
           </ButtonIcon>
         </Box>
         <Box mx="5px">
-          <ButtonIcon>
+          <ButtonIcon color="secondary">
             <SettingsIcon style={{ fontSize: 18 }} />
           </ButtonIcon>
         </Box>

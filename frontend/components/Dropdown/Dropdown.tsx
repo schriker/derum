@@ -5,7 +5,7 @@ const Dropdown = withStyles({
   paper: {},
 })((props: MenuProps) => (
   <Menu
-    elevation={5}
+    elevation={3}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: 'bottom',

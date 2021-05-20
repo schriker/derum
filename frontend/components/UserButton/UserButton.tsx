@@ -2,6 +2,7 @@ import { Avatar, Box, Button, Typography } from '@material-ui/core';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import ArrowDropdown from '../Icons/ArrowDropdownIcon';
+import UserAvatar from '../UserAvatar/UserAvatar';
 
 const UserButton = ({
   onClick,
@@ -18,9 +19,14 @@ const UserButton = ({
         aria-controls="user-menu"
         aria-haspopup="true"
       >
-        <Avatar
-          style={{ border: '3px solid #3469FF', width: 40, height: 40 }}
-          alt={data.me.displayName}
+        <UserAvatar
+          styles={{
+            border: '2px solid #FF026A',
+            width: 40,
+            height: 40,
+            backgroundColor: '#FF026A',
+          }}
+          name={data.me.displayName}
           src={data.me.photo}
         />
         <Typography style={{ marginLeft: 10 }} variant="body1">

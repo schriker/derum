@@ -52,10 +52,12 @@ const theme = createMuiTheme({
     subtitle1: {
       fontSize: 16,
       fontWeight: 600,
+      lineHeight: 1.5,
     },
     subtitle2: {
       fontSize: 14,
       fontWeight: 400,
+      lineHeight: 1,
     },
   },
   shape: {
