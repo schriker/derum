@@ -8,7 +8,7 @@ export class NewMessageInput {
   roomId: number;
 
   @Field()
-  @Length(1, 255)
+  @Length(1, 500)
   @Transform(({ value }) => value.trim())
   body: string;
 }

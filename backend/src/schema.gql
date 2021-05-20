@@ -4,26 +4,30 @@
 
 type User {
   id: Int!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
   displayName: String!
   email: String!
-  photo: String!
+  photo: String
   isAdmin: Boolean!
   isModerator: Boolean!
 }
 
+"""Date custom scalar type"""
+scalar Date
+
 type Message {
   id: Int!
-  createdAt: String!
+  createdAt: Date!
+  updatedAt: Date!
   author: User!
   body: String!
 }
 
 type Room {
   id: Int!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
   name: String!
   description: String!
   author: User!

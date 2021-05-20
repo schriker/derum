@@ -19,10 +19,11 @@ export class Message {
 
   @Field()
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: string;
+  createdAt: Date;
 
+  @Field()
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: string;
+  updatedAt: Date;
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.messages)

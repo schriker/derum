@@ -1,4 +1,4 @@
-import { Snackbar } from '@material-ui/core';
+import { Box, Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import React, { useState } from 'react';
 import Chat from '../components/Chat/Chat';
@@ -38,6 +38,7 @@ export default function Home() {
           Błąd serwera!
         </Alert>
       </Snackbar>
+      <Box flex="1 1 auto">Content</Box>
       <Chat roomId={data.room.id} />
     </Layout>
   );

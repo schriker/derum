@@ -8,22 +8,29 @@ import UserDropdown from '../UserDropdown/UserDropdown';
 
 const NavBarUser = () => {
   return (
-    <Box display="flex" alignItems="center">
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="space-between"
+      flex="1 1 auto"
+    >
       <UserDropdown />
-      <Box mx="5px">
-        <ButtonIcon>
-          <BellIcon style={{ fontSize: 18 }} />
-        </ButtonIcon>
-      </Box>
-      <Box mx="5px">
-        <ButtonIcon>
-          <UserIcon style={{ fontSize: 18 }} />
-        </ButtonIcon>
-      </Box>
-      <Box mx="5px">
-        <ButtonIcon>
-          <SettingsIcon style={{ fontSize: 18 }} />
-        </ButtonIcon>
+      <Box display="flex">
+        <Box mx="5px">
+          <ButtonIcon>
+            <BellIcon style={{ fontSize: 18 }} />
+          </ButtonIcon>
+        </Box>
+        <Box mx="5px">
+          <ButtonIcon>
+            <UserIcon style={{ fontSize: 18 }} />
+          </ButtonIcon>
+        </Box>
+        <Box mx="5px">
+          <ButtonIcon>
+            <SettingsIcon style={{ fontSize: 18 }} />
+          </ButtonIcon>
+        </Box>
       </Box>
     </Box>
   );

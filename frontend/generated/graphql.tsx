@@ -12,12 +12,14 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** `Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch. */
+  Timestamp: any;
 };
 
 export type Message = {
   __typename?: 'Message';
   id: Scalars['Int'];
-  createdAt: Scalars['String'];
+  createdAt: Scalars['Timestamp'];
   author: User;
   body: Scalars['String'];
 };
@@ -87,8 +89,8 @@ export type QueryInitialMessagesArgs = {
 export type Room = {
   __typename?: 'Room';
   id: Scalars['Int'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
+  createdAt: Scalars['Timestamp'];
+  updatedAt: Scalars['Timestamp'];
   name: Scalars['String'];
   description: Scalars['String'];
   author: User;
@@ -110,11 +112,12 @@ export type SubscriptionMessageDeletedArgs = {
   roomId: Scalars['Int'];
 };
 
+
 export type User = {
   __typename?: 'User';
   id: Scalars['Int'];
-  createdAt: Scalars['String'];
-  updatedAt: Scalars['String'];
+  createdAt: Scalars['Timestamp'];
+  updatedAt: Scalars['Timestamp'];
   displayName: Scalars['String'];
   email: Scalars['String'];
   photo: Scalars['String'];
@@ -154,7 +157,7 @@ export type InitialMessagesQuery = (
   { __typename?: 'Query' }
   & { initialMessages: Array<(
     { __typename?: 'Message' }
-    & Pick<Message, 'id' | 'createdAt' | 'body'>
+    & Pick<Message, 'id' | 'body' | 'createdAt'>
     & { author: (
       { __typename?: 'User' }
       & AuthorFragmentFragment
@@ -298,11 +301,11 @@ export const InitialMessagesDocument = gql`
     query InitialMessages($roomId: Int!) {
   initialMessages(roomId: $roomId) {
     id
+    body
     createdAt
     author {
       ...AuthorFragment
     }
-    body
   }
 }
     ${AuthorFragmentFragmentDoc}`;

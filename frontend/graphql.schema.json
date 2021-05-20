@@ -40,7 +40,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Timestamp",
                 "ofType": null
               }
             },
@@ -534,7 +534,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Timestamp",
                 "ofType": null
               }
             },
@@ -550,7 +550,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Timestamp",
                 "ofType": null
               }
             },
@@ -689,6 +689,16 @@
         "possibleTypes": null
       },
       {
+        "kind": "SCALAR",
+        "name": "Timestamp",
+        "description": "`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "User",
         "description": null,
@@ -718,7 +728,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Timestamp",
                 "ofType": null
               }
             },
@@ -734,7 +744,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "Timestamp",
                 "ofType": null
               }
             },

@@ -24,7 +24,7 @@ export class UsersService {
 
   async checkIfDisplayNameIsTaken(displayName: string): Promise<boolean> {
     const displayNameTaken = await this.usersRepository.find({
-      displayName: ILike(displayName.replace(' ', '-')),
+      displayName: ILike(displayName.replace(' ', '_')),
     });
     if (displayNameTaken.length) return true;
     return false;
@@ -41,13 +41,13 @@ export class UsersService {
     user.photo = photo;
     user.authProvider = authProvider;
     user.displayName = !displayNameTaken
-      ? `${displayName.replace(' ', '-')}`
+      ? `${displayName.replace(' ', '_')}`
       : null;
     const savedUser = await this.usersRepository.save(user);
     if (displayNameTaken) {
       return this.usersRepository.save({
         ...savedUser,
-        displayName: `${displayName.replace(' ', '-')}-${savedUser.id}`,
+        displayName: `${displayName.replace(' ', '_')}${savedUser.id}`,
       });
     }
     return savedUser;

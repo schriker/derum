@@ -13,9 +13,9 @@ const NavBar = () => {
       }}
       bgcolor="background.paper"
       display="grid"
-      height={65}
+      height={60}
       alignItems="center"
-      pr={2}
+      pr={1}
       pl={1}
     >
       <Box display="flex" alignItems="center">
@@ -29,9 +29,7 @@ const NavBar = () => {
       <Box ml={10} mr={5}>
         Wyszukiwarka
       </Box>
-      <Box mr="0" ml="auto">
-        <NavBarLogin />
-      </Box>
+      <NavBarLogin />
     </Box>
   );
 };

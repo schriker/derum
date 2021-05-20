@@ -1,3 +1,4 @@
+import Box from '@material-ui/core/Box';
 import { Skeleton } from '@material-ui/lab';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
@@ -8,14 +9,24 @@ const NavBarLogin = () => {
   const { data, loading } = useMeQuery({
     nextFetchPolicy: 'cache-only',
   });
-  return loading ? (
-    <Skeleton>
-      <LoginModal />
-    </Skeleton>
-  ) : data ? (
-    <NavBarUser />
-  ) : (
-    <LoginModal />
+  return (
+    <Box
+      mr="0"
+      ml="auto"
+      minWidth="400px"
+      display="flex"
+      justifyContent="flex-end"
+    >
+      {loading ? (
+        <Skeleton>
+          <LoginModal />
+        </Skeleton>
+      ) : data ? (
+        <NavBarUser />
+      ) : (
+        <LoginModal />
+      )}
+    </Box>
   );
 };
 

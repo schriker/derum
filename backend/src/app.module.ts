@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { EntriesService } from './entries/entries.service';
 import { EntriesModule } from './entries/entries.module';
 import { CaslModule } from './casl/casl.module';
+import { DateScalar } from './scalars/date.scalar';
 
 @Module({
   imports: [
@@ -40,6 +41,6 @@ import { CaslModule } from './casl/casl.module';
     EntriesModule,
     CaslModule,
   ],
-  providers: [EntriesService],
+  providers: [EntriesService, DateScalar],
 })
 export class AppModule {}

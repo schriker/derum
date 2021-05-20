@@ -1,14 +1,19 @@
+import { Box } from '@material-ui/core';
 import { LayoutProps } from '../../types/layout';
 import Header from '../Header/Header';
 import NavBar from '../NavBar/NavBar';
+import Sidebar from '../Sidebar/SIdebar';
 
 const Layout = ({ children, ...rest }: LayoutProps) => {
   return (
-    <div>
+    <>
       <Header {...rest} />
       <NavBar />
-      {children}
-    </div>
+      <Box display="flex" alignItems="stretch" height="calc(100% - 60px)">
+        <Sidebar />
+        {children}
+      </Box>
+    </>
   );
 };
 

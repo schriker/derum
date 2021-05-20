@@ -20,11 +20,11 @@ export class User {
 
   @Field()
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: string;
+  createdAt: Date;
 
   @Field()
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: string;
+  updatedAt: Date;
 
   @Field()
   @Column({ nullable: true })
@@ -36,8 +36,8 @@ export class User {
   @Index({ unique: true })
   email: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   photo: string;
 
   @Column()

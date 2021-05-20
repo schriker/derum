@@ -1,10 +1,10 @@
 query InitialMessages($roomId: Int!) {
   initialMessages(roomId: $roomId) {
     id
+    body
     createdAt
     author {
       ...AuthorFragment
     }
-    body
   }
 }

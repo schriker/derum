@@ -62,6 +62,7 @@ const LoginModal = () => {
         </ButtonSocialLogin>
       </Modal>
       <ButtonPrimary
+        style={{ marginRight: 8 }}
         startIcon={<UserIcon style={{ fontSize: 16 }} />}
         onClick={handleOpen}
         color="primary"

@@ -21,11 +21,11 @@ export class Room {
 
   @Field()
   @CreateDateColumn({ type: 'timestamptz' })
-  createdAt: string;
+  createdAt: Date;
 
   @Field()
   @UpdateDateColumn({ type: 'timestamptz' })
-  updatedAt: string;
+  updatedAt: Date;
 
   @Field()
   @Column()
