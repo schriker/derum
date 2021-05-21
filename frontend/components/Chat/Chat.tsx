@@ -41,7 +41,7 @@ const Chat = ({ roomId }: { roomId: number }) => {
       ) : (
         <ChatMessagesSkeleton />
       )}
-      <ChatInput />
+      <ChatInput roomId={roomId} />
     </Box>
   );
 };

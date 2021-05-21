@@ -1,0 +1,5 @@
+mutation CreateMessage($roomId: Int!, $body: String!) {
+  createMessage(newMessageData: { roomId: $roomId, body: $body }) {
+    id
+  }
+}

@@ -11,6 +11,16 @@
     },
     "types": [
       {
+        "kind": "SCALAR",
+        "name": "Date",
+        "description": "Date custom scalar type",
+        "fields": null,
+        "inputFields": null,
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "OBJECT",
         "name": "Message",
         "description": null,
@@ -40,7 +50,23 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Timestamp",
+                "name": "Date",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updatedAt",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Date",
                 "ofType": null
               }
             },
@@ -534,7 +560,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Timestamp",
+                "name": "Date",
                 "ofType": null
               }
             },
@@ -550,7 +576,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Timestamp",
+                "name": "Date",
                 "ofType": null
               }
             },
@@ -689,16 +715,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "SCALAR",
-        "name": "Timestamp",
-        "description": "`Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch.",
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
         "kind": "OBJECT",
         "name": "User",
         "description": null,
@@ -728,7 +744,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Timestamp",
+                "name": "Date",
                 "ofType": null
               }
             },
@@ -744,7 +760,7 @@
               "name": null,
               "ofType": {
                 "kind": "SCALAR",
-                "name": "Timestamp",
+                "name": "Date",
                 "ofType": null
               }
             },
@@ -788,13 +804,9 @@
             "description": null,
             "args": [],
             "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              }
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
             },
             "isDeprecated": false,
             "deprecationReason": null

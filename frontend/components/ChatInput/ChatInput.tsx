@@ -1,50 +1,85 @@
 import { Box, InputAdornment } from '@material-ui/core';
 import React from 'react';
 import { openModalVar } from '../../lib/apolloVars';
-import { useMeQuery } from '../../generated/graphql';
+import { useCreateMessageMutation, useMeQuery } from '../../generated/graphql';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import { CustomInput } from '../CustomInput/CustomInput';
 import EmoticonsIcon from '../Icons/EmoticonsIcon';
 import SendIcon from '../Icons/SendIcon';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { ChatInputs } from '../../types/chatInputs';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
-const ChatInput = () => {
+const schema = yup.object().shape({
+  body: yup.string().trim().required(),
+});
+
+const ChatInput = ({ roomId }: { roomId: number }) => {
+  const { control, handleSubmit, reset } = useForm<ChatInputs>({
+    resolver: yupResolver(schema),
+  });
   const { data } = useMeQuery({
     nextFetchPolicy: 'cache-only',
   });
+  const [sendNewMessage] = useCreateMessageMutation({
+    onCompleted: () => reset({ body: '' }),
+  });
 
-  const handleSendMessage = () => {
+  const onSubmit: SubmitHandler<ChatInputs> = (inputData) => {
     if (!data) {
       openModalVar(true);
+    } else {
+      sendNewMessage({
+        variables: {
+          body: inputData.body,
+          roomId: roomId,
+        },
+      });
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.which === 13) {
+      event.preventDefault();
+      handleSubmit(onSubmit)();
     }
   };
 
   return (
-    <Box
-      minHeight={70}
-      py={2}
-      display="flex"
-      alignItems="center"
-      flex="1 1 auto"
-    >
-      <Box flex="1 0 auto">
-        <CustomInput
-          inputProps={{ maxLength: 500 }}
-          placeholder="Wiadomość"
-          endAdornment={
-            <InputAdornment position="end">
-              <ButtonIcon color="secondary" size="small">
-                <EmoticonsIcon style={{ fontSize: 24 }} />
-              </ButtonIcon>
-            </InputAdornment>
-          }
-        />
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Box minHeight={70} py={2} display="flex" flex="1 0 auto">
+        <Box flex="1 0 auto">
+          <Controller
+            name="body"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <CustomInput
+                inputProps={{ maxLength: 500 }}
+                multiline
+                rowsMax={15}
+                placeholder="Wiadomość"
+                endAdornment={
+                  <InputAdornment position="end">
+                    <ButtonIcon color="secondary" size="small">
+                      <EmoticonsIcon style={{ fontSize: 24 }} />
+                    </ButtonIcon>
+                  </InputAdornment>
+                }
+                {...field}
+                onKeyDown={handleKeyDown}
+              />
+            )}
+          />
+        </Box>
+        <Box mx={1}>
+          <ButtonIcon color="primary" type="submit">
+            <SendIcon style={{ fontSize: 16 }} />
+          </ButtonIcon>
+        </Box>
       </Box>
-      <Box mx={1}>
-        <ButtonIcon color="primary" onClick={handleSendMessage}>
-          <SendIcon style={{ fontSize: 16 }} />
-        </ButtonIcon>
-      </Box>
-    </Box>
+    </form>
   );
 };
 

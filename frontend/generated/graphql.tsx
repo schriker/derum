@@ -12,14 +12,16 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** `Date` type as integer. Type represents date and time as number of milliseconds from start of UNIX epoch. */
-  Timestamp: any;
+  /** Date custom scalar type */
+  Date: any;
 };
+
 
 export type Message = {
   __typename?: 'Message';
   id: Scalars['Int'];
-  createdAt: Scalars['Timestamp'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
   author: User;
   body: Scalars['String'];
 };
@@ -89,8 +91,8 @@ export type QueryInitialMessagesArgs = {
 export type Room = {
   __typename?: 'Room';
   id: Scalars['Int'];
-  createdAt: Scalars['Timestamp'];
-  updatedAt: Scalars['Timestamp'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
   name: Scalars['String'];
   description: Scalars['String'];
   author: User;
@@ -112,15 +114,14 @@ export type SubscriptionMessageDeletedArgs = {
   roomId: Scalars['Int'];
 };
 
-
 export type User = {
   __typename?: 'User';
   id: Scalars['Int'];
-  createdAt: Scalars['Timestamp'];
-  updatedAt: Scalars['Timestamp'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
   displayName: Scalars['String'];
   email: Scalars['String'];
-  photo: Scalars['String'];
+  photo?: Maybe<Scalars['String']>;
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
 };
@@ -128,6 +129,20 @@ export type User = {
 export type AuthorFragmentFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'displayName' | 'photo' | 'isAdmin' | 'isModerator'>
+);
+
+export type CreateMessageMutationVariables = Exact<{
+  roomId: Scalars['Int'];
+  body: Scalars['String'];
+}>;
+
+
+export type CreateMessageMutation = (
+  { __typename?: 'Mutation' }
+  & { createMessage: (
+    { __typename?: 'Message' }
+    & Pick<Message, 'id'>
+  ) }
 );
 
 export type LoginUserWithFacebookMutationVariables = Exact<{
@@ -236,6 +251,40 @@ export const AuthorFragmentFragmentDoc = gql`
   isModerator
 }
     `;
+export const CreateMessageDocument = gql`
+    mutation CreateMessage($roomId: Int!, $body: String!) {
+  createMessage(newMessageData: {roomId: $roomId, body: $body}) {
+    id
+  }
+}
+    `;
+export type CreateMessageMutationFn = Apollo.MutationFunction<CreateMessageMutation, CreateMessageMutationVariables>;
+
+/**
+ * __useCreateMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createMessageMutation, { data, loading, error }] = useCreateMessageMutation({
+ *   variables: {
+ *      roomId: // value for 'roomId'
+ *      body: // value for 'body'
+ *   },
+ * });
+ */
+export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateMessageMutation, CreateMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMessageMutation, CreateMessageMutationVariables>(CreateMessageDocument, options);
+      }
+export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
+export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
+export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
 export const LoginUserWithFacebookDocument = gql`
     mutation LoginUserWithFacebook($access_token: String!) {
   loginUserWithFacebook(access_token: $access_token)

@@ -4,7 +4,7 @@ export const CustomInput = withStyles((theme: Theme) => ({
   root: {
     width: '100%',
     border: '2px solid',
-    padding: '3px 15px 3px 15px',
+    padding: '3px 15px',
     borderColor: 'transparent',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.background.paper,
@@ -12,13 +12,10 @@ export const CustomInput = withStyles((theme: Theme) => ({
     'label + &': {
       marginTop: theme.spacing(3),
     },
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1),
-      width: '25ch',
-    },
   },
   multiline: {
-    padding: '3px 20px',
+    padding: '9px 15px',
+    wordBreak: 'break-all',
   },
   focused: {
     borderColor: theme.palette.primary['A700'],

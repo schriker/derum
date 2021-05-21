@@ -10,11 +10,11 @@ const Layout = ({ children, ...rest }: LayoutProps) => {
     <>
       <Header {...rest} />
       <NavBar />
-      <LoginModal />
       <Box display="flex" alignItems="stretch" height="calc(100% - 60px)">
         <Sidebar />
         {children}
       </Box>
+      <LoginModal />
     </>
   );
 };
