@@ -9,7 +9,7 @@ const NavBar = () => {
   return (
     <Box
       style={{
-        gridTemplateColumns: 'auto auto 1fr',
+        gridTemplateColumns: 'auto 2fr 1fr',
       }}
       bgcolor="background.paper"
       display="grid"
@@ -22,13 +22,11 @@ const NavBar = () => {
         <ButtonMenu aria-label="menu" color="secondary">
           <MenuIcon />
         </ButtonMenu>
-        <Box ml={2}>
+        {/* <Box ml={2}>
           <Logo />
-        </Box>
+        </Box> */}
       </Box>
-      <Box ml={10} mr={5}>
-        Wyszukiwarka
-      </Box>
+      <Box justifySelf="center">Wyszukiwarka</Box>
       <NavBarLogin />
     </Box>
   );

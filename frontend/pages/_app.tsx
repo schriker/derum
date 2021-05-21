@@ -6,6 +6,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../lib/theme';
 import useFacebookSDK from '../hooks/useFacebookSDK';
+import '../css/ScrollBar.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useFacebookSDK();

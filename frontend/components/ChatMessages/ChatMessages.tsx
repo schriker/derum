@@ -2,7 +2,6 @@ import { Box } from '@material-ui/core';
 import React from 'react';
 import { InitialMessagesQuery } from '../../generated/graphql';
 import ChatMessagesItem from './ChatMessagesItem';
-import styles from './ChatMessages.module.css';
 
 const ChatMessages = ({
   messages,
@@ -11,7 +10,7 @@ const ChatMessages = ({
 }) => {
   return (
     <Box
-      className={styles.scrollbar}
+      className="scrollbar"
       flex="1 1 auto"
       overflow="auto"
       flexDirection="column-reverse"

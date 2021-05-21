@@ -10,13 +10,7 @@ const NavBarLogin = () => {
     nextFetchPolicy: 'cache-only',
   });
   return (
-    <Box
-      mr="0"
-      ml="auto"
-      minWidth="400px"
-      display="flex"
-      justifyContent="flex-end"
-    >
+    <Box justifySelf="end" display="flex" justifyContent="flex-end">
       {loading ? (
         <Skeleton>
           <LoginModal />

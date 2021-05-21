@@ -4,6 +4,7 @@ import { ButtonIcon } from '../Buttons/ButtonIcon';
 import BellIcon from '../Icons/BellIcon';
 import SettingsIcon from '../Icons/SettingsIcon';
 import UserIcon from '../Icons/UserIcon';
+import DarkTooltip from '../Tooltip/Tooltip';
 import UserDropdown from '../UserDropdown/UserDropdown';
 
 const NavBarUser = () => {
@@ -17,19 +18,25 @@ const NavBarUser = () => {
       <UserDropdown />
       <Box display="flex">
         <Box mx="5px">
-          <ButtonIcon color="secondary">
-            <BellIcon style={{ fontSize: 18 }} />
-          </ButtonIcon>
+          <DarkTooltip title="Powiadomienia" enterDelay={500}>
+            <ButtonIcon color="secondary">
+              <BellIcon style={{ fontSize: 18 }} />
+            </ButtonIcon>
+          </DarkTooltip>
         </Box>
         <Box mx="5px">
-          <ButtonIcon color="secondary">
-            <UserIcon style={{ fontSize: 18 }} />
-          </ButtonIcon>
+          <DarkTooltip title="Użytkownicy online" enterDelay={500}>
+            <ButtonIcon color="secondary">
+              <UserIcon style={{ fontSize: 18 }} />
+            </ButtonIcon>
+          </DarkTooltip>
         </Box>
         <Box mx="5px">
-          <ButtonIcon color="secondary">
-            <SettingsIcon style={{ fontSize: 18 }} />
-          </ButtonIcon>
+          <DarkTooltip title="Ustawienia" enterDelay={500}>
+            <ButtonIcon color="secondary">
+              <SettingsIcon style={{ fontSize: 18 }} />
+            </ButtonIcon>
+          </DarkTooltip>
         </Box>
       </Box>
     </Box>

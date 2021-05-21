@@ -11,7 +11,7 @@ const UserButton = ({
 }) => {
   const { data } = useMeQuery();
 
-  return (
+  return data ? (
     <Box display="flex" alignItems="center">
       <Button
         style={{ textTransform: 'none' }}
@@ -35,7 +35,7 @@ const UserButton = ({
         <ArrowDropdown style={{ fontSize: 22, marginLeft: 3, paddingTop: 3 }} />
       </Button>
     </Box>
-  );
+  ) : null;
 };
 
 export default UserButton;
