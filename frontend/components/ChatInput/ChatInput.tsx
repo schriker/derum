@@ -1,6 +1,6 @@
 import { Box, InputAdornment } from '@material-ui/core';
 import React from 'react';
-import { openModalVar } from '../../lib/apolloVars';
+import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
 import { useCreateMessageMutation, useMeQuery } from '../../generated/graphql';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import { CustomInput } from '../CustomInput/CustomInput';
@@ -24,6 +24,7 @@ const ChatInput = ({ roomId }: { roomId: number }) => {
   });
   const [sendNewMessage] = useCreateMessageMutation({
     onCompleted: () => reset({ body: '' }),
+    onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
   });
 
   const onSubmit: SubmitHandler<ChatInputs> = (inputData) => {

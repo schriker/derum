@@ -1,5 +1,6 @@
 import { Box } from '@material-ui/core';
 import { LayoutProps } from '../../types/layout';
+import GlobalError from '../GlobalError/GlobalError';
 import Header from '../Header/Header';
 import LoginModal from '../LoginModal/LoginModal';
 import NavBar from '../NavBar/NavBar';
@@ -15,6 +16,7 @@ const Layout = ({ children, ...rest }: LayoutProps) => {
         {children}
       </Box>
       <LoginModal />
+      <GlobalError />
     </>
   );
 };

@@ -1,7 +1,7 @@
-import { Box, ListItemText, Snackbar } from '@material-ui/core';
-import { Alert } from '@material-ui/lab';
-import React, { useState } from 'react';
+import { Box, ListItemText } from '@material-ui/core';
+import React from 'react';
 import { useLogoutMutation } from '../../generated/graphql';
+import { globalErrorVar } from '../../lib/apolloVars';
 import Dropdown from '../Dropdown/Dropdown';
 import DropdownIcon from '../Dropdown/DropdownIcon';
 import DropdownItem from '../Dropdown/DropdownItem';
@@ -14,10 +14,9 @@ import UserIcon from '../Icons/UserIcon';
 import UserButton from '../UserButton/UserButton';
 
 const UserDropdown = () => {
-  const [error, setError] = useState(false);
   const [logout] = useLogoutMutation({
     onError: () => {
-      setError(true);
+      globalErrorVar({ isOpen: true, message: 'Błąd serwera!' });
     },
     update(cache, { data: { logout } }) {
       if (logout) {
@@ -76,19 +75,6 @@ const UserDropdown = () => {
 
   return (
     <Box mr={2}>
-      <Snackbar
-        open={error}
-        autoHideDuration={6000}
-        onClose={() => setError(false)}
-      >
-        <Alert
-          onClose={() => setError(false)}
-          severity="error"
-          variant="filled"
-        >
-          Błąd serwera!
-        </Alert>
-      </Snackbar>
       <UserButton onClick={handleClick} />
       <Dropdown
         id="user-menu"
