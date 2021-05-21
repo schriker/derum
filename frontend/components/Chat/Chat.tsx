@@ -6,6 +6,7 @@ import {
   MessageAddedSubscription,
   useInitialMessagesQuery,
 } from '../../generated/graphql';
+import ChatInput from '../ChatInput/ChatInput';
 import ChatMessages from '../ChatMessages/ChatMessages';
 import ChatMessagesSkeleton from '../ChatMessages/ChatMessagesSkeleton';
 
@@ -40,7 +41,7 @@ const Chat = ({ roomId }: { roomId: number }) => {
       ) : (
         <ChatMessagesSkeleton />
       )}
-      <Box height={70}>Input</Box>
+      <ChatInput />
     </Box>
   );
 };

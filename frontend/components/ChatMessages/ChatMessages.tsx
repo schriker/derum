@@ -16,7 +16,7 @@ const ChatMessages = ({
       flexDirection="column-reverse"
       display="flex"
       pr="5px"
-      maxHeight="calc(100% - 70px)"
+      height="100%"
     >
       {messages.map((message) => (
         <ChatMessagesItem message={message} key={message.id} />

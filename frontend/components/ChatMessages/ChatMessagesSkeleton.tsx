@@ -4,13 +4,7 @@ import React from 'react';
 
 const ChatMessagesSkeleton = () => {
   return (
-    <Box
-      flex="1 1 auto"
-      overflow="auto"
-      pr={2}
-      pt={2}
-      maxHeight="calc(100% - 70px)"
-    >
+    <Box flex="1 1 auto" overflow="auto" pr={2} pt={2} height="100%">
       <Skeleton height={30} />
       <Skeleton height={30} width="80%" />
       <Skeleton height={30} />
