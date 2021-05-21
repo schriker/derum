@@ -1,44 +1,22 @@
-import { Box, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { useState } from 'react';
 import { ChatMessagesItemProps } from '../../types/messages';
 import UserAvatar from '../UserAvatar/UserAvatar';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  avatar: {
-    cursor: 'pointer',
-    transition: theme.transitions.create('opacity'),
-    '&:hover': {
-      opacity: 0.75,
-    },
-  },
-  wrapper: {
-    display: 'flex',
-    wordBreak: 'break-word',
-    transition: theme.transitions.create('background-color'),
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(1),
-    borderRadius: '3px',
-    marginTop: '2px',
-    '&:hover': {
-      backgroundColor: theme.palette.divider,
-    },
-  },
-  userName: (props: any) => ({
-    color: props.userColor,
-    marginRight: '5px',
-    '&:hover': {
-      cursor: 'pointer',
-      textDecoration: 'underline',
-    },
-  }),
-}));
+import ChatMessageActions from './ChatMessageActions';
+import useChatMessageItemStyles from './ChatMessageItemStyles';
 
 const ChatMessagesItem = ({ message }: ChatMessagesItemProps) => {
-  const classes = useStyles({ userColor: '#FF026A' });
+  const [showActions, setShowActions] = useState(false);
+  const classes = useChatMessageItemStyles({ userColor: '#FF026A' });
 
   return (
-    <Box className={classes.wrapper}>
+    <Box
+      className={classes.wrapper}
+      onClick={() => setShowActions((prevState) => !prevState)}
+      onMouseLeave={() => setShowActions(false)}
+    >
+      {showActions && <ChatMessageActions messageId={message.id} />}
       <Box mr={1}>
         <UserAvatar
           styles={{

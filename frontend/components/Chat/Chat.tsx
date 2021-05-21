@@ -1,9 +1,10 @@
 import { Box } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
 import React, { useEffect } from 'react';
 import {
   MessageAddedDocument,
   MessageAddedSubscription,
+  MessageDeletedDocument,
+  MessageDeletedSubscription,
   useInitialMessagesQuery,
 } from '../../generated/graphql';
 import ChatInput from '../ChatInput/ChatInput';
@@ -27,8 +28,30 @@ const Chat = ({ roomId }: { roomId: number }) => {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const newMessage = subscriptionData.data.messageAdded;
+        const prevMessages = [...prev.initialMessages];
         return Object.assign({}, prev, {
-          initialMessages: [newMessage, ...prev.initialMessages],
+          initialMessages: [newMessage, ...prevMessages.slice(0, -1)],
+        });
+      },
+    });
+
+    subscribeToMore<MessageDeletedSubscription>({
+      document: MessageDeletedDocument,
+      variables: {
+        roomId: roomId,
+      },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
+        const {
+          data: {
+            messageDeleted: { id },
+          },
+        } = subscriptionData;
+        const messages = prev.initialMessages.filter(
+          (message) => message.id !== id
+        );
+        return Object.assign({}, prev, {
+          initialMessages: messages,
         });
       },
     });

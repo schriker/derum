@@ -14,3 +14,7 @@ export type ChatMessagesItemProps = {
         >;
     };
 };
+
+export type MessageActionProps = {
+  messageId: number;
+};

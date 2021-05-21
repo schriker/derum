@@ -59,7 +59,7 @@ const ChatInput = ({ roomId }: { roomId: number }) => {
               <CustomInput
                 inputProps={{ maxLength: 500 }}
                 multiline
-                rowsMax={15}
+                rowsMax={20}
                 placeholder="Wiadomość"
                 endAdornment={
                   <InputAdornment position="end">

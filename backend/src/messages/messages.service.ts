@@ -42,7 +42,7 @@ export class MessagesService {
       .where('message.roomId = :roomId', { roomId })
       .leftJoinAndSelect('message.author', 'author')
       .orderBy('message.createdAt', 'DESC')
-      .limit(100)
+      .limit(150)
       .getMany();
   }
 

@@ -22,8 +22,8 @@ export class UsersResolver {
 
   @Query(() => User)
   @UseGuards(GQLSessionGuard)
-  me(@CurrentUser() user: User): User {
-    return user;
+  me(@CurrentUser() user: User): Promise<User> {
+    return this.usersService.findById(user);
   }
 
   @Mutation(() => Boolean)

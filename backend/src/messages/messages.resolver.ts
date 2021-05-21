@@ -74,7 +74,7 @@ export class MessagesResolver {
   @UseGuards(GQLSessionGuard)
   async deleteMessage(
     @CurrentUser() user: User,
-    @Args('id') id: number,
+    @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {
     const ability = this.caslAbilityFactory.createForUser(user);
     const message = await this.messagesService.getById(id);
