@@ -24,6 +24,7 @@ const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
     onCompleted: (data) => {
       if (data.loginUserWithFacebook) fetchUser();
     },
+    onError: hadleError,
   });
 
   const handleFacebookLogin = () => {

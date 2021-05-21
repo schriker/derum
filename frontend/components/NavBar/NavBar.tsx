@@ -2,7 +2,6 @@ import { Box } from '@material-ui/core';
 import React from 'react';
 import { ButtonMenu } from '../Buttons/ButtonMenu';
 import MenuIcon from '../Icons/MenuIcon';
-import Logo from '../Logo/Logo';
 import NavBarLogin from '../NavBarLogin/NavBarLogin';
 
 const NavBar = () => {
@@ -22,9 +21,6 @@ const NavBar = () => {
         <ButtonMenu aria-label="menu" color="secondary">
           <MenuIcon />
         </ButtonMenu>
-        {/* <Box ml={2}>
-          <Logo />
-        </Box> */}
       </Box>
       <Box justifySelf="center">Wyszukiwarka</Box>
       <NavBarLogin />

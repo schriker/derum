@@ -1,4 +1,4 @@
-import { withStyles, Theme, fade, InputBase } from '@material-ui/core';
+import { withStyles, Theme, InputBase } from '@material-ui/core';
 
 export const CustomInput = withStyles((theme: Theme) => ({
   root: {

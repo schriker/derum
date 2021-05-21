@@ -58,6 +58,7 @@ const ChatMessagesItem = ({ message }: ChatMessagesItemProps) => {
             variant="subtitle1"
             component="span"
             className={classes.userName}
+            onClick={() => console.log(message.author.id)}
           >
             {message.author.displayName}
           </Typography>

@@ -2,7 +2,7 @@ import Box from '@material-ui/core/Box';
 import { Skeleton } from '@material-ui/lab';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
-import LoginModal from '../LoginModal/LoginModal';
+import LoginButton from '../LoginButton/LoginButton';
 import NavBarUser from '../NavBarUser/NavBarUser';
 
 const NavBarLogin = () => {
@@ -13,12 +13,12 @@ const NavBarLogin = () => {
     <Box justifySelf="end" display="flex" justifyContent="flex-end">
       {loading ? (
         <Skeleton>
-          <LoginModal />
+          <LoginButton />
         </Skeleton>
       ) : data ? (
         <NavBarUser />
       ) : (
-        <LoginModal />
+        <LoginButton />
       )}
     </Box>
   );

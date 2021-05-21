@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Typography } from '@material-ui/core';
+import { Box, Button, Typography } from '@material-ui/core';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import ArrowDropdown from '../Icons/ArrowDropdownIcon';

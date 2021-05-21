@@ -4,9 +4,10 @@ import { ModalProps } from '../../types/modal';
 import ModalContent from './ModalContent';
 import ModalTitle from './ModalTitle';
 
-const Modal = ({ children, title, isOpen, close }: ModalProps) => {
+const Modal = ({ children, title, isOpen, close, exited }: ModalProps) => {
   return (
     <Dialog
+      onExited={exited}
       onClose={close}
       aria-labelledby="customized-dialog-title"
       open={isOpen}
