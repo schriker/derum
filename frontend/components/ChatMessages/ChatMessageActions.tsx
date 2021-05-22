@@ -9,13 +9,14 @@ import CloseIcon from '../Icons/CloseIcon';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
 const ChatMessageActions = ({ messageId }: MessageActionProps) => {
-  const router = useRouter();
-  const classes = useChatMessageItemStyles({ userColor: '#FF026A' });
+  // Use router to fetch room from cache and check if user is owner of the room the allow him to delete messages
+  // const router = useRouter();
   // console.log(router);
+  const classes = useChatMessageItemStyles({ userColor: '#FF026A' });
   const { data } = useMeQuery({
-    nextFetchPolicy: 'cache-only',
+    fetchPolicy: 'cache-only',
   });
-  const [deleteMessage] = useDeleteMessageMutation({
+  const [deleteMessage, { loading }] = useDeleteMessageMutation({
     onError: () =>
       globalErrorVar({ isOpen: true, message: 'Błąd usuwania wiadomości' }),
   });
@@ -29,9 +30,14 @@ const ChatMessageActions = ({ messageId }: MessageActionProps) => {
   };
 
   return data ? (
-    <Box className={classes.actions} onClick={(e) => e.stopPropagation()}>
+    <Box className={classes.actions}>
       {(data.me.isAdmin || data.me.isModerator) && (
-        <ButtonIcon color="secondary" size="small" onClick={onDeleteMessage}>
+        <ButtonIcon
+          disabled={loading}
+          color="secondary"
+          size="small"
+          onClick={onDeleteMessage}
+        >
           <CloseIcon style={{ fontSize: 16 }} />
         </ButtonIcon>
       )}

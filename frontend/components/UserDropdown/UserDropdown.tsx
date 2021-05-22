@@ -1,6 +1,10 @@
 import { Box, ListItemText } from '@material-ui/core';
 import React from 'react';
-import { useLogoutMutation } from '../../generated/graphql';
+import {
+  MeDocument,
+  MeQuery,
+  useLogoutMutation,
+} from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
 import Dropdown from '../Dropdown/Dropdown';
 import DropdownIcon from '../Dropdown/DropdownIcon';
@@ -20,13 +24,7 @@ const UserDropdown = () => {
     },
     update(cache, { data: { logout } }) {
       if (logout) {
-        cache.modify({
-          fields: {
-            me(_, { DELETE }) {
-              return DELETE;
-            },
-          },
-        });
+        cache.reset();
       }
     },
   });

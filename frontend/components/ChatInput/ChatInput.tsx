@@ -20,9 +20,9 @@ const ChatInput = ({ roomId }: { roomId: number }) => {
     resolver: yupResolver(schema),
   });
   const { data } = useMeQuery({
-    nextFetchPolicy: 'cache-only',
+    fetchPolicy: 'cache-only',
   });
-  const [sendNewMessage] = useCreateMessageMutation({
+  const [sendNewMessage, { loading }] = useCreateMessageMutation({
     onCompleted: () => reset({ body: '' }),
     onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
   });

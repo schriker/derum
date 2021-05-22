@@ -13,7 +13,7 @@ const ChatMessagesItem = ({ message }: ChatMessagesItemProps) => {
   return (
     <Box
       className={classes.wrapper}
-      onClick={() => setShowActions((prevState) => !prevState)}
+      onMouseEnter={() => setShowActions((prevState) => !prevState)}
       onMouseLeave={() => setShowActions(false)}
     >
       {showActions && <ChatMessageActions messageId={message.id} />}

@@ -27,8 +27,9 @@ const wsLink = process.browser
 
 const splitLink = process.browser
   ? split(
-      ({ query }) => {
+      ({ query, operationName }) => {
         const definition = getMainDefinition(query);
+        if (operationName === 'CreateMessage') return true;
         return (
           definition.kind === 'OperationDefinition' &&
           definition.operation === 'subscription'
