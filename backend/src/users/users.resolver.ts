@@ -12,6 +12,7 @@ import { FacebookAuthGuard } from 'src/auth/guards/facebook-auth.guard';
 import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { NewDisplayNameData } from './dto/new-display-name';
+import { OnlineUser } from './dto/online-user';
 import { ProviderUserInput } from './dto/provider-user.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -26,6 +27,11 @@ export class UsersResolver {
     return this.usersService.findById(user);
   }
 
+  @Query(() => [OnlineUser])
+  onlineUsers() {
+    return this.usersService.getOnlineUsers();
+  }
+
   @Mutation(() => Boolean)
   @UseGuards(FacebookAuthGuard)
   loginUserWithFacebook(
@@ -36,7 +42,10 @@ export class UsersResolver {
   }
 
   @Mutation(() => Boolean)
-  logout(@Context() ctx) {
+  logout(@Context() ctx, @CurrentUser() user: User) {
+    if (user) {
+      this.usersService.removeOnlineUser(user);
+    }
     ctx.req.logout();
     return true;
   }

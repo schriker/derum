@@ -16,15 +16,15 @@ const httpLink = new HttpLink({
   credentials: 'include',
 });
 
-const wsLink = process.browser
+export const wsLink = process.browser
   ? new WebSocketLink({
       uri: process.env.NEXT_PUBLIC_GRAPHQL_WS,
       options: {
         reconnect: true,
+        lazy: true,
       },
     })
   : null;
-
 const splitLink = process.browser
   ? split(
       ({ query, operationName }) => {

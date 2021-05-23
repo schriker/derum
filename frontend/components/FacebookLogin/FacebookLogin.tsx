@@ -1,3 +1,4 @@
+import { useApolloClient } from '@apollo/client';
 import React from 'react';
 import {
   useLoginUserWithFacebookMutation,
@@ -8,6 +9,7 @@ import { ButtonSocialLogin } from '../Buttons/ButtonSocialLogin';
 import FacebookIcon from '../Icons/FacebookIcon';
 
 const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
+  const client = useApolloClient();
   const hadleError = () => {
     onLoading(false);
     onError(true);
@@ -23,6 +25,11 @@ const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
   const [login] = useLoginUserWithFacebookMutation({
     onCompleted: (data) => {
       if (data.loginUserWithFacebook) fetchUser();
+    },
+    update(cache, { data: { loginUserWithFacebook } }) {
+      if (loginUserWithFacebook) {
+        cache.reset();
+      }
     },
     onError: hadleError,
   });

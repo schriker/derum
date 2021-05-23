@@ -1,7 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
-import { useApollo } from '../lib/apolloClient';
+import { initializeApollo, useApollo } from '../lib/apolloClient';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../lib/theme';

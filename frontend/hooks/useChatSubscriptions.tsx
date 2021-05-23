@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   MessageAddedSubscription,
   MessageAddedDocument,
@@ -8,6 +8,7 @@ import {
   useMeQuery,
   useMessageDeletedSubscription,
 } from '../generated/graphql';
+import { wsLink } from '../lib/apolloClient';
 import { globalErrorVar } from '../lib/apolloVars';
 
 const useChatSubscriptions = (roomId: number) => {
@@ -21,20 +22,34 @@ const useChatSubscriptions = (roomId: number) => {
     fetchPolicy: 'cache-only',
   });
 
-  useMessageDeletedSubscription({
-    variables: {
-      roomId,
-    },
-    onSubscriptionData: (data) => {
-      if (!user) return;
-      if (data.subscriptionData.data.messageDeleted.author.id === user.me.id) {
-        globalErrorVar({
-          isOpen: true,
-          message: 'Twoja wiadomość została usunięta.',
-        });
-      }
-    },
-  });
+  useEffect(() => {
+    // Reestablish ws connection with new user credentials hacky as hell :(
+    if (user) {
+      // @ts-ignore
+      wsLink?.subscriptionClient.close(true, true);
+      // @ts-ignore
+      wsLink?.subscriptionClient.connect();
+    }
+  }, [user]);
+
+  // useMessageDeletedSubscription({
+  //   variables: {
+  //     roomId,
+  //   },
+  //   onSubscriptionComplete: () => {
+  //     console.log('Test');
+  //   },
+  //   onSubscriptionData: (data) => {
+  //     console.log(user);
+  //     if (!user) return;
+  //     if (data.subscriptionData.data.messageDeleted.author.id === user.me.id) {
+  //       globalErrorVar({
+  //         isOpen: true,
+  //         message: 'Twoja wiadomość została usunięta.',
+  //       });
+  //     }
+  //   },
+  // });
 
   useEffect(() => {
     subscribeToMore<MessageAddedSubscription>({
@@ -58,6 +73,14 @@ const useChatSubscriptions = (roomId: number) => {
         roomId: roomId,
       },
       updateQuery: (prev, { subscriptionData }) => {
+        if (user) {
+          if (subscriptionData.data.messageDeleted.author.id === user.me.id) {
+            globalErrorVar({
+              isOpen: true,
+              message: 'Twoja wiadomość została usunięta.',
+            });
+          }
+        }
         if (!subscriptionData.data) return prev;
         const {
           data: {
@@ -72,7 +95,7 @@ const useChatSubscriptions = (roomId: number) => {
         });
       },
     });
-  }, []);
+  }, [user, roomId]);
 
   return {
     data,

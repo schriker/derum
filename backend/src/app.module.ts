@@ -14,6 +14,17 @@ import { CaslModule } from './casl/casl.module';
 import { DateScalar } from './scalars/date.scalar';
 import * as cookie from 'cookie';
 import { redisClient } from './main';
+import { UsersService } from './users/users.service';
+
+const parseUserSession = async (headerCookie) => {
+  const cookies = cookie.parse(headerCookie);
+  if (cookies['connect.sid']) {
+    const [redisKey] = cookies['connect.sid'].split('s:').pop().split('.');
+    const session = JSON.parse(await redisClient.get(`sess:${redisKey}`));
+    return session;
+  }
+  return undefined;
+};
 
 @Module({
   imports: [
@@ -21,43 +32,64 @@ import { redisClient } from './main';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(),
-    GraphQLModule.forRoot({
-      playground: {
-        settings: {
-          'request.credentials': 'include',
+    GraphQLModule.forRootAsync({
+      imports: [UsersModule],
+      inject: [UsersService],
+      useFactory: async (usersService: UsersService) => ({
+        playground:
+          process.env.NODE_ENV === 'production'
+            ? false
+            : {
+                settings: {
+                  'request.credentials': 'include',
+                },
+              },
+        context: async ({ req, connection }) => {
+          if (connection) {
+            return { req: connection.context };
+          }
+          return { req };
         },
-      },
-      context: async ({ req, connection }) => {
-        if (connection) {
-          return { req: connection.context };
-        }
-        return { req };
-      },
-      subscriptions: {
-        keepAlive: 5000,
-        onConnect: async (connectionParams, webSocket, context) => {
-          const cookies = cookie.parse(context.request.headers.cookie);
-          const [redisKey] = cookies['connect.sid']
-            .split('s:')
-            .pop()
-            .split('.');
-          const session = JSON.parse(await redisClient.get(`sess:${redisKey}`));
-          return {
-            session,
-          };
+        subscriptions: {
+          keepAlive: 10000,
+          onConnect: async (connectionParams, webSocket, context) => {
+            const session = await parseUserSession(
+              context.request.headers.cookie,
+            );
+            if (session) {
+              const user = session.passport.user;
+              if (user) {
+                usersService.addOnlineUser(user);
+              }
+              return {
+                session,
+              };
+            }
+          },
+          onDisconnect: async (webSocket, context) => {
+            const session = await parseUserSession(
+              context.request.headers.cookie,
+            );
+            if (session) {
+              const user = session.passport.user;
+              if (user) {
+                usersService.addOnlineUser(user);
+              }
+              if (user) {
+                usersService.removeOnlineUser(user);
+              }
+            }
+          },
         },
-        // onDisconnect: (ws, ctx) => {
-        //   console.log('DISCONECT');
-        // },
-      },
-      cors: {
-        credentials: true,
-        origin: true,
-      },
-      uploads: false,
-      validationRules: [depthLimit(3)],
-      installSubscriptionHandlers: true,
-      autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+        cors: {
+          credentials: true,
+          origin: true,
+        },
+        uploads: false,
+        validationRules: [depthLimit(3)],
+        installSubscriptionHandlers: true,
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      }),
     }),
     RoomsModule,
     MessagesModule,

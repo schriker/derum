@@ -1,5 +1,6 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
+import { useMeQuery } from '../../generated/graphql';
 import useChatSubscriptions from '../../hooks/useChatSubscriptions';
 import ChatInput from '../ChatInput/ChatInput';
 import ChatMessages from '../ChatMessages/ChatMessages';

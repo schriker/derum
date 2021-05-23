@@ -32,7 +32,7 @@ async function bootstrap() {
       cookie: {
         httpOnly: true,
         sameSite: false,
-        secure: false, // Change to true on prod
+        secure: process.env.NODE_ENV === 'production',
       },
     }),
   );

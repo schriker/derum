@@ -13,6 +13,7 @@ import { Action } from 'src/casl/action.enum';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { NewMessageInput } from './dto/new-message.input';
 import { Message } from './entities/message.entity';
 import { MessagesService } from './messages.service';
@@ -24,6 +25,7 @@ export class MessagesResolver {
     @Inject('PUB_SUB')
     private pubSub: RedisPubSub,
     private caslAbilityFactory: CaslAbilityFactory,
+    private usersService: UsersService,
   ) {}
 
   @Query(() => [Message])
@@ -50,6 +52,7 @@ export class MessagesResolver {
     @Args('newMessageData') newMessageData: NewMessageInput,
     @CurrentUser() user: User,
   ): Promise<Message> {
+    this.usersService.addOnlineUser(user);
     const message = await this.messagesService.create(newMessageData, user);
     this.pubSub.publish('messageAdded', {
       messageAdded: message,

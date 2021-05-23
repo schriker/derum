@@ -3,15 +3,41 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { ILike, Repository } from 'typeorm';
 import { NewDisplayNameData } from './dto/new-display-name';
+import { OnlineUser } from './dto/online-user';
 import { ProviderUser } from './dto/provider-user.interface';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
+  private onlineUsers: OnlineUser[] = [];
+
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
+
+  addOnlineUser(user: User) {
+    const isUserOnline = this.onlineUsers.some((online) => {
+      return online.userId === user.id;
+    });
+    if (!isUserOnline) {
+      this.onlineUsers.push({
+        userId: user.id,
+        name: user.displayName,
+        photo: user.photo,
+      });
+    }
+  }
+
+  removeOnlineUser(user: User) {
+    this.onlineUsers = this.onlineUsers.filter(
+      (online) => online.userId !== user.id,
+    );
+  }
+
+  getOnlineUsers(): OnlineUser[] {
+    return this.onlineUsers;
+  }
 
   findById(user: User): Promise<User> {
     return this.usersRepository.findOne({ id: user.id });
@@ -50,6 +76,7 @@ export class UsersService {
         displayName: `${displayName.replace(' ', '_')}${savedUser.id}`,
       });
     }
+    this.addOnlineUser(savedUser);
     return savedUser;
   }
 
@@ -71,7 +98,10 @@ export class UsersService {
       email: userData.email,
     });
 
-    if (userExists) return userExists;
+    if (userExists) {
+      this.addOnlineUser(userExists);
+      return userExists;
+    }
 
     return this.createWithAuthProvider(userData);
   }

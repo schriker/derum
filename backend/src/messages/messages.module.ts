@@ -6,6 +6,7 @@ import { Message } from './entities/message.entity';
 import { RoomsModule } from 'src/rooms/rooms.module';
 import { PubSubModule } from 'src/pub-sub/pub-sub.module';
 import { CaslModule } from 'src/casl/casl.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { CaslModule } from 'src/casl/casl.module';
     RoomsModule,
     PubSubModule,
     CaslModule,
+    UsersModule,
   ],
   providers: [MessagesService, MessagesResolver],
 })

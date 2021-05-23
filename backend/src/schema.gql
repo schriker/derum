@@ -33,19 +33,26 @@ type Room {
   author: User!
 }
 
+type OnlineUser {
+  userId: Int!
+  name: String!
+  photo: String!
+}
+
 type Query {
+  me: User!
+  onlineUsers: [OnlineUser!]!
   room(name: String!): Room!
   initialMessages(roomId: Int!): [Message!]!
-  me: User!
 }
 
 type Mutation {
-  createRoom(newRoomData: NewRoomInput!): Room!
-  createMessage(newMessageData: NewMessageInput!): Message!
-  deleteMessage(id: Int!): Boolean!
   loginUserWithFacebook(access_token: String!): Boolean!
   logout: Boolean!
   changeUserDisplayName(name: String!): User!
+  createRoom(newRoomData: NewRoomInput!): Room!
+  createMessage(newMessageData: NewMessageInput!): Message!
+  deleteMessage(id: Int!): Boolean!
 }
 
 input NewRoomInput {

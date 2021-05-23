@@ -7,6 +7,7 @@ import {
   RoomDocument,
   RoomQuery,
   RoomQueryVariables,
+  useMeQuery,
   useRoomQuery,
 } from '../generated/graphql';
 import { addApolloState, initializeApollo } from '../lib/apolloClient';
