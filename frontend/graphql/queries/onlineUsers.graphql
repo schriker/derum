@@ -1,0 +1,9 @@
+query OnlineUsers($roomId: Int!) {
+  onlineUsers(roomId: $roomId) {
+    userId
+    name
+    photo
+    isAdmin
+    isModerator
+  }
+}

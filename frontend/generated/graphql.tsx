@@ -28,12 +28,22 @@ export type Message = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createRoom: Room;
-  createMessage: Message;
-  deleteMessage: Scalars['Boolean'];
   loginUserWithFacebook: Scalars['Boolean'];
   logout: Scalars['Boolean'];
   changeUserDisplayName: User;
+  createRoom: Room;
+  createMessage: Message;
+  deleteMessage: Scalars['Boolean'];
+};
+
+
+export type MutationLoginUserWithFacebookArgs = {
+  access_token: Scalars['String'];
+};
+
+
+export type MutationChangeUserDisplayNameArgs = {
+  name: Scalars['String'];
 };
 
 
@@ -51,16 +61,6 @@ export type MutationDeleteMessageArgs = {
   id: Scalars['Int'];
 };
 
-
-export type MutationLoginUserWithFacebookArgs = {
-  access_token: Scalars['String'];
-};
-
-
-export type MutationChangeUserDisplayNameArgs = {
-  name: Scalars['String'];
-};
-
 export type NewMessageInput = {
   roomId: Scalars['Int'];
   body: Scalars['String'];
@@ -71,11 +71,27 @@ export type NewRoomInput = {
   description: Scalars['String'];
 };
 
+export type OnlineUser = {
+  __typename?: 'OnlineUser';
+  userId: Scalars['Int'];
+  roomId: Scalars['Int'];
+  name: Scalars['String'];
+  photo: Scalars['String'];
+  isAdmin: Scalars['Boolean'];
+  isModerator: Scalars['Boolean'];
+};
+
 export type Query = {
   __typename?: 'Query';
+  me: User;
+  onlineUsers: Array<OnlineUser>;
   room: Room;
   initialMessages: Array<Message>;
-  me: User;
+};
+
+
+export type QueryOnlineUsersArgs = {
+  roomId: Scalars['Int'];
 };
 
 
@@ -199,6 +215,19 @@ export type MeQuery = (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'displayName' | 'email' | 'photo' | 'isAdmin' | 'isModerator'>
   ) }
+);
+
+export type OnlineUsersQueryVariables = Exact<{
+  roomId: Scalars['Int'];
+}>;
+
+
+export type OnlineUsersQuery = (
+  { __typename?: 'Query' }
+  & { onlineUsers: Array<(
+    { __typename?: 'OnlineUser' }
+    & Pick<OnlineUser, 'userId' | 'name' | 'photo' | 'isAdmin' | 'isModerator'>
+  )> }
 );
 
 export type RoomQueryVariables = Exact<{
@@ -466,6 +495,45 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const OnlineUsersDocument = gql`
+    query OnlineUsers($roomId: Int!) {
+  onlineUsers(roomId: $roomId) {
+    userId
+    name
+    photo
+    isAdmin
+    isModerator
+  }
+}
+    `;
+
+/**
+ * __useOnlineUsersQuery__
+ *
+ * To run a query within a React component, call `useOnlineUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useOnlineUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnlineUsersQuery({
+ *   variables: {
+ *      roomId: // value for 'roomId'
+ *   },
+ * });
+ */
+export function useOnlineUsersQuery(baseOptions: Apollo.QueryHookOptions<OnlineUsersQuery, OnlineUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<OnlineUsersQuery, OnlineUsersQueryVariables>(OnlineUsersDocument, options);
+      }
+export function useOnlineUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<OnlineUsersQuery, OnlineUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<OnlineUsersQuery, OnlineUsersQueryVariables>(OnlineUsersDocument, options);
+        }
+export type OnlineUsersQueryHookResult = ReturnType<typeof useOnlineUsersQuery>;
+export type OnlineUsersLazyQueryHookResult = ReturnType<typeof useOnlineUsersLazyQuery>;
+export type OnlineUsersQueryResult = Apollo.QueryResult<OnlineUsersQuery, OnlineUsersQueryVariables>;
 export const RoomDocument = gql`
     query Room($name: String!) {
   room(name: $name) {

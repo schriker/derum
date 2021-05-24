@@ -16,12 +16,12 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       margin: 0,
-      padding: theme.spacing(2),
+      padding: theme.spacing(3),
     },
     closeButton: {
       position: 'absolute',
-      right: theme.spacing(2),
-      top: theme.spacing(2),
+      right: theme.spacing(3),
+      top: theme.spacing(3),
     },
   });
 

@@ -34,7 +34,7 @@ const LoginModal = () => {
   return (
     <Modal
       title="Zaloguj się"
-      isOpen={openModal}
+      open={openModal}
       close={handleClose}
       exited={handleExited}
     >

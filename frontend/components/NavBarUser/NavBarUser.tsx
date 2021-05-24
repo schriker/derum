@@ -3,7 +3,7 @@ import React from 'react';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import BellIcon from '../Icons/BellIcon';
 import SettingsIcon from '../Icons/SettingsIcon';
-import UserIcon from '../Icons/UserIcon';
+import OnlineUsers from '../OnlineUsers/OnlineUsers';
 import DarkTooltip from '../Tooltip/Tooltip';
 import UserDropdown from '../UserDropdown/UserDropdown';
 
@@ -24,13 +24,7 @@ const NavBarUser = () => {
             </ButtonIcon>
           </DarkTooltip>
         </Box>
-        <Box mx="5px">
-          <DarkTooltip title="Użytkownicy online" enterDelay={500}>
-            <ButtonIcon color="secondary">
-              <UserIcon style={{ fontSize: 18 }} />
-            </ButtonIcon>
-          </DarkTooltip>
-        </Box>
+        <OnlineUsers />
         <Box mx="5px">
           <DarkTooltip title="Ustawienia" enterDelay={500}>
             <ButtonIcon color="secondary">
