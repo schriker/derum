@@ -30,6 +30,7 @@ const splitLink = process.browser
       ({ query, operationName }) => {
         const definition = getMainDefinition(query);
         if (operationName === 'CreateMessage') return true;
+        if (operationName === 'DeleteMessage') return true;
         return (
           definition.kind === 'OperationDefinition' &&
           definition.operation === 'subscription'

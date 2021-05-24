@@ -21,6 +21,9 @@ export const CustomInput = withStyles((theme: Theme) => ({
     borderColor: theme.palette.primary['A700'],
     backgroundColor: theme.palette.background.default,
   },
+  disabled: {
+    color: theme.palette.secondary.dark,
+  },
   error: {
     borderColor: theme.palette.error.dark,
   },

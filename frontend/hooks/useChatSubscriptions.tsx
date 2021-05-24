@@ -6,7 +6,6 @@ import {
   MessageDeletedDocument,
   useInitialMessagesQuery,
   useMeQuery,
-  useMessageDeletedSubscription,
 } from '../generated/graphql';
 import { wsLink } from '../lib/apolloClient';
 import { globalErrorVar } from '../lib/apolloVars';
@@ -18,38 +17,18 @@ const useChatSubscriptions = (roomId: number) => {
       roomId: roomId,
     },
   });
+
   const { data: user } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
 
   useEffect(() => {
     // Reestablish ws connection with new user credentials hacky as hell :(
-    if (user) {
-      // @ts-ignore
-      wsLink?.subscriptionClient.close(true, true);
-      // @ts-ignore
-      wsLink?.subscriptionClient.connect();
-    }
+    // @ts-ignore
+    wsLink?.subscriptionClient.close();
+    // @ts-ignore
+    wsLink?.subscriptionClient.connect();
   }, [user]);
-
-  // useMessageDeletedSubscription({
-  //   variables: {
-  //     roomId,
-  //   },
-  //   onSubscriptionComplete: () => {
-  //     console.log('Test');
-  //   },
-  //   onSubscriptionData: (data) => {
-  //     console.log(user);
-  //     if (!user) return;
-  //     if (data.subscriptionData.data.messageDeleted.author.id === user.me.id) {
-  //       globalErrorVar({
-  //         isOpen: true,
-  //         message: 'Twoja wiadomość została usunięta.',
-  //       });
-  //     }
-  //   },
-  // });
 
   useEffect(() => {
     subscribeToMore<MessageAddedSubscription>({
@@ -73,6 +52,7 @@ const useChatSubscriptions = (roomId: number) => {
         roomId: roomId,
       },
       updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data) return prev;
         if (user) {
           if (subscriptionData.data.messageDeleted.author.id === user.me.id) {
             globalErrorVar({
@@ -81,7 +61,6 @@ const useChatSubscriptions = (roomId: number) => {
             });
           }
         }
-        if (!subscriptionData.data) return prev;
         const {
           data: {
             messageDeleted: { id },

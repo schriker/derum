@@ -10,22 +10,26 @@ import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { ChatInputs } from '../../types/chatInputs';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import useIsConnected from '../../hooks/useIsConnected';
 
 const schema = yup.object().shape({
   body: yup.string().trim().required(),
 });
 
 const ChatInput = ({ roomId }: { roomId: number }) => {
+  const isConnected = useIsConnected();
   const { control, handleSubmit, reset } = useForm<ChatInputs>({
     resolver: yupResolver(schema),
   });
-  const { data } = useMeQuery({
+  const { data, loading } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
-  const [sendNewMessage, { loading }] = useCreateMessageMutation({
+  const [sendNewMessage] = useCreateMessageMutation({
     onCompleted: () => reset({ body: '' }),
     onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
   });
+
+  const connecting = !isConnected && !loading;
 
   const onSubmit: SubmitHandler<ChatInputs> = (inputData) => {
     if (!data) {
@@ -59,8 +63,9 @@ const ChatInput = ({ roomId }: { roomId: number }) => {
               <CustomInput
                 inputProps={{ maxLength: 500 }}
                 multiline
+                disabled={connecting}
                 rowsMax={20}
-                placeholder="Wiadomość"
+                placeholder={!connecting ? 'Wiadomość' : 'Łącze z serwerem...'}
                 endAdornment={
                   <InputAdornment position="end">
                     <ButtonIcon color="secondary" size="small">
