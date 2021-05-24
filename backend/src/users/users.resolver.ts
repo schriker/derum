@@ -7,6 +7,7 @@ import {
   Query,
   ResolveField,
   Parent,
+  Int,
 } from '@nestjs/graphql';
 import { FacebookAuthGuard } from 'src/auth/guards/facebook-auth.guard';
 import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
@@ -28,8 +29,8 @@ export class UsersResolver {
   }
 
   @Query(() => [OnlineUser])
-  onlineUsers() {
-    return this.usersService.getOnlineUsers();
+  onlineUsers(@Args('roomId', { type: () => Int }) roomId: number) {
+    return this.usersService.getOnlineUsers(roomId);
   }
 
   @Mutation(() => Boolean)
@@ -42,10 +43,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => Boolean)
-  logout(@Context() ctx, @CurrentUser() user: User) {
-    if (user) {
-      this.usersService.removeOnlineUser(user);
-    }
+  logout(@Context() ctx) {
     ctx.req.logout();
     return true;
   }

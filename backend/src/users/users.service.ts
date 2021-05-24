@@ -16,27 +16,27 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  addOnlineUser(user: User) {
-    const isUserOnline = this.onlineUsers.some((online) => {
-      return online.userId === user.id;
+  addOnlineUser(user: User, roomId: number, cId: string) {
+    this.onlineUsers.push({
+      roomId: roomId,
+      userId: user.id,
+      name: user.displayName,
+      photo: user.photo,
+      isAdmin: user.isAdmin,
+      isModerator: user.isModerator,
+      connectionId: cId,
     });
-    if (!isUserOnline) {
-      this.onlineUsers.push({
-        userId: user.id,
-        name: user.displayName,
-        photo: user.photo,
-      });
-    }
   }
 
-  removeOnlineUser(user: User) {
+  removeOnlineUser(cId: string) {
     this.onlineUsers = this.onlineUsers.filter(
-      (online) => online.userId !== user.id,
+      (online) => online.connectionId !== cId,
     );
   }
 
-  getOnlineUsers(): OnlineUser[] {
-    return this.onlineUsers;
+  getOnlineUsers(roomId: number): OnlineUser[] {
+    const users = this.onlineUsers.filter((user) => user.roomId === roomId);
+    return [...new Map(users.map((item) => [item['name'], item])).values()];
   }
 
   findById(user: User): Promise<User> {
@@ -76,7 +76,7 @@ export class UsersService {
         displayName: `${displayName.replace(' ', '_')}${savedUser.id}`,
       });
     }
-    this.addOnlineUser(savedUser);
+    // this.addOnlineUser(savedUser);
     return savedUser;
   }
 
@@ -99,7 +99,7 @@ export class UsersService {
     });
 
     if (userExists) {
-      this.addOnlineUser(userExists);
+      // this.addOnlineUser(userExists);
       return userExists;
     }
 

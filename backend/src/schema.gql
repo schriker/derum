@@ -35,13 +35,16 @@ type Room {
 
 type OnlineUser {
   userId: Int!
+  roomId: Int!
   name: String!
   photo: String!
+  isAdmin: Boolean!
+  isModerator: Boolean!
 }
 
 type Query {
   me: User!
-  onlineUsers: [OnlineUser!]!
+  onlineUsers(roomId: Int!): [OnlineUser!]!
   room(name: String!): Room!
   initialMessages(roomId: Int!): [Message!]!
 }

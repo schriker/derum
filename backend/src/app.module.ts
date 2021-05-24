@@ -57,28 +57,16 @@ const parseUserSession = async (headerCookie) => {
               context.request.headers.cookie,
             );
             if (session) {
-              const user = session.passport.user;
-              if (user) {
-                usersService.addOnlineUser(user);
-              }
               return {
                 session,
+                cId: context.request.headers['sec-websocket-key'],
               };
             }
           },
           onDisconnect: async (webSocket, context) => {
-            const session = await parseUserSession(
-              context.request.headers.cookie,
+            usersService.removeOnlineUser(
+              context.request.headers['sec-websocket-key'],
             );
-            if (session) {
-              const user = session.passport.user;
-              if (user) {
-                usersService.addOnlineUser(user);
-              }
-              if (user) {
-                usersService.removeOnlineUser(user);
-              }
-            }
           },
         },
         cors: {

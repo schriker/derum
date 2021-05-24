@@ -6,6 +6,7 @@ import {
   Resolver,
   Subscription,
   Query,
+  Context,
 } from '@nestjs/graphql';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
 import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
@@ -42,7 +43,14 @@ export class MessagesResolver {
     },
   })
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  messageAdded(@Args('roomId', { type: () => Int }) _roomId: number) {
+  messageAdded(
+    @Args('roomId', { type: () => Int }) roomId: number,
+    @CurrentUser() user: User,
+    @Context() ctx,
+  ) {
+    if (user) {
+      this.usersService.addOnlineUser(user, roomId, ctx.req.cId);
+    }
     return this.pubSub.asyncIterator('messageAdded');
   }
 
@@ -52,7 +60,6 @@ export class MessagesResolver {
     @Args('newMessageData') newMessageData: NewMessageInput,
     @CurrentUser() user: User,
   ): Promise<Message> {
-    this.usersService.addOnlineUser(user);
     const message = await this.messagesService.create(newMessageData, user);
     this.pubSub.publish('messageAdded', {
       messageAdded: message,
