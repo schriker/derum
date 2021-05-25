@@ -44,6 +44,7 @@ type OnlineUser {
 
 type Query {
   me: User!
+  user(id: Int!): User!
   onlineUsers(roomId: Int!): [OnlineUser!]!
   room(name: String!): Room!
   initialMessages(roomId: Int!): [Message!]!

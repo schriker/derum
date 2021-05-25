@@ -6,6 +6,7 @@ import {
   useOnlineUsersQuery,
   useRoomQuery,
 } from '../../generated/graphql';
+import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import UserIcon from '../Icons/UserIcon';
 import Modal from '../Modal/Modal';
@@ -13,15 +14,7 @@ import DarkTooltip from '../Tooltip/Tooltip';
 import OnlineUsersList from './OnlineUsersList';
 
 const OnlineUsers = () => {
-  const [openModal, setOpenModal] = useState(false);
-
-  const handleClose = () => {
-    setOpenModal(false);
-  };
-
-  const handleOpen = () => {
-    setOpenModal(true);
-  };
+  const { openModal, handleClose, handleOpen } = useOpenCloseModal();
 
   const { data: roomData } = useRoomQuery({
     variables: {

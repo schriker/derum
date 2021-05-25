@@ -13,7 +13,7 @@ const styles = (theme: Theme) =>
         primary: theme.palette.primary['A700'],
         secondary: theme.palette.secondary['800'],
       }),
-      padding: '4px 16px',
+      padding: '5px 20px',
       '&:hover': {
         backgroundColor: styledBy('color', {
           primary: theme.palette.primary['A400'],

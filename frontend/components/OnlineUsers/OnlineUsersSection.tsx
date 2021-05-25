@@ -9,9 +9,11 @@ import useOnlineUsersStyles from './OnlineUsersStyle';
 const OnlineUsersSection = ({
   title,
   data,
+  handleUserClick,
 }: {
   title: string;
   data: OnlineUser[];
+  handleUserClick: (id: number) => void;
 }) => {
   const classes = useOnlineUsersStyles();
 
@@ -22,7 +24,10 @@ const OnlineUsersSection = ({
       </Typography>
       {data.sort(sortUsersMethod).map((user) => (
         <Box key={user.userId}>
-          <ButtonPrimary className={classes.button}>
+          <ButtonPrimary
+            className={classes.button}
+            onClick={() => handleUserClick(user.userId)}
+          >
             <UserAvatar
               className={classes.avatar}
               src={user.photo}

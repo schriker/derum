@@ -84,9 +84,15 @@ export type OnlineUser = {
 export type Query = {
   __typename?: 'Query';
   me: User;
+  user: User;
   onlineUsers: Array<OnlineUser>;
   room: Room;
   initialMessages: Array<Message>;
+};
+
+
+export type QueryUserArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -144,7 +150,7 @@ export type User = {
 
 export type AuthorFragmentFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'displayName' | 'photo' | 'isAdmin' | 'isModerator'>
+  & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName'>
 );
 
 export type CreateMessageMutationVariables = Exact<{
@@ -247,6 +253,19 @@ export type RoomQuery = (
   ) }
 );
 
+export type UserQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserQuery = (
+  { __typename?: 'Query' }
+  & { user: (
+    { __typename?: 'User' }
+    & AuthorFragmentFragment
+  ) }
+);
+
 export type MessageAddedSubscriptionVariables = Exact<{
   roomId: Scalars['Int'];
 }>;
@@ -284,10 +303,11 @@ export type MessageDeletedSubscription = (
 export const AuthorFragmentFragmentDoc = gql`
     fragment AuthorFragment on User {
   id
-  displayName
   photo
   isAdmin
+  createdAt
   isModerator
+  displayName
 }
     `;
 export const CreateMessageDocument = gql`
@@ -574,6 +594,41 @@ export function useRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RoomQ
 export type RoomQueryHookResult = ReturnType<typeof useRoomQuery>;
 export type RoomLazyQueryHookResult = ReturnType<typeof useRoomLazyQuery>;
 export type RoomQueryResult = Apollo.QueryResult<RoomQuery, RoomQueryVariables>;
+export const UserDocument = gql`
+    query User($id: Int!) {
+  user(id: $id) {
+    ...AuthorFragment
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const MessageAddedDocument = gql`
     subscription MessageAdded($roomId: Int!) {
   messageAdded(roomId: $roomId) {

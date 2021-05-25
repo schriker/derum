@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { wsLink } from '../lib/apolloClient';
 
 const useIsConnected = () => {
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnected, setIsConnected] = useState(true);
 
   useEffect(() => {
     wsLink?.subscriptionClient.onDisconnected(() => {

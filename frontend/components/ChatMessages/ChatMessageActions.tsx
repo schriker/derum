@@ -1,5 +1,4 @@
 import { Box } from '@material-ui/core';
-import { useRouter } from 'next/router';
 import React from 'react';
 import { indexRoomVars } from '../../consts';
 import {

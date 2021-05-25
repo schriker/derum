@@ -39,8 +39,8 @@ export class UsersService {
     return [...new Map(users.map((item) => [item['name'], item])).values()];
   }
 
-  findById(user: User): Promise<User> {
-    return this.usersRepository.findOne({ id: user.id });
+  findById(id: number): Promise<User> {
+    return this.usersRepository.findOne({ id });
   }
 
   updateSession(ctx, user: User) {
@@ -76,7 +76,6 @@ export class UsersService {
         displayName: `${displayName.replace(' ', '_')}${savedUser.id}`,
       });
     }
-    // this.addOnlineUser(savedUser);
     return savedUser;
   }
 
@@ -99,7 +98,6 @@ export class UsersService {
     });
 
     if (userExists) {
-      // this.addOnlineUser(userExists);
       return userExists;
     }
 

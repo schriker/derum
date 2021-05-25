@@ -1,35 +1,71 @@
 import { Box } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { OnlineUser } from '../../generated/graphql';
+import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import { OnlineUsersListProps } from '../../types/onlineUsers';
 import { CustomInput } from '../CustomInput/CustomInput';
 import SearchIcon from '../Icons/SearchIcon';
+import UserModal from '../UserModal/UserModal';
 import OnlineUsersSection from './OnlineUsersSection';
 import useOnlineUsersStyles from './OnlineUsersStyle';
 
 const OnlineUsersList = ({ users }: OnlineUsersListProps) => {
+  const { openModal, handleClose, handleOpen } = useOpenCloseModal();
+  const [userId, setUserId] = useState(null);
   const classes = useOnlineUsersStyles();
+  const [searchValue, setSearchValue] = useState('');
   const onlineAdmins: OnlineUser[] = [];
   const onlineUsers: OnlineUser[] = [];
 
-  users.forEach((user) => {
-    if (user.isAdmin || user.isModerator) {
-      onlineAdmins.push(user);
-    } else {
-      onlineUsers.push(user);
-    }
-  });
+  users
+    .filter((user) =>
+      user.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
+    )
+    .forEach((user) => {
+      if (user.isAdmin || user.isModerator) {
+        onlineAdmins.push(user);
+      } else {
+        onlineUsers.push(user);
+      }
+    });
+
+  const handlerUserSelect = (id: number) => {
+    setUserId(id);
+    handleOpen();
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
 
   return (
     <Box className={classes.wrapper}>
       <Box className={classes.inputWrapper}>
         <CustomInput
+          value={searchValue}
+          onChange={handleChange}
           startAdornment={<SearchIcon className={classes.icon} />}
           className={classes.search}
           placeholder="Szukaj użytkownika"
         />
       </Box>
-      <OnlineUsersSection title="Administratorzy" data={onlineAdmins} />
+      <OnlineUsersSection
+        handleUserClick={handlerUserSelect}
+        title="Administratorzy"
+        data={onlineAdmins}
+      />
+      <OnlineUsersSection
+        handleUserClick={handlerUserSelect}
+        title="Użytkownicy"
+        data={onlineUsers}
+      />
+      {userId && (
+        <UserModal
+          openModal={openModal}
+          handleClose={handleClose}
+          id={userId}
+        />
+      )}
     </Box>
   );
 };

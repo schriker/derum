@@ -1,7 +1,8 @@
 fragment AuthorFragment on User {
   id
-  displayName
   photo
   isAdmin
+  createdAt
   isModerator
+  displayName
 }
