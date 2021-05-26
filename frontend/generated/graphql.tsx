@@ -31,7 +31,11 @@ export type Mutation = {
   loginUserWithFacebook: Scalars['Boolean'];
   logout: Scalars['Boolean'];
   changeUserDisplayName: User;
+  ignoreUser: Scalars['Boolean'];
+  removeIgnoreUser: Scalars['Boolean'];
   createRoom: Room;
+  joinRoom: Scalars['Boolean'];
+  leave: Scalars['Boolean'];
   createMessage: Message;
   deleteMessage: Scalars['Boolean'];
 };
@@ -47,8 +51,28 @@ export type MutationChangeUserDisplayNameArgs = {
 };
 
 
+export type MutationIgnoreUserArgs = {
+  id: Scalars['Float'];
+};
+
+
+export type MutationRemoveIgnoreUserArgs = {
+  id: Scalars['Float'];
+};
+
+
 export type MutationCreateRoomArgs = {
   newRoomData: NewRoomInput;
+};
+
+
+export type MutationJoinRoomArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationLeaveArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -146,6 +170,8 @@ export type User = {
   photo?: Maybe<Scalars['String']>;
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
+  joinedRooms: Array<Room>;
+  ignore: Array<User>;
 };
 
 export type AuthorFragmentFragment = (
@@ -219,7 +245,15 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'displayName' | 'email' | 'photo' | 'isAdmin' | 'isModerator'>
+    & Pick<User, 'email'>
+    & { ignore: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'displayName'>
+    )>, joinedRooms: Array<(
+      { __typename?: 'Room' }
+      & Pick<Room, 'id' | 'name'>
+    )> }
+    & AuthorFragmentFragment
   ) }
 );
 
@@ -479,15 +513,19 @@ export type InitialMessagesQueryResult = Apollo.QueryResult<InitialMessagesQuery
 export const MeDocument = gql`
     query Me {
   me {
-    id
-    displayName
+    ...AuthorFragment
     email
-    photo
-    isAdmin
-    isModerator
+    ignore {
+      id
+      displayName
+    }
+    joinedRooms {
+      id
+      name
+    }
   }
 }
-    `;
+    ${AuthorFragmentFragmentDoc}`;
 
 /**
  * __useMeQuery__

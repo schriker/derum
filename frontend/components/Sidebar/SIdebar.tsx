@@ -2,11 +2,15 @@ import { Box } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import Link from 'next/link';
 import React from 'react';
+import { useMeQuery } from '../../generated/graphql';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import HomeIcon from '../Icons/HomeIcon';
+import RoomAvatar from '../RoomAvatar/RoomAvatar';
 import DarkTooltip from '../Tooltip/Tooltip';
 
 const Sidebar = () => {
+  const { data, loading } = useMeQuery({});
+
   return (
     <Box
       width={60}
@@ -23,12 +27,18 @@ const Sidebar = () => {
           </ButtonIcon>
         </DarkTooltip>
       </Link>
-      <Skeleton
-        style={{ marginTop: 10 }}
-        variant="circle"
-        width={40}
-        height={40}
-      />
+      {loading ? (
+        <Skeleton
+          style={{ marginTop: 10 }}
+          variant="circle"
+          width={40}
+          height={40}
+        />
+      ) : data ? (
+        data.me.joinedRooms.map((room) => (
+          <RoomAvatar key={room.id} name={room.name} />
+        ))
+      ) : null}
     </Box>
   );
 };

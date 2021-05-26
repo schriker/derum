@@ -1,10 +1,14 @@
 query Me {
   me {
-    id
-    displayName
+    ...AuthorFragment
     email
-    photo
-    isAdmin
-    isModerator
+    ignore {
+      id
+      displayName
+    }
+    joinedRooms {
+      id
+      name
+    }
   }
 }
