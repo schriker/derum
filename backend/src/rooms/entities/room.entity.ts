@@ -6,6 +6,8 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -42,4 +44,8 @@ export class Room {
 
   @OneToMany(() => Message, (message) => message.room)
   messages: Message[];
+
+  @ManyToMany(() => User, (user) => user.joinedRooms)
+  @JoinTable()
+  users: User[];
 }

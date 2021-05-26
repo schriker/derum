@@ -1,4 +1,4 @@
-import { Box, ListItemText } from '@material-ui/core';
+import { Box, ListItemText, makeStyles, Theme } from '@material-ui/core';
 import React from 'react';
 import {
   MeDocument,
@@ -17,7 +17,15 @@ import SunIcon from '../Icons/SunIcon';
 import UserIcon from '../Icons/UserIcon';
 import UserButton from '../UserButton/UserButton';
 
+const useStyles = makeStyles((theme: Theme) => ({
+  icon: {
+    fontSize: 16,
+    color: theme.palette.grey[600],
+  },
+}));
+
 const UserDropdown = () => {
+  const classes = useStyles();
   const [logout] = useLogoutMutation({
     onError: () => {
       globalErrorVar({ isOpen: true, message: 'Błąd serwera!' });
@@ -33,32 +41,32 @@ const UserDropdown = () => {
   const items = [
     {
       text: 'Profil',
-      icon: <UserIcon style={{ fontSize: 16 }} />,
+      icon: <UserIcon className={classes.icon} />,
       onClick: () => console.log('Click'),
     },
     {
       text: 'Wiadomości',
-      icon: <MessageIcon style={{ fontSize: 18 }} />,
+      icon: <MessageIcon className={classes.icon} />,
       onClick: () => console.log('Click'),
     },
     {
       text: 'Tryb dzienny',
-      icon: <SunIcon style={{ fontSize: 18 }} />,
+      icon: <SunIcon className={classes.icon} />,
       onClick: () => console.log('Click'),
     },
     {
       text: 'Zgłoś błąd',
-      icon: <BugIcon style={{ fontSize: 18 }} />,
+      icon: <BugIcon className={classes.icon} />,
       onClick: () => console.log('Click'),
     },
     {
       text: 'Pomoc',
-      icon: <HelpIcon style={{ fontSize: 18 }} />,
+      icon: <HelpIcon className={classes.icon} />,
       onClick: () => console.log('Click'),
     },
     {
       text: 'Wyloguj',
-      icon: <LogoutIcon style={{ fontSize: 18 }} />,
+      icon: <LogoutIcon className={classes.icon} />,
       onClick: () => logout(),
     },
   ];

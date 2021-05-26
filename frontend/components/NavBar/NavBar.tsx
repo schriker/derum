@@ -1,5 +1,6 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
+import { openDrawerVar } from '../../lib/apolloVars';
 import { ButtonMenu } from '../Buttons/ButtonMenu';
 import MenuIcon from '../Icons/MenuIcon';
 import NavBarLogin from '../NavBarLogin/NavBarLogin';
@@ -18,7 +19,11 @@ const NavBar = () => {
       pl={1}
     >
       <Box display="flex" alignItems="center">
-        <ButtonMenu aria-label="menu" color="secondary">
+        <ButtonMenu
+          onClick={() => openDrawerVar(true)}
+          aria-label="menu"
+          color="secondary"
+        >
           <MenuIcon />
         </ButtonMenu>
       </Box>

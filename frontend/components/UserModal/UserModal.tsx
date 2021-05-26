@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: '50%',
     marginRight: 6,
     marginTop: 3,
-    marginLeft: -14,
+    marginLeft: -12,
   },
   name: {
     display: 'flex',

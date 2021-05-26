@@ -20,7 +20,7 @@ export class RoomsService {
   async findOneByName(name: string): Promise<Room> {
     const room = await this.roomsRepository
       .createQueryBuilder('room')
-      .where('room.name = :name', { name })
+      .where('room.name ILIKE :name', { name })
       .leftJoinAndSelect('room.author', 'author')
       .getOne();
     if (!room) {
@@ -54,5 +54,27 @@ export class RoomsService {
     room.author = user;
 
     return this.roomsRepository.save(room);
+  }
+
+  async join(user: User, roomId: number): Promise<boolean> {
+    try {
+      await this.roomsRepository
+        .createQueryBuilder('room')
+        .relation('users')
+        .of(roomId)
+        .add(user);
+      return true;
+    } catch (err) {
+      throw new BadRequestException('Error while joining room.');
+    }
+  }
+
+  async leave(user: User, roomId: number): Promise<boolean> {
+    await this.roomsRepository
+      .createQueryBuilder('room')
+      .relation('users')
+      .of(roomId)
+      .remove(user);
+    return true;
   }
 }

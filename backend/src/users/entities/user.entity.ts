@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -59,4 +60,8 @@ export class User {
   @Field(() => Boolean)
   @Column({ default: false })
   isModerator: boolean;
+
+  @Field(() => [Room])
+  @ManyToMany(() => Room, (room) => room.users)
+  joinedRooms: Room[];
 }

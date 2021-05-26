@@ -5,6 +5,7 @@ import Header from '../Header/Header';
 import LoginModal from '../LoginModal/LoginModal';
 import NavBar from '../NavBar/NavBar';
 import Sidebar from '../Sidebar/SIdebar';
+import SidebarDrawer from '../SidebarDrawer/SidebarDrawer';
 
 const Layout = ({ children, ...rest }: LayoutProps) => {
   return (
@@ -15,6 +16,7 @@ const Layout = ({ children, ...rest }: LayoutProps) => {
         <Sidebar />
         {children}
       </Box>
+      <SidebarDrawer />
       <LoginModal />
       <GlobalError />
     </>

@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
+import { Room } from 'src/rooms/entities/room.entity';
 import { ILike, Repository } from 'typeorm';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { OnlineUser } from './dto/online-user';
@@ -46,6 +47,14 @@ export class UsersService {
   updateSession(ctx, user: User) {
     ctx.req.session.passport.user = user;
     ctx.req.session.save();
+  }
+
+  async getJoinedRooms(user: User): Promise<Room[]> {
+    return this.usersRepository
+      .createQueryBuilder('user')
+      .relation('joinedRooms')
+      .of(user)
+      .loadMany();
   }
 
   async checkIfDisplayNameIsTaken(displayName: string): Promise<boolean> {
