@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -64,4 +65,9 @@ export class User {
   @Field(() => [Room])
   @ManyToMany(() => Room, (room) => room.users)
   joinedRooms: Room[];
+
+  @Field(() => [User])
+  @ManyToMany(() => User)
+  @JoinTable()
+  ignore: User[];
 }

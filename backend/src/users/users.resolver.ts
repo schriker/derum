@@ -69,6 +69,24 @@ export class UsersResolver {
     return savedUser;
   }
 
+  @Mutation(() => Boolean)
+  @UseGuards(GQLSessionGuard)
+  ignoreUser(
+    @CurrentUser() currentUser: User,
+    @Args('id') id: number,
+  ): Promise<boolean> {
+    return this.usersService.ignore(currentUser, id);
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GQLSessionGuard)
+  removeIgnoreUser(
+    @CurrentUser() currentUser: User,
+    @Args('id') id: number,
+  ): Promise<boolean> {
+    return this.usersService.removeIgnore(currentUser, id);
+  }
+
   @ResolveField()
   email(@CurrentUser() currentUser: User, @Parent() user: User): string {
     if (currentUser) return user.email;
@@ -81,6 +99,15 @@ export class UsersResolver {
     @Parent() user: User,
   ): Promise<Room[]> | [] {
     if (currentUser) return this.usersService.getJoinedRooms(user);
+    return [];
+  }
+
+  @ResolveField()
+  ignore(
+    @CurrentUser() currentUser: User,
+    @Parent() user: User,
+  ): Promise<User[]> | [] {
+    if (currentUser) return this.usersService.getIgnors(user);
     return [];
   }
 }

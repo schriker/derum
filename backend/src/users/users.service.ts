@@ -44,15 +44,45 @@ export class UsersService {
     return this.usersRepository.findOne({ id });
   }
 
+  async ignore(user: User, id: number): Promise<boolean> {
+    try {
+      await this.usersRepository
+        .createQueryBuilder('user')
+        .relation('ignore')
+        .of(user)
+        .add(id);
+      return true;
+    } catch (err) {
+      throw new BadRequestException('Error ignoring user.');
+    }
+  }
+
+  async removeIgnore(user: User, id: number): Promise<boolean> {
+    await this.usersRepository
+      .createQueryBuilder('user')
+      .relation('ignore')
+      .of(user)
+      .remove(id);
+    return true;
+  }
+
   updateSession(ctx, user: User) {
     ctx.req.session.passport.user = user;
     ctx.req.session.save();
   }
 
-  async getJoinedRooms(user: User): Promise<Room[]> {
+  getJoinedRooms(user: User): Promise<Room[]> {
     return this.usersRepository
       .createQueryBuilder('user')
       .relation('joinedRooms')
+      .of(user)
+      .loadMany();
+  }
+
+  getIgnors(user: User): Promise<User[]> {
+    return this.usersRepository
+      .createQueryBuilder('user')
+      .relation('ignore')
       .of(user)
       .loadMany();
   }
