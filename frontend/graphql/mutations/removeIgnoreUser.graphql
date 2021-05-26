@@ -1,0 +1,3 @@
+mutation RemoveIgnoreUser($id: Int!) {
+  removeIgnoreUser(id: $id)
+}

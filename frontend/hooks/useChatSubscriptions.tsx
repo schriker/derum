@@ -28,7 +28,7 @@ const useChatSubscriptions = (roomId: number) => {
     wsLink?.subscriptionClient.close();
     // @ts-ignore
     wsLink?.subscriptionClient.connect();
-  }, [user]);
+  }, [user?.me.id]);
 
   useEffect(() => {
     subscribeToMore<MessageAddedSubscription>({
@@ -74,7 +74,7 @@ const useChatSubscriptions = (roomId: number) => {
         });
       },
     });
-  }, [user, roomId]);
+  }, [user?.me.id, roomId]);
 
   return {
     data,

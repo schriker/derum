@@ -52,12 +52,12 @@ export type MutationChangeUserDisplayNameArgs = {
 
 
 export type MutationIgnoreUserArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 
 export type MutationRemoveIgnoreUserArgs = {
-  id: Scalars['Float'];
+  id: Scalars['Int'];
 };
 
 
@@ -203,6 +203,16 @@ export type DeleteMessageMutation = (
   & Pick<Mutation, 'deleteMessage'>
 );
 
+export type IgnoreUserMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type IgnoreUserMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'ignoreUser'>
+);
+
 export type LoginUserWithFacebookMutationVariables = Exact<{
   access_token: Scalars['String'];
 }>;
@@ -219,6 +229,16 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'logout'>
+);
+
+export type RemoveIgnoreUserMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type RemoveIgnoreUserMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeIgnoreUser'>
 );
 
 export type InitialMessagesQueryVariables = Exact<{
@@ -409,6 +429,37 @@ export function useDeleteMessageMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteMessageMutationHookResult = ReturnType<typeof useDeleteMessageMutation>;
 export type DeleteMessageMutationResult = Apollo.MutationResult<DeleteMessageMutation>;
 export type DeleteMessageMutationOptions = Apollo.BaseMutationOptions<DeleteMessageMutation, DeleteMessageMutationVariables>;
+export const IgnoreUserDocument = gql`
+    mutation IgnoreUser($id: Int!) {
+  ignoreUser(id: $id)
+}
+    `;
+export type IgnoreUserMutationFn = Apollo.MutationFunction<IgnoreUserMutation, IgnoreUserMutationVariables>;
+
+/**
+ * __useIgnoreUserMutation__
+ *
+ * To run a mutation, you first call `useIgnoreUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useIgnoreUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [ignoreUserMutation, { data, loading, error }] = useIgnoreUserMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useIgnoreUserMutation(baseOptions?: Apollo.MutationHookOptions<IgnoreUserMutation, IgnoreUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<IgnoreUserMutation, IgnoreUserMutationVariables>(IgnoreUserDocument, options);
+      }
+export type IgnoreUserMutationHookResult = ReturnType<typeof useIgnoreUserMutation>;
+export type IgnoreUserMutationResult = Apollo.MutationResult<IgnoreUserMutation>;
+export type IgnoreUserMutationOptions = Apollo.BaseMutationOptions<IgnoreUserMutation, IgnoreUserMutationVariables>;
 export const LoginUserWithFacebookDocument = gql`
     mutation LoginUserWithFacebook($access_token: String!) {
   loginUserWithFacebook(access_token: $access_token)
@@ -470,6 +521,37 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const RemoveIgnoreUserDocument = gql`
+    mutation RemoveIgnoreUser($id: Int!) {
+  removeIgnoreUser(id: $id)
+}
+    `;
+export type RemoveIgnoreUserMutationFn = Apollo.MutationFunction<RemoveIgnoreUserMutation, RemoveIgnoreUserMutationVariables>;
+
+/**
+ * __useRemoveIgnoreUserMutation__
+ *
+ * To run a mutation, you first call `useRemoveIgnoreUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveIgnoreUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeIgnoreUserMutation, { data, loading, error }] = useRemoveIgnoreUserMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useRemoveIgnoreUserMutation(baseOptions?: Apollo.MutationHookOptions<RemoveIgnoreUserMutation, RemoveIgnoreUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveIgnoreUserMutation, RemoveIgnoreUserMutationVariables>(RemoveIgnoreUserDocument, options);
+      }
+export type RemoveIgnoreUserMutationHookResult = ReturnType<typeof useRemoveIgnoreUserMutation>;
+export type RemoveIgnoreUserMutationResult = Apollo.MutationResult<RemoveIgnoreUserMutation>;
+export type RemoveIgnoreUserMutationOptions = Apollo.BaseMutationOptions<RemoveIgnoreUserMutation, RemoveIgnoreUserMutationVariables>;
 export const InitialMessagesDocument = gql`
     query InitialMessages($roomId: Int!) {
   initialMessages(roomId: $roomId) {

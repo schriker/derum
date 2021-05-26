@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
-import { InitialMessagesQuery } from '../../generated/graphql';
+import { InitialMessagesQuery, useMeQuery } from '../../generated/graphql';
 import ChatMessagesItem from './ChatMessagesItem';
 
 const ChatMessages = ({
@@ -8,6 +8,10 @@ const ChatMessages = ({
 }: {
   messages: InitialMessagesQuery['initialMessages'];
 }) => {
+  const { data } = useMeQuery({
+    fetchPolicy: 'cache-only',
+  });
+  const ignoresId = data?.me.ignore.map((user) => user.id);
   return (
     <Box
       className="scrollbar"
@@ -18,9 +22,11 @@ const ChatMessages = ({
       pr="5px"
       height="100%"
     >
-      {messages.map((message) => (
-        <ChatMessagesItem message={message} key={message.id} />
-      ))}
+      {messages.map((message) =>
+        ignoresId?.includes(message.author.id) ? null : (
+          <ChatMessagesItem message={message} key={message.id} />
+        )
+      )}
     </Box>
   );
 };
