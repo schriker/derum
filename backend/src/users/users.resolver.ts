@@ -73,7 +73,7 @@ export class UsersResolver {
   @UseGuards(GQLSessionGuard)
   ignoreUser(
     @CurrentUser() currentUser: User,
-    @Args('id') id: number,
+    @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {
     return this.usersService.ignore(currentUser, id);
   }
@@ -82,7 +82,7 @@ export class UsersResolver {
   @UseGuards(GQLSessionGuard)
   removeIgnoreUser(
     @CurrentUser() currentUser: User,
-    @Args('id') id: number,
+    @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {
     return this.usersService.removeIgnore(currentUser, id);
   }

@@ -1,9 +1,11 @@
 import { Box } from '@material-ui/core';
+import gql from 'graphql-tag';
 import React from 'react';
 import {
   useIgnoreUserMutation,
   useMeQuery,
   useRemoveIgnoreUserMutation,
+  useUserQuery,
 } from '../../generated/graphql';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import LockIcon from '../Icons/LockIcon';
@@ -16,6 +18,11 @@ const UserModalActions = ({ id }: { id: number }) => {
   const { data: me } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
+  const { data } = useUserQuery({
+    variables: {
+      id,
+    },
+  });
   const [ignoreUser] = useIgnoreUserMutation({
     errorPolicy: 'ignore',
     update(cache) {
@@ -23,7 +30,15 @@ const UserModalActions = ({ id }: { id: number }) => {
         id: cache.identify(me.me),
         fields: {
           ignore(prev) {
-            return [...prev, { __ref: `User:${id}` }];
+            const ignoredUserRef = cache.writeFragment({
+              data: data.user,
+              fragment: gql`
+                fragment IgnoreUser on User {
+                  id
+                }
+              `,
+            });
+            return [...prev, ignoredUserRef];
           },
         },
       });
@@ -46,17 +61,17 @@ const UserModalActions = ({ id }: { id: number }) => {
   const isIgnored = me?.me.ignore.some((user) => user.id === id);
 
   const handleIgnore = () => {
+    const variables = {
+      id,
+    };
+
     if (!isIgnored) {
       ignoreUser({
-        variables: {
-          id,
-        },
+        variables,
       });
     } else {
       removeIgnoreUser({
-        variables: {
-          id,
-        },
+        variables,
       });
     }
   };

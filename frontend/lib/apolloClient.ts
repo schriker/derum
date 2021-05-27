@@ -49,7 +49,19 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: splitLink,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            initialMessages: {
+              merge(_, incoming) {
+                return incoming;
+              },
+            },
+          },
+        },
+      },
+    }),
   });
 }
 

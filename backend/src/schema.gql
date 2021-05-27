@@ -56,8 +56,8 @@ type Mutation {
   loginUserWithFacebook(access_token: String!): Boolean!
   logout: Boolean!
   changeUserDisplayName(name: String!): User!
-  ignoreUser(id: Float!): Boolean!
-  removeIgnoreUser(id: Float!): Boolean!
+  ignoreUser(id: Int!): Boolean!
+  removeIgnoreUser(id: Int!): Boolean!
   createRoom(newRoomData: NewRoomInput!): Room!
   joinRoom(id: Int!): Boolean!
   leave(id: Int!): Boolean!

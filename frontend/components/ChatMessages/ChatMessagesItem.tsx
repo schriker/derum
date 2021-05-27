@@ -9,10 +9,12 @@ import UserModal from '../UserModal/UserModal';
 import ChatMessageActions from './ChatMessageActions';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
-const ChatMessagesItem = ({ message }: ChatMessagesItemProps) => {
+const ChatMessagesItem = ({
+  message,
+  setUserId,
+  handleOpen,
+}: ChatMessagesItemProps) => {
   const [showActions, setShowActions] = useState(false);
-  const { openModal, handleClose, handleOpen } = useOpenCloseModal();
-  const [userId, setUserId] = useState(null);
   const classes = useChatMessageItemStyles({ userColor: '#FF026A' });
   const isConnected = useIsConnected();
 
@@ -64,13 +66,6 @@ const ChatMessagesItem = ({ message }: ChatMessagesItemProps) => {
           <Typography variant="body2">{message.body}</Typography>
         </Box>
       </Box>
-      {userId && (
-        <UserModal
-          openModal={openModal}
-          handleClose={handleClose}
-          id={userId}
-        />
-      )}
     </Box>
   );
 };

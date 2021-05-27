@@ -1,6 +1,8 @@
 import { Box } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { InitialMessagesQuery, useMeQuery } from '../../generated/graphql';
+import useOpenCloseModal from '../../hooks/useOpenCloseModal';
+import UserModal from '../UserModal/UserModal';
 import ChatMessagesItem from './ChatMessagesItem';
 
 const ChatMessages = ({
@@ -8,9 +10,9 @@ const ChatMessages = ({
 }: {
   messages: InitialMessagesQuery['initialMessages'];
 }) => {
-  const { data } = useMeQuery({
-    fetchPolicy: 'cache-only',
-  });
+  const { data } = useMeQuery();
+  const [userId, setUserId] = useState(null);
+  const { openModal, handleClose, handleOpen } = useOpenCloseModal();
   const ignoresId = data?.me.ignore.map((user) => user.id);
   return (
     <Box
@@ -24,8 +26,20 @@ const ChatMessages = ({
     >
       {messages.map((message) =>
         ignoresId?.includes(message.author.id) ? null : (
-          <ChatMessagesItem message={message} key={message.id} />
+          <ChatMessagesItem
+            setUserId={setUserId}
+            handleOpen={handleOpen}
+            message={message}
+            key={message.id}
+          />
         )
+      )}
+      {userId && (
+        <UserModal
+          openModal={openModal}
+          handleClose={handleClose}
+          id={userId}
+        />
       )}
     </Box>
   );
