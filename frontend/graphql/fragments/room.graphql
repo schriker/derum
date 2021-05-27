@@ -1,0 +1,9 @@
+fragment RoomFragment on Room {
+  id
+  name
+  description
+  usersNumber
+  author {
+    ...AuthorFragment
+  }
+}

@@ -33,6 +33,7 @@ type Room {
   name: String!
   description: String!
   author: User!
+  usersNumber: Int!
 }
 
 type OnlineUser {

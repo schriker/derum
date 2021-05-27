@@ -142,6 +142,7 @@ export type Room = {
   name: Scalars['String'];
   description: Scalars['String'];
   author: User;
+  usersNumber: Scalars['Int'];
 };
 
 export type Subscription = {
@@ -177,6 +178,15 @@ export type User = {
 export type AuthorFragmentFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName'>
+);
+
+export type RoomFragmentFragment = (
+  { __typename?: 'Room' }
+  & Pick<Room, 'id' | 'name' | 'description' | 'usersNumber'>
+  & { author: (
+    { __typename?: 'User' }
+    & AuthorFragmentFragment
+  ) }
 );
 
 export type CreateMessageMutationVariables = Exact<{
@@ -299,11 +309,7 @@ export type RoomQuery = (
   { __typename?: 'Query' }
   & { room: (
     { __typename?: 'Room' }
-    & Pick<Room, 'id' | 'name' | 'description'>
-    & { author: (
-      { __typename?: 'User' }
-      & AuthorFragmentFragment
-    ) }
+    & RoomFragmentFragment
   ) }
 );
 
@@ -364,6 +370,17 @@ export const AuthorFragmentFragmentDoc = gql`
   displayName
 }
     `;
+export const RoomFragmentFragmentDoc = gql`
+    fragment RoomFragment on Room {
+  id
+  name
+  description
+  usersNumber
+  author {
+    ...AuthorFragment
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
 export const CreateMessageDocument = gql`
     mutation CreateMessage($roomId: Int!, $body: String!) {
   createMessage(newMessageData: {roomId: $roomId, body: $body}) {
@@ -677,15 +694,10 @@ export type OnlineUsersQueryResult = Apollo.QueryResult<OnlineUsersQuery, Online
 export const RoomDocument = gql`
     query Room($name: String!) {
   room(name: $name) {
-    id
-    name
-    description
-    author {
-      ...AuthorFragment
-    }
+    ...RoomFragment
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${RoomFragmentFragmentDoc}`;
 
 /**
  * __useRoomQuery__

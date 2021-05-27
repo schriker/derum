@@ -22,6 +22,8 @@ export class RoomsService {
       .createQueryBuilder('room')
       .where('room.name ILIKE :name', { name })
       .leftJoinAndSelect('room.author', 'author')
+      .leftJoinAndSelect('room.users', 'users')
+      .loadRelationCountAndMap('room.usersNumber', 'room.users')
       .getOne();
     if (!room) {
       throw new NotFoundException(name);
@@ -34,6 +36,8 @@ export class RoomsService {
       .createQueryBuilder('room')
       .where('room.id = :id', { id })
       .leftJoinAndSelect('room.author', 'author')
+      .leftJoinAndSelect('room.users', 'users')
+      .loadRelationCountAndMap('room.usersNumber', 'room.users')
       .getOne();
     if (!room) {
       throw new NotFoundException(id);

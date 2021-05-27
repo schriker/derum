@@ -48,4 +48,7 @@ export class Room {
   @ManyToMany(() => User, (user) => user.joinedRooms)
   @JoinTable()
   users: User[];
+
+  @Field(() => Int)
+  usersNumber: number;
 }
