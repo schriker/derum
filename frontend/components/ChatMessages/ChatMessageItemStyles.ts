@@ -20,11 +20,16 @@ const useChatMessageItemStyles = makeStyles((theme: Theme) => ({
     borderRadius: theme.shape.borderRadius,
     boxShadow: theme.shadows[1],
   },
-  wrapper: {
+  wrapper: (props: any) => ({
+    opacity: !props.selectedUser
+      ? 1
+      : props.selectedUser === props.author
+      ? 1
+      : 0.5,
     position: 'relative',
     display: 'flex',
     wordBreak: 'break-word',
-    transition: theme.transitions.create('background-color'),
+    transition: theme.transitions.create(['background-color', 'opacity']),
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(1),
     borderRadius: theme.shape.borderRadius,
@@ -33,7 +38,7 @@ const useChatMessageItemStyles = makeStyles((theme: Theme) => ({
       backgroundColor: theme.palette.secondary.main,
       cursor: 'pointer',
     },
-  },
+  }),
   userName: (props: any) => ({
     color: props.userColor,
     marginRight: '5px',

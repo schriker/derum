@@ -2,20 +2,23 @@ import { Box, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import useIsConnected from '../../hooks/useIsConnected';
-import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import { ChatMessagesItemProps } from '../../types/messages';
 import UserAvatar from '../UserAvatar/UserAvatar';
-import UserModal from '../UserModal/UserModal';
 import ChatMessageActions from './ChatMessageActions';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
 const ChatMessagesItem = ({
   message,
   setUserId,
+  userId,
   handleOpen,
 }: ChatMessagesItemProps) => {
   const [showActions, setShowActions] = useState(false);
-  const classes = useChatMessageItemStyles({ userColor: '#FF026A' });
+  const classes = useChatMessageItemStyles({
+    userColor: '#FF026A',
+    author: message.author.id,
+    selectedUser: userId,
+  });
   const isConnected = useIsConnected();
 
   const handlerUserSelect = (id: number) => {
@@ -23,11 +26,20 @@ const ChatMessagesItem = ({
     handleOpen();
   };
 
+  const handleHighLightMessages = () => {
+    if (userId) {
+      setUserId(null);
+    } else {
+      setUserId(message.author.id);
+    }
+  };
+
   return (
     <Box
       className={classes.wrapper}
       onMouseEnter={() => setShowActions((prevState) => !prevState)}
       onMouseLeave={() => setShowActions(false)}
+      onClick={handleHighLightMessages}
     >
       {showActions && isConnected && (
         <ChatMessageActions messageId={message.id} />

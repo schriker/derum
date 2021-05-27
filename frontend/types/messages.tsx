@@ -13,6 +13,7 @@ export type ChatMessagesItemProps = {
           'id' | 'displayName' | 'photo' | 'isAdmin' | 'isModerator'
         >;
     };
+  userId: number | null;
   setUserId: (id: number) => void;
   handleOpen: () => void;
 };

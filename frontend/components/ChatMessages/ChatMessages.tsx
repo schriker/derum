@@ -27,6 +27,7 @@ const ChatMessages = ({
       {messages.map((message) =>
         ignoresId?.includes(message.author.id) ? null : (
           <ChatMessagesItem
+            userId={userId}
             setUserId={setUserId}
             handleOpen={handleOpen}
             message={message}
