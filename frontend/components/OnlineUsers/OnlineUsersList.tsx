@@ -5,6 +5,7 @@ import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import { OnlineUsersListProps } from '../../types/onlineUsers';
 import { CustomInput } from '../CustomInput/CustomInput';
 import SearchIcon from '../Icons/SearchIcon';
+import SearchInput from '../SearchInput/SearchInput';
 import UserModal from '../UserModal/UserModal';
 import OnlineUsersSection from './OnlineUsersSection';
 import useOnlineUsersStyles from './OnlineUsersStyle';
@@ -41,11 +42,9 @@ const OnlineUsersList = ({ users }: OnlineUsersListProps) => {
   return (
     <Box className={classes.wrapper}>
       <Box className={classes.inputWrapper}>
-        <CustomInput
+        <SearchInput
           value={searchValue}
           onChange={handleChange}
-          startAdornment={<SearchIcon className={classes.icon} />}
-          className={classes.search}
           placeholder="Szukaj użytkownika"
         />
       </Box>

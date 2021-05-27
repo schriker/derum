@@ -24,7 +24,7 @@ const ChatMessageActions = ({ messageId }: MessageActionProps) => {
     },
   });
 
-  const [deleteMessage, { loading }] = useDeleteMessageMutation({
+  const [deleteMessage] = useDeleteMessageMutation({
     onError: () =>
       globalErrorVar({ isOpen: true, message: 'Błąd usuwania wiadomości' }),
   });
@@ -45,12 +45,7 @@ const ChatMessageActions = ({ messageId }: MessageActionProps) => {
   return data ? (
     <Box className={classes.actions}>
       {isRoomAdmin && (
-        <ButtonIcon
-          disabled={loading}
-          color="secondary"
-          size="small"
-          onClick={onDeleteMessage}
-        >
+        <ButtonIcon color="secondary" size="small" onClick={onDeleteMessage}>
           <CloseIcon style={{ fontSize: 16 }} />
         </ButtonIcon>
       )}

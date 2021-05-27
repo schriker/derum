@@ -5,7 +5,7 @@ import Header from '../Header/Header';
 import LoginModal from '../LoginModal/LoginModal';
 import NavBar from '../NavBar/NavBar';
 import Sidebar from '../Sidebar/SIdebar';
-import SidebarDrawer from '../SidebarDrawer/SidebarDrawer';
+import SidebarDrawer from '../Sidebar/SidebarDrawer';
 
 const Layout = ({ children, ...rest }: LayoutProps) => {
   return (

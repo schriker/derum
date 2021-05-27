@@ -29,7 +29,9 @@ const useChatMessageItemStyles = makeStyles((theme: Theme) => ({
     position: 'relative',
     display: 'flex',
     wordBreak: 'break-word',
-    transition: theme.transitions.create(['background-color', 'opacity']),
+    transition: theme.transitions.create(['background-color', 'opacity'], {
+      duration: 150,
+    }),
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(1),
     borderRadius: theme.shape.borderRadius,

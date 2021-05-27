@@ -3,13 +3,17 @@ import { Skeleton } from '@material-ui/lab';
 import Link from 'next/link';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
+import { openDrawerVar } from '../../lib/apolloVars';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import HomeIcon from '../Icons/HomeIcon';
+import PlusIcon from '../Icons/PlusIcon';
 import RoomAvatar from '../RoomAvatar/RoomAvatar';
 import DarkTooltip from '../Tooltip/Tooltip';
+import SidebarHomeLink from './SidebarHomeLink';
+import SidebarSkeleton from './SidebarSkeleton';
 
 const Sidebar = () => {
-  const { data, loading } = useMeQuery({});
+  const { data, loading } = useMeQuery();
 
   return (
     <Box
@@ -20,25 +24,28 @@ const Sidebar = () => {
       alignItems="center"
       flexDirection="column"
     >
-      <Link href="/">
-        <DarkTooltip title="Główna" enterDelay={500} placement="right">
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDirection="column"
+        flexGrow="1"
+      >
+        <SidebarHomeLink />
+        {loading ? (
+          <SidebarSkeleton />
+        ) : data ? (
+          data.me.joinedRooms.map((room) => (
+            <RoomAvatar key={room.id} name={room.name} />
+          ))
+        ) : null}
+      </Box>
+      <Box my={1} onClick={() => openDrawerVar(true)}>
+        <DarkTooltip title="Dodaj" enterDelay={500} placement="right">
           <ButtonIcon color="secondary">
-            <HomeIcon style={{ fontSize: 16 }} />
+            <PlusIcon style={{ fontSize: 16 }} />
           </ButtonIcon>
         </DarkTooltip>
-      </Link>
-      {loading ? (
-        <Skeleton
-          style={{ marginTop: 10 }}
-          variant="circle"
-          width={40}
-          height={40}
-        />
-      ) : data ? (
-        data.me.joinedRooms.map((room) => (
-          <RoomAvatar key={room.id} name={room.name} />
-        ))
-      ) : null}
+      </Box>
     </Box>
   );
 };
