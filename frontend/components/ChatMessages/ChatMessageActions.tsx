@@ -1,11 +1,7 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
-import { indexRoomVars } from '../../consts';
-import {
-  useDeleteMessageMutation,
-  useMeQuery,
-  useRoomQuery,
-} from '../../generated/graphql';
+import { useDeleteMessageMutation, useMeQuery } from '../../generated/graphql';
+import useRoomData from '../../hooks/useRoomData';
 import { globalErrorVar } from '../../lib/apolloVars';
 import { MessageActionProps } from '../../types/messages';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
@@ -13,15 +9,10 @@ import CloseIcon from '../Icons/CloseIcon';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
 const ChatMessageActions = ({ messageId }: MessageActionProps) => {
+  const { roomData } = useRoomData();
   const classes = useChatMessageItemStyles({ userColor: '#FF026A' });
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',
-  });
-
-  const { data: roomData } = useRoomQuery({
-    variables: {
-      name: indexRoomVars.name,
-    },
   });
 
   const [deleteMessage] = useDeleteMessageMutation({

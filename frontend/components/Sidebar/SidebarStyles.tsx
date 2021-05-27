@@ -6,6 +6,8 @@ const useSidebarStyles = makeStyles((theme: Theme) => ({
     border: '2px solid',
     borderColor: theme.palette.grey[600],
     marginRight: 15,
+    width: 30,
+    height: 30,
   },
   button: {
     display: 'flex',
@@ -17,7 +19,7 @@ const useSidebarStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.grey[500],
   },
   sectionTitle: {
-    margin: 5,
+    margin: '5px 8px',
   },
   newRoomButton: {
     marginLeft: theme.spacing(1),

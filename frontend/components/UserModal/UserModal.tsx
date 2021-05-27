@@ -2,12 +2,8 @@ import { Box, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import dayjs from 'dayjs';
 import React from 'react';
-import { indexRoomVars } from '../../consts';
-import {
-  useOnlineUsersQuery,
-  useRoomQuery,
-  useUserQuery,
-} from '../../generated/graphql';
+import { useOnlineUsersQuery, useUserQuery } from '../../generated/graphql';
+import useRoomData from '../../hooks/useRoomData';
 import { UserModalProps } from '../../types/userModal';
 import Modal from '../Modal/Modal';
 import UserAvatar from '../UserAvatar/UserAvatar';
@@ -15,17 +11,11 @@ import useUserModalStyles from './UserModalStyles';
 import UserModalActions from './UsertMoalActions';
 
 const UserModal = ({ id, openModal, handleClose }: UserModalProps) => {
+  const { roomData } = useRoomData();
   const classes = useUserModalStyles();
-
   const { data } = useUserQuery({
     variables: {
       id,
-    },
-  });
-
-  const { data: roomData } = useRoomQuery({
-    variables: {
-      name: indexRoomVars.name,
     },
   });
 

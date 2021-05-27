@@ -20,7 +20,7 @@ const RoomAvatar = ({ name }: { name: string }) => {
   const classes = useStyles();
 
   return (
-    <Link href={`/`} as="/[room]">
+    <Link href={`/p/${name}`}>
       <DarkTooltip title={name} enterDelay={500} placement="right">
         <ButtonIcon className={classes.button}>
           <UserAvatar name={name} src={null} className={classes.photo} />

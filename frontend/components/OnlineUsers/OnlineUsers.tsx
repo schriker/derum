@@ -1,12 +1,8 @@
 import { Box } from '@material-ui/core';
-import React, { useState } from 'react';
-import { indexRoomVars } from '../../consts';
-import {
-  OnlineUser,
-  useOnlineUsersQuery,
-  useRoomQuery,
-} from '../../generated/graphql';
+import React from 'react';
+import { OnlineUser, useOnlineUsersQuery } from '../../generated/graphql';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
+import useRoomData from '../../hooks/useRoomData';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import UserIcon from '../Icons/UserIcon';
 import Modal from '../Modal/Modal';
@@ -14,13 +10,8 @@ import DarkTooltip from '../Tooltip/Tooltip';
 import OnlineUsersList from './OnlineUsersList';
 
 const OnlineUsers = () => {
+  const { roomData } = useRoomData();
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
-
-  const { data: roomData } = useRoomQuery({
-    variables: {
-      name: indexRoomVars.name,
-    },
-  });
 
   const { data: usersData } = useOnlineUsersQuery({
     variables: {

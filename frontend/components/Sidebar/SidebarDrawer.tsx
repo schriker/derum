@@ -1,17 +1,26 @@
 import { useReactiveVar } from '@apollo/client';
 import { Box, Drawer } from '@material-ui/core';
 import React, { useState } from 'react';
+import {
+  useNewRoomsQuery,
+  usePopularRoomsQuery,
+} from '../../generated/graphql';
 import { openDrawerVar } from '../../lib/apolloVars';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import CloseIcon from '../Icons/CloseIcon';
 import SearchInput from '../SearchInput/SearchInput';
+import SidebarDrawerSection from './SidebarDrawerSection';
+import SidebarSkeleton from './SidebarSkeleton';
 import useSidebarStyles from './SidebarStyles';
 
 const SidebarDrawer = () => {
   const isOpen = useReactiveVar(openDrawerVar);
   const classes = useSidebarStyles();
   const [searchValue, setSearchValue] = useState('');
+  const { data: newRoomsData, loading: newRoomsLoading } = useNewRoomsQuery();
+  const { data: popularRoomsData, loading: popularRoomsLoading } =
+    usePopularRoomsQuery();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -31,16 +40,22 @@ const SidebarDrawer = () => {
           </ButtonIcon>
         </Box>
         <Box display="flex" flexDirection="column" flexGrow="1" minWidth={300}>
-          {/* {loading ? (
+          {newRoomsLoading ? (
             <SidebarSkeleton />
-          ) : data ? (
-            <SidebarDrawerSection sectionData={data} title="Nowe" />
+          ) : newRoomsData ? (
+            <SidebarDrawerSection
+              sectionData={newRoomsData.newRooms}
+              title="Nowe"
+            />
           ) : null}
-          {loading ? (
+          {popularRoomsLoading ? (
             <SidebarSkeleton />
-          ) : data ? (
-            <SidebarDrawerSection sectionData={data} title="Popularne" />
-          ) : null} */}
+          ) : popularRoomsData ? (
+            <SidebarDrawerSection
+              sectionData={popularRoomsData.popularRooms}
+              title="Popularne"
+            />
+          ) : null}
           <ButtonPrimary className={classes.newRoomButton} color="primary">
             Utwórz nowy pokój
           </ButtonPrimary>
