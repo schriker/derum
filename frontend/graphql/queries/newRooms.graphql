@@ -1,0 +1,5 @@
+query NewRooms {
+  newRooms {
+    ...RoomFragment
+  }
+}

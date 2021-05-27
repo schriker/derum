@@ -35,7 +35,7 @@ export type Mutation = {
   removeIgnoreUser: Scalars['Boolean'];
   createRoom: Room;
   joinRoom: Scalars['Boolean'];
-  leave: Scalars['Boolean'];
+  leaveRoom: Scalars['Boolean'];
   createMessage: Message;
   deleteMessage: Scalars['Boolean'];
 };
@@ -71,7 +71,7 @@ export type MutationJoinRoomArgs = {
 };
 
 
-export type MutationLeaveArgs = {
+export type MutationLeaveRoomArgs = {
   id: Scalars['Int'];
 };
 
@@ -111,6 +111,8 @@ export type Query = {
   user: User;
   onlineUsers: Array<OnlineUser>;
   room: Room;
+  newRooms: Array<Room>;
+  popularRooms: Array<Room>;
   initialMessages: Array<Message>;
 };
 
@@ -287,6 +289,17 @@ export type MeQuery = (
   ) }
 );
 
+export type NewRoomsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type NewRoomsQuery = (
+  { __typename?: 'Query' }
+  & { newRooms: Array<(
+    { __typename?: 'Room' }
+    & RoomFragmentFragment
+  )> }
+);
+
 export type OnlineUsersQueryVariables = Exact<{
   roomId: Scalars['Int'];
 }>;
@@ -297,6 +310,17 @@ export type OnlineUsersQuery = (
   & { onlineUsers: Array<(
     { __typename?: 'OnlineUser' }
     & Pick<OnlineUser, 'userId' | 'name' | 'photo' | 'isAdmin' | 'isModerator'>
+  )> }
+);
+
+export type PopularRoomsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type PopularRoomsQuery = (
+  { __typename?: 'Query' }
+  & { popularRooms: Array<(
+    { __typename?: 'Room' }
+    & RoomFragmentFragment
   )> }
 );
 
@@ -652,6 +676,40 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const NewRoomsDocument = gql`
+    query NewRooms {
+  newRooms {
+    ...RoomFragment
+  }
+}
+    ${RoomFragmentFragmentDoc}`;
+
+/**
+ * __useNewRoomsQuery__
+ *
+ * To run a query within a React component, call `useNewRoomsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNewRoomsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewRoomsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useNewRoomsQuery(baseOptions?: Apollo.QueryHookOptions<NewRoomsQuery, NewRoomsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NewRoomsQuery, NewRoomsQueryVariables>(NewRoomsDocument, options);
+      }
+export function useNewRoomsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NewRoomsQuery, NewRoomsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NewRoomsQuery, NewRoomsQueryVariables>(NewRoomsDocument, options);
+        }
+export type NewRoomsQueryHookResult = ReturnType<typeof useNewRoomsQuery>;
+export type NewRoomsLazyQueryHookResult = ReturnType<typeof useNewRoomsLazyQuery>;
+export type NewRoomsQueryResult = Apollo.QueryResult<NewRoomsQuery, NewRoomsQueryVariables>;
 export const OnlineUsersDocument = gql`
     query OnlineUsers($roomId: Int!) {
   onlineUsers(roomId: $roomId) {
@@ -691,6 +749,40 @@ export function useOnlineUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type OnlineUsersQueryHookResult = ReturnType<typeof useOnlineUsersQuery>;
 export type OnlineUsersLazyQueryHookResult = ReturnType<typeof useOnlineUsersLazyQuery>;
 export type OnlineUsersQueryResult = Apollo.QueryResult<OnlineUsersQuery, OnlineUsersQueryVariables>;
+export const PopularRoomsDocument = gql`
+    query PopularRooms {
+  popularRooms {
+    ...RoomFragment
+  }
+}
+    ${RoomFragmentFragmentDoc}`;
+
+/**
+ * __usePopularRoomsQuery__
+ *
+ * To run a query within a React component, call `usePopularRoomsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePopularRoomsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePopularRoomsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function usePopularRoomsQuery(baseOptions?: Apollo.QueryHookOptions<PopularRoomsQuery, PopularRoomsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PopularRoomsQuery, PopularRoomsQueryVariables>(PopularRoomsDocument, options);
+      }
+export function usePopularRoomsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PopularRoomsQuery, PopularRoomsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PopularRoomsQuery, PopularRoomsQueryVariables>(PopularRoomsDocument, options);
+        }
+export type PopularRoomsQueryHookResult = ReturnType<typeof usePopularRoomsQuery>;
+export type PopularRoomsLazyQueryHookResult = ReturnType<typeof usePopularRoomsLazyQuery>;
+export type PopularRoomsQueryResult = Apollo.QueryResult<PopularRoomsQuery, PopularRoomsQueryVariables>;
 export const RoomDocument = gql`
     query Room($name: String!) {
   room(name: $name) {

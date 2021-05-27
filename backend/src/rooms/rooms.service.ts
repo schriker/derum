@@ -45,6 +45,31 @@ export class RoomsService {
     return room;
   }
 
+  getNewest(): Promise<Room[]> {
+    return this.roomsRepository
+      .createQueryBuilder('room')
+      .orderBy('room.createdAt', 'DESC')
+      .limit(5)
+      .leftJoinAndSelect('room.author', 'author')
+      .leftJoin('room.users', 'users')
+      .loadRelationCountAndMap('room.usersNumber', 'room.users')
+      .getMany();
+  }
+
+  getMostPopular(): Promise<Room[]> {
+    return this.roomsRepository
+      .createQueryBuilder('room')
+      .addSelect('COUNT(users.id) as usersNumber')
+      .leftJoinAndSelect('room.author', 'author')
+      .leftJoin('room.users', 'users')
+      .groupBy('room.id')
+      .addGroupBy('author.id')
+      .orderBy('usersNumber', 'DESC')
+      .loadRelationCountAndMap('room.usersNumber', 'room.users')
+      .limit(5)
+      .getMany();
+  }
+
   async create(data: NewRoomInput, user: User): Promise<Room> {
     const roomExists = await this.roomsRepository.find({
       name: ILike(data.name),

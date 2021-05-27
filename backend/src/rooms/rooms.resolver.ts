@@ -16,6 +16,16 @@ export class RoomsResolver {
     return this.roomsService.findOneByName(name);
   }
 
+  @Query(() => [Room])
+  newRooms(): Promise<Room[]> {
+    return this.roomsService.getNewest();
+  }
+
+  @Query(() => [Room])
+  popularRooms(): Promise<Room[]> {
+    return this.roomsService.getMostPopular();
+  }
+
   @Mutation(() => Room)
   @UseGuards(GQLSessionGuard)
   createRoom(
@@ -36,7 +46,7 @@ export class RoomsResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(GQLSessionGuard)
-  leave(
+  leaveRoom(
     @CurrentUser() user: User,
     @Args('id', { type: () => Int }) roomId: number,
   ) {

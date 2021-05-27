@@ -50,6 +50,8 @@ type Query {
   user(id: Int!): User!
   onlineUsers(roomId: Int!): [OnlineUser!]!
   room(name: String!): Room!
+  newRooms: [Room!]!
+  popularRooms: [Room!]!
   initialMessages(roomId: Int!): [Message!]!
 }
 
@@ -61,7 +63,7 @@ type Mutation {
   removeIgnoreUser(id: Int!): Boolean!
   createRoom(newRoomData: NewRoomInput!): Room!
   joinRoom(id: Int!): Boolean!
-  leave(id: Int!): Boolean!
+  leaveRoom(id: Int!): Boolean!
   createMessage(newMessageData: NewMessageInput!): Message!
   deleteMessage(id: Int!): Boolean!
 }
