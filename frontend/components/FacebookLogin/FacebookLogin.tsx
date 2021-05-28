@@ -1,4 +1,3 @@
-import { useApolloClient } from '@apollo/client';
 import React from 'react';
 import {
   useLoginUserWithFacebookMutation,
@@ -9,14 +8,14 @@ import { ButtonSocialLogin } from '../Buttons/ButtonSocialLogin';
 import FacebookIcon from '../Icons/FacebookIcon';
 
 const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
-  const client = useApolloClient();
   const hadleError = () => {
     onLoading(false);
     onError(true);
   };
 
   const [fetchUser] = useMeLazyQuery({
-    onError: hadleError,
+    // onError: hadleError,
+    onError: (e) => console.log(e),
     onCompleted: (data) => {
       if (data.me) onSuccess();
     },
@@ -31,7 +30,8 @@ const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
         cache.reset();
       }
     },
-    onError: hadleError,
+    // onError: hadleError,
+    onError: (e) => console.log(e),
   });
 
   const handleFacebookLogin = () => {

@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import gql from 'graphql-tag';
 import React from 'react';
 import {
+  AuthorFragmentFragmentDoc,
   useIgnoreUserMutation,
   useMeQuery,
   useRemoveIgnoreUserMutation,
@@ -32,11 +33,7 @@ const UserModalActions = ({ id }: { id: number }) => {
           ignore(prev) {
             const ignoredUserRef = cache.writeFragment({
               data: data.user,
-              fragment: gql`
-                fragment IgnoreUser on User {
-                  id
-                }
-              `,
+              fragment: AuthorFragmentFragmentDoc,
             });
             return [...prev, ignoredUserRef];
           },

@@ -7,8 +7,7 @@ query Me {
       displayName
     }
     joinedRooms {
-      id
-      name
+      ...RoomFragment
     }
   }
 }

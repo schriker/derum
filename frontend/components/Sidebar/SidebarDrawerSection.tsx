@@ -8,7 +8,7 @@ const SidebarDrawerSection = ({
   title,
   sectionData,
 }: SidebarDrawerSectionProps) => {
-  const classes = useSidebarStyles();
+  const classes = useSidebarStyles({});
 
   return (
     <>

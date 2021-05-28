@@ -1,4 +1,4 @@
-import { Box, makeStyles, Theme, Typography } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { openDrawerVar } from '../../lib/apolloVars';
@@ -8,8 +8,8 @@ import UserAvatar from '../UserAvatar/UserAvatar';
 import useSidebarStyles from './SidebarStyles';
 
 const SidebarDrawerItem = ({ name, usersNumber }: SidebarDrawerItemProps) => {
-  const classes = useSidebarStyles();
   const router = useRouter();
+  const classes = useSidebarStyles({ isActive: router.query.room === name });
 
   const handleClick = () => {
     openDrawerVar(false);

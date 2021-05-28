@@ -1,19 +1,15 @@
 import { Box } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
-import Link from 'next/link';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import { openDrawerVar } from '../../lib/apolloVars';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
-import HomeIcon from '../Icons/HomeIcon';
 import PlusIcon from '../Icons/PlusIcon';
 import RoomAvatar from '../RoomAvatar/RoomAvatar';
 import DarkTooltip from '../Tooltip/Tooltip';
 import SidebarHomeLink from './SidebarHomeLink';
-import SidebarSkeleton from './SidebarSkeleton';
 
 const Sidebar = () => {
-  const { data, loading } = useMeQuery();
+  const { data } = useMeQuery();
 
   return (
     <Box
@@ -31,13 +27,11 @@ const Sidebar = () => {
         flexGrow="1"
       >
         <SidebarHomeLink />
-        {loading ? (
-          <SidebarSkeleton />
-        ) : data ? (
-          data.me.joinedRooms.map((room) => (
-            <RoomAvatar key={room.id} name={room.name} />
-          ))
-        ) : null}
+        {data
+          ? data.me.joinedRooms.map((room) => (
+              <RoomAvatar key={room.id} name={room.name} />
+            ))
+          : null}
       </Box>
       <Box my={1} onClick={() => openDrawerVar(true)}>
         <DarkTooltip title="Dodaj" enterDelay={500} placement="right">

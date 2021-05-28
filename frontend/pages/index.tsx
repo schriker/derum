@@ -1,41 +1,22 @@
-import { Box } from '@material-ui/core';
-import React from 'react';
-import Chat from '../components/Chat/Chat';
-import Layout from '../components/Layout/Layout';
 import { indexRoomVars } from '../consts';
 import {
-  RoomDocument,
   RoomQuery,
   RoomQueryVariables,
-  useMeQuery,
-  useRoomQuery,
+  RoomDocument,
 } from '../generated/graphql';
-import { addApolloState, initializeApollo } from '../lib/apolloClient';
-import { globalErrorVar } from '../lib/apolloVars';
+import { initializeApollo, addApolloState } from '../lib/apolloClient';
+import Room from './p/[room]';
 
-export default function Home() {
-  const { data } = useRoomQuery({
-    onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
-    variables: indexRoomVars,
-  });
+export default Room;
 
-  return (
-    <Layout
-      title={`${data.room.name} - ${data.room.description}`}
-      ogDescription="Description"
-    >
-      <Box flex="1 1 auto">Content</Box>
-      <Chat roomId={data.room.id} />
-    </Layout>
-  );
-}
-
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   const apolloClient = initializeApollo();
 
   await apolloClient.query<RoomQuery, RoomQueryVariables>({
     query: RoomDocument,
-    variables: indexRoomVars,
+    variables: {
+      name: indexRoomVars.name,
+    },
   });
 
   return addApolloState(apolloClient, {

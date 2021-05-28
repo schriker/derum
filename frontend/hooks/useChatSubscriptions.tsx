@@ -11,12 +11,16 @@ import { wsLink } from '../lib/apolloClient';
 import { globalErrorVar } from '../lib/apolloVars';
 
 const useChatSubscriptions = (roomId: number) => {
-  const { data, subscribeToMore } = useInitialMessagesQuery({
+  const { data, subscribeToMore, refetch } = useInitialMessagesQuery({
     fetchPolicy: 'cache-first',
     variables: {
       roomId: roomId,
     },
   });
+
+  useEffect(() => {
+    refetch();
+  }, [roomId]);
 
   const { data: user } = useMeQuery({
     fetchPolicy: 'cache-only',
@@ -28,7 +32,7 @@ const useChatSubscriptions = (roomId: number) => {
     wsLink?.subscriptionClient.close();
     // @ts-ignore
     wsLink?.subscriptionClient.connect();
-  }, [user?.me.id]);
+  }, [user?.me.id, roomId]);
 
   useEffect(() => {
     subscribeToMore<MessageAddedSubscription>({
@@ -40,8 +44,12 @@ const useChatSubscriptions = (roomId: number) => {
         if (!subscriptionData.data) return prev;
         const newMessage = subscriptionData.data.messageAdded;
         const prevMessages = [...prev.initialMessages];
+        const slicedPrevMessages =
+          prevMessages.length > 100
+            ? [...prevMessages.slice(0, -1)]
+            : [...prevMessages];
         return Object.assign({}, prev, {
-          initialMessages: [newMessage, ...prevMessages.slice(0, -1)],
+          initialMessages: [newMessage, ...slicedPrevMessages],
         });
       },
     });

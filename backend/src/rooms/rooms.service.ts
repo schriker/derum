@@ -78,11 +78,14 @@ export class RoomsService {
       throw new BadRequestException(ERROR_MESSAGES.ROOM_EXISTS);
     }
     const room = new Room();
+    room.author = user;
+    room.usersNumber = 1;
     room.name = data.name;
     room.description = data.description;
-    room.author = user;
 
-    return this.roomsRepository.save(room);
+    const createdRoom = await this.roomsRepository.save(room);
+    await this.join(user, createdRoom.id);
+    return createdRoom;
   }
 
   async join(user: User, roomId: number): Promise<boolean> {

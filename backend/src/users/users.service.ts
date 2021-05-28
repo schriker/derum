@@ -1,7 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
-import { Room } from 'src/rooms/entities/room.entity';
 import { ILike, Repository } from 'typeorm';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { OnlineUser } from './dto/online-user';
@@ -40,8 +39,16 @@ export class UsersService {
     return [...new Map(users.map((item) => [item['name'], item])).values()];
   }
 
-  findById(id: number): Promise<User> {
-    return this.usersRepository.findOne({ id });
+  async findById(id: number): Promise<User> {
+    const user = await this.usersRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id })
+      .leftJoinAndSelect('user.ignore', 'ignore')
+      .leftJoinAndSelect('user.joinedRooms', 'joinedRooms')
+      .leftJoinAndSelect('joinedRooms.author', 'roomAuthor')
+      .loadRelationCountAndMap('joinedRooms.usersNumber', 'joinedRooms.users')
+      .getOne();
+    return user;
   }
 
   async ignore(user: User, id: number): Promise<boolean> {
@@ -71,13 +78,14 @@ export class UsersService {
     ctx.req.session.save();
   }
 
-  getJoinedRooms(user: User): Promise<Room[]> {
-    return this.usersRepository
-      .createQueryBuilder('user')
-      .relation('joinedRooms')
-      .of(user)
-      .loadMany();
-  }
+  // getJoinedRooms(user: User): Promise<Room[]> {
+  //   return this.usersRepository
+  //     .createQueryBuilder('user')
+  //     .loadRelationCountAndMap('room.usersNumber', 'room.users')
+  //     .relation('joinedRooms')
+  //     .of(user)
+  //     .loadMany();
+  // }
 
   getIgnors(user: User): Promise<User[]> {
     return this.usersRepository

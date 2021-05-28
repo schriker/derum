@@ -1,5 +1,7 @@
 import { withStyles, Theme, InputBase } from '@material-ui/core';
 
+const styledBy = (property, mapping) => (props) => mapping[props[property]];
+
 export const CustomInput = withStyles((theme: Theme) => ({
   root: {
     width: '100%',
@@ -7,7 +9,10 @@ export const CustomInput = withStyles((theme: Theme) => ({
     padding: '3px 15px',
     borderColor: 'transparent',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: styledBy('bg', {
+      dark: theme.palette.background.paper,
+      light: theme.palette.grey[800],
+    }),
     transition: theme.transitions.create(['border-color', 'background-color']),
     'label + &': {
       marginTop: theme.spacing(3),

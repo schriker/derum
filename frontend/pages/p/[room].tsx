@@ -13,12 +13,14 @@ import {
 import { addApolloState, initializeApollo } from '../../lib/apolloClient';
 import { globalErrorVar } from '../../lib/apolloVars';
 
-export default function Home() {
+export default function Room() {
   const router = useRouter();
   const { data } = useRoomQuery({
     onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
     variables: {
-      name: router.query.room as string,
+      name: router.query.room
+        ? (router.query.room as string)
+        : indexRoomVars.name,
     },
   });
 

@@ -11,7 +11,6 @@ import {
 } from '@nestjs/graphql';
 import { FacebookAuthGuard } from 'src/auth/guards/facebook-auth.guard';
 import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
-import { Room } from 'src/rooms/entities/room.entity';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { OnlineUser } from './dto/online-user';
@@ -91,15 +90,6 @@ export class UsersResolver {
   email(@CurrentUser() currentUser: User, @Parent() user: User): string {
     if (currentUser) return user.email;
     return '';
-  }
-
-  @ResolveField()
-  joinedRooms(
-    @CurrentUser() currentUser: User,
-    @Parent() user: User,
-  ): Promise<Room[]> | [] {
-    if (currentUser) return this.usersService.getJoinedRooms(user);
-    return [];
   }
 
   @ResolveField()

@@ -1,5 +1,6 @@
 import { makeStyles, Theme } from '@material-ui/core';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import DarkTooltip from '../Tooltip/Tooltip';
@@ -10,14 +11,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: 0,
     marginTop: 10,
   },
-  photo: {
+  photo: (props: any) => ({
     border: '2px solid',
-    borderColor: theme.palette.grey[600],
-  },
+    borderColor: props.isActive
+      ? theme.palette.primary['A400']
+      : theme.palette.grey[600],
+  }),
 }));
 
 const RoomAvatar = ({ name }: { name: string }) => {
-  const classes = useStyles();
+  const router = useRouter();
+  const classes = useStyles({ isActive: router.query.room === name });
 
   return (
     <Link href={`/p/${name}`}>

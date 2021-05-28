@@ -1,0 +1,5 @@
+mutation CreateRoom($name: String!, $description: String!) {
+  createRoom(newRoomData: { name: $name, description: $description }) {
+    ...RoomFragment
+  }
+}

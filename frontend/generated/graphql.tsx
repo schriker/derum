@@ -205,6 +205,20 @@ export type CreateMessageMutation = (
   ) }
 );
 
+export type CreateRoomMutationVariables = Exact<{
+  name: Scalars['String'];
+  description: Scalars['String'];
+}>;
+
+
+export type CreateRoomMutation = (
+  { __typename?: 'Mutation' }
+  & { createRoom: (
+    { __typename?: 'Room' }
+    & RoomFragmentFragment
+  ) }
+);
+
 export type DeleteMessageMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -283,7 +297,7 @@ export type MeQuery = (
       & Pick<User, 'id' | 'displayName'>
     )>, joinedRooms: Array<(
       { __typename?: 'Room' }
-      & Pick<Room, 'id' | 'name'>
+      & RoomFragmentFragment
     )> }
     & AuthorFragmentFragment
   ) }
@@ -439,6 +453,40 @@ export function useCreateMessageMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateMessageMutationHookResult = ReturnType<typeof useCreateMessageMutation>;
 export type CreateMessageMutationResult = Apollo.MutationResult<CreateMessageMutation>;
 export type CreateMessageMutationOptions = Apollo.BaseMutationOptions<CreateMessageMutation, CreateMessageMutationVariables>;
+export const CreateRoomDocument = gql`
+    mutation CreateRoom($name: String!, $description: String!) {
+  createRoom(newRoomData: {name: $name, description: $description}) {
+    ...RoomFragment
+  }
+}
+    ${RoomFragmentFragmentDoc}`;
+export type CreateRoomMutationFn = Apollo.MutationFunction<CreateRoomMutation, CreateRoomMutationVariables>;
+
+/**
+ * __useCreateRoomMutation__
+ *
+ * To run a mutation, you first call `useCreateRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createRoomMutation, { data, loading, error }] = useCreateRoomMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      description: // value for 'description'
+ *   },
+ * });
+ */
+export function useCreateRoomMutation(baseOptions?: Apollo.MutationHookOptions<CreateRoomMutation, CreateRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateRoomMutation, CreateRoomMutationVariables>(CreateRoomDocument, options);
+      }
+export type CreateRoomMutationHookResult = ReturnType<typeof useCreateRoomMutation>;
+export type CreateRoomMutationResult = Apollo.MutationResult<CreateRoomMutation>;
+export type CreateRoomMutationOptions = Apollo.BaseMutationOptions<CreateRoomMutation, CreateRoomMutationVariables>;
 export const DeleteMessageDocument = gql`
     mutation DeleteMessage($id: Int!) {
   deleteMessage(id: $id)
@@ -643,12 +691,12 @@ export const MeDocument = gql`
       displayName
     }
     joinedRooms {
-      id
-      name
+      ...RoomFragment
     }
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${AuthorFragmentFragmentDoc}
+${RoomFragmentFragmentDoc}`;
 
 /**
  * __useMeQuery__

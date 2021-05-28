@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
-import { initializeApollo, useApollo } from '../lib/apolloClient';
+import { useApollo } from '../lib/apolloClient';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../lib/theme';
 import useFacebookSDK from '../hooks/useFacebookSDK';
-import '../css/ScrollBar.css';
+import '../css/scrollBar.css';
+import NextNprogress from 'nextjs-progressbar';
 
 function MyApp({ Component, pageProps }: AppProps) {
   useFacebookSDK();
@@ -23,6 +24,13 @@ function MyApp({ Component, pageProps }: AppProps) {
     <ApolloProvider client={apolloClient}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
+        <NextNprogress
+          color="#214dff"
+          startPosition={0.3}
+          stopDelayMs={200}
+          height={2}
+          options={{ showSpinner: false }}
+        />
         <Component {...pageProps} />
       </ThemeProvider>
     </ApolloProvider>

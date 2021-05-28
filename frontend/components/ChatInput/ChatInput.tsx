@@ -61,6 +61,7 @@ const ChatInput = ({ roomId }: { roomId: number }) => {
             defaultValue=""
             render={({ field }) => (
               <CustomInput
+                bg="dark"
                 inputProps={{ maxLength: 500 }}
                 multiline
                 disabled={connecting}

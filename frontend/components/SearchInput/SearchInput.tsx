@@ -12,15 +12,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   search: {
     backgroundColor: theme.palette.grey[800],
-    marginBottom: theme.spacing(2),
   },
 }));
 
-const SearchInput = ({ value, onChange, placeholder }: SearchInputProps) => {
+const SearchInput = ({ value, onChange, placeholder, style }: SearchInputProps) => {
   const classes = useStyles();
 
   return (
     <CustomInput
+      style={style}
       value={value}
       onChange={onChange}
       startAdornment={<SearchIcon className={classes.icon} />}

@@ -1,14 +1,16 @@
 import { makeStyles, Theme } from '@material-ui/core';
 
 const useSidebarStyles = makeStyles((theme: Theme) => ({
-  photo: {
+  photo: (props: any) => ({
     fontWeight: 400,
     border: '2px solid',
-    borderColor: theme.palette.grey[600],
+    borderColor: props.isActive
+      ? theme.palette.primary['A400']
+      : theme.palette.grey[600],
     marginRight: 15,
     width: 30,
     height: 30,
-  },
+  }),
   button: {
     display: 'flex',
     alignItems: 'center',
@@ -20,12 +22,6 @@ const useSidebarStyles = makeStyles((theme: Theme) => ({
   },
   sectionTitle: {
     margin: '5px 8px',
-  },
-  newRoomButton: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
   },
 }));
 

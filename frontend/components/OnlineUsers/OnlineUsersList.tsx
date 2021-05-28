@@ -43,6 +43,9 @@ const OnlineUsersList = ({ users }: OnlineUsersListProps) => {
     <Box className={classes.wrapper}>
       <Box className={classes.inputWrapper}>
         <SearchInput
+          style={{
+            marginBottom: 10,
+          }}
           value={searchValue}
           onChange={handleChange}
           placeholder="Szukaj użytkownika"
