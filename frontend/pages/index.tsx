@@ -9,7 +9,7 @@ import Room from './p/[room]';
 
 export default Room;
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   const apolloClient = initializeApollo();
 
   await apolloClient.query<RoomQuery, RoomQueryVariables>({

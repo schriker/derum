@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Chat from '../../components/Chat/Chat';
 import Layout from '../../components/Layout/Layout';
+import RoomHeader from '../../components/RoomHeader/RoomHeader';
 import { indexRoomVars } from '../../consts';
 import {
   RoomDocument,
@@ -10,27 +11,24 @@ import {
   RoomQueryVariables,
   useRoomQuery,
 } from '../../generated/graphql';
+import useRoomData from '../../hooks/useRoomData';
 import { addApolloState, initializeApollo } from '../../lib/apolloClient';
 import { globalErrorVar } from '../../lib/apolloVars';
 
 export default function Room() {
   const router = useRouter();
-  const { data } = useRoomQuery({
-    onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
-    variables: {
-      name: router.query.room
-        ? (router.query.room as string)
-        : indexRoomVars.name,
-    },
-  });
+  const { roomData } = useRoomData();
 
   return (
     <Layout
-      title={`${data.room.name} - ${data.room.description}`}
-      ogDescription="Description"
+      title={roomData.room.name}
+      ogDescription={roomData.room.description}
     >
-      <Box flex="1 1 auto">Content</Box>
-      <Chat roomId={data.room.id} />
+      <Box px={2} flex="1 1 auto">
+        {router.query.room && <RoomHeader />}
+        content
+      </Box>
+      <Chat roomId={roomData.room.id} />
     </Layout>
   );
 }

@@ -6,7 +6,7 @@ import { useOnlineUsersQuery, useUserQuery } from '../../generated/graphql';
 import useRoomData from '../../hooks/useRoomData';
 import { UserModalProps } from '../../types/userModal';
 import Modal from '../Modal/Modal';
-import UserAvatar from '../UserAvatar/UserAvatar';
+import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import useUserModalStyles from './UserModalStyles';
 import UserModalActions from './UsertMoalActions';
 
@@ -34,11 +34,12 @@ const UserModal = ({ id, openModal, handleClose }: UserModalProps) => {
     <Modal open={openModal} close={handleClose}>
       {data ? (
         <Box className={classes.wrapper}>
-          <UserAvatar
+          <AvatarPhoto
             className={classes.avatar}
             src={data.user.photo}
             name={data.user.displayName}
             styles={{ border: '3px solid #FF026A' }}
+            color="#FF026A"
           />
           <Box className={classes.name}>
             {isOnline && <Box className={classes.online}></Box>}

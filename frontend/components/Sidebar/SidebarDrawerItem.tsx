@@ -4,7 +4,7 @@ import React from 'react';
 import { openDrawerVar } from '../../lib/apolloVars';
 import { SidebarDrawerItemProps } from '../../types/sidebar';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
-import UserAvatar from '../UserAvatar/UserAvatar';
+import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import useSidebarStyles from './SidebarStyles';
 
 const SidebarDrawerItem = ({ name, usersNumber }: SidebarDrawerItemProps) => {
@@ -19,7 +19,7 @@ const SidebarDrawerItem = ({ name, usersNumber }: SidebarDrawerItemProps) => {
   return (
     <ButtonPrimary onClick={handleClick} className={classes.button}>
       <Box display="flex" alignItems="center">
-        <UserAvatar name={name} src={null} className={classes.photo} />
+        <AvatarPhoto color="#FF026A" name={name} src={null} className={classes.photo} />
         <Typography variant="body1">{name}</Typography>
         <Typography className={classes.userNumber} variant="subtitle2">
           {usersNumber}

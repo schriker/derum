@@ -21,11 +21,7 @@ const useChatMessageItemStyles = makeStyles((theme: Theme) => ({
     boxShadow: theme.shadows[1],
   },
   wrapper: (props: any) => ({
-    opacity: !props.selectedUser
-      ? 1
-      : props.selectedUser === props.author
-      ? 1
-      : 0.5,
+    opacity: !props.selectedUser ? 1 : props.isSelected ? 1 : 0.5,
     position: 'relative',
     display: 'flex',
     wordBreak: 'break-word',

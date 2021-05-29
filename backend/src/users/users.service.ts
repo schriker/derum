@@ -21,7 +21,7 @@ export class UsersService {
       roomId: roomId,
       userId: user.id,
       name: user.displayName,
-      photo: user.photo,
+      photo: user.photo ? user.photo : '',
       isAdmin: user.isAdmin,
       isModerator: user.isModerator,
       connectionId: cId,
@@ -77,15 +77,6 @@ export class UsersService {
     ctx.req.session.passport.user = user;
     ctx.req.session.save();
   }
-
-  // getJoinedRooms(user: User): Promise<Room[]> {
-  //   return this.usersRepository
-  //     .createQueryBuilder('user')
-  //     .loadRelationCountAndMap('room.usersNumber', 'room.users')
-  //     .relation('joinedRooms')
-  //     .of(user)
-  //     .loadMany();
-  // }
 
   getIgnors(user: User): Promise<User[]> {
     return this.usersRepository

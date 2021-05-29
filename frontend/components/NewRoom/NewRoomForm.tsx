@@ -22,7 +22,7 @@ const schema = yup.object().shape({
     .trim()
     .required('Nazwa jest wymagana.')
     .min(3, 'Nazwa min. 3 znaki.')
-    .max(255, 'Zbyt długa nazwa.')
+    .max(35, 'Zbyt długa nazwa.')
     .matches(/^[a-zA-Z0-9_]+$/, 'Tylko znaki alfarnumerczyne oraz "_"'),
   description: yup
     .string()
@@ -38,7 +38,7 @@ const NewRoomForm = ({ openModal, handleClose }: NewRoomProps) => {
   const { data: me } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
-  const [createRoom] = useCreateRoomMutation({
+  const [createRoom, { loading }] = useCreateRoomMutation({
     onCompleted: ({ createRoom }) => {
       handleClose();
       openDrawerVar(false);
@@ -47,7 +47,6 @@ const NewRoomForm = ({ openModal, handleClose }: NewRoomProps) => {
     onError: (error) =>
       globalErrorVar({ isOpen: true, message: error.message }),
     update: (cache, { data: { createRoom } }) => {
-      console.log(createRoom);
       cache.modify({
         id: cache.identify(me.me),
         fields: {
@@ -121,7 +120,7 @@ const NewRoomForm = ({ openModal, handleClose }: NewRoomProps) => {
           )}
         />
         <ButtonPrimary
-          disabled={false}
+          disabled={loading}
           className={classes.submitButton}
           color="primary"
           type="submit"

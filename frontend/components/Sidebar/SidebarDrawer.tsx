@@ -17,9 +17,10 @@ import useSidebarStyles from './SidebarStyles';
 
 const SidebarDrawer = () => {
   const isOpen = useReactiveVar(openDrawerVar);
-  const classes = useSidebarStyles({});
   const [searchValue, setSearchValue] = useState('');
-  const { data: userData, loading: userLoading } = useMeQuery();
+  const { data: userData, loading: userLoading } = useMeQuery({
+    fetchPolicy: 'cache-only',
+  });
   const { data: newRoomsData, loading: newRoomsLoading } = useNewRoomsQuery();
   const { data: popularRoomsData, loading: popularRoomsLoading } =
     usePopularRoomsQuery();
@@ -29,13 +30,8 @@ const SidebarDrawer = () => {
   };
 
   return (
-    <Drawer
-      className="scrollbar"
-      anchor="left"
-      open={isOpen}
-      onClose={() => openDrawerVar(false)}
-    >
-      <Box pt={1} display="flex" height="100%" flexDirection="column">
+    <Drawer anchor="left" open={isOpen} onClose={() => openDrawerVar(false)}>
+      <Box pt={1} pb={2} display="flex" flexDirection="column">
         <Box display="flex" justifyContent="flex-end" mr={1}>
           <ButtonIcon
             size="small"
@@ -55,7 +51,7 @@ const SidebarDrawer = () => {
           />
         </Box>
         <NewRoomButton />
-        <Box display="flex" flexDirection="column">
+        <Box mt={1} display="flex" flexDirection="column">
           {userLoading ? (
             <SidebarSkeleton />
           ) : userData ? (

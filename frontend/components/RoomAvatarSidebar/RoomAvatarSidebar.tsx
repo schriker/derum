@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import DarkTooltip from '../Tooltip/Tooltip';
-import UserAvatar from '../UserAvatar/UserAvatar';
+import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 
 const useStyles = makeStyles((theme: Theme) => ({
   button: {
@@ -13,9 +13,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   photo: (props: any) => ({
     border: '2px solid',
-    borderColor: props.isActive
-      ? theme.palette.primary['A400']
-      : theme.palette.grey[600],
+    width: 30,
+    height: 30,
+    borderColor: props.isActive ? theme.palette.primary['A400'] : 'transparent',
   }),
 }));
 
@@ -27,7 +27,12 @@ const RoomAvatar = ({ name }: { name: string }) => {
     <Link href={`/p/${name}`}>
       <DarkTooltip title={name} enterDelay={500} placement="right">
         <ButtonIcon className={classes.button}>
-          <UserAvatar name={name} src={null} className={classes.photo} />
+          <AvatarPhoto
+            color="#FF026A"
+            name={name}
+            src={null}
+            className={classes.photo}
+          />
         </ButtonIcon>
       </DarkTooltip>
     </Link>

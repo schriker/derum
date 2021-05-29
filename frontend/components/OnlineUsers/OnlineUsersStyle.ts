@@ -33,6 +33,7 @@ const useOnlineUsersStyles = makeStyles((theme: Theme) => ({
     width: 24,
     height: 24,
     marginRight: 10,
+    fontWeight: 500,
   },
   sectionTitle: {
     paddingLeft: theme.spacing(3),

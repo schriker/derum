@@ -9,7 +9,7 @@ const Chat = ({ roomId }: { roomId: number }) => {
   const { data } = useChatSubscriptions(roomId);
 
   return (
-    <Box width={400} display="flex" flexDirection="column">
+    <Box width={400} display="flex" flexDirection="column" flexShrink={0}>
       {data?.initialMessages ? (
         <ChatMessages messages={data.initialMessages} />
       ) : (

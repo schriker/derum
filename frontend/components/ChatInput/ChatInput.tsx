@@ -53,7 +53,13 @@ const ChatInput = ({ roomId }: { roomId: number }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Box minHeight={70} py={2} display="flex" flex="1 0 auto">
+      <Box
+        minHeight={70}
+        py={2}
+        display="flex"
+        flex="1 0 auto"
+        alignItems="flex-end"
+      >
         <Box flex="1 0 auto">
           <Controller
             name="body"

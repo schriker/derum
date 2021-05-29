@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import useIsConnected from '../../hooks/useIsConnected';
 import { ChatMessagesItemProps } from '../../types/messages';
-import UserAvatar from '../UserAvatar/UserAvatar';
+import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import ChatMessageActions from './ChatMessageActions';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
@@ -16,12 +16,14 @@ const ChatMessagesItem = ({
   const [showActions, setShowActions] = useState(false);
   const classes = useChatMessageItemStyles({
     userColor: '#FF026A',
-    author: message.author.id,
     selectedUser: userId,
+    isSelected: message.author.id === userId,
   });
+
   const isConnected = useIsConnected();
 
-  const handlerUserSelect = (id: number) => {
+  const handlerUserSelect = (id: number, e: React.MouseEvent) => {
+    e.stopPropagation();
     setUserId(id);
     handleOpen();
   };
@@ -45,13 +47,14 @@ const ChatMessagesItem = ({
         <ChatMessageActions messageId={message.id} />
       )}
       <Box mr={1}>
-        <UserAvatar
+        <AvatarPhoto
           styles={{
             width: 30,
             height: 30,
           }}
+          color="#FF026A"
           className={classes.avatar}
-          onClick={() => handlerUserSelect(message.author.id)}
+          onClick={(e) => handlerUserSelect(message.author.id, e)}
           src={message.author.photo}
           name={message.author.displayName}
         />
@@ -62,7 +65,7 @@ const ChatMessagesItem = ({
             variant="subtitle1"
             component="span"
             className={classes.userName}
-            onClick={() => handlerUserSelect(message.author.id)}
+            onClick={(e) => handlerUserSelect(message.author.id, e)}
           >
             {message.author.displayName}
           </Typography>

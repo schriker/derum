@@ -2,7 +2,7 @@ import { Box, Button, Typography } from '@material-ui/core';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import ArrowDropdown from '../Icons/ArrowDropdownIcon';
-import UserAvatar from '../UserAvatar/UserAvatar';
+import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 
 const UserButton = ({
   onClick,
@@ -19,13 +19,13 @@ const UserButton = ({
         aria-controls="user-menu"
         aria-haspopup="true"
       >
-        <UserAvatar
+        <AvatarPhoto
           styles={{
-            border: '2px solid #FF026A',
+            border: '2px solid #214dff',
             width: 40,
             height: 40,
-            backgroundColor: '#FF026A',
           }}
+          color="#FF026A"
           name={data.me.displayName}
           src={data.me.photo}
         />

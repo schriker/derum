@@ -100,7 +100,7 @@ export type OnlineUser = {
   userId: Scalars['Int'];
   roomId: Scalars['Int'];
   name: Scalars['String'];
-  photo: Scalars['String'];
+  photo?: Maybe<Scalars['String']>;
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
 };

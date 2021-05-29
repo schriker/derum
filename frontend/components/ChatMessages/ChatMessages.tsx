@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InitialMessagesQuery, useMeQuery } from '../../generated/graphql';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import UserModal from '../UserModal/UserModal';
@@ -14,6 +14,7 @@ const ChatMessages = ({
   const [userId, setUserId] = useState(null);
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
   const ignoresId = data?.me.ignore.map((user) => user.id);
+
   return (
     <Box
       className="scrollbar"

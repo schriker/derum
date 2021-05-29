@@ -40,7 +40,7 @@ type OnlineUser {
   userId: Int!
   roomId: Int!
   name: String!
-  photo: String!
+  photo: String
   isAdmin: Boolean!
   isModerator: Boolean!
 }

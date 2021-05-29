@@ -10,6 +10,7 @@ const useUserModalStyles = makeStyles((theme: Theme) => ({
     width: 55,
     height: 55,
     marginBottom: 10,
+    fontSize: 26,
   },
   online: {
     width: 8,

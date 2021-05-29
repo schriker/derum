@@ -11,7 +11,7 @@ export class OnlineUser {
   @Field()
   name: string;
 
-  @Field()
+  @Field({ nullable: true })
   photo: string;
 
   @Field()

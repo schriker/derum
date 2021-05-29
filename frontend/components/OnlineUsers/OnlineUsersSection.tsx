@@ -3,7 +3,7 @@ import React from 'react';
 import { OnlineUser } from '../../generated/graphql';
 import { sortUsersMethod } from '../../helpers/sortUsersMethod';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
-import UserAvatar from '../UserAvatar/UserAvatar';
+import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import useOnlineUsersStyles from './OnlineUsersStyle';
 
 const OnlineUsersSection = ({
@@ -28,10 +28,11 @@ const OnlineUsersSection = ({
             className={classes.button}
             onClick={() => handleUserClick(user.userId)}
           >
-            <UserAvatar
+            <AvatarPhoto
               className={classes.avatar}
               src={user.photo}
               name={user.name}
+              color="#FF026A"
             />
             <Typography variant="body1">{user.name}</Typography>
           </ButtonPrimary>

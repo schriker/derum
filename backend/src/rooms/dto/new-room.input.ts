@@ -5,7 +5,7 @@ import { Length, Matches } from 'class-validator';
 @InputType()
 export class NewRoomInput {
   @Field()
-  @Length(3, 255)
+  @Length(3, 35)
   @Transform(({ value }) => value.trim())
   @Matches(/^[a-zA-Z0-9_]+$/)
   name: string;
