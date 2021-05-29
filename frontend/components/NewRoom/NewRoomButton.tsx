@@ -25,6 +25,7 @@ const NewRoomButton = () => {
         onClick={handleButtonClick}
         className={classes.newRoomButton}
         color="primary"
+        size="large"
       >
         Utwórz nowy pokój
       </ButtonPrimary>

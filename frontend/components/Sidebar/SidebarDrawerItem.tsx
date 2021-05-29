@@ -6,6 +6,7 @@ import { SidebarDrawerItemProps } from '../../types/sidebar';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import useSidebarStyles from './SidebarStyles';
+import numbro from 'numbro';
 
 const SidebarDrawerItem = ({ name, usersNumber }: SidebarDrawerItemProps) => {
   const router = useRouter();
@@ -19,10 +20,15 @@ const SidebarDrawerItem = ({ name, usersNumber }: SidebarDrawerItemProps) => {
   return (
     <ButtonPrimary onClick={handleClick} className={classes.button}>
       <Box display="flex" alignItems="center">
-        <AvatarPhoto color="#FF026A" name={name} src={null} className={classes.photo} />
+        <AvatarPhoto
+          color="#FF026A"
+          name={name}
+          src={null}
+          className={classes.photo}
+        />
         <Typography variant="body1">{name}</Typography>
         <Typography className={classes.userNumber} variant="subtitle2">
-          {usersNumber}
+          {numbro(usersNumber).format({ average: true })}
         </Typography>
       </Box>
     </ButtonPrimary>

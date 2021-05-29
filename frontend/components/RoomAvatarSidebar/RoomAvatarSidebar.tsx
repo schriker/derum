@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   photo: (props: any) => ({
     border: '2px solid',
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 35,
     borderColor: props.isActive ? theme.palette.primary['A400'] : 'transparent',
   }),
 }));

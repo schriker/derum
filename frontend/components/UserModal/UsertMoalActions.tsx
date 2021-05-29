@@ -8,6 +8,7 @@ import {
   useRemoveIgnoreUserMutation,
   useUserQuery,
 } from '../../generated/graphql';
+import { globalErrorVar } from '../../lib/apolloVars';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import LockIcon from '../Icons/LockIcon';
 import MessageIcon from '../Icons/MessageIcon';
@@ -24,8 +25,8 @@ const UserModalActions = ({ id }: { id: number }) => {
       id,
     },
   });
-  const [ignoreUser] = useIgnoreUserMutation({
-    errorPolicy: 'ignore',
+  const [ignoreUser, { loading: ignoreLoading }] = useIgnoreUserMutation({
+    onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
     update(cache) {
       cache.modify({
         id: cache.identify(me.me),
@@ -41,20 +42,21 @@ const UserModalActions = ({ id }: { id: number }) => {
       });
     },
   });
-  const [removeIgnoreUser] = useRemoveIgnoreUserMutation({
-    errorPolicy: 'ignore',
-    update(cache) {
-      cache.modify({
-        id: cache.identify(me.me),
-        fields: {
-          ignore(prev, { readField }) {
-            return prev.filter((ignore) => id !== readField('id', ignore));
+  const [removeIgnoreUser, { loading: unignoreLoading }] =
+    useRemoveIgnoreUserMutation({
+      onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
+      update(cache) {
+        cache.modify({
+          id: cache.identify(me.me),
+          fields: {
+            ignore(prev, { readField }) {
+              return prev.filter((ignore) => id !== readField('id', ignore));
+            },
           },
-        },
-      });
-    },
-  });
-
+        });
+      },
+    });
+  const isLoading = ignoreLoading || unignoreLoading;
   const isIgnored = me?.me.ignore.some((user) => user.id === id);
 
   const handleIgnore = () => {
@@ -79,6 +81,7 @@ const UserModalActions = ({ id }: { id: number }) => {
         Wiadomość
       </ButtonPrimary>
       <ButtonPrimary
+        disabled={isLoading}
         onClick={handleIgnore}
         color="secondary"
         endIcon={isIgnored ? <UnLockIcon /> : <LockIcon />}

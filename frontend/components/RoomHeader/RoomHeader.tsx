@@ -3,6 +3,7 @@ import useHeaderStyles from './RoomHeaderStyles';
 import useRoomData from '../../hooks/useRoomData';
 import { Box, Typography } from '@material-ui/core';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
+import RoomHeaderJoinButton from './RoomHeaderJoinButton';
 
 const RoomHeader = () => {
   const { roomData } = useRoomData();
@@ -21,6 +22,7 @@ const RoomHeader = () => {
           {roomData.room.description}
         </Typography>
       </Box>
+      <RoomHeaderJoinButton roomId={roomData.room.id} />
     </Box>
   );
 };

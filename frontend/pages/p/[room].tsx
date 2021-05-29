@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import Chat from '../../components/Chat/Chat';
 import Layout from '../../components/Layout/Layout';
+import RoomAddContentButtons from '../../components/RoomAddContentButtons/RoomAddContentButtons';
 import RoomHeader from '../../components/RoomHeader/RoomHeader';
 import { indexRoomVars } from '../../consts';
 import {
@@ -26,6 +27,7 @@ export default function Room() {
     >
       <Box px={2} flex="1 1 auto">
         {router.query.room && <RoomHeader />}
+        {router.query.room && <RoomAddContentButtons />}
         content
       </Box>
       <Chat roomId={roomData.room.id} />

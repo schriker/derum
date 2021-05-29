@@ -15,7 +15,7 @@ const Sidebar = () => {
 
   return (
     <Box
-      width={50}
+      width={60}
       pt={1}
       flexShrink={0}
       bgcolor="background.paper"

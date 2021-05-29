@@ -239,6 +239,26 @@ export type IgnoreUserMutation = (
   & Pick<Mutation, 'ignoreUser'>
 );
 
+export type JoinRoomMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type JoinRoomMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'joinRoom'>
+);
+
+export type LeaveRoomMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type LeaveRoomMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'leaveRoom'>
+);
+
 export type LoginUserWithFacebookMutationVariables = Exact<{
   access_token: Scalars['String'];
 }>;
@@ -549,6 +569,68 @@ export function useIgnoreUserMutation(baseOptions?: Apollo.MutationHookOptions<I
 export type IgnoreUserMutationHookResult = ReturnType<typeof useIgnoreUserMutation>;
 export type IgnoreUserMutationResult = Apollo.MutationResult<IgnoreUserMutation>;
 export type IgnoreUserMutationOptions = Apollo.BaseMutationOptions<IgnoreUserMutation, IgnoreUserMutationVariables>;
+export const JoinRoomDocument = gql`
+    mutation JoinRoom($id: Int!) {
+  joinRoom(id: $id)
+}
+    `;
+export type JoinRoomMutationFn = Apollo.MutationFunction<JoinRoomMutation, JoinRoomMutationVariables>;
+
+/**
+ * __useJoinRoomMutation__
+ *
+ * To run a mutation, you first call `useJoinRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinRoomMutation, { data, loading, error }] = useJoinRoomMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useJoinRoomMutation(baseOptions?: Apollo.MutationHookOptions<JoinRoomMutation, JoinRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<JoinRoomMutation, JoinRoomMutationVariables>(JoinRoomDocument, options);
+      }
+export type JoinRoomMutationHookResult = ReturnType<typeof useJoinRoomMutation>;
+export type JoinRoomMutationResult = Apollo.MutationResult<JoinRoomMutation>;
+export type JoinRoomMutationOptions = Apollo.BaseMutationOptions<JoinRoomMutation, JoinRoomMutationVariables>;
+export const LeaveRoomDocument = gql`
+    mutation LeaveRoom($id: Int!) {
+  leaveRoom(id: $id)
+}
+    `;
+export type LeaveRoomMutationFn = Apollo.MutationFunction<LeaveRoomMutation, LeaveRoomMutationVariables>;
+
+/**
+ * __useLeaveRoomMutation__
+ *
+ * To run a mutation, you first call `useLeaveRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLeaveRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [leaveRoomMutation, { data, loading, error }] = useLeaveRoomMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useLeaveRoomMutation(baseOptions?: Apollo.MutationHookOptions<LeaveRoomMutation, LeaveRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LeaveRoomMutation, LeaveRoomMutationVariables>(LeaveRoomDocument, options);
+      }
+export type LeaveRoomMutationHookResult = ReturnType<typeof useLeaveRoomMutation>;
+export type LeaveRoomMutationResult = Apollo.MutationResult<LeaveRoomMutation>;
+export type LeaveRoomMutationOptions = Apollo.BaseMutationOptions<LeaveRoomMutation, LeaveRoomMutationVariables>;
 export const LoginUserWithFacebookDocument = gql`
     mutation LoginUserWithFacebook($access_token: String!) {
   loginUserWithFacebook(access_token: $access_token)

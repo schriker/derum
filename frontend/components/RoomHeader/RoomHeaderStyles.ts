@@ -14,7 +14,9 @@ const useHeaderStyles = makeStyles((theme: Theme) => ({
     width: 50,
   },
   content: {
+    flex: '1 1 100%',
     marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(4),
     wordBreak: 'break-all',
   },
 }));
