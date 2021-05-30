@@ -15,6 +15,7 @@ import { DateScalar } from './scalars/date.scalar';
 import * as cookie from 'cookie';
 import { redisClient } from './main';
 import { UsersService } from './users/users.service';
+import { MetaScraperModule } from './meta-scraper/meta-scraper.module';
 
 const parseUserSession = async (headerCookie) => {
   const cookies = cookie.parse(headerCookie);
@@ -85,6 +86,7 @@ const parseUserSession = async (headerCookie) => {
     AuthModule,
     EntriesModule,
     CaslModule,
+    MetaScraperModule,
   ],
   providers: [EntriesService, DateScalar],
 })

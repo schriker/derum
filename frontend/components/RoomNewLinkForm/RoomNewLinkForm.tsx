@@ -14,7 +14,10 @@ const schema = yup.object().shape({
     .string()
     .trim()
     .required('Adres jest wymagany.')
-    .url('Podaj poprawny adres url.'),
+    .matches(
+      /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/,
+      'Podaj poprawny adres url z https.'
+    ),
 });
 
 const RoomNewLinkForm = ({ openModal, handleClose }: NewLinkProps) => {

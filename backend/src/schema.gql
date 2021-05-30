@@ -2,6 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Link {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  url: String!
+  publisher: String!
+  author: String
+  title: String!
+  description: String
+  photo: String
+}
+
+"""Date custom scalar type"""
+scalar Date
+
 type User {
   id: Int!
   createdAt: Date!
@@ -14,9 +29,6 @@ type User {
   joinedRooms: [Room!]!
   ignore: [User!]!
 }
-
-"""Date custom scalar type"""
-scalar Date
 
 type Message {
   id: Int!
@@ -53,6 +65,7 @@ type Query {
   newRooms: [Room!]!
   popularRooms: [Room!]!
   initialMessages(roomId: Int!): [Message!]!
+  metadata(url: String!): Link!
 }
 
 type Mutation {
