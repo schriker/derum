@@ -1,5 +1,4 @@
 import { Box } from '@material-ui/core';
-import gql from 'graphql-tag';
 import React from 'react';
 import {
   AuthorFragmentFragmentDoc,
@@ -64,15 +63,14 @@ const UserModalActions = ({ id }: { id: number }) => {
       id,
     };
 
-    if (!isIgnored) {
-      ignoreUser({
+    if (!isIgnored)
+      return ignoreUser({
         variables,
       });
-    } else {
-      removeIgnoreUser({
-        variables,
-      });
-    }
+
+    removeIgnoreUser({
+      variables,
+    });
   };
 
   return me ? (

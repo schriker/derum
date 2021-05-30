@@ -4,7 +4,7 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       flex: '1 1 auto',
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: 600,
       textTransform: 'initial',
       borderRadius: 0,

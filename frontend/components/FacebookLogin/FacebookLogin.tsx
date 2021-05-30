@@ -14,8 +14,7 @@ const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
   };
 
   const [fetchUser] = useMeLazyQuery({
-    // onError: hadleError,
-    onError: (e) => console.log(e),
+    onError: hadleError,
     onCompleted: (data) => {
       if (data.me) onSuccess();
     },
@@ -30,8 +29,7 @@ const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
         cache.reset();
       }
     },
-    // onError: hadleError,
-    onError: (e) => console.log(e),
+    onError: hadleError,
   });
 
   const handleFacebookLogin = () => {
@@ -40,15 +38,13 @@ const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
     if (window.FB) {
       window.FB.login(
         (response: any) => {
-          if (!response.authResponse) {
-            onLoading(false);
-          } else {
-            login({
-              variables: {
-                access_token: response.authResponse.accessToken,
-              },
-            });
-          }
+          if (!response.authResponse) return onLoading(false);
+
+          login({
+            variables: {
+              access_token: response.authResponse.accessToken,
+            },
+          });
         },
         { scope: 'email' }
       );

@@ -7,8 +7,7 @@ const useNewRoomStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(2),
   },
   submitButton: {
-    marginTop: theme.spacing(2),
-    width: '100%',
+    marginTop: theme.spacing(1),
   },
 }));
 

@@ -13,7 +13,6 @@ import NewRoomButton from '../NewRoom/NewRoomButton';
 import SearchInput from '../SearchInput/SearchInput';
 import SidebarDrawerSection from './SidebarDrawerSection';
 import SidebarSkeleton from './SidebarSkeleton';
-import useSidebarStyles from './SidebarStyles';
 
 const SidebarDrawer = () => {
   const isOpen = useReactiveVar(openDrawerVar);

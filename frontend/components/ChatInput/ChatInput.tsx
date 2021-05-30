@@ -32,16 +32,14 @@ const ChatInput = ({ roomId }: { roomId: number }) => {
   const connecting = !isConnected && !loading;
 
   const onSubmit: SubmitHandler<ChatInputs> = (inputData) => {
-    if (!data) {
-      openModalVar(true);
-    } else {
-      sendNewMessage({
-        variables: {
-          body: inputData.body,
-          roomId: roomId,
-        },
-      });
-    }
+    if (!data) return openModalVar(true);
+
+    sendNewMessage({
+      variables: {
+        body: inputData.body,
+        roomId: roomId,
+      },
+    });
   };
 
   const handleKeyDown = (event) => {

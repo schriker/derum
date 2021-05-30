@@ -40,7 +40,7 @@ const Sidebar = () => {
       </Box>
       <Box py={1} onClick={() => openDrawerVar(true)}>
         <DarkTooltip title="Dodaj" enterDelay={500} placement="right">
-          <ButtonIcon color="secondary">
+          <ButtonIcon color="default">
             <PlusIcon style={{ fontSize: 16 }} />
           </ButtonIcon>
         </DarkTooltip>

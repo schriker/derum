@@ -1,25 +1,20 @@
 import { Box, Divider } from '@material-ui/core';
 import React from 'react';
-import { ButtonRoomContent } from '../Buttons/ButtonRoomContent';
-import ArticleIcon from '../Icons/ArticleIcon';
-import LinkIcon from '../Icons/LinkIcon';
-import VideoIcon from '../Icons/VideoIcon';
+import RoomAddArticle from './RoomAddArticle';
 import useRoomAddContentButtonsStyles from './RoomAddContentButtonsStyles';
+import RoomAddLink from './RoomAddLink';
+import RoomAddVideo from './RoomAddVideo';
 
 const RoomAddContentButtons = () => {
   const classes = useRoomAddContentButtonsStyles();
 
   return (
     <Box className={classes.wrapper}>
-      <ButtonRoomContent startIcon={<ArticleIcon />}>
-        Utwórz wpis
-      </ButtonRoomContent>
+      <RoomAddArticle />
       <Divider orientation="vertical" flexItem />
-      <ButtonRoomContent startIcon={<LinkIcon />}>Dodaj link</ButtonRoomContent>
+      <RoomAddLink />
       <Divider orientation="vertical" flexItem />
-      <ButtonRoomContent startIcon={<VideoIcon />}>
-        Dodaj video
-      </ButtonRoomContent>
+      <RoomAddVideo />
     </Box>
   );
 };

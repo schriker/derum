@@ -1,5 +1,5 @@
 import { Box } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { InitialMessagesQuery, useMeQuery } from '../../generated/graphql';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import UserModal from '../UserModal/UserModal';

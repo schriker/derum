@@ -7,7 +7,7 @@ import {
   useMeQuery,
 } from '../../generated/graphql';
 import useRoomData from '../../hooks/useRoomData';
-import { globalErrorVar } from '../../lib/apolloVars';
+import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 
 const RoomHeaderJoinButton = ({ roomId }: { roomId: number }) => {
@@ -55,15 +55,15 @@ const RoomHeaderJoinButton = ({ roomId }: { roomId: number }) => {
     const variables = {
       id: roomId,
     };
-    if (isJoined) {
-      leaveRoom({
+    if (!data) return openModalVar(true);
+    if (isJoined)
+      return leaveRoom({
         variables,
       });
-    } else {
-      joinRoom({
-        variables,
-      });
-    }
+
+    return joinRoom({
+      variables,
+    });
   };
 
   return (

@@ -36,7 +36,7 @@ const theme = createMuiTheme({
     divider: '#333436',
     text: {
       primary: grey[50],
-      secondary: grey[700],
+      secondary: grey[600],
     },
   },
   typography: {

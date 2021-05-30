@@ -1,10 +1,6 @@
 import { Box, ListItemText, makeStyles, Theme } from '@material-ui/core';
 import React from 'react';
-import {
-  MeDocument,
-  MeQuery,
-  useLogoutMutation,
-} from '../../generated/graphql';
+import { useLogoutMutation } from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
 import Dropdown from '../Dropdown/Dropdown';
 import DropdownIcon from '../Dropdown/DropdownIcon';

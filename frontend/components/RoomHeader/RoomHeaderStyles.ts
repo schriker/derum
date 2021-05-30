@@ -9,6 +9,18 @@ const useHeaderStyles = makeStyles((theme: Theme) => ({
     borderRadius: theme.shape.borderRadius,
     padding: theme.spacing(2),
   },
+  title: {
+    display: 'flex',
+    alignItems: 'center',
+    '& :first-child': {
+      marginRight: theme.spacing(1),
+    },
+  },
+  userIcon: {
+    marginLeft: 2,
+    color: theme.palette.text.secondary,
+    fontSize: 16,
+  },
   photo: {
     height: 50,
     width: 50,

@@ -3,8 +3,6 @@ import React, { useState } from 'react';
 import { OnlineUser } from '../../generated/graphql';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import { OnlineUsersListProps } from '../../types/onlineUsers';
-import { CustomInput } from '../CustomInput/CustomInput';
-import SearchIcon from '../Icons/SearchIcon';
 import SearchInput from '../SearchInput/SearchInput';
 import UserModal from '../UserModal/UserModal';
 import OnlineUsersSection from './OnlineUsersSection';
@@ -23,11 +21,9 @@ const OnlineUsersList = ({ users }: OnlineUsersListProps) => {
       user.name.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase())
     )
     .forEach((user) => {
-      if (user.isAdmin || user.isModerator) {
-        onlineAdmins.push(user);
-      } else {
-        onlineUsers.push(user);
-      }
+      if (user.isAdmin || user.isModerator) return onlineAdmins.push(user);
+
+      onlineUsers.push(user);
     });
 
   const handlerUserSelect = (id: number) => {

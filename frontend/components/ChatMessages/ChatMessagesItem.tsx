@@ -29,11 +29,9 @@ const ChatMessagesItem = ({
   };
 
   const handleHighLightMessages = () => {
-    if (userId) {
-      setUserId(null);
-    } else {
-      setUserId(message.author.id);
-    }
+    if (userId) return setUserId(null);
+
+    setUserId(message.author.id);
   };
 
   return (

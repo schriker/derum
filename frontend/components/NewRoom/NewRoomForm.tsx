@@ -79,7 +79,7 @@ const NewRoomForm = ({ openModal, handleClose }: NewRoomProps) => {
   return (
     <Modal
       fullWidth
-      maxWidth="xs"
+      maxWidth="sm"
       title="Nowy pokój"
       open={openModal}
       close={handleClose}
