@@ -1,16 +1,23 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
 import { Link } from 'src/meta-scraper/entities/link.entity';
+import { Photo } from 'src/photos/entities/photo.entity';
 import { Room } from 'src/rooms/entities/room.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { EntryType } from '../types/entry-type.enum';
+
+registerEnumType(EntryType, {
+  name: 'EntryType',
+});
 
 @ObjectType()
 @Entity('entry')
@@ -57,6 +64,11 @@ export class Entry {
 
   @ManyToOne(() => Link, (link) => link.entires, { nullable: true })
   link: Link;
+
+  @Field(() => Photo)
+  @OneToOne(() => Photo, { nullable: true })
+  @JoinColumn()
+  photo: Photo;
 
   @Field(() => EntryType)
   @Column({

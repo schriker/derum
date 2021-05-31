@@ -1,5 +1,6 @@
 # custom
 /pdata
+/uploads
 .env
 ormconfig.json
 # compiled output

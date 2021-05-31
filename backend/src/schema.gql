@@ -13,6 +13,14 @@ type Message {
 """Date custom scalar type"""
 scalar Date
 
+type Photo {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  name: String!
+  path: String!
+}
+
 type User {
   id: Int!
   createdAt: Date!
@@ -36,6 +44,27 @@ type Link {
   title: String
   description: String
   photo: String
+}
+
+type Entry {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  url: String!
+  title: String!
+  publisher: String
+  description: String!
+  body: String
+  author: User!
+  room: Room!
+  photo: Photo!
+  type: EntryType!
+}
+
+enum EntryType {
+  LINK
+  ARTICLE
+  VIDEO
 }
 
 type Room {
@@ -66,6 +95,7 @@ type Query {
   searchRooms(name: String!): [Room!]!
   popularRooms(limit: Int!): [Room!]!
   initialMessages(roomId: Int!): [Message!]!
+  checkLinkExsits(linkId: Int!, roomId: Int!): [Entry!]!
   metadata(url: String!): Link!
 }
 
@@ -80,6 +110,7 @@ type Mutation {
   leaveRoom(id: Int!): Boolean!
   createMessage(newMessageData: NewMessageInput!): Message!
   deleteMessage(id: Int!): Boolean!
+  createLink(newLinkData: NewLinkData!): Entry!
 }
 
 input NewRoomInput {
@@ -90,6 +121,14 @@ input NewRoomInput {
 input NewMessageInput {
   roomId: Int!
   body: String!
+}
+
+input NewLinkData {
+  title: String!
+  photo: String!
+  description: String!
+  linkId: Int!
+  roomId: Int!
 }
 
 type Subscription {

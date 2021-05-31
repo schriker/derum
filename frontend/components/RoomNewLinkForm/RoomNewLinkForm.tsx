@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@material-ui/core';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -65,14 +66,16 @@ const RoomNewLinkForm = ({ setLinkMetadata }: NewLinkProps) => {
           />
         )}
       />
-      <ButtonPrimary
-        disabled={loading}
-        className={classes.submitButton}
-        color="primary"
-        type="submit"
-      >
-        Dodaj link
-      </ButtonPrimary>
+      <Box display="flex" justifyContent="flex-end">
+        <ButtonPrimary
+          disabled={loading}
+          className={classes.submitButton}
+          color="primary"
+          type="submit"
+        >
+          Dodaj link
+        </ButtonPrimary>
+      </Box>
     </form>
   );
 };

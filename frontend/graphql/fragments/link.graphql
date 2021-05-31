@@ -1,0 +1,15 @@
+fragment LinkFragment on Entry {
+  id
+  createdAt
+  url
+  title
+  publisher
+  description
+  photo {
+    name
+    path
+  }
+  author {
+    displayName
+  }
+}

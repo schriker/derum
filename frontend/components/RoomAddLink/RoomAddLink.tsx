@@ -29,6 +29,7 @@ const RoomAddLink = () => {
           <RoomNewLinkMetadataForm
             setLinkMetadata={setLinkMetadata}
             metadata={linkMetadata}
+            closeModal={handleClose}
           />
         ) : (
           <RoomNewLinkForm setLinkMetadata={setLinkMetadata} />

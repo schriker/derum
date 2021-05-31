@@ -17,6 +17,28 @@ export type Scalars = {
 };
 
 
+export type Entry = {
+  __typename?: 'Entry';
+  id: Scalars['Int'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+  url: Scalars['String'];
+  title: Scalars['String'];
+  publisher?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
+  body?: Maybe<Scalars['String']>;
+  author: User;
+  room: Room;
+  photo: Photo;
+  type: EntryType;
+};
+
+export enum EntryType {
+  Link = 'LINK',
+  Article = 'ARTICLE',
+  Video = 'VIDEO'
+}
+
 export type Link = {
   __typename?: 'Link';
   id: Scalars['Int'];
@@ -51,6 +73,7 @@ export type Mutation = {
   leaveRoom: Scalars['Boolean'];
   createMessage: Message;
   deleteMessage: Scalars['Boolean'];
+  createLink: Entry;
 };
 
 
@@ -98,6 +121,19 @@ export type MutationDeleteMessageArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationCreateLinkArgs = {
+  newLinkData: NewLinkData;
+};
+
+export type NewLinkData = {
+  title: Scalars['String'];
+  photo: Scalars['String'];
+  description: Scalars['String'];
+  linkId: Scalars['Int'];
+  roomId: Scalars['Int'];
+};
+
 export type NewMessageInput = {
   roomId: Scalars['Int'];
   body: Scalars['String'];
@@ -118,6 +154,15 @@ export type OnlineUser = {
   isModerator: Scalars['Boolean'];
 };
 
+export type Photo = {
+  __typename?: 'Photo';
+  id: Scalars['Int'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+  name: Scalars['String'];
+  path: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   me: User;
@@ -128,6 +173,7 @@ export type Query = {
   searchRooms: Array<Room>;
   popularRooms: Array<Room>;
   initialMessages: Array<Message>;
+  checkLinkExsits: Array<Entry>;
   metadata: Link;
 };
 
@@ -158,6 +204,12 @@ export type QueryPopularRoomsArgs = {
 
 
 export type QueryInitialMessagesArgs = {
+  roomId: Scalars['Int'];
+};
+
+
+export type QueryCheckLinkExsitsArgs = {
+  linkId: Scalars['Int'];
   roomId: Scalars['Int'];
 };
 
@@ -212,12 +264,37 @@ export type AuthorFragmentFragment = (
   & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName'>
 );
 
+export type LinkFragmentFragment = (
+  { __typename?: 'Entry' }
+  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'title' | 'publisher' | 'description'>
+  & { photo: (
+    { __typename?: 'Photo' }
+    & Pick<Photo, 'name' | 'path'>
+  ), author: (
+    { __typename?: 'User' }
+    & Pick<User, 'displayName'>
+  ) }
+);
+
 export type RoomFragmentFragment = (
   { __typename?: 'Room' }
   & Pick<Room, 'id' | 'name' | 'description' | 'usersNumber'>
   & { author: (
     { __typename?: 'User' }
     & AuthorFragmentFragment
+  ) }
+);
+
+export type CreateLinkMutationVariables = Exact<{
+  newLinkData: NewLinkData;
+}>;
+
+
+export type CreateLinkMutation = (
+  { __typename?: 'Mutation' }
+  & { createLink: (
+    { __typename?: 'Entry' }
+    & LinkFragmentFragment
   ) }
 );
 
@@ -315,6 +392,20 @@ export type RemoveIgnoreUserMutationVariables = Exact<{
 export type RemoveIgnoreUserMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'removeIgnoreUser'>
+);
+
+export type CheckLinkExsitsQueryVariables = Exact<{
+  linkId: Scalars['Int'];
+  roomId: Scalars['Int'];
+}>;
+
+
+export type CheckLinkExsitsQuery = (
+  { __typename?: 'Query' }
+  & { checkLinkExsits: Array<(
+    { __typename?: 'Entry' }
+    & LinkFragmentFragment
+  )> }
 );
 
 export type InitialMessagesQueryVariables = Exact<{
@@ -476,6 +567,23 @@ export type MessageDeletedSubscription = (
   ) }
 );
 
+export const LinkFragmentFragmentDoc = gql`
+    fragment LinkFragment on Entry {
+  id
+  createdAt
+  url
+  title
+  publisher
+  description
+  photo {
+    name
+    path
+  }
+  author {
+    displayName
+  }
+}
+    `;
 export const AuthorFragmentFragmentDoc = gql`
     fragment AuthorFragment on User {
   id
@@ -497,6 +605,39 @@ export const RoomFragmentFragmentDoc = gql`
   }
 }
     ${AuthorFragmentFragmentDoc}`;
+export const CreateLinkDocument = gql`
+    mutation CreateLink($newLinkData: NewLinkData!) {
+  createLink(newLinkData: $newLinkData) {
+    ...LinkFragment
+  }
+}
+    ${LinkFragmentFragmentDoc}`;
+export type CreateLinkMutationFn = Apollo.MutationFunction<CreateLinkMutation, CreateLinkMutationVariables>;
+
+/**
+ * __useCreateLinkMutation__
+ *
+ * To run a mutation, you first call `useCreateLinkMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateLinkMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createLinkMutation, { data, loading, error }] = useCreateLinkMutation({
+ *   variables: {
+ *      newLinkData: // value for 'newLinkData'
+ *   },
+ * });
+ */
+export function useCreateLinkMutation(baseOptions?: Apollo.MutationHookOptions<CreateLinkMutation, CreateLinkMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateLinkMutation, CreateLinkMutationVariables>(CreateLinkDocument, options);
+      }
+export type CreateLinkMutationHookResult = ReturnType<typeof useCreateLinkMutation>;
+export type CreateLinkMutationResult = Apollo.MutationResult<CreateLinkMutation>;
+export type CreateLinkMutationOptions = Apollo.BaseMutationOptions<CreateLinkMutation, CreateLinkMutationVariables>;
 export const CreateMessageDocument = gql`
     mutation CreateMessage($roomId: Int!, $body: String!) {
   createMessage(newMessageData: {roomId: $roomId, body: $body}) {
@@ -781,6 +922,42 @@ export function useRemoveIgnoreUserMutation(baseOptions?: Apollo.MutationHookOpt
 export type RemoveIgnoreUserMutationHookResult = ReturnType<typeof useRemoveIgnoreUserMutation>;
 export type RemoveIgnoreUserMutationResult = Apollo.MutationResult<RemoveIgnoreUserMutation>;
 export type RemoveIgnoreUserMutationOptions = Apollo.BaseMutationOptions<RemoveIgnoreUserMutation, RemoveIgnoreUserMutationVariables>;
+export const CheckLinkExsitsDocument = gql`
+    query CheckLinkExsits($linkId: Int!, $roomId: Int!) {
+  checkLinkExsits(linkId: $linkId, roomId: $roomId) {
+    ...LinkFragment
+  }
+}
+    ${LinkFragmentFragmentDoc}`;
+
+/**
+ * __useCheckLinkExsitsQuery__
+ *
+ * To run a query within a React component, call `useCheckLinkExsitsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckLinkExsitsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckLinkExsitsQuery({
+ *   variables: {
+ *      linkId: // value for 'linkId'
+ *      roomId: // value for 'roomId'
+ *   },
+ * });
+ */
+export function useCheckLinkExsitsQuery(baseOptions: Apollo.QueryHookOptions<CheckLinkExsitsQuery, CheckLinkExsitsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CheckLinkExsitsQuery, CheckLinkExsitsQueryVariables>(CheckLinkExsitsDocument, options);
+      }
+export function useCheckLinkExsitsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CheckLinkExsitsQuery, CheckLinkExsitsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CheckLinkExsitsQuery, CheckLinkExsitsQueryVariables>(CheckLinkExsitsDocument, options);
+        }
+export type CheckLinkExsitsQueryHookResult = ReturnType<typeof useCheckLinkExsitsQuery>;
+export type CheckLinkExsitsLazyQueryHookResult = ReturnType<typeof useCheckLinkExsitsLazyQuery>;
+export type CheckLinkExsitsQueryResult = Apollo.QueryResult<CheckLinkExsitsQuery, CheckLinkExsitsQueryVariables>;
 export const InitialMessagesDocument = gql`
     query InitialMessages($roomId: Int!) {
   initialMessages(roomId: $roomId) {

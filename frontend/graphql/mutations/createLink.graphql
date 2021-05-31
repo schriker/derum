@@ -1,0 +1,5 @@
+mutation CreateLink($newLinkData: NewLinkData!) {
+  createLink(newLinkData: $newLinkData) {
+    ...LinkFragment
+  }
+}

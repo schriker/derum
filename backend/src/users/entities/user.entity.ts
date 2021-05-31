@@ -2,6 +2,7 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { Link } from 'src/meta-scraper/entities/link.entity';
+import { Photo } from 'src/photos/entities/photo.entity';
 import { Room } from 'src/rooms/entities/room.entity';
 import {
   Column,
@@ -61,6 +62,9 @@ export class User {
 
   @OneToMany(() => Entry, (entry) => entry.author)
   entires: Entry[];
+
+  @OneToMany(() => Photo, (photo) => photo.user)
+  photos: Photo[];
 
   @Field(() => Boolean)
   @Column({ default: false })

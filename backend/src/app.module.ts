@@ -8,7 +8,6 @@ import { RoomsModule } from './rooms/rooms.module';
 import { MessagesModule } from './messages/messages.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { EntriesService } from './entries/entries.service';
 import { EntriesModule } from './entries/entries.module';
 import { CaslModule } from './casl/casl.module';
 import { DateScalar } from './scalars/date.scalar';
@@ -16,6 +15,8 @@ import * as cookie from 'cookie';
 import { redisClient } from './main';
 import { UsersService } from './users/users.service';
 import { MetaScraperModule } from './meta-scraper/meta-scraper.module';
+import { PhotosModule } from './photos/photos.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 const parseUserSession = async (headerCookie) => {
   const cookies = cookie.parse(headerCookie);
@@ -31,6 +32,10 @@ const parseUserSession = async (headerCookie) => {
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'uploads'),
+      exclude: ['/graphql*'],
     }),
     TypeOrmModule.forRoot(),
     GraphQLModule.forRootAsync({
@@ -87,7 +92,8 @@ const parseUserSession = async (headerCookie) => {
     EntriesModule,
     CaslModule,
     MetaScraperModule,
+    PhotosModule,
   ],
-  providers: [EntriesService, DateScalar],
+  providers: [DateScalar],
 })
 export class AppModule {}

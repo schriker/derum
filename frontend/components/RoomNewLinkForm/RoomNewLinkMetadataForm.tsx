@@ -1,7 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import React from 'react';
+import { Box } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import {
+  CheckLinkExsitsQuery,
+  useCheckLinkExsitsLazyQuery,
+} from '../../generated/graphql';
 import {
   NewLinkMetadataInputs,
   NewLinkMetadataProps,
@@ -9,12 +14,13 @@ import {
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import { CustomInput } from '../CustomInput/CustomInput';
 import FormInput from '../FormInput/FormInput';
+import RoomNewLinkExist from '../RoomNewLinkExist/RoomNewLinkExist';
 import RoomNewLinkPreview from '../RoomNewLinkPreview/RoomNewLinkPreview';
 import RoomSearchInput from '../RoomSearchInput/RoomSearchInput';
 import useNewRoomLinkStyles from './RoomNewLinkFormStyles';
 
 const schema = yup.object().shape({
-  id: yup.number().required('Wybierz pokój.'),
+  roomId: yup.number().required('Wybierz pokój.'),
   title: yup
     .string()
     .trim()
@@ -40,8 +46,12 @@ const schema = yup.object().shape({
 const RoomNewLinkMetadataForm = ({
   metadata,
   setLinkMetadata,
+  closeModal,
 }: NewLinkMetadataProps) => {
   const classes = useNewRoomLinkStyles();
+  const [exists, setExsists] = useState<
+    CheckLinkExsitsQuery['checkLinkExsits']
+  >([]);
   const {
     control,
     handleSubmit,
@@ -58,6 +68,26 @@ const RoomNewLinkMetadataForm = ({
     },
   });
 
+  const [checkIfExists, { loading: checkLoading }] =
+    useCheckLinkExsitsLazyQuery({
+      onCompleted: (data) => {
+        if (!data.checkLinkExsits.length) return setExsists([]);
+
+        setExsists(data.checkLinkExsits);
+      },
+    });
+
+  useEffect(() => {
+    if (watch('roomId')) {
+      checkIfExists({
+        variables: {
+          roomId: watch('roomId'),
+          linkId: metadata.id,
+        },
+      });
+    }
+  }, [watch('roomId')]);
+
   const onSubmit: SubmitHandler<NewLinkMetadataInputs> = (variables) => {
     console.log(variables);
   };
@@ -65,8 +95,10 @@ const RoomNewLinkMetadataForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <RoomSearchInput
-        error={errors.id}
-        onSelect={(id: number) => setValue('id', id, { shouldValidate: true })}
+        error={errors.roomId}
+        onSelect={(id: number) =>
+          setValue('roomId', id, { shouldValidate: true })
+        }
       />
       <FormInput
         name="title"
@@ -113,6 +145,9 @@ const RoomNewLinkMetadataForm = ({
           />
         )}
       />
+      {!!exists.length && (
+        <RoomNewLinkExist closeModal={closeModal} data={exists} />
+      )}
       <RoomNewLinkPreview
         metadata={{
           ...metadata,
@@ -121,22 +156,23 @@ const RoomNewLinkMetadataForm = ({
           photo: watch('photo'),
         }}
       />
-      <ButtonPrimary
-        // disabled={loading}
-        onClick={() => setLinkMetadata(null)}
-        className={classes.submitButton}
-        color="default"
-      >
-        Wstecz
-      </ButtonPrimary>
-      <ButtonPrimary
-        // disabled={loading}
-        className={classes.submitButton}
-        color="primary"
-        type="submit"
-      >
-        Dodaj link
-      </ButtonPrimary>
+      <Box display="flex" justifyContent="flex-end">
+        <ButtonPrimary
+          onClick={() => setLinkMetadata(null)}
+          className={classes.submitButton}
+          color="default"
+        >
+          Wstecz
+        </ButtonPrimary>
+        <ButtonPrimary
+          disabled={checkLoading || !!exists.length}
+          className={classes.submitButton}
+          color="primary"
+          type="submit"
+        >
+          Dodaj link
+        </ButtonPrimary>
+      </Box>
     </form>
   );
 };

@@ -7,6 +7,7 @@ export type NewLinkProps = {
 export type NewLinkMetadataProps = {
   metadata: MetadataQuery['metadata'];
   setLinkMetadata: (metadata: MetadataQuery['metadata'] | null) => void;
+  closeModal: () => void;
 };
 
 export type NewLinkPreviewProps = {
@@ -18,7 +19,7 @@ export type NewLinkInputs = {
 };
 
 export type NewLinkMetadataInputs = {
-  id: number;
+  roomId: number;
   title: string;
   photo: string;
   description: string;
