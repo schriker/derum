@@ -20,7 +20,7 @@ export const CustomInput = withStyles((theme: Theme) => ({
   },
   multiline: {
     padding: '9px 15px',
-    wordBreak: 'break-all',
+    wordBreak: 'break-word',
   },
   focused: {
     borderColor: theme.palette.primary['A700'],

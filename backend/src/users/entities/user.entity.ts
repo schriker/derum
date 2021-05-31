@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { Link } from 'src/meta-scraper/entities/link.entity';
 import { Room } from 'src/rooms/entities/room.entity';
@@ -57,6 +58,9 @@ export class User {
 
   @OneToMany(() => Link, (link) => link.user)
   links: Link[];
+
+  @OneToMany(() => Entry, (entry) => entry.author)
+  entires: Entry[];
 
   @Field(() => Boolean)
   @Column({ default: false })

@@ -1,0 +1,6 @@
+query SearchRoom($name: String!) {
+  searchRooms(name: $name) {
+    id
+    name
+  }
+}

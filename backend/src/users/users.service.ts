@@ -60,7 +60,7 @@ export class UsersService {
         .add(id);
       return true;
     } catch (err) {
-      throw new BadRequestException('Error ignoring user.');
+      throw new BadRequestException(ERROR_MESSAGES.IGNORE_USER);
     }
   }
 

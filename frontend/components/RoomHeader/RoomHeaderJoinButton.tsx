@@ -17,7 +17,7 @@ const RoomHeaderJoinButton = ({ roomId }: { roomId: number }) => {
   const { roomData } = useRoomData();
   const isJoined = data?.me.joinedRooms.some((room) => room.id === roomId);
   const [joinRoom, { loading: joinLoading }] = useJoinRoomMutation({
-    onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
     update(cache) {
       cache.modify({
         id: cache.identify(data.me),
@@ -36,7 +36,7 @@ const RoomHeaderJoinButton = ({ roomId }: { roomId: number }) => {
   });
 
   const [leaveRoom, { loading: leaveLoading }] = useLeaveRoomMutation({
-    onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
     update(cache) {
       cache.modify({
         id: cache.identify(data.me),

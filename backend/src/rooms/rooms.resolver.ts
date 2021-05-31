@@ -22,8 +22,15 @@ export class RoomsResolver {
   }
 
   @Query(() => [Room])
-  popularRooms(): Promise<Room[]> {
-    return this.roomsService.getMostPopular();
+  searchRooms(@Args('name') name: string): Promise<Room[]> {
+    return this.roomsService.searchRoomsByName(name);
+  }
+
+  @Query(() => [Room])
+  popularRooms(
+    @Args('limit', { type: () => Int }) limit: number,
+  ): Promise<Room[]> {
+    return this.roomsService.getMostPopular(limit);
   }
 
   @Mutation(() => Room)

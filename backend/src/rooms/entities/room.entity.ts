@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -44,6 +45,9 @@ export class Room {
 
   @OneToMany(() => Message, (message) => message.room)
   messages: Message[];
+
+  @OneToMany(() => Entry, (entry) => entry.room)
+  entires: Entry[];
 
   @ManyToMany(() => User, (user) => user.joinedRooms)
   @JoinTable()

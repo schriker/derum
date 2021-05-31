@@ -1,0 +1,11 @@
+query Metadata($url: String!) {
+  metadata(url: $url) {
+    id
+    url
+    publisher
+    author
+    title
+    description
+    photo
+  }
+}

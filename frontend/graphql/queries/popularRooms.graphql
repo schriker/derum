@@ -1,5 +1,5 @@
-query PopularRooms {
-  popularRooms {
+query PopularRooms($limit: Int!) {
+  popularRooms(limit: $limit) {
     ...RoomFragment
   }
 }

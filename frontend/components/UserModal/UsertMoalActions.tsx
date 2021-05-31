@@ -25,7 +25,7 @@ const UserModalActions = ({ id }: { id: number }) => {
     },
   });
   const [ignoreUser, { loading: ignoreLoading }] = useIgnoreUserMutation({
-    onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
     update(cache) {
       cache.modify({
         id: cache.identify(me.me),
@@ -43,7 +43,7 @@ const UserModalActions = ({ id }: { id: number }) => {
   });
   const [removeIgnoreUser, { loading: unignoreLoading }] =
     useRemoveIgnoreUserMutation({
-      onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
+      onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
       update(cache) {
         cache.modify({
           id: cache.identify(me.me),

@@ -45,6 +45,19 @@ export class RoomsService {
     return room;
   }
 
+  searchRoomsByName(name: string): Promise<Room[]> {
+    return this.roomsRepository
+      .createQueryBuilder('room')
+      .where('room.name ILIKE :name', { name: `${name}%` })
+      .addSelect('COUNT(users.id) as usersNumber')
+      .leftJoin('room.users', 'users')
+      .groupBy('room.id')
+      .orderBy('usersNumber', 'DESC')
+      .loadRelationCountAndMap('room.usersNumber', 'room.users')
+      .limit(15)
+      .getMany();
+  }
+
   getNewest(): Promise<Room[]> {
     return this.roomsRepository
       .createQueryBuilder('room')
@@ -56,7 +69,7 @@ export class RoomsService {
       .getMany();
   }
 
-  getMostPopular(): Promise<Room[]> {
+  getMostPopular(limit: number): Promise<Room[]> {
     return this.roomsRepository
       .createQueryBuilder('room')
       .addSelect('COUNT(users.id) as usersNumber')
@@ -66,7 +79,7 @@ export class RoomsService {
       .addGroupBy('author.id')
       .orderBy('usersNumber', 'DESC')
       .loadRelationCountAndMap('room.usersNumber', 'room.users')
-      .limit(5)
+      .limit(limit > 20 ? 20 : limit)
       .getMany();
   }
 
@@ -97,7 +110,7 @@ export class RoomsService {
         .add(user);
       return true;
     } catch (err) {
-      throw new BadRequestException('Error while joining room.');
+      throw new BadRequestException(ERROR_MESSAGES.JOINING_ROOM);
     }
   }
 

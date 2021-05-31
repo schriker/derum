@@ -17,6 +17,19 @@ export type Scalars = {
 };
 
 
+export type Link = {
+  __typename?: 'Link';
+  id: Scalars['Int'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+  url: Scalars['String'];
+  publisher: Scalars['String'];
+  author?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  photo?: Maybe<Scalars['String']>;
+};
+
 export type Message = {
   __typename?: 'Message';
   id: Scalars['Int'];
@@ -112,8 +125,10 @@ export type Query = {
   onlineUsers: Array<OnlineUser>;
   room: Room;
   newRooms: Array<Room>;
+  searchRooms: Array<Room>;
   popularRooms: Array<Room>;
   initialMessages: Array<Message>;
+  metadata: Link;
 };
 
 
@@ -132,8 +147,23 @@ export type QueryRoomArgs = {
 };
 
 
+export type QuerySearchRoomsArgs = {
+  name: Scalars['String'];
+};
+
+
+export type QueryPopularRoomsArgs = {
+  limit: Scalars['Int'];
+};
+
+
 export type QueryInitialMessagesArgs = {
   roomId: Scalars['Int'];
+};
+
+
+export type QueryMetadataArgs = {
+  url: Scalars['String'];
 };
 
 export type Room = {
@@ -323,6 +353,19 @@ export type MeQuery = (
   ) }
 );
 
+export type MetadataQueryVariables = Exact<{
+  url: Scalars['String'];
+}>;
+
+
+export type MetadataQuery = (
+  { __typename?: 'Query' }
+  & { metadata: (
+    { __typename?: 'Link' }
+    & Pick<Link, 'id' | 'url' | 'publisher' | 'author' | 'title' | 'description' | 'photo'>
+  ) }
+);
+
 export type NewRoomsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -347,7 +390,9 @@ export type OnlineUsersQuery = (
   )> }
 );
 
-export type PopularRoomsQueryVariables = Exact<{ [key: string]: never; }>;
+export type PopularRoomsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+}>;
 
 
 export type PopularRoomsQuery = (
@@ -369,6 +414,19 @@ export type RoomQuery = (
     { __typename?: 'Room' }
     & RoomFragmentFragment
   ) }
+);
+
+export type SearchRoomQueryVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type SearchRoomQuery = (
+  { __typename?: 'Query' }
+  & { searchRooms: Array<(
+    { __typename?: 'Room' }
+    & Pick<Room, 'id' | 'name'>
+  )> }
 );
 
 export type UserQueryVariables = Exact<{
@@ -806,6 +864,47 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const MetadataDocument = gql`
+    query Metadata($url: String!) {
+  metadata(url: $url) {
+    id
+    url
+    publisher
+    author
+    title
+    description
+    photo
+  }
+}
+    `;
+
+/**
+ * __useMetadataQuery__
+ *
+ * To run a query within a React component, call `useMetadataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMetadataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMetadataQuery({
+ *   variables: {
+ *      url: // value for 'url'
+ *   },
+ * });
+ */
+export function useMetadataQuery(baseOptions: Apollo.QueryHookOptions<MetadataQuery, MetadataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MetadataQuery, MetadataQueryVariables>(MetadataDocument, options);
+      }
+export function useMetadataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MetadataQuery, MetadataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MetadataQuery, MetadataQueryVariables>(MetadataDocument, options);
+        }
+export type MetadataQueryHookResult = ReturnType<typeof useMetadataQuery>;
+export type MetadataLazyQueryHookResult = ReturnType<typeof useMetadataLazyQuery>;
+export type MetadataQueryResult = Apollo.QueryResult<MetadataQuery, MetadataQueryVariables>;
 export const NewRoomsDocument = gql`
     query NewRooms {
   newRooms {
@@ -880,8 +979,8 @@ export type OnlineUsersQueryHookResult = ReturnType<typeof useOnlineUsersQuery>;
 export type OnlineUsersLazyQueryHookResult = ReturnType<typeof useOnlineUsersLazyQuery>;
 export type OnlineUsersQueryResult = Apollo.QueryResult<OnlineUsersQuery, OnlineUsersQueryVariables>;
 export const PopularRoomsDocument = gql`
-    query PopularRooms {
-  popularRooms {
+    query PopularRooms($limit: Int!) {
+  popularRooms(limit: $limit) {
     ...RoomFragment
   }
 }
@@ -899,10 +998,11 @@ export const PopularRoomsDocument = gql`
  * @example
  * const { data, loading, error } = usePopularRoomsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
  *   },
  * });
  */
-export function usePopularRoomsQuery(baseOptions?: Apollo.QueryHookOptions<PopularRoomsQuery, PopularRoomsQueryVariables>) {
+export function usePopularRoomsQuery(baseOptions: Apollo.QueryHookOptions<PopularRoomsQuery, PopularRoomsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<PopularRoomsQuery, PopularRoomsQueryVariables>(PopularRoomsDocument, options);
       }
@@ -948,6 +1048,42 @@ export function useRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RoomQ
 export type RoomQueryHookResult = ReturnType<typeof useRoomQuery>;
 export type RoomLazyQueryHookResult = ReturnType<typeof useRoomLazyQuery>;
 export type RoomQueryResult = Apollo.QueryResult<RoomQuery, RoomQueryVariables>;
+export const SearchRoomDocument = gql`
+    query SearchRoom($name: String!) {
+  searchRooms(name: $name) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useSearchRoomQuery__
+ *
+ * To run a query within a React component, call `useSearchRoomQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchRoomQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchRoomQuery({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useSearchRoomQuery(baseOptions: Apollo.QueryHookOptions<SearchRoomQuery, SearchRoomQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchRoomQuery, SearchRoomQueryVariables>(SearchRoomDocument, options);
+      }
+export function useSearchRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchRoomQuery, SearchRoomQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchRoomQuery, SearchRoomQueryVariables>(SearchRoomDocument, options);
+        }
+export type SearchRoomQueryHookResult = ReturnType<typeof useSearchRoomQuery>;
+export type SearchRoomLazyQueryHookResult = ReturnType<typeof useSearchRoomLazyQuery>;
+export type SearchRoomQueryResult = Apollo.QueryResult<SearchRoomQuery, SearchRoomQueryVariables>;
 export const UserDocument = gql`
     query User($id: Int!) {
   user(id: $id) {

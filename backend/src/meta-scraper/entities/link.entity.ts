@@ -1,10 +1,13 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Entry } from 'src/entries/entities/entry.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -26,6 +29,7 @@ export class Link {
 
   @Field()
   @Column()
+  @Index()
   url: string;
 
   @Field()
@@ -36,8 +40,8 @@ export class Link {
   @Column({ nullable: true })
   author: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   title: string;
 
   @Field({ nullable: true })
@@ -50,4 +54,7 @@ export class Link {
 
   @ManyToOne(() => User, (user) => user.links)
   user: User;
+
+  @OneToMany(() => Entry, (entry) => entry.link, { nullable: true })
+  entires: Entry[];
 }

@@ -4,7 +4,6 @@ const useHeaderStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: theme.spacing(2),
     backgroundColor: theme.palette.background.paper,
     borderRadius: theme.shape.borderRadius,
     padding: theme.spacing(2),
@@ -29,7 +28,7 @@ const useHeaderStyles = makeStyles((theme: Theme) => ({
     flex: '1 1 100%',
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(4),
-    wordBreak: 'break-all',
+    wordBreak: 'break-word',
   },
 }));
 

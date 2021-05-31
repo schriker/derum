@@ -17,7 +17,7 @@ const ChatMessageActions = ({ messageId }: MessageActionProps) => {
 
   const [deleteMessage] = useDeleteMessageMutation({
     onError: () =>
-      globalErrorVar({ isOpen: true, message: 'Błąd usuwania wiadomości' }),
+      globalErrorVar({ isOpen: true, message: 'Błąd usuwania wiadomości.' }),
   });
 
   const onDeleteMessage = () => {

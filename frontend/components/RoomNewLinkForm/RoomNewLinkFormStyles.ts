@@ -1,9 +1,10 @@
 import { makeStyles, Theme } from '@material-ui/core';
 
-const useNewRoomLinkStyles = makeStyles((theme: Theme) => ({
+const useRoomNewLinkStyles = makeStyles((theme: Theme) => ({
   submitButton: {
+    marginRight: theme.spacing(1),
     marginTop: theme.spacing(1),
   },
 }));
 
-export default useNewRoomLinkStyles;
+export default useRoomNewLinkStyles;

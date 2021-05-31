@@ -22,7 +22,11 @@ const SidebarDrawer = () => {
   });
   const { data: newRoomsData, loading: newRoomsLoading } = useNewRoomsQuery();
   const { data: popularRoomsData, loading: popularRoomsLoading } =
-    usePopularRoomsQuery();
+    usePopularRoomsQuery({
+      variables: {
+        limit: 5,
+      },
+    });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
