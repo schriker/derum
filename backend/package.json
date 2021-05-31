@@ -43,6 +43,7 @@
     "graphql-depth-limit": "^1.1.0",
     "graphql-redis-subscriptions": "^2.4.0",
     "graphql-tools": "^7.0.5",
+    "iconv-lite": "^0.6.3",
     "ioredis": "^4.27.3",
     "metascraper": "^5.21.10",
     "metascraper-author": "^5.21.10",
@@ -62,6 +63,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
     "sharp": "^0.28.3",
+    "slugify": "^1.5.3",
     "typeorm": "^0.2.32",
     "uuid": "^8.3.2"
   },

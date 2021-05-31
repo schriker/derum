@@ -18,7 +18,7 @@ type Photo {
   createdAt: Date!
   updatedAt: Date!
   name: String!
-  path: String!
+  url: String!
 }
 
 type User {
@@ -51,6 +51,7 @@ type Entry {
   createdAt: Date!
   updatedAt: Date!
   url: String!
+  slug: String!
   title: String!
   publisher: String
   description: String!

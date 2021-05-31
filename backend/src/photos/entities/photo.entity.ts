@@ -30,7 +30,7 @@ export class Photo {
 
   @Field()
   @Column()
-  path: string;
+  url: string;
 
   @ManyToOne(() => User, (user) => user.photos)
   user: User;

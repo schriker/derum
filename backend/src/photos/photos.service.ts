@@ -29,7 +29,7 @@ export class PhotosService {
         );
       const photo = new Photo();
       photo.name = `${name}.png`;
-      photo.path = `${name}/${name}.png`;
+      photo.url = `https://api.derum.pl/${name}/${name}.png`;
       photo.user = user;
       return this.photosRepository.save(photo);
     } catch (e) {

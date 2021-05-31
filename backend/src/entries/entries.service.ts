@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import slugify from 'slugify';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { Link } from 'src/meta-scraper/entities/link.entity';
 import { PhotosService } from 'src/photos/photos.service';
@@ -13,6 +14,8 @@ import { Repository } from 'typeorm';
 import { NewLinkData } from './dto/new-link.input';
 import { Entry } from './entities/entry.entity';
 import { EntryType } from './types/entry-type.enum';
+import { v4 as uuidv4 } from 'uuid';
+import trimString from 'src/helpers/trimString';
 
 @Injectable()
 export class EntriesService {
@@ -46,6 +49,11 @@ export class EntriesService {
     if (!link || !room) throw new NotFoundException();
     const savedPhoto = await this.photosService.savePhotoFromLink(photo, user);
     const entry = new Entry();
+    const trimedTitle = trimString(title, 60);
+    entry.slug = `${slugify(trimedTitle, {
+      lower: true,
+      remove: /[*+~.()'"!:@]/g,
+    })}-${uuidv4()}`;
     entry.author = user;
     entry.description = description;
     entry.link = link;

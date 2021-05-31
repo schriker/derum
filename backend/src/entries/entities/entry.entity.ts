@@ -7,6 +7,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToOne,
@@ -37,6 +38,11 @@ export class Entry {
   @Field()
   @Column()
   url: string;
+
+  @Field()
+  @Column()
+  @Index()
+  slug: string;
 
   @Field()
   @Column()

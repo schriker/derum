@@ -23,6 +23,7 @@ export type Entry = {
   createdAt: Scalars['Date'];
   updatedAt: Scalars['Date'];
   url: Scalars['String'];
+  slug: Scalars['String'];
   title: Scalars['String'];
   publisher?: Maybe<Scalars['String']>;
   description: Scalars['String'];
@@ -160,7 +161,7 @@ export type Photo = {
   createdAt: Scalars['Date'];
   updatedAt: Scalars['Date'];
   name: Scalars['String'];
-  path: Scalars['String'];
+  url: Scalars['String'];
 };
 
 export type Query = {
@@ -266,10 +267,10 @@ export type AuthorFragmentFragment = (
 
 export type LinkFragmentFragment = (
   { __typename?: 'Entry' }
-  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'title' | 'publisher' | 'description'>
+  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'title' | 'publisher' | 'description' | 'type'>
   & { photo: (
     { __typename?: 'Photo' }
-    & Pick<Photo, 'name' | 'path'>
+    & Pick<Photo, 'name' | 'url'>
   ), author: (
     { __typename?: 'User' }
     & Pick<User, 'displayName'>
@@ -575,9 +576,10 @@ export const LinkFragmentFragmentDoc = gql`
   title
   publisher
   description
+  type
   photo {
     name
-    path
+    url
   }
   author {
     displayName

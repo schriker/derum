@@ -7,6 +7,7 @@ import { Link } from './entities/link.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
+import * as iconv from 'iconv-lite';
 
 const metascraper = require('metascraper')([
   require('metascraper-author')(),
@@ -28,14 +29,24 @@ export class MetaScraperService {
 
   async getMetadata(newLink: NewLink, user: User): Promise<Link> {
     try {
-      const { body: html, url } = await got(newLink.url);
+      const {
+        body: html,
+        url,
+        headers,
+      } = await got(newLink.url, {
+        responseType: 'buffer',
+      });
+      const ctype = headers['content-type'];
+      const data = ctype.toLowerCase().includes('windows-1250')
+        ? iconv.decode(html, 'Windows-1250')
+        : iconv.decode(html, 'UTF-8');
       const {
         author,
         description,
         image,
         title,
         url: linkUrl,
-      } = await metascraper({ html, url });
+      } = await metascraper({ html: data, url });
       const isScraped = await this.linkRepository.findOne({ url: linkUrl });
       if (isScraped) return isScraped;
       const link = new Link();
@@ -51,6 +62,7 @@ export class MetaScraperService {
 
       return this.linkRepository.save(link);
     } catch (e) {
+      console.log(e);
       throw new BadRequestException(ERROR_MESSAGES.LINK_FETCH_ERROR);
     }
   }

@@ -5,9 +5,10 @@ fragment LinkFragment on Entry {
   title
   publisher
   description
+  type
   photo {
     name
-    path
+    url
   }
   author {
     displayName
