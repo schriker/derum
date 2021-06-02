@@ -96,8 +96,15 @@ type Query {
   searchRooms(name: String!): [Room!]!
   popularRooms(limit: Int!): [Room!]!
   initialMessages(roomId: Int!): [Message!]!
+  entries(queryData: QueryEntriesInput!): [Entry!]!
   checkLinkExsits(linkId: Int!, roomId: Int!): [Entry!]!
   metadata(url: String!): Link!
+}
+
+input QueryEntriesInput {
+  roomName: String!
+  limit: Int!
+  offset: Int!
 }
 
 type Mutation {

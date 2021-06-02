@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
-import React from 'react';
+import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { useMetadataLazyQuery } from '../../generated/graphql';
@@ -49,6 +49,8 @@ const RoomNewLinkForm = ({ setLinkMetadata }: NewLinkProps) => {
     });
   };
 
+  const [d, setD] = useState(false);
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <FormInput
@@ -70,7 +72,6 @@ const RoomNewLinkForm = ({ setLinkMetadata }: NewLinkProps) => {
         <ButtonPrimary
           disabled={loading}
           className={classes.submitButton}
-          color="primary"
           type="submit"
         >
           Dodaj link

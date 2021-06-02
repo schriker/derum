@@ -1,16 +1,20 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import {
   CheckLinkExsitsQuery,
   useCheckLinkExsitsLazyQuery,
+  useCreateLinkMutation,
 } from '../../generated/graphql';
+import { globalErrorVar } from '../../lib/apolloVars';
 import {
   NewLinkMetadataInputs,
   NewLinkMetadataProps,
 } from '../../types/newLink';
+import { ButtonDefault } from '../Buttons/ButtonDefault';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import { CustomInput } from '../CustomInput/CustomInput';
 import FormInput from '../FormInput/FormInput';
@@ -25,14 +29,14 @@ const schema = yup.object().shape({
     .string()
     .trim()
     .required('Tytuł jest wymagany.')
-    .min(3, 'Tytuł min. 3 znaki.')
+    .min(10, 'Tytuł min. 10 znaków.')
     .max(150, 'Zbyt długi tytuł.'),
   description: yup
     .string()
     .trim()
     .required('Opis jest wymagany.')
-    .min(100, 'Opis min. 100 znaków.')
-    .max(500, 'Zbyt długi opis.'),
+    .min(50, 'Opis min. 50 znaków.')
+    .max(350, 'Zbyt długi opis.'),
   photo: yup
     .string()
     .trim()
@@ -49,6 +53,7 @@ const RoomNewLinkMetadataForm = ({
   closeModal,
 }: NewLinkMetadataProps) => {
   const classes = useNewRoomLinkStyles();
+  const router = useRouter();
   const [exists, setExsists] = useState<
     CheckLinkExsitsQuery['checkLinkExsits']
   >([]);
@@ -88,8 +93,26 @@ const RoomNewLinkMetadataForm = ({
     }
   }, [watch('roomId')]);
 
+  const [createLink, { loading: createLinkLoading }] = useCreateLinkMutation({
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
+    onCompleted: (data) => {
+      router.push(`/p/${data.createLink.room.name}/w/${data.createLink.slug}`);
+    },
+  });
+
   const onSubmit: SubmitHandler<NewLinkMetadataInputs> = (variables) => {
-    console.log(variables);
+    const { description, title, photo, roomId } = variables;
+    createLink({
+      variables: {
+        newLinkData: {
+          description,
+          photo,
+          title,
+          roomId,
+          linkId: metadata.id,
+        },
+      },
+    });
   };
 
   return (
@@ -137,7 +160,7 @@ const RoomNewLinkMetadataForm = ({
           <CustomInput
             bg="light"
             error={!!errors.description}
-            inputProps={{ maxLength: 500, id: id }}
+            inputProps={{ maxLength: 350, id: id }}
             multiline
             rows={3}
             rowsMax={40}
@@ -157,17 +180,16 @@ const RoomNewLinkMetadataForm = ({
         }}
       />
       <Box display="flex" justifyContent="flex-end">
-        <ButtonPrimary
+        <ButtonDefault
           onClick={() => setLinkMetadata(null)}
           className={classes.submitButton}
-          color="default"
+          disabled={createLinkLoading}
         >
           Wstecz
-        </ButtonPrimary>
+        </ButtonDefault>
         <ButtonPrimary
-          disabled={checkLoading || !!exists.length}
+          disabled={checkLoading || createLinkLoading || !!exists.length}
           className={classes.submitButton}
-          color="primary"
           type="submit"
         >
           Dodaj link

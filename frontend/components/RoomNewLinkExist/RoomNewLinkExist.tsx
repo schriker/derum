@@ -3,7 +3,7 @@ import { Alert } from '@material-ui/lab';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { CheckLinkExsitsQuery } from '../../generated/graphql';
-import { ButtonPrimary } from '../Buttons/ButtonPrimary';
+import { ButtonDefault } from '../Buttons/ButtonDefault';
 
 const RoomNewLinkExist = ({
   data,
@@ -16,7 +16,7 @@ const RoomNewLinkExist = ({
 
   const handleClick = () => {
     closeModal();
-    router.push(`/w/${data[0].id}`);
+    router.push(`/p/${data[0].room.name}/w/${data[0].slug}`);
   };
 
   return (
@@ -25,9 +25,9 @@ const RoomNewLinkExist = ({
         variant="filled"
         severity="warning"
         action={
-          <ButtonPrimary onClick={handleClick} color="default" size="small">
+          <ButtonDefault onClick={handleClick} size="small">
             Zobacz
-          </ButtonPrimary>
+          </ButtonDefault>
         }
       >
         Wygląda na to, że ten link jest już dodany.

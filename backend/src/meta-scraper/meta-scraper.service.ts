@@ -36,9 +36,9 @@ export class MetaScraperService {
       } = await got(newLink.url, {
         responseType: 'buffer',
       });
-      const ctype = headers['content-type'];
-      const data = ctype.toLowerCase().includes('windows-1250')
-        ? iconv.decode(html, 'Windows-1250')
+      const ctype = headers['content-type'].split('=').pop();
+      const data = ctype
+        ? iconv.decode(html, ctype)
         : iconv.decode(html, 'UTF-8');
       const {
         author,

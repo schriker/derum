@@ -13,8 +13,8 @@ const RoomAddContentButtons = () => {
       <RoomAddArticle />
       <Divider orientation="vertical" flexItem />
       <RoomAddLink />
-      <Divider orientation="vertical" flexItem />
-      <RoomAddVideo />
+      {/* <Divider orientation="vertical" flexItem />
+      <RoomAddVideo /> */}
     </Box>
   );
 };

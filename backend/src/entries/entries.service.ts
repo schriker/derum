@@ -10,12 +10,13 @@ import { Link } from 'src/meta-scraper/entities/link.entity';
 import { PhotosService } from 'src/photos/photos.service';
 import { Room } from 'src/rooms/entities/room.entity';
 import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { NewLinkData } from './dto/new-link.input';
 import { Entry } from './entities/entry.entity';
 import { EntryType } from './types/entry-type.enum';
 import { v4 as uuidv4 } from 'uuid';
 import trimString from 'src/helpers/trimString';
+import { QueryEntriesInput } from './dto/query.input';
 
 @Injectable()
 export class EntriesService {
@@ -29,13 +30,30 @@ export class EntriesService {
     private photosService: PhotosService,
   ) {}
 
-  async checkIfAlreadyAdded(linkId: number, roomId: number): Promise<Entry[]> {
-    return await this.entryRepository.find({
+  async findMany(queryData: QueryEntriesInput): Promise<Entry[]> {
+    const { roomName, limit, offset } = queryData;
+    const room = await this.roomRepository.findOne({ name: ILike(roomName) });
+    if (!room) throw new NotFoundException(roomName);
+    return this.entryRepository.find({
+      where: {
+        room: room,
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+      skip: offset * limit,
+      take: limit > 25 ? 25 : limit,
+      relations: ['author', 'photo', 'room'],
+    });
+  }
+
+  checkIfAlreadyAdded(linkId: number, roomId: number): Promise<Entry[]> {
+    return this.entryRepository.find({
       where: {
         room: roomId,
         link: linkId,
       },
-      relations: ['author', 'photo'],
+      relations: ['author', 'photo', 'room'],
     });
   }
 

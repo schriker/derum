@@ -6,6 +6,11 @@ fragment LinkFragment on Entry {
   publisher
   description
   type
+  slug
+  room {
+    id
+    name
+  }
   photo {
     name
     url

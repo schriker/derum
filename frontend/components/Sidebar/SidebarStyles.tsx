@@ -12,6 +12,7 @@ const useSidebarStyles = makeStyles((theme: Theme) => ({
   button: {
     display: 'flex',
     alignItems: 'center',
+    borderRadius: 0,
     justifyContent: 'flex-start',
   },
   userNumber: {

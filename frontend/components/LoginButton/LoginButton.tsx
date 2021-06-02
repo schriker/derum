@@ -10,7 +10,6 @@ const LoginButton = () => {
         style={{ marginRight: 8 }}
         startIcon={<UserIcon style={{ fontSize: 16 }} />}
         onClick={() => openModalVar(true)}
-        color="primary"
         size="large"
       >
         Zaloguj

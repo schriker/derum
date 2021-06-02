@@ -5,10 +5,10 @@ const DropdownItem = withStyles((theme) => ({
     borderBottom: `1px solid ${theme.palette.divider}`,
     paddingRight: theme.spacing(5),
     '&:hover': {
-      backgroundColor: theme.palette.divider,
+      backgroundColor: theme.palette.secondary['800'],
     },
     '&:focus': {
-      backgroundColor: theme.palette.divider,
+      backgroundColor: theme.palette.secondary['800'],
       '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
         color: theme.palette.common.white,
       },

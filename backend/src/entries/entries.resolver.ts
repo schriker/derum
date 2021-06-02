@@ -4,12 +4,18 @@ import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { NewLinkData } from './dto/new-link.input';
+import { QueryEntriesInput } from './dto/query.input';
 import { Entry } from './entities/entry.entity';
 import { EntriesService } from './entries.service';
 
 @Resolver(() => Entry)
 export class EntriesResolver {
   constructor(private entriesService: EntriesService) {}
+
+  @Query(() => [Entry])
+  entries(@Args('queryData') queryData: QueryEntriesInput) {
+    return this.entriesService.findMany(queryData);
+  }
 
   @Mutation(() => Entry)
   @UseGuards(GQLSessionGuard)

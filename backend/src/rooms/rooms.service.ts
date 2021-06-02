@@ -48,7 +48,10 @@ export class RoomsService {
   searchRoomsByName(name: string): Promise<Room[]> {
     return this.roomsRepository
       .createQueryBuilder('room')
-      .where('room.name ILIKE :name', { name: `${name}%` })
+      .where('room.name ILIKE :name AND room.name NOT ILIKE :derum', {
+        name: `${name}%`,
+        derum: 'Derum',
+      })
       .addSelect('COUNT(users.id) as usersNumber')
       .leftJoin('room.users', 'users')
       .groupBy('room.id')
@@ -72,6 +75,7 @@ export class RoomsService {
   getMostPopular(limit: number): Promise<Room[]> {
     return this.roomsRepository
       .createQueryBuilder('room')
+      .where('room.name NOT LIKE :name', { name: 'Derum' })
       .addSelect('COUNT(users.id) as usersNumber')
       .leftJoinAndSelect('room.author', 'author')
       .leftJoin('room.users', 'users')

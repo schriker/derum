@@ -174,6 +174,7 @@ export type Query = {
   searchRooms: Array<Room>;
   popularRooms: Array<Room>;
   initialMessages: Array<Message>;
+  entries: Array<Entry>;
   checkLinkExsits: Array<Entry>;
   metadata: Link;
 };
@@ -209,6 +210,11 @@ export type QueryInitialMessagesArgs = {
 };
 
 
+export type QueryEntriesArgs = {
+  queryData: QueryEntriesInput;
+};
+
+
 export type QueryCheckLinkExsitsArgs = {
   linkId: Scalars['Int'];
   roomId: Scalars['Int'];
@@ -217,6 +223,12 @@ export type QueryCheckLinkExsitsArgs = {
 
 export type QueryMetadataArgs = {
   url: Scalars['String'];
+};
+
+export type QueryEntriesInput = {
+  roomName: Scalars['String'];
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
 };
 
 export type Room = {
@@ -265,10 +277,28 @@ export type AuthorFragmentFragment = (
   & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName'>
 );
 
+export type HomeEntryFragment = (
+  { __typename?: 'Entry' }
+  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'type'>
+  & { author: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'displayName' | 'isAdmin' | 'isModerator'>
+  ), photo: (
+    { __typename?: 'Photo' }
+    & Pick<Photo, 'url' | 'name'>
+  ), room: (
+    { __typename?: 'Room' }
+    & Pick<Room, 'name'>
+  ) }
+);
+
 export type LinkFragmentFragment = (
   { __typename?: 'Entry' }
-  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'title' | 'publisher' | 'description' | 'type'>
-  & { photo: (
+  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'title' | 'publisher' | 'description' | 'type' | 'slug'>
+  & { room: (
+    { __typename?: 'Room' }
+    & Pick<Room, 'id' | 'name'>
+  ), photo: (
     { __typename?: 'Photo' }
     & Pick<Photo, 'name' | 'url'>
   ), author: (
@@ -406,6 +436,19 @@ export type CheckLinkExsitsQuery = (
   & { checkLinkExsits: Array<(
     { __typename?: 'Entry' }
     & LinkFragmentFragment
+  )> }
+);
+
+export type EntriesQueryVariables = Exact<{
+  queryData: QueryEntriesInput;
+}>;
+
+
+export type EntriesQuery = (
+  { __typename?: 'Query' }
+  & { entries: Array<(
+    { __typename?: 'Entry' }
+    & HomeEntryFragment
   )> }
 );
 
@@ -568,6 +611,31 @@ export type MessageDeletedSubscription = (
   ) }
 );
 
+export const HomeEntryFragmentDoc = gql`
+    fragment HomeEntry on Entry {
+  id
+  createdAt
+  url
+  slug
+  title
+  publisher
+  description
+  author {
+    id
+    displayName
+    isAdmin
+    isModerator
+  }
+  photo {
+    url
+    name
+  }
+  type
+  room {
+    name
+  }
+}
+    `;
 export const LinkFragmentFragmentDoc = gql`
     fragment LinkFragment on Entry {
   id
@@ -577,6 +645,11 @@ export const LinkFragmentFragmentDoc = gql`
   publisher
   description
   type
+  slug
+  room {
+    id
+    name
+  }
   photo {
     name
     url
@@ -960,6 +1033,41 @@ export function useCheckLinkExsitsLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type CheckLinkExsitsQueryHookResult = ReturnType<typeof useCheckLinkExsitsQuery>;
 export type CheckLinkExsitsLazyQueryHookResult = ReturnType<typeof useCheckLinkExsitsLazyQuery>;
 export type CheckLinkExsitsQueryResult = Apollo.QueryResult<CheckLinkExsitsQuery, CheckLinkExsitsQueryVariables>;
+export const EntriesDocument = gql`
+    query Entries($queryData: QueryEntriesInput!) {
+  entries(queryData: $queryData) {
+    ...HomeEntry
+  }
+}
+    ${HomeEntryFragmentDoc}`;
+
+/**
+ * __useEntriesQuery__
+ *
+ * To run a query within a React component, call `useEntriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEntriesQuery({
+ *   variables: {
+ *      queryData: // value for 'queryData'
+ *   },
+ * });
+ */
+export function useEntriesQuery(baseOptions: Apollo.QueryHookOptions<EntriesQuery, EntriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EntriesQuery, EntriesQueryVariables>(EntriesDocument, options);
+      }
+export function useEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EntriesQuery, EntriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EntriesQuery, EntriesQueryVariables>(EntriesDocument, options);
+        }
+export type EntriesQueryHookResult = ReturnType<typeof useEntriesQuery>;
+export type EntriesLazyQueryHookResult = ReturnType<typeof useEntriesLazyQuery>;
+export type EntriesQueryResult = Apollo.QueryResult<EntriesQuery, EntriesQueryVariables>;
 export const InitialMessagesDocument = gql`
     query InitialMessages($roomId: Int!) {
   initialMessages(roomId: $roomId) {

@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { openDrawerVar } from '../../lib/apolloVars';
 import { SidebarDrawerItemProps } from '../../types/sidebar';
-import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import useSidebarStyles from './SidebarStyles';
 import numbro from 'numbro';
+import { ButtonBlank } from '../Buttons/ButtonBlank';
 
 const SidebarDrawerItem = ({ name, usersNumber }: SidebarDrawerItemProps) => {
   const router = useRouter();
@@ -18,7 +18,7 @@ const SidebarDrawerItem = ({ name, usersNumber }: SidebarDrawerItemProps) => {
   };
 
   return (
-    <ButtonPrimary onClick={handleClick} className={classes.button}>
+    <ButtonBlank onClick={handleClick} className={classes.button}>
       <Box display="flex" alignItems="center">
         <AvatarPhoto
           color="#FF026A"
@@ -31,7 +31,7 @@ const SidebarDrawerItem = ({ name, usersNumber }: SidebarDrawerItemProps) => {
           {numbro(usersNumber).format({ average: true })}
         </Typography>
       </Box>
-    </ButtonPrimary>
+    </ButtonBlank>
   );
 };
 

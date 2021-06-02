@@ -8,6 +8,7 @@ import {
 } from '../../generated/graphql';
 import useRoomData from '../../hooks/useRoomData';
 import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
+import { ButtonDefault } from '../Buttons/ButtonDefault';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 
 const RoomHeaderJoinButton = ({ roomId }: { roomId: number }) => {
@@ -68,14 +69,15 @@ const RoomHeaderJoinButton = ({ roomId }: { roomId: number }) => {
 
   return (
     <Box>
-      <ButtonPrimary
-        disabled={isLoading}
-        onClick={handleClick}
-        color={isJoined ? 'default' : 'primary'}
-        size="small"
-      >
-        {isJoined ? 'Opuść' : 'Dołącz'}
-      </ButtonPrimary>
+      {isJoined ? (
+        <ButtonDefault disabled={isLoading} onClick={handleClick} size="small">
+          Opuść
+        </ButtonDefault>
+      ) : (
+        <ButtonPrimary disabled={isLoading} onClick={handleClick} size="small">
+          Dołącz
+        </ButtonPrimary>
+      )}
     </Box>
   );
 };

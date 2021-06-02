@@ -5,11 +5,11 @@ const useClasses = makeStyles((theme: Theme) => ({
   root: {
     fontWeight: 700,
     textTransform: 'initial',
-    backgroundColor: theme.palette.primary['A700'],
+    backgroundColor: theme.palette.secondary['800'],
     color: theme.palette.text.primary,
     padding: '5px 20px',
     '&:hover': {
-      backgroundColor: theme.palette.primary['A400'],
+      backgroundColor: theme.palette.secondary['700'],
     },
     '&$disabled': {
       backgroundColor: theme.palette.grey.A400,
@@ -26,7 +26,7 @@ const useClasses = makeStyles((theme: Theme) => ({
   },
 }));
 
-export const ButtonPrimary = React.forwardRef((props: ButtonProps, ref) => {
+export const ButtonSecondary = React.forwardRef((props: ButtonProps, ref) => {
   const classes = useClasses();
 
   return (

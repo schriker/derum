@@ -1,4 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -119,14 +120,15 @@ const NewRoomForm = ({ openModal, handleClose }: NewRoomProps) => {
             />
           )}
         />
-        <ButtonPrimary
-          disabled={loading}
-          className={classes.submitButton}
-          color="primary"
-          type="submit"
-        >
-          Utwórz
-        </ButtonPrimary>
+        <Box display="flex" justifyContent="flex-end">
+          <ButtonPrimary
+            disabled={loading}
+            className={classes.submitButton}
+            type="submit"
+          >
+            Utwórz
+          </ButtonPrimary>
+        </Box>
       </form>
     </Modal>
   );

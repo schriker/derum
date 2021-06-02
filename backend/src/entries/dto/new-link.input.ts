@@ -5,7 +5,7 @@ import { Transform } from 'class-transformer';
 @InputType()
 export class NewLinkData {
   @Field()
-  @Length(3, 150)
+  @Length(10, 150)
   @Transform(({ value }) => value.trim())
   title: string;
 
@@ -17,7 +17,7 @@ export class NewLinkData {
   photo: string;
 
   @Field()
-  @Length(100, 500)
+  @Length(50, 350)
   @Transform(({ value }) => value.trim())
   description: string;
 

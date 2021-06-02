@@ -1,0 +1,23 @@
+fragment HomeEntry on Entry {
+  id
+  createdAt
+  url
+  slug
+  title
+  publisher
+  description
+  author {
+    id
+    displayName
+    isAdmin
+    isModerator
+  }
+  photo {
+    url
+    name
+  }
+  type
+  room {
+    name
+  }
+}

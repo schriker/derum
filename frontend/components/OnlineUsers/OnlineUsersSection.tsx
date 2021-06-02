@@ -2,9 +2,9 @@ import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { OnlineUser } from '../../generated/graphql';
 import { sortUsersMethod } from '../../helpers/sortUsersMethod';
-import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import useOnlineUsersStyles from './OnlineUsersStyle';
+import { ButtonBlank } from '../Buttons/ButtonBlank';
 
 const OnlineUsersSection = ({
   title,
@@ -24,7 +24,7 @@ const OnlineUsersSection = ({
       </Typography>
       {data.sort(sortUsersMethod).map((user) => (
         <Box key={user.userId}>
-          <ButtonPrimary
+          <ButtonBlank
             className={classes.button}
             onClick={() => handleUserClick(user.userId)}
           >
@@ -35,7 +35,7 @@ const OnlineUsersSection = ({
               color="#FF026A"
             />
             <Typography variant="body1">{user.name}</Typography>
-          </ButtonPrimary>
+          </ButtonBlank>
         </Box>
       ))}
     </Box>

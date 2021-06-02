@@ -9,6 +9,7 @@ import {
 } from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
+import { ButtonSecondary } from '../Buttons/ButtonSecondary';
 import LockIcon from '../Icons/LockIcon';
 import MessageIcon from '../Icons/MessageIcon';
 import UnLockIcon from '../Icons/UnLockIcon';
@@ -75,17 +76,14 @@ const UserModalActions = ({ id }: { id: number }) => {
 
   return me ? (
     <Box className={classes.buttons}>
-      <ButtonPrimary color="primary" endIcon={<MessageIcon />}>
-        Wiadomość
-      </ButtonPrimary>
-      <ButtonPrimary
+      <ButtonPrimary endIcon={<MessageIcon />}>Wiadomość</ButtonPrimary>
+      <ButtonSecondary
         disabled={isLoading}
         onClick={handleIgnore}
-        color="secondary"
         endIcon={isIgnored ? <UnLockIcon /> : <LockIcon />}
       >
         {isIgnored ? 'Odblokuj' : 'Zablokuj'}
-      </ButtonPrimary>
+      </ButtonSecondary>
     </Box>
   ) : null;
 };
