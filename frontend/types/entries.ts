@@ -1,6 +1,6 @@
-import { HomeEntryFragment } from '../generated/graphql';
+import { HomeEntryFragmentFragment } from '../generated/graphql';
 
 export type EntriesItemProps = {
-  data: HomeEntryFragment;
+  data: HomeEntryFragmentFragment;
   handleUserClick: (id: number) => void;
 };

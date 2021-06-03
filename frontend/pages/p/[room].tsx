@@ -1,6 +1,7 @@
 import { Box, makeStyles, Theme } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
 import Chat from '../../components/Chat/Chat';
 import Entries from '../../components/Entries/Entires';
 import EntriesSort from '../../components/EntriesSort/EntiresSort';
@@ -20,7 +21,7 @@ import useRoomData from '../../hooks/useRoomData';
 import { addApolloState, initializeApollo } from '../../lib/apolloClient';
 import Custom404 from '../404';
 
-const PAGE_LIMIT = 5;
+export const PAGE_LIMIT = 7;
 
 const useStyles = makeStyles((theme: Theme) => ({
   contentWrapper: {
@@ -35,9 +36,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function Room() {
   const classes = useStyles();
-  const [offset, setOffset] = useState(0);
   const router = useRouter();
+  const [hasMore, setHasMore] = useState(false);
+  const [isInView, setIsInView] = useState(false);
   const { roomData } = useRoomData();
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
   const vars = {
     roomName: router.query.room as string,
     limit: PAGE_LIMIT,
@@ -46,38 +51,47 @@ export default function Room() {
     data: entriesData,
     fetchMore,
     loading,
-    refetch,
   } = useEntriesQuery({
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
     variables: {
       queryData: {
         ...vars,
-        offset: offset,
+        offset: 0,
       },
     },
   });
 
   useEffect(() => {
-    setOffset(0);
-    refetch({
-      queryData: {
-        ...vars,
-        offset: 0,
-      },
-    });
+    setHasMore(true);
+    setIsInView(false);
+    () => {
+      setHasMore(false);
+      setIsInView(true);
+    };
   }, [router.query.room]);
 
-  const handleFetchMore = async () => {
-    await fetchMore({
-      variables: {
-        queryData: {
-          ...vars,
-          offset: offset + 1,
-        },
-      },
-    });
-    setOffset((prev) => prev + 1);
-  };
+  useEffect(() => {
+    setIsInView(inView);
+  }, [inView]);
+
+  useEffect(() => {
+    const fetchMoreData = async () => {
+      if (isInView && hasMore) {
+        const { data } = await fetchMore({
+          variables: {
+            queryData: {
+              ...vars,
+              offset: entriesData.entries.length,
+            },
+          },
+        });
+        if (!data.entries.length) setHasMore(false);
+      }
+    };
+
+    fetchMoreData();
+  }, [isInView, hasMore]);
 
   return roomData ? (
     <Layout
@@ -87,8 +101,10 @@ export default function Room() {
       <Box className={`scrollbar ${classes.contentWrapper}`}>
         {router.query.room && <RoomHeader />}
         <RoomAddContentButtons />
-        {router.query.room && <EntriesSort />}
-        {entriesData && <Entries entriesData={entriesData} />}
+        <EntriesSort />
+        {entriesData && (
+          <Entries ref={ref} hasMore={hasMore} entriesData={entriesData} />
+        )}
       </Box>
       <Chat roomId={roomData.room.id} />
     </Layout>

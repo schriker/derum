@@ -16,7 +16,7 @@ import useEntriesItemStyle from './EntriesItemStyles';
 
 const EntriesItem = ({ data, handleUserClick }: EntriesItemProps) => {
   const classes = useEntriesItemStyle();
-  const link = `/p/${data.room.name}/w/${data.slug}`;
+  const link = `/p/${data.room.name}/${data.id}/${data.slug}`;
   const roomLink = `/p/${data.room.name}`;
   return (
     <Card className={classes.wrapper} elevation={0}>

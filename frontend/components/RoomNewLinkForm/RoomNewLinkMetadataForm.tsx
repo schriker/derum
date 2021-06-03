@@ -96,7 +96,11 @@ const RoomNewLinkMetadataForm = ({
   const [createLink, { loading: createLinkLoading }] = useCreateLinkMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
     onCompleted: (data) => {
-      router.push(`/p/${data.createLink.room.name}/w/${data.createLink.slug}`);
+      console.log(data);
+      closeModal();
+      // router.push(
+      //   `/p/${data.createLink.room.name}/${data.createLink.id}/${data.createLink.slug}`
+      // );
     },
   });
 

@@ -36,10 +36,11 @@ export class MetaScraperService {
       } = await got(newLink.url, {
         responseType: 'buffer',
       });
-      const ctype = headers['content-type'].split('=').pop();
-      const data = ctype
-        ? iconv.decode(html, ctype)
-        : iconv.decode(html, 'UTF-8');
+      const ctype = headers['content-type'].split('=');
+      const data =
+        ctype.length > 1
+          ? iconv.decode(html, ctype[1])
+          : iconv.decode(html, 'UTF-8');
       const {
         author,
         description,

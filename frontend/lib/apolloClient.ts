@@ -9,11 +9,7 @@ import {
 import merge from 'deepmerge';
 import isEqual from 'lodash/isEqual';
 import { WebSocketLink } from '@apollo/client/link/ws';
-import {
-  getMainDefinition,
-  offsetLimitPagination,
-  relayStylePagination,
-} from '@apollo/client/utilities';
+import { getMainDefinition } from '@apollo/client/utilities';
 
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL,
@@ -66,8 +62,16 @@ function createApolloClient() {
               keyArgs: [],
               merge(existing, incoming, { args }) {
                 if (args.queryData.offset === 0) return [...incoming];
-
                 return [...existing, ...incoming];
+              },
+              read(existing, { args, readField }) {
+                const filteredByRoom =
+                  existing &&
+                  existing.filter((item) => {
+                    const room: any = readField('room', item);
+                    return room.name === args.queryData.roomName;
+                  });
+                return filteredByRoom;
               },
             },
           },

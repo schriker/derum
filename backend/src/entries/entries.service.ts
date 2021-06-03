@@ -41,7 +41,7 @@ export class EntriesService {
       order: {
         createdAt: 'DESC',
       },
-      skip: offset * limit,
+      skip: offset,
       take: limit > 25 ? 25 : limit,
       relations: ['author', 'photo', 'room'],
     });
@@ -70,8 +70,7 @@ export class EntriesService {
     const trimedTitle = trimString(title, 60);
     entry.slug = `${slugify(trimedTitle, {
       lower: true,
-      remove: /[*+~.()'"!:@]/g,
-    })}-${uuidv4()}`;
+    }).replace(/[^0-9a-zA-Z]/g, '')}-${uuidv4()}`;
     entry.author = user;
     entry.description = description;
     entry.link = link;

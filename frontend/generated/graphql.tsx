@@ -277,7 +277,7 @@ export type AuthorFragmentFragment = (
   & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName'>
 );
 
-export type HomeEntryFragment = (
+export type HomeEntryFragmentFragment = (
   { __typename?: 'Entry' }
   & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'type'>
   & { author: (
@@ -289,21 +289,6 @@ export type HomeEntryFragment = (
   ), room: (
     { __typename?: 'Room' }
     & Pick<Room, 'name'>
-  ) }
-);
-
-export type LinkFragmentFragment = (
-  { __typename?: 'Entry' }
-  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'title' | 'publisher' | 'description' | 'type' | 'slug'>
-  & { room: (
-    { __typename?: 'Room' }
-    & Pick<Room, 'id' | 'name'>
-  ), photo: (
-    { __typename?: 'Photo' }
-    & Pick<Photo, 'name' | 'url'>
-  ), author: (
-    { __typename?: 'User' }
-    & Pick<User, 'displayName'>
   ) }
 );
 
@@ -325,7 +310,7 @@ export type CreateLinkMutation = (
   { __typename?: 'Mutation' }
   & { createLink: (
     { __typename?: 'Entry' }
-    & LinkFragmentFragment
+    & HomeEntryFragmentFragment
   ) }
 );
 
@@ -435,7 +420,7 @@ export type CheckLinkExsitsQuery = (
   { __typename?: 'Query' }
   & { checkLinkExsits: Array<(
     { __typename?: 'Entry' }
-    & LinkFragmentFragment
+    & HomeEntryFragmentFragment
   )> }
 );
 
@@ -448,7 +433,7 @@ export type EntriesQuery = (
   { __typename?: 'Query' }
   & { entries: Array<(
     { __typename?: 'Entry' }
-    & HomeEntryFragment
+    & HomeEntryFragmentFragment
   )> }
 );
 
@@ -611,8 +596,8 @@ export type MessageDeletedSubscription = (
   ) }
 );
 
-export const HomeEntryFragmentDoc = gql`
-    fragment HomeEntry on Entry {
+export const HomeEntryFragmentFragmentDoc = gql`
+    fragment HomeEntryFragment on Entry {
   id
   createdAt
   url
@@ -633,29 +618,6 @@ export const HomeEntryFragmentDoc = gql`
   type
   room {
     name
-  }
-}
-    `;
-export const LinkFragmentFragmentDoc = gql`
-    fragment LinkFragment on Entry {
-  id
-  createdAt
-  url
-  title
-  publisher
-  description
-  type
-  slug
-  room {
-    id
-    name
-  }
-  photo {
-    name
-    url
-  }
-  author {
-    displayName
   }
 }
     `;
@@ -683,10 +645,10 @@ export const RoomFragmentFragmentDoc = gql`
 export const CreateLinkDocument = gql`
     mutation CreateLink($newLinkData: NewLinkData!) {
   createLink(newLinkData: $newLinkData) {
-    ...LinkFragment
+    ...HomeEntryFragment
   }
 }
-    ${LinkFragmentFragmentDoc}`;
+    ${HomeEntryFragmentFragmentDoc}`;
 export type CreateLinkMutationFn = Apollo.MutationFunction<CreateLinkMutation, CreateLinkMutationVariables>;
 
 /**
@@ -1000,10 +962,10 @@ export type RemoveIgnoreUserMutationOptions = Apollo.BaseMutationOptions<RemoveI
 export const CheckLinkExsitsDocument = gql`
     query CheckLinkExsits($linkId: Int!, $roomId: Int!) {
   checkLinkExsits(linkId: $linkId, roomId: $roomId) {
-    ...LinkFragment
+    ...HomeEntryFragment
   }
 }
-    ${LinkFragmentFragmentDoc}`;
+    ${HomeEntryFragmentFragmentDoc}`;
 
 /**
  * __useCheckLinkExsitsQuery__
@@ -1036,10 +998,10 @@ export type CheckLinkExsitsQueryResult = Apollo.QueryResult<CheckLinkExsitsQuery
 export const EntriesDocument = gql`
     query Entries($queryData: QueryEntriesInput!) {
   entries(queryData: $queryData) {
-    ...HomeEntry
+    ...HomeEntryFragment
   }
 }
-    ${HomeEntryFragmentDoc}`;
+    ${HomeEntryFragmentFragmentDoc}`;
 
 /**
  * __useEntriesQuery__
