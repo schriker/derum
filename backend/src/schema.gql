@@ -25,7 +25,6 @@ type Vote {
   id: Int!
   createdAt: Date!
   updatedAt: Date!
-  entry: Entry!
   value: Int!
 }
 
@@ -68,6 +67,7 @@ type Entry {
   room: Room!
   photo: Photo!
   type: EntryType!
+  voteScore: Int
 }
 
 enum EntryType {
@@ -127,7 +127,7 @@ type Mutation {
   createMessage(newMessageData: NewMessageInput!): Message!
   deleteMessage(id: Int!): Boolean!
   createLink(newLinkData: NewLinkData!): Entry!
-  vote(value: ValueEnum!, entryId: Int!): Vote!
+  vote(value: VoteValueEnum!, entryId: Int!): Vote!
 }
 
 input NewRoomInput {
@@ -148,7 +148,7 @@ input NewLinkData {
   roomId: Int!
 }
 
-enum ValueEnum {
+enum VoteValueEnum {
   UP
   DOWN
   NONE

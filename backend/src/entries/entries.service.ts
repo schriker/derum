@@ -17,6 +17,7 @@ import { EntryType } from './types/entry-type.enum';
 import { v4 as uuidv4 } from 'uuid';
 import trimString from 'src/helpers/trimString';
 import { QueryEntriesInput } from './dto/query.input';
+import { Vote } from 'src/votes/entities/vote.entity';
 
 @Injectable()
 export class EntriesService {
@@ -34,17 +35,25 @@ export class EntriesService {
     const { roomName, limit, offset } = queryData;
     const room = await this.roomRepository.findOne({ name: ILike(roomName) });
     if (!room) throw new NotFoundException(roomName);
-    return this.entryRepository.find({
-      where: {
-        room: room,
-      },
-      order: {
-        createdAt: 'DESC',
-      },
-      skip: offset,
-      take: limit > 25 ? 25 : limit,
-      relations: ['author', 'photo', 'room'],
-    });
+
+    return this.entryRepository
+      .createQueryBuilder('entry')
+      .where('entry.roomId = :roomId', {
+        roomId: room.id,
+      })
+      .orderBy('entry.createdAt', 'DESC')
+      .skip(offset)
+      .take(limit > 25 ? 25 : limit)
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('SUM(value)')
+          .from(Vote, 'vote')
+          .where('vote.entryId = entry.id');
+      }, 'entry_voteScore')
+      .leftJoinAndSelect('entry.author', 'author')
+      .leftJoinAndSelect('entry.photo', 'photo')
+      .leftJoinAndSelect('entry.room', 'room')
+      .getMany();
   }
 
   checkIfAlreadyAdded(linkId: number, roomId: number): Promise<Entry[]> {

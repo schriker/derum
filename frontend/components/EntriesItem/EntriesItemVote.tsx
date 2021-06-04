@@ -6,19 +6,45 @@ import { ButtonIcon } from '../Buttons/ButtonIcon';
 import PlusIcon from '../Icons/PlusIcon';
 import MinusIcon from '../Icons/MinusIcon';
 import numbro from 'numbro';
+import {
+  useMeQuery,
+  useVoteMutation,
+  VoteValueEnum,
+} from '../../generated/graphql';
+import { openModalVar } from '../../lib/apolloVars';
 
-const EntriesItemVote = ({ id }: EntriesItemVoteProps) => {
+const EntriesItemVote = ({ id, voteScore }: EntriesItemVoteProps) => {
   const classes = useEntriesItemStyle();
+  const { data: userData } = useMeQuery();
+  const [vote] = useVoteMutation();
+
+  const handleCLick = (value: VoteValueEnum) => {
+    if (!userData) return openModalVar(true);
+    vote({
+      variables: {
+        value: value,
+        entryId: id,
+      },
+    });
+  };
 
   return (
     <CardContent className={classes.vote}>
-      <ButtonIcon color="secondary" size="small">
+      <ButtonIcon
+        onClick={() => handleCLick(VoteValueEnum.Up)}
+        color="secondary"
+        size="small"
+      >
         <PlusIcon style={{ fontSize: 18 }} />
       </ButtonIcon>
       <Typography className={classes.voteText} variant="subtitle1">
-        {numbro(250).format({ average: true })}
+        {numbro(voteScore ? voteScore : 0).format({ average: true })}
       </Typography>
-      <ButtonIcon color="secondary" size="small">
+      <ButtonIcon
+        onClick={() => handleCLick(VoteValueEnum.Down)}
+        color="secondary"
+        size="small"
+      >
         <MinusIcon style={{ fontSize: 18 }} />
       </ButtonIcon>
     </CardContent>

@@ -1,0 +1,6 @@
+mutation Vote($value: VoteValueEnum!, $entryId: Int!) {
+  vote(value: $value, entryId: $entryId) {
+    id
+    value
+  }
+}

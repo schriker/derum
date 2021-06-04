@@ -4,7 +4,7 @@ import { Entry } from 'src/entries/entities/entry.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Vote } from './entities/vote.entity';
-import { ValueEnum } from './types/value.enum';
+import { VoteValueEnum } from './types/value.enum';
 
 @Injectable()
 export class VotesService {
@@ -15,7 +15,7 @@ export class VotesService {
     private entriesRepository: Repository<Entry>,
   ) {}
 
-  async vote(user: User, entryId: number, value: ValueEnum): Promise<Vote> {
+  async vote(user: User, entryId: number, value: VoteValueEnum): Promise<Vote> {
     const entry = await this.entriesRepository.findOne({ id: entryId });
     if (!entry) throw new NotFoundException(entryId);
 
@@ -24,7 +24,6 @@ export class VotesService {
         user: user,
         entry: entry,
       },
-      relations: ['entry'],
     });
 
     if (alreadyVoted)

@@ -30,4 +30,5 @@ export type EntiresItemRoomProps = {
 
 export type EntriesItemVoteProps = {
   id: number;
+  voteScore: number;
 };

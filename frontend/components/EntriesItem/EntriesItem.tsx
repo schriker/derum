@@ -16,7 +16,7 @@ const EntriesItem = ({ data, handleUserClick }: EntriesItemProps) => {
   const link = `/p/${data.room.name}/${data.id}/${data.slug}`;
   return (
     <Card className={classes.wrapper} elevation={0}>
-      <EntriesItemVote id={data.id} />
+      <EntriesItemVote voteScore={data.voteScore} id={data.id} />
       <EntriesItemTitle link={link} image={data.photo.url} title={data.title} />
       <CardContent>
         <NextLink href={link} passHref>

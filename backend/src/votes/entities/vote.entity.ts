@@ -11,7 +11,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
-import { ValueEnum } from '../types/value.enum';
+import { VoteValueEnum } from '../types/value.enum';
 
 @Entity('vote')
 @ObjectType()
@@ -34,11 +34,10 @@ export class Vote {
   user: User;
 
   @Index()
-  @Field(() => Entry)
   @ManyToOne(() => Entry, (entry) => entry.votes)
   entry: Entry;
 
   @Column()
   @Field(() => Int)
-  value: ValueEnum;
+  value: VoteValueEnum;
 }

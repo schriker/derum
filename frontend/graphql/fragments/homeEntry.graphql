@@ -6,6 +6,7 @@ fragment HomeEntryFragment on Entry {
   title
   publisher
   description
+  voteScore
   author {
     id
     displayName

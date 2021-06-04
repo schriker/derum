@@ -88,4 +88,8 @@ export class Entry {
 
   @OneToMany(() => Vote, (vote) => vote.entry)
   votes: Vote[];
+
+  @Field(() => Int, { nullable: true })
+  @Column({ select: false, insert: false, readonly: true })
+  voteScore: number;
 }
