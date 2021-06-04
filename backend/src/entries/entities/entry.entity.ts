@@ -3,6 +3,7 @@ import { Link } from 'src/meta-scraper/entities/link.entity';
 import { Photo } from 'src/photos/entities/photo.entity';
 import { Room } from 'src/rooms/entities/room.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Vote } from 'src/votes/entities/vote.entity';
 import {
   Column,
   CreateDateColumn,
@@ -10,6 +11,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -64,6 +66,7 @@ export class Entry {
   @ManyToOne(() => User, (user) => user.entires)
   author: User;
 
+  @Index()
   @Field(() => Room)
   @ManyToOne(() => Room, (room) => room.entires)
   room: Room;
@@ -82,4 +85,7 @@ export class Entry {
     enum: EntryType,
   })
   type: EntryType;
+
+  @OneToMany(() => Vote, (vote) => vote.entry)
+  votes: Vote[];
 }

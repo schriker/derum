@@ -21,6 +21,14 @@ type Photo {
   url: String!
 }
 
+type Vote {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  entry: Entry!
+  value: Int!
+}
+
 type User {
   id: Int!
   createdAt: Date!
@@ -119,6 +127,7 @@ type Mutation {
   createMessage(newMessageData: NewMessageInput!): Message!
   deleteMessage(id: Int!): Boolean!
   createLink(newLinkData: NewLinkData!): Entry!
+  vote(value: ValueEnum!, entryId: Int!): Vote!
 }
 
 input NewRoomInput {
@@ -137,6 +146,12 @@ input NewLinkData {
   description: String!
   linkId: Int!
   roomId: Int!
+}
+
+enum ValueEnum {
+  UP
+  DOWN
+  NONE
 }
 
 type Subscription {

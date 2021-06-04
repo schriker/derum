@@ -4,6 +4,7 @@ import { Message } from 'src/messages/entities/message.entity';
 import { Link } from 'src/meta-scraper/entities/link.entity';
 import { Photo } from 'src/photos/entities/photo.entity';
 import { Room } from 'src/rooms/entities/room.entity';
+import { Vote } from 'src/votes/entities/vote.entity';
 import {
   Column,
   CreateDateColumn,
@@ -82,4 +83,7 @@ export class User {
   @ManyToMany(() => User)
   @JoinTable()
   ignore: User[];
+
+  @OneToMany(() => Vote, (vote) => vote.user)
+  votes: Vote[];
 }
