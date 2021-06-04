@@ -33,6 +33,7 @@ export type Entry = {
   photo: Photo;
   type: EntryType;
   voteScore?: Maybe<Scalars['Int']>;
+  userVote?: Maybe<VoteValueEnum>;
 };
 
 export enum EntryType {
@@ -301,7 +302,7 @@ export type AuthorFragmentFragment = (
 
 export type HomeEntryFragmentFragment = (
   { __typename?: 'Entry' }
-  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'voteScore' | 'type'>
+  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'voteScore' | 'userVote' | 'type'>
   & { author: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'displayName' | 'isAdmin' | 'isModerator'>
@@ -642,6 +643,7 @@ export const HomeEntryFragmentFragmentDoc = gql`
   publisher
   description
   voteScore
+  userVote
   author {
     id
     displayName

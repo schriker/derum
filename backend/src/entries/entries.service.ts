@@ -31,11 +31,10 @@ export class EntriesService {
     private photosService: PhotosService,
   ) {}
 
-  async findMany(queryData: QueryEntriesInput): Promise<Entry[]> {
+  async findMany(queryData: QueryEntriesInput, user: User): Promise<Entry[]> {
     const { roomName, limit, offset } = queryData;
     const room = await this.roomRepository.findOne({ name: ILike(roomName) });
     if (!room) throw new NotFoundException(roomName);
-
     return this.entryRepository
       .createQueryBuilder('entry')
       .where('entry.roomId = :roomId', {
@@ -50,6 +49,14 @@ export class EntriesService {
           .from(Vote, 'vote')
           .where('vote.entryId = entry.id');
       }, 'entry_voteScore')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('value')
+          .from(Vote, 'vote')
+          .where('vote.entryId = entry.id AND vote.userId = :userId', {
+            userId: user ? user.id : null,
+          });
+      }, 'entry_userVote')
       .leftJoinAndSelect('entry.author', 'author')
       .leftJoinAndSelect('entry.photo', 'photo')
       .leftJoinAndSelect('entry.room', 'room')

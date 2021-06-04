@@ -1,4 +1,4 @@
-import { HomeEntryFragmentFragment } from '../generated/graphql';
+import { HomeEntryFragmentFragment, VoteValueEnum } from '../generated/graphql';
 
 export type EntriesItemProps = {
   data: HomeEntryFragmentFragment;
@@ -29,6 +29,7 @@ export type EntiresItemRoomProps = {
 };
 
 export type EntriesItemVoteProps = {
+  userVote: VoteValueEnum;
   id: number;
   voteScore: number;
 };

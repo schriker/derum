@@ -4,6 +4,7 @@ import { Photo } from 'src/photos/entities/photo.entity';
 import { Room } from 'src/rooms/entities/room.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
+import { VoteValueEnum } from 'src/votes/types/value.enum';
 import {
   Column,
   CreateDateColumn,
@@ -90,6 +91,10 @@ export class Entry {
   votes: Vote[];
 
   @Field(() => Int, { nullable: true })
-  @Column({ select: false, insert: false, readonly: true })
+  @Column({ select: false, insert: false, readonly: true, nullable: true })
   voteScore: number;
+
+  @Field(() => VoteValueEnum, { nullable: true })
+  @Column({ select: false, insert: false, readonly: true, nullable: true })
+  userVote: VoteValueEnum;
 }

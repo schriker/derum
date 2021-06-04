@@ -68,12 +68,19 @@ type Entry {
   photo: Photo!
   type: EntryType!
   voteScore: Int
+  userVote: VoteValueEnum
 }
 
 enum EntryType {
   LINK
   ARTICLE
   VIDEO
+}
+
+enum VoteValueEnum {
+  UP
+  DOWN
+  NONE
 }
 
 type Room {
@@ -146,12 +153,6 @@ input NewLinkData {
   description: String!
   linkId: Int!
   roomId: Int!
-}
-
-enum VoteValueEnum {
-  UP
-  DOWN
-  NONE
 }
 
 type Subscription {

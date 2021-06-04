@@ -13,7 +13,7 @@ import {
 } from '../../generated/graphql';
 import { openModalVar } from '../../lib/apolloVars';
 
-const EntriesItemVote = ({ id, voteScore }: EntriesItemVoteProps) => {
+const EntriesItemVote = ({ id, voteScore, userVote }: EntriesItemVoteProps) => {
   const classes = useEntriesItemStyle();
   const { data: userData } = useMeQuery();
   const [vote] = useVoteMutation();
@@ -32,7 +32,7 @@ const EntriesItemVote = ({ id, voteScore }: EntriesItemVoteProps) => {
     <CardContent className={classes.vote}>
       <ButtonIcon
         onClick={() => handleCLick(VoteValueEnum.Up)}
-        color="secondary"
+        color={userVote === VoteValueEnum.Up ? 'default' : 'secondary'}
         size="small"
       >
         <PlusIcon style={{ fontSize: 18 }} />
@@ -42,7 +42,7 @@ const EntriesItemVote = ({ id, voteScore }: EntriesItemVoteProps) => {
       </Typography>
       <ButtonIcon
         onClick={() => handleCLick(VoteValueEnum.Down)}
-        color="secondary"
+        color={userVote === VoteValueEnum.Down ? 'default' : 'secondary'}
         size="small"
       >
         <MinusIcon style={{ fontSize: 18 }} />

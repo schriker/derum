@@ -13,8 +13,11 @@ export class EntriesResolver {
   constructor(private entriesService: EntriesService) {}
 
   @Query(() => [Entry])
-  entries(@Args('queryData') queryData: QueryEntriesInput) {
-    return this.entriesService.findMany(queryData);
+  entries(
+    @Args('queryData') queryData: QueryEntriesInput,
+    @CurrentUser() user: User,
+  ) {
+    return this.entriesService.findMany(queryData, user);
   }
 
   @Mutation(() => Entry)

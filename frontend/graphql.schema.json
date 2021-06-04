@@ -236,6 +236,18 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "userVote",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "ENUM",
+              "name": "VoteValueEnum",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
