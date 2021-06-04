@@ -11,7 +11,16 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
   photo: {
     height: '100%',
   },
-  vote: {},
+  vote: {
+    flex: '0 0 65px',
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+  voteText: {
+    margin: '5px 0',
+  },
   description: {
     color: theme.palette.grey[500],
   },

@@ -47,11 +47,7 @@ export default function Room() {
     roomName: router.query.room as string,
     limit: PAGE_LIMIT,
   };
-  const {
-    data: entriesData,
-    fetchMore,
-    loading,
-  } = useEntriesQuery({
+  const { data: entriesData, fetchMore } = useEntriesQuery({
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
     variables: {
