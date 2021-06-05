@@ -35,13 +35,17 @@ export class EntriesService {
     const { roomName, limit, offset } = queryData;
     const room = await this.roomRepository.findOne({ name: ILike(roomName) });
     if (!room) throw new NotFoundException(roomName);
+    const whereQuery =
+      offset > 0
+        ? 'entry.roomId = :roomId AND entry.id < :offset'
+        : 'entry.roomId = :roomId';
     return this.entryRepository
       .createQueryBuilder('entry')
-      .where('entry.roomId = :roomId', {
+      .where(whereQuery, {
         roomId: room.id,
+        offset,
       })
       .orderBy('entry.createdAt', 'DESC')
-      .skip(offset)
       .take(limit > 25 ? 25 : limit)
       .addSelect((subQuery) => {
         return subQuery

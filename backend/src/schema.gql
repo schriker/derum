@@ -21,13 +21,6 @@ type Photo {
   url: String!
 }
 
-type Vote {
-  id: Int!
-  createdAt: Date!
-  updatedAt: Date!
-  value: Int!
-}
-
 type User {
   id: Int!
   createdAt: Date!
@@ -102,6 +95,11 @@ type OnlineUser {
   isModerator: Boolean!
 }
 
+type VoteResult {
+  userValue: Int!
+  voteScore: Int!
+}
+
 type Query {
   me: User!
   user(id: Int!): User!
@@ -134,7 +132,7 @@ type Mutation {
   createMessage(newMessageData: NewMessageInput!): Message!
   deleteMessage(id: Int!): Boolean!
   createLink(newLinkData: NewLinkData!): Entry!
-  vote(value: VoteValueEnum!, entryId: Int!): Vote!
+  vote(value: VoteValueEnum!, entryId: Int!): VoteResult!
 }
 
 input NewRoomInput {

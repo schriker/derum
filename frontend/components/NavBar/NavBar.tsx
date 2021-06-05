@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
     gridTemplateColumns: 'auto 2fr 1fr',
-    backgroundColor: theme.palette.grey[900],
+    backgroundColor: theme.palette.background.paper,
   },
   menu: {
     display: 'flex',

@@ -77,7 +77,7 @@ export type Mutation = {
   createMessage: Message;
   deleteMessage: Scalars['Boolean'];
   createLink: Entry;
-  vote: Vote;
+  vote: VoteResult;
 };
 
 
@@ -281,12 +281,10 @@ export type User = {
   ignore: Array<User>;
 };
 
-export type Vote = {
-  __typename?: 'Vote';
-  id: Scalars['Int'];
-  createdAt: Scalars['Date'];
-  updatedAt: Scalars['Date'];
-  value: Scalars['Int'];
+export type VoteResult = {
+  __typename?: 'VoteResult';
+  userValue: Scalars['Int'];
+  voteScore: Scalars['Int'];
 };
 
 export enum VoteValueEnum {
@@ -442,8 +440,8 @@ export type VoteMutationVariables = Exact<{
 export type VoteMutation = (
   { __typename?: 'Mutation' }
   & { vote: (
-    { __typename?: 'Vote' }
-    & Pick<Vote, 'id' | 'value'>
+    { __typename?: 'VoteResult' }
+    & Pick<VoteResult, 'userValue' | 'voteScore'>
   ) }
 );
 
@@ -1001,8 +999,8 @@ export type RemoveIgnoreUserMutationOptions = Apollo.BaseMutationOptions<RemoveI
 export const VoteDocument = gql`
     mutation Vote($value: VoteValueEnum!, $entryId: Int!) {
   vote(value: $value, entryId: $entryId) {
-    id
-    value
+    userValue
+    voteScore
   }
 }
     `;

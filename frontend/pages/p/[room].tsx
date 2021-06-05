@@ -47,9 +47,16 @@ export default function Room() {
     roomName: router.query.room as string,
     limit: PAGE_LIMIT,
   };
-  const { data: entriesData, fetchMore } = useEntriesQuery({
+
+  // Need to dind out how to fetch data after user login and route change but not when voting
+  const {
+    data: entriesData,
+    fetchMore,
+    refetch,
+  } = useEntriesQuery({
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
     variables: {
       queryData: {
         ...vars,
@@ -59,6 +66,12 @@ export default function Room() {
   });
 
   useEffect(() => {
+    refetch({
+      queryData: {
+        ...vars,
+        offset: 0,
+      },
+    });
     setHasMore(true);
     setIsInView(false);
     () => {
@@ -78,7 +91,9 @@ export default function Room() {
           variables: {
             queryData: {
               ...vars,
-              offset: entriesData.entries.length,
+              offset: entriesData.entries.length
+                ? entriesData.entries[entriesData.entries.length - 1].id
+                : 0,
             },
           },
         });

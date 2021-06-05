@@ -17,6 +17,7 @@ const EntriesItem = ({ data, handleUserClick }: EntriesItemProps) => {
   return (
     <Card className={classes.wrapper} elevation={0}>
       <EntriesItemVote
+        data={data}
         userVote={data.userVote}
         voteScore={data.voteScore}
         id={data.id}

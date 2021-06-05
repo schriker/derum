@@ -31,5 +31,6 @@ export type EntiresItemRoomProps = {
 export type EntriesItemVoteProps = {
   userVote: VoteValueEnum;
   id: number;
+  data: HomeEntryFragmentFragment;
   voteScore: number;
 };

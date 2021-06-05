@@ -13,10 +13,34 @@ import {
 } from '../../generated/graphql';
 import { openModalVar } from '../../lib/apolloVars';
 
-const EntriesItemVote = ({ id, voteScore, userVote }: EntriesItemVoteProps) => {
+const EntriesItemVote = ({
+  id,
+  voteScore,
+  userVote,
+  data,
+}: EntriesItemVoteProps) => {
   const classes = useEntriesItemStyle();
   const { data: userData } = useMeQuery();
-  const [vote] = useVoteMutation();
+  const [vote] = useVoteMutation({
+    update: (cache, mutaionResult) => {
+      cache.modify({
+        id: cache.identify(data),
+        fields: {
+          voteScore() {
+            return mutaionResult.data.vote.voteScore;
+          },
+          userVote() {
+            return mutaionResult.data.vote.userValue === 1
+              ? VoteValueEnum.Up
+              : mutaionResult.data.vote.userValue === 0
+              ? VoteValueEnum.None
+              : VoteValueEnum.Down;
+          },
+        },
+        broadcast: true,
+      });
+    },
+  });
 
   const handleCLick = (value: VoteValueEnum) => {
     if (!userData) return openModalVar(true);
@@ -31,7 +55,13 @@ const EntriesItemVote = ({ id, voteScore, userVote }: EntriesItemVoteProps) => {
   return (
     <CardContent className={classes.vote}>
       <ButtonIcon
-        onClick={() => handleCLick(VoteValueEnum.Up)}
+        onClick={() =>
+          handleCLick(
+            userVote === VoteValueEnum.Up
+              ? VoteValueEnum.None
+              : VoteValueEnum.Up
+          )
+        }
         color={userVote === VoteValueEnum.Up ? 'default' : 'secondary'}
         size="small"
       >
@@ -41,7 +71,13 @@ const EntriesItemVote = ({ id, voteScore, userVote }: EntriesItemVoteProps) => {
         {numbro(voteScore ? voteScore : 0).format({ average: true })}
       </Typography>
       <ButtonIcon
-        onClick={() => handleCLick(VoteValueEnum.Down)}
+        onClick={() =>
+          handleCLick(
+            userVote === VoteValueEnum.Down
+              ? VoteValueEnum.None
+              : VoteValueEnum.Down
+          )
+        }
         color={userVote === VoteValueEnum.Down ? 'default' : 'secondary'}
         size="small"
       >

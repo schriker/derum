@@ -927,7 +927,7 @@
               "name": null,
               "ofType": {
                 "kind": "OBJECT",
-                "name": "Vote",
+                "name": "VoteResult",
                 "ofType": null
               }
             },
@@ -2177,11 +2177,11 @@
       },
       {
         "kind": "OBJECT",
-        "name": "Vote",
+        "name": "VoteResult",
         "description": null,
         "fields": [
           {
-            "name": "id",
+            "name": "userValue",
             "description": null,
             "args": [],
             "type": {
@@ -2197,39 +2197,7 @@
             "deprecationReason": null
           },
           {
-            "name": "createdAt",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Date",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "updatedAt",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Date",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "value",
+            "name": "voteScore",
             "description": null,
             "args": [],
             "type": {
