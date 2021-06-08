@@ -1,8 +1,8 @@
 import { Box } from '@material-ui/core';
 import React, { useState } from 'react';
+import { PAGE_LIMIT } from '../../consts';
 import { EntriesQuery } from '../../generated/graphql';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
-import { PAGE_LIMIT } from '../../pages/p/[room]';
 import EntriesEmpty from '../EntriesEmpty/EntriesEmpty';
 import EntriesItem from '../EntriesItem/EntriesItem';
 import EntiresItemLoading from '../EntriesItemLoading/EntriesItemLoading';

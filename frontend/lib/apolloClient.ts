@@ -10,6 +10,9 @@ import merge from 'deepmerge';
 import isEqual from 'lodash/isEqual';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { setContext } from '@apollo/client/link/context';
+
+let authLink;
 
 const httpLink = new HttpLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL,
@@ -48,7 +51,7 @@ let apolloClient;
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
-    link: splitLink,
+    link: authLink.concat(splitLink),
     cache: new InMemoryCache({
       typePolicies: {
         Query: {
@@ -82,8 +85,17 @@ function createApolloClient() {
 }
 
 export function initializeApollo(
-  initialState = null
+  initialState = null,
+  headers = {}
 ): ApolloClient<NormalizedCacheObject> {
+  authLink = setContext((_, { headers: apolloHeaders }) => {
+    return {
+      headers: {
+        ...apolloHeaders,
+        ...headers,
+      },
+    };
+  });
   const _apolloClient = apolloClient ?? createApolloClient();
 
   // If your page has Next.js data fetching methods that use Apollo Client, the initial state

@@ -17,7 +17,7 @@ const OnlineUsers = () => {
     variables: {
       roomId: roomData.room.id,
     },
-    pollInterval: 10000,
+    pollInterval: 15000,
   });
 
   return (

@@ -67,6 +67,7 @@ type Entry {
 enum EntryType {
   LINK
   ARTICLE
+  IMAGE
   VIDEO
 }
 
@@ -118,6 +119,13 @@ input QueryEntriesInput {
   roomName: String!
   limit: Int!
   offset: Int!
+  sort: EntrySort!
+}
+
+enum EntrySort {
+  NEW
+  HOT
+  BEST
 }
 
 type Mutation {

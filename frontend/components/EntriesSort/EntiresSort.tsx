@@ -8,17 +8,14 @@ const sortButtons = [
   {
     text: 'Najnowsze',
     link: '',
-    href: '',
   },
   {
     text: 'Gorące',
     link: 'hot',
-    href: '?sort=hot',
   },
   {
     text: 'Najlepsze',
-    link: 'popular',
-    href: '?sort=popular',
+    link: 'best',
   },
 ];
 
@@ -28,7 +25,7 @@ const EntriesSort = () => {
 
   const handleClick = (link: string) => {
     router.push(
-      router.query.room ? `/p/${router.query.room}${link}` : `/${link}`
+      router.query.room ? `/p/${router.query.room}/${link}` : `/${link}`
     );
   };
 
@@ -36,13 +33,13 @@ const EntriesSort = () => {
     <Box className={classes.wrapper}>
       {sortButtons.map((button, index) => {
         const isActive =
-          router.query.sort === button.link ||
+          router.query.sort?.includes(button.link) ||
           (!router.query.sort && button.link === '');
         return (
           <ButtonSecondary
             key={index}
             className={isActive ? null : classes.button}
-            onClick={() => handleClick(button.href)}
+            onClick={() => handleClick(button.link)}
             size="small"
           >
             {button.text}

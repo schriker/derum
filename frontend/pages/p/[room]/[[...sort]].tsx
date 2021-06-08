@@ -1,41 +1,33 @@
-import { Box, makeStyles, Theme } from '@material-ui/core';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import Chat from '../../components/Chat/Chat';
-import Entries from '../../components/Entries/Entires';
-import EntriesSort from '../../components/EntriesSort/EntiresSort';
-import Layout from '../../components/Layout/Layout';
-import RoomAddContentButtons from '../../components/RoomAddContentButtons/RoomAddContentButtons';
-import RoomHeader from '../../components/RoomHeader/RoomHeader';
+import Chat from '../../../components/Chat/Chat';
+import Entries from '../../../components/Entries/Entires';
+import EntriesSort from '../../../components/EntriesSort/EntiresSort';
+import EntriesWrapper from '../../../components/EntriesWrapper/EntriesWrapper';
+import Layout from '../../../components/Layout/Layout';
+import RoomAddContentButtons from '../../../components/RoomAddContentButtons/RoomAddContentButtons';
+import RoomHeader from '../../../components/RoomHeader/RoomHeader';
+import { PAGE_LIMIT } from '../../../consts';
 import {
   EntriesDocument,
   EntriesQuery,
   EntriesQueryVariables,
+  EntrySort,
+  MeDocument,
+  MeQuery,
+  MeQueryVariables,
   RoomDocument,
   RoomQuery,
   RoomQueryVariables,
   useEntriesQuery,
-} from '../../generated/graphql';
-import useRoomData from '../../hooks/useRoomData';
-import { addApolloState, initializeApollo } from '../../lib/apolloClient';
-import Custom404 from '../404';
-
-export const PAGE_LIMIT = 7;
-
-const useStyles = makeStyles((theme: Theme) => ({
-  contentWrapper: {
-    flex: '1 1 calc(100% - 60px)',
-    paddingTop: theme.spacing(2),
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    overflowY: 'auto',
-  },
-}));
+} from '../../../generated/graphql';
+import useRoomData from '../../../hooks/useRoomData';
+import { addApolloState, initializeApollo } from '../../../lib/apolloClient';
+import Custom404 from '../../404';
 
 export default function Room() {
-  const classes = useStyles();
   const router = useRouter();
   const [hasMore, setHasMore] = useState(false);
   const [isInView, setIsInView] = useState(false);
@@ -47,31 +39,20 @@ export default function Room() {
     roomName: router.query.room as string,
     limit: PAGE_LIMIT,
   };
-
-  // Need to dind out how to fetch data after user login and route change but not when voting
-  const {
-    data: entriesData,
-    fetchMore,
-    refetch,
-  } = useEntriesQuery({
+  const { data: entriesData, fetchMore } = useEntriesQuery({
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-first',
     variables: {
       queryData: {
         ...vars,
         offset: 0,
+        sort: router.query.sort
+          ? EntrySort[router.query.sort[0].toUpperCase()]
+          : EntrySort.NEW,
       },
     },
   });
 
   useEffect(() => {
-    refetch({
-      queryData: {
-        ...vars,
-        offset: 0,
-      },
-    });
     setHasMore(true);
     setIsInView(false);
     () => {
@@ -87,13 +68,19 @@ export default function Room() {
   useEffect(() => {
     const fetchMoreData = async () => {
       if (isInView && hasMore) {
-        const { data } = await fetchMore({
+        const cursor = entriesData.entries.length
+          ? entriesData.entries[entriesData.entries.length - 1].id
+          : 0;
+        const offset = !router.query.sort ? cursor : entriesData.entries.length;
+
+        const { data }: { data: EntriesQuery } = await fetchMore({
           variables: {
             queryData: {
               ...vars,
-              offset: entriesData.entries.length
-                ? entriesData.entries[entriesData.entries.length - 1].id
-                : 0,
+              sort: router.query.sort
+                ? EntrySort[router.query.sort[0].toUpperCase()]
+                : EntrySort.NEW,
+              offset: offset,
             },
           },
         });
@@ -109,14 +96,14 @@ export default function Room() {
       title={roomData.room.name}
       ogDescription={roomData.room.description}
     >
-      <Box className={`scrollbar ${classes.contentWrapper}`}>
+      <EntriesWrapper>
         {router.query.room && <RoomHeader />}
         <RoomAddContentButtons />
         <EntriesSort />
         {entriesData && (
           <Entries ref={ref} hasMore={hasMore} entriesData={entriesData} />
         )}
-      </Box>
+      </EntriesWrapper>
       <Chat roomId={roomData.room.id} />
     </Layout>
   ) : (
@@ -124,13 +111,18 @@ export default function Room() {
   );
 }
 
-export async function getServerSideProps(context) {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const apolloClient = initializeApollo();
+    const apolloClient = initializeApollo(null, context.req.headers);
+    await apolloClient.query<MeQuery, MeQueryVariables>({
+      query: MeDocument,
+      errorPolicy: 'ignore',
+    });
+
     await apolloClient.query<RoomQuery, RoomQueryVariables>({
       query: RoomDocument,
       variables: {
-        name: context.params.room,
+        name: context.params.room as string,
       },
     });
 
@@ -138,9 +130,12 @@ export async function getServerSideProps(context) {
       query: EntriesDocument,
       variables: {
         queryData: {
-          roomName: context.params.room,
-          limit: PAGE_LIMIT,
           offset: 0,
+          limit: PAGE_LIMIT,
+          sort: context.params.sort
+            ? EntrySort[context.params.sort[0].toUpperCase()]
+            : EntrySort.NEW,
+          roomName: context.params.room as string,
         },
       },
     });
@@ -153,4 +148,4 @@ export async function getServerSideProps(context) {
       props: {},
     };
   }
-}
+};

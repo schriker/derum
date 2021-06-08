@@ -9,7 +9,7 @@ import useFacebookSDK from '../hooks/useFacebookSDK';
 import '../css/scrollBar.css';
 import NextNprogress from 'nextjs-progressbar';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, ...rest }: AppProps) {
   useFacebookSDK();
   const apolloClient = useApollo(pageProps);
 

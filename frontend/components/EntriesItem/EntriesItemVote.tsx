@@ -31,10 +31,10 @@ const EntriesItemVote = ({
           },
           userVote() {
             return mutaionResult.data.vote.userValue === 1
-              ? VoteValueEnum.Up
+              ? VoteValueEnum.UP
               : mutaionResult.data.vote.userValue === 0
-              ? VoteValueEnum.None
-              : VoteValueEnum.Down;
+              ? VoteValueEnum.NONE
+              : VoteValueEnum.DOWN;
           },
         },
         broadcast: true,
@@ -57,12 +57,12 @@ const EntriesItemVote = ({
       <ButtonIcon
         onClick={() =>
           handleCLick(
-            userVote === VoteValueEnum.Up
-              ? VoteValueEnum.None
-              : VoteValueEnum.Up
+            userVote === VoteValueEnum.UP
+              ? VoteValueEnum.NONE
+              : VoteValueEnum.UP
           )
         }
-        color={userVote === VoteValueEnum.Up ? 'default' : 'secondary'}
+        color={userVote === VoteValueEnum.UP ? 'default' : 'secondary'}
         size="small"
       >
         <PlusIcon style={{ fontSize: 18 }} />
@@ -73,12 +73,12 @@ const EntriesItemVote = ({
       <ButtonIcon
         onClick={() =>
           handleCLick(
-            userVote === VoteValueEnum.Down
-              ? VoteValueEnum.None
-              : VoteValueEnum.Down
+            userVote === VoteValueEnum.DOWN
+              ? VoteValueEnum.NONE
+              : VoteValueEnum.DOWN
           )
         }
-        color={userVote === VoteValueEnum.Down ? 'default' : 'secondary'}
+        color={userVote === VoteValueEnum.DOWN ? 'default' : 'secondary'}
         size="small"
       >
         <MinusIcon style={{ fontSize: 18 }} />

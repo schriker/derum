@@ -36,10 +36,16 @@ export type Entry = {
   userVote?: Maybe<VoteValueEnum>;
 };
 
+export enum EntrySort {
+  NEW = 'NEW',
+  HOT = 'HOT',
+  BEST = 'BEST'
+}
+
 export enum EntryType {
-  Link = 'LINK',
-  Article = 'ARTICLE',
-  Video = 'VIDEO'
+  LINK = 'LINK',
+  ARTICLE = 'ARTICLE',
+  VIDEO = 'VIDEO'
 }
 
 export type Link = {
@@ -238,6 +244,7 @@ export type QueryEntriesInput = {
   roomName: Scalars['String'];
   limit: Scalars['Int'];
   offset: Scalars['Int'];
+  sort: EntrySort;
 };
 
 export type Room = {
@@ -288,9 +295,9 @@ export type VoteResult = {
 };
 
 export enum VoteValueEnum {
-  Up = 'UP',
-  Down = 'DOWN',
-  None = 'NONE'
+  UP = 'UP',
+  DOWN = 'DOWN',
+  NONE = 'NONE'
 }
 
 export type AuthorFragmentFragment = (
