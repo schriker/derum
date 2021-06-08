@@ -1,8 +1,10 @@
+import { NetworkStatus } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Chat from '../../../components/Chat/Chat';
 import Entries from '../../../components/Entries/Entires';
+import EntriesBackdrop from '../../../components/EntriesBackdrop/EntriesBackdrop';
 import EntriesSort from '../../../components/EntriesSort/EntiresSort';
 import EntriesWrapper from '../../../components/EntriesWrapper/EntriesWrapper';
 import Layout from '../../../components/Layout/Layout';
@@ -29,7 +31,7 @@ import Custom404 from '../../404';
 export default function Room() {
   const router = useRouter();
   const { roomData } = useRoomData();
-  const { hasMore, entriesData, ref } = useRoomEntries();
+  const { hasMore, entriesData, networkStatus, ref } = useRoomEntries();
 
   return roomData ? (
     <Layout
@@ -37,6 +39,7 @@ export default function Room() {
       ogDescription={roomData.room.description}
     >
       <EntriesWrapper>
+        <EntriesBackdrop open={networkStatus === NetworkStatus.refetch} />
         {router.query.room && <RoomHeader />}
         <RoomAddContentButtons />
         <EntriesSort />

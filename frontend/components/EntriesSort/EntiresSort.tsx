@@ -9,10 +9,10 @@ const sortButtons = [
     text: 'Najnowsze',
     link: '',
   },
-  {
-    text: 'Gorące',
-    link: 'hot',
-  },
+  // {
+  //   text: 'Gorące',
+  //   link: 'hot',
+  // },
   {
     text: 'Najlepsze',
     link: 'best',

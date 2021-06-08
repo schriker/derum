@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { PAGE_LIMIT } from '../consts';
 import { useEntriesQuery, EntrySort, EntriesQuery } from '../generated/graphql';
+import { globalErrorVar } from '../lib/apolloVars';
 
 const useRoomEntries = () => {
   const router = useRouter();
@@ -20,8 +21,11 @@ const useRoomEntries = () => {
   const {
     data: entriesData,
     fetchMore,
+    networkStatus,
     refetch,
   } = useEntriesQuery({
+    onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera.' }),
+    notifyOnNetworkStatusChange: true,
     variables: {
       queryData: {
         ...vars,
@@ -83,6 +87,7 @@ const useRoomEntries = () => {
 
   return {
     hasMore,
+    networkStatus,
     entriesData,
     ref,
   };

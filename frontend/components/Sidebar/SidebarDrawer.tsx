@@ -1,6 +1,6 @@
 import { useReactiveVar } from '@apollo/client';
 import { Box, Drawer } from '@material-ui/core';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   useMeQuery,
   useNewRoomsQuery,
@@ -10,13 +10,12 @@ import { openDrawerVar } from '../../lib/apolloVars';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import CloseIcon from '../Icons/CloseIcon';
 import NewRoomButton from '../NewRoom/NewRoomButton';
-import SearchInput from '../SearchInput/SearchInput';
+import SidebarDrawerSearch from './SidebarDrawerSearch';
 import SidebarDrawerSection from './SidebarDrawerSection';
 import SidebarSkeleton from './SidebarSkeleton';
 
 const SidebarDrawer = () => {
   const isOpen = useReactiveVar(openDrawerVar);
-  const [searchValue, setSearchValue] = useState('');
   const { data: userData, loading: userLoading } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
@@ -27,10 +26,6 @@ const SidebarDrawer = () => {
         limit: 5,
       },
     });
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-  };
 
   return (
     <Drawer anchor="left" open={isOpen} onClose={() => openDrawerVar(false)}>
@@ -45,14 +40,7 @@ const SidebarDrawer = () => {
             <CloseIcon style={{ fontSize: 22 }} />
           </ButtonIcon>
         </Box>
-        <Box px={1}>
-          <SearchInput
-            style={{ marginTop: 10 }}
-            value={searchValue}
-            onChange={handleChange}
-            placeholder="Szukaj pokoju"
-          />
-        </Box>
+        <SidebarDrawerSearch />
         <NewRoomButton />
         <Box mt={1} display="flex" flexDirection="column">
           {userLoading ? (

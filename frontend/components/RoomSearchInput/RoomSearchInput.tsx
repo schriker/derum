@@ -13,7 +13,7 @@ import SearchIcon from '../Icons/SearchIcon';
 import useRoomSearchAutocompleteStyles from './RoomSearchAutocompleteStyles';
 import useRoomSearchInputStyles from './RoomSearchInputStyles';
 
-const RoomSearchInput = ({ error, onSelect }: RoomSearchProps) => {
+const RoomSearchInput = ({ error, onSelect, placeholder }: RoomSearchProps) => {
   const classes = useRoomSearchInputStyles();
   const { roomData } = useRoomData();
   const autoCompleteClasses = useRoomSearchAutocompleteStyles();
@@ -33,8 +33,8 @@ const RoomSearchInput = ({ error, onSelect }: RoomSearchProps) => {
   });
 
   useEffect(() => {
-    if (roomData && roomData.room.name !== indexRoomVars.name) {
-      onSelect(roomData.room.id);
+    if (roomData && !placeholder && roomData.room.name !== indexRoomVars.name) {
+      onSelect(roomData.room.id, roomData.room.name);
     }
   }, [roomData]);
 
@@ -50,7 +50,7 @@ const RoomSearchInput = ({ error, onSelect }: RoomSearchProps) => {
   };
 
   const handleSelect = (_, value) => {
-    if (value) return onSelect(value.id);
+    if (value) return onSelect(value.id, value.name);
     return onSelect(undefined);
   };
 
@@ -58,7 +58,9 @@ const RoomSearchInput = ({ error, onSelect }: RoomSearchProps) => {
     <Box style={{ width: '100%', margin: '0 0 10px 0' }}>
       <Autocomplete
         defaultValue={
-          roomData && roomData?.room.name !== indexRoomVars.name
+          placeholder
+            ? null
+            : roomData && roomData?.room.name !== indexRoomVars.name
             ? { id: roomData.room.id, name: roomData.room.name }
             : null
         }
@@ -83,6 +85,7 @@ const RoomSearchInput = ({ error, onSelect }: RoomSearchProps) => {
             </InputLabel>
             <CustomInput
               bg="light"
+              placeholder={placeholder}
               startAdornment={<SearchIcon className={classes.icon} />}
               error={!!error}
               inputProps={{

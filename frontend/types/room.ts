@@ -11,6 +11,7 @@ export type NewRoomInputs = {
 };
 
 export type RoomSearchProps = {
-  error: FieldError;
-  onSelect: (id: number) => void;
+  error?: FieldError;
+  placeholder?: string;
+  onSelect: (id: number, name?: string) => void;
 };
