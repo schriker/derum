@@ -1,7 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
+import React from 'react';
 import Chat from '../../../components/Chat/Chat';
 import Entries from '../../../components/Entries/Entires';
 import EntriesSort from '../../../components/EntriesSort/EntiresSort';
@@ -21,75 +20,16 @@ import {
   RoomDocument,
   RoomQuery,
   RoomQueryVariables,
-  useEntriesQuery,
 } from '../../../generated/graphql';
 import useRoomData from '../../../hooks/useRoomData';
+import useRoomEntries from '../../../hooks/useRoomEntries';
 import { addApolloState, initializeApollo } from '../../../lib/apolloClient';
 import Custom404 from '../../404';
 
 export default function Room() {
   const router = useRouter();
-  const [hasMore, setHasMore] = useState(false);
-  const [isInView, setIsInView] = useState(false);
   const { roomData } = useRoomData();
-  const { ref, inView } = useInView({
-    threshold: 0.5,
-  });
-  const vars = {
-    roomName: router.query.room as string,
-    limit: PAGE_LIMIT,
-  };
-  const { data: entriesData, fetchMore } = useEntriesQuery({
-    notifyOnNetworkStatusChange: true,
-    variables: {
-      queryData: {
-        ...vars,
-        offset: 0,
-        sort: router.query.sort
-          ? EntrySort[router.query.sort[0].toUpperCase()]
-          : EntrySort.NEW,
-      },
-    },
-  });
-
-  useEffect(() => {
-    setHasMore(true);
-    setIsInView(false);
-    () => {
-      setHasMore(false);
-      setIsInView(true);
-    };
-  }, [router.query.room]);
-
-  useEffect(() => {
-    setIsInView(inView);
-  }, [inView]);
-
-  useEffect(() => {
-    const fetchMoreData = async () => {
-      if (isInView && hasMore) {
-        const cursor = entriesData.entries.length
-          ? entriesData.entries[entriesData.entries.length - 1].id
-          : 0;
-        const offset = !router.query.sort ? cursor : entriesData.entries.length;
-
-        const { data }: { data: EntriesQuery } = await fetchMore({
-          variables: {
-            queryData: {
-              ...vars,
-              sort: router.query.sort
-                ? EntrySort[router.query.sort[0].toUpperCase()]
-                : EntrySort.NEW,
-              offset: offset,
-            },
-          },
-        });
-        if (!data.entries.length) setHasMore(false);
-      }
-    };
-
-    fetchMoreData();
-  }, [isInView, hasMore]);
+  const { hasMore, entriesData, ref } = useRoomEntries();
 
   return roomData ? (
     <Layout
