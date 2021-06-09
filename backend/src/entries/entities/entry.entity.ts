@@ -38,8 +38,8 @@ export class Entry {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   url: string;
 
   @Field()

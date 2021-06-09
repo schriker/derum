@@ -50,7 +50,7 @@ type Entry {
   id: Int!
   createdAt: Date!
   updatedAt: Date!
-  url: String!
+  url: String
   slug: String!
   title: String!
   publisher: String

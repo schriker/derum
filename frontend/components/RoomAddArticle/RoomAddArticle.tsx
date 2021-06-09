@@ -1,22 +1,32 @@
 import React from 'react';
-import { useMeQuery } from '../../generated/graphql';
-import { openModalVar } from '../../lib/apolloVars';
+import useButtonWithAuthAndModal from '../../hooks/useButtonWithAuthAndModal';
 import { ButtonRoomContent } from '../Buttons/ButtonRoomContent';
 import ArticleIcon from '../Icons/ArticleIcon';
+import Modal from '../Modal/Modal';
+import RoomNewArticleForm from '../RoomNewArticleForm/RoomNewArticleForm';
 
 const RoomAddArticle = () => {
-  const { data } = useMeQuery({
-    fetchPolicy: 'cache-only',
-  });
-
-  const handleClick = () => {
-    if (!data) return openModalVar(true);
-  };
+  const { handleButtonClick, handleClose, openModal } =
+    useButtonWithAuthAndModal();
 
   return (
-    <ButtonRoomContent onClick={handleClick} startIcon={<ArticleIcon />}>
-      Utwórz wpis
-    </ButtonRoomContent>
+    <>
+      <ButtonRoomContent
+        onClick={handleButtonClick}
+        startIcon={<ArticleIcon />}
+      >
+        Utwórz wpis
+      </ButtonRoomContent>
+      <Modal
+        fullWidth
+        maxWidth="md"
+        title="Nowy wpis"
+        open={openModal}
+        close={handleClose}
+      >
+        <RoomNewArticleForm />
+      </Modal>
+    </>
   );
 };
 
