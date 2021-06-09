@@ -22,7 +22,7 @@ export type Entry = {
   id: Scalars['Int'];
   createdAt: Scalars['Date'];
   updatedAt: Scalars['Date'];
-  url: Scalars['String'];
+  url?: Maybe<Scalars['String']>;
   slug: Scalars['String'];
   title: Scalars['String'];
   publisher?: Maybe<Scalars['String']>;
@@ -30,7 +30,7 @@ export type Entry = {
   body?: Maybe<Scalars['String']>;
   author: User;
   room: Room;
-  photo: Photo;
+  photo?: Maybe<Photo>;
   type: EntryType;
   voteScore?: Maybe<Scalars['Int']>;
   userVote?: Maybe<VoteValueEnum>;
@@ -45,6 +45,7 @@ export enum EntrySort {
 export enum EntryType {
   LINK = 'LINK',
   ARTICLE = 'ARTICLE',
+  IMAGE = 'IMAGE',
   VIDEO = 'VIDEO'
 }
 
@@ -83,6 +84,8 @@ export type Mutation = {
   createMessage: Message;
   deleteMessage: Scalars['Boolean'];
   createLink: Entry;
+  createArticle: Entry;
+  deleteEntry: Scalars['Boolean'];
   vote: VoteResult;
 };
 
@@ -137,9 +140,27 @@ export type MutationCreateLinkArgs = {
 };
 
 
+export type MutationCreateArticleArgs = {
+  newArticleData: NewArticleData;
+};
+
+
+export type MutationDeleteEntryArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type MutationVoteArgs = {
   value: VoteValueEnum;
   entryId: Scalars['Int'];
+};
+
+export type NewArticleData = {
+  title: Scalars['String'];
+  photo?: Maybe<Scalars['String']>;
+  description: Scalars['String'];
+  body: Scalars['String'];
+  roomId: Scalars['Int'];
 };
 
 export type NewLinkData = {
@@ -311,10 +332,10 @@ export type HomeEntryFragmentFragment = (
   & { author: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'displayName' | 'isAdmin' | 'isModerator'>
-  ), photo: (
+  ), photo?: Maybe<(
     { __typename?: 'Photo' }
     & Pick<Photo, 'url' | 'name'>
-  ), room: (
+  )>, room: (
     { __typename?: 'Room' }
     & Pick<Room, 'name'>
   ) }
@@ -326,6 +347,19 @@ export type RoomFragmentFragment = (
   & { author: (
     { __typename?: 'User' }
     & AuthorFragmentFragment
+  ) }
+);
+
+export type CreateArticleMutationVariables = Exact<{
+  newArticleData: NewArticleData;
+}>;
+
+
+export type CreateArticleMutation = (
+  { __typename?: 'Mutation' }
+  & { createArticle: (
+    { __typename?: 'Entry' }
+    & HomeEntryFragmentFragment
   ) }
 );
 
@@ -368,6 +402,16 @@ export type CreateRoomMutation = (
     { __typename?: 'Room' }
     & RoomFragmentFragment
   ) }
+);
+
+export type DeleteEntryMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteEntryMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteEntry'>
 );
 
 export type DeleteMessageMutationVariables = Exact<{
@@ -686,6 +730,39 @@ export const RoomFragmentFragmentDoc = gql`
   }
 }
     ${AuthorFragmentFragmentDoc}`;
+export const CreateArticleDocument = gql`
+    mutation CreateArticle($newArticleData: NewArticleData!) {
+  createArticle(newArticleData: $newArticleData) {
+    ...HomeEntryFragment
+  }
+}
+    ${HomeEntryFragmentFragmentDoc}`;
+export type CreateArticleMutationFn = Apollo.MutationFunction<CreateArticleMutation, CreateArticleMutationVariables>;
+
+/**
+ * __useCreateArticleMutation__
+ *
+ * To run a mutation, you first call `useCreateArticleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateArticleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createArticleMutation, { data, loading, error }] = useCreateArticleMutation({
+ *   variables: {
+ *      newArticleData: // value for 'newArticleData'
+ *   },
+ * });
+ */
+export function useCreateArticleMutation(baseOptions?: Apollo.MutationHookOptions<CreateArticleMutation, CreateArticleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateArticleMutation, CreateArticleMutationVariables>(CreateArticleDocument, options);
+      }
+export type CreateArticleMutationHookResult = ReturnType<typeof useCreateArticleMutation>;
+export type CreateArticleMutationResult = Apollo.MutationResult<CreateArticleMutation>;
+export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<CreateArticleMutation, CreateArticleMutationVariables>;
 export const CreateLinkDocument = gql`
     mutation CreateLink($newLinkData: NewLinkData!) {
   createLink(newLinkData: $newLinkData) {
@@ -787,6 +864,37 @@ export function useCreateRoomMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateRoomMutationHookResult = ReturnType<typeof useCreateRoomMutation>;
 export type CreateRoomMutationResult = Apollo.MutationResult<CreateRoomMutation>;
 export type CreateRoomMutationOptions = Apollo.BaseMutationOptions<CreateRoomMutation, CreateRoomMutationVariables>;
+export const DeleteEntryDocument = gql`
+    mutation DeleteEntry($id: Int!) {
+  deleteEntry(id: $id)
+}
+    `;
+export type DeleteEntryMutationFn = Apollo.MutationFunction<DeleteEntryMutation, DeleteEntryMutationVariables>;
+
+/**
+ * __useDeleteEntryMutation__
+ *
+ * To run a mutation, you first call `useDeleteEntryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteEntryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteEntryMutation, { data, loading, error }] = useDeleteEntryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteEntryMutation(baseOptions?: Apollo.MutationHookOptions<DeleteEntryMutation, DeleteEntryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteEntryMutation, DeleteEntryMutationVariables>(DeleteEntryDocument, options);
+      }
+export type DeleteEntryMutationHookResult = ReturnType<typeof useDeleteEntryMutation>;
+export type DeleteEntryMutationResult = Apollo.MutationResult<DeleteEntryMutation>;
+export type DeleteEntryMutationOptions = Apollo.BaseMutationOptions<DeleteEntryMutation, DeleteEntryMutationVariables>;
 export const DeleteMessageDocument = gql`
     mutation DeleteMessage($id: Int!) {
   deleteMessage(id: $id)

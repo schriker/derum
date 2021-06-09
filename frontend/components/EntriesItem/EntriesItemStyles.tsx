@@ -3,6 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 const useEntriesItemStyle = makeStyles((theme: Theme) => ({
   wrapper: {
     display: 'flex',
+    position: 'relative',
     marginTop: 3,
   },
   action: {
@@ -17,12 +18,16 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: 'center',
+    backgroundColor: theme.palette.grey[900],
   },
   voteText: {
     margin: '5px 0',
   },
   description: {
     color: theme.palette.grey[500],
+  },
+  publisher: {
+    marginRight: 10,
   },
   info: {
     display: 'flex',

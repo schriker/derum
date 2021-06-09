@@ -22,5 +22,6 @@ export type NewLinkMetadataInputs = {
   roomId: number;
   title: string;
   photo: string;
+  body: string;
   description: string;
 };

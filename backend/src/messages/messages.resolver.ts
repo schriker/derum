@@ -1,4 +1,4 @@
-import { Inject, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { ForbiddenException, Inject, UseGuards } from '@nestjs/common';
 import {
   Args,
   Int,
@@ -83,12 +83,13 @@ export class MessagesResolver {
   @Mutation(() => Boolean)
   @UseGuards(GQLSessionGuard)
   async deleteMessage(
-    @CurrentUser() user: User,
+    @CurrentUser() session: User,
     @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {
-    const ability = this.caslAbilityFactory.createForUser(user);
     const message = await this.messagesService.getById(id);
-    if (!ability.can(Action.Manage, message)) throw new UnauthorizedException();
+    const user = await this.usersService.getById(session.id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+    if (!ability.can(Action.Manage, message)) throw new ForbiddenException();
     await this.messagesService.deleteById(message.id);
     this.pubSub.publish('messageDeleted', {
       messageDeleted: message,

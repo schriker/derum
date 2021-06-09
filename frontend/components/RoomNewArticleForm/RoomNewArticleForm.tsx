@@ -1,6 +1,7 @@
+import dynamic from 'next/dynamic';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { NewArticleInputs } from '../../types/newArticle';
@@ -10,8 +11,13 @@ import { CustomInput } from '../CustomInput/CustomInput';
 import FormInput from '../FormInput/FormInput';
 import RoomSearchInput from '../RoomSearchInput/RoomSearchInput';
 import useNewRoomLinkStyles from '../RoomNewLinkForm/RoomNewLinkFormStyles';
-import Markdown from '../Markdown/Markdown';
 import bodyDefaultValue from './bodyDefaultValue';
+import localforage from 'localforage';
+import { globalErrorVar } from '../../lib/apolloVars';
+import { useCreateArticleMutation } from '../../generated/graphql';
+const Markdown = dynamic(() => import('../Markdown/Markdown'));
+
+const STORAGE_KEY_NAME = 'article';
 
 const schema = yup.object().shape({
   roomId: yup.number().required('Wybierz pokój.'),
@@ -51,7 +57,7 @@ const schema = yup.object().shape({
     .min(150, 'Trść min. 150 znaków.'),
 });
 
-const RoomNewArticleForm = () => {
+const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
   const classes = useNewRoomLinkStyles();
 
   const {
@@ -60,7 +66,8 @@ const RoomNewArticleForm = () => {
     reset,
     setValue,
     watch,
-    formState: { errors },
+    getValues,
+    formState: { errors, touchedFields, isSubmitted },
   } = useForm<NewArticleInputs>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -68,8 +75,49 @@ const RoomNewArticleForm = () => {
     },
   });
 
+  const [createArticle, { loading }] = useCreateArticleMutation({
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
+    onCompleted: (data) => {
+      console.log(data);
+      localforage.removeItem(STORAGE_KEY_NAME);
+      closeModal();
+      // router.push(
+      //   `/p/${data.createLink.room.name}/${data.createLink.id}/${data.createLink.slug}`
+      // );
+    },
+  });
+
+  useEffect(() => {
+    const restoreValues = async () => {
+      const values = await localforage.getItem<NewLinkMetadataInputs>(
+        STORAGE_KEY_NAME
+      );
+      if (values) {
+        for (let key in values) {
+          setValue(key as any, values[key]);
+        }
+      }
+    };
+    restoreValues();
+    return () => {
+      if (
+        !isSubmitted &&
+        Object.entries(touchedFields).some((value) => value)
+      ) {
+        localforage.setItem(STORAGE_KEY_NAME, getValues());
+      }
+    };
+  }, [isSubmitted]);
+
   const onSubmit: SubmitHandler<NewLinkMetadataInputs> = (variables) => {
-    console.log(variables);
+    createArticle({
+      variables: {
+        newArticleData: {
+          ...variables,
+          photo: variables.photo.length ? variables.photo : null,
+        },
+      },
+    });
   };
 
   return (
@@ -145,7 +193,7 @@ const RoomNewArticleForm = () => {
       <Markdown value={watch('body')} />
       <Box display="flex" justifyContent="flex-end">
         <ButtonPrimary
-          disabled={false}
+          disabled={loading}
           className={classes.submitButton}
           type="submit"
         >

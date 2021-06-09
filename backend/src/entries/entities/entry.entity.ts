@@ -75,7 +75,7 @@ export class Entry {
   @ManyToOne(() => Link, (link) => link.entires, { nullable: true })
   link: Link;
 
-  @Field(() => Photo)
+  @Field(() => Photo, { nullable: true })
   @OneToOne(() => Photo, { nullable: true })
   @JoinColumn()
   photo: Photo;
@@ -97,4 +97,7 @@ export class Entry {
   @Field(() => VoteValueEnum, { nullable: true })
   @Column({ select: false, insert: false, readonly: true, nullable: true })
   userVote: VoteValueEnum;
+
+  @Column({ type: Boolean, default: false })
+  deleted: boolean;
 }

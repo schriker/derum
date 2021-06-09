@@ -4,7 +4,7 @@ import { CardActionArea, CardMedia } from '@material-ui/core';
 import useEntriesItemStyle from './EntriesItemStyles';
 import { EntiresItemTitleProps } from '../../types/entries';
 
-const EntriesItemTitle = ({ link, image, title }: EntiresItemTitleProps) => {
+const EntriesItemPhoto = ({ link, image, title }: EntiresItemTitleProps) => {
   const classes = useEntriesItemStyle();
 
   return (
@@ -21,4 +21,4 @@ const EntriesItemTitle = ({ link, image, title }: EntiresItemTitleProps) => {
   );
 };
 
-export default EntriesItemTitle;
+export default EntriesItemPhoto;

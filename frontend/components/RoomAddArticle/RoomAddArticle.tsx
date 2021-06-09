@@ -24,7 +24,7 @@ const RoomAddArticle = () => {
         open={openModal}
         close={handleClose}
       >
-        <RoomNewArticleForm />
+        <RoomNewArticleForm closeModal={handleClose} />
       </Modal>
     </>
   );

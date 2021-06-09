@@ -19,6 +19,7 @@ import trimString from 'src/helpers/trimString';
 import { QueryEntriesInput } from './dto/query.input';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { EntrySort } from './types/entry-sort.enum';
+import { NewArticleData } from './dto/new-article.input';
 
 @Injectable()
 export class EntriesService {
@@ -32,6 +33,17 @@ export class EntriesService {
     private photosService: PhotosService,
   ) {}
 
+  async getById(id: number): Promise<Entry> {
+    const entry = await this.entryRepository
+      .createQueryBuilder('entry')
+      .where('entry.id = :id', { id })
+      .leftJoinAndSelect('entry.room', 'room')
+      .leftJoinAndSelect('room.author', 'roomAuthor')
+      .getOne();
+    if (!entry) throw new NotFoundException();
+    return entry;
+  }
+
   getNewest(
     queryData: QueryEntriesInput,
     room: Room,
@@ -40,8 +52,8 @@ export class EntriesService {
     const { limit, offset } = queryData;
     const whereQuery =
       offset > 0
-        ? 'entry.roomId = :roomId AND entry.id < :offset'
-        : 'entry.roomId = :roomId';
+        ? 'entry.roomId = :roomId AND entry.id < :offset AND entry.deleted = false'
+        : 'entry.roomId = :roomId AND entry.deleted = false';
     return this.entryRepository
       .createQueryBuilder('entry')
       .where(whereQuery, {
@@ -79,7 +91,7 @@ export class EntriesService {
 
     return this.entryRepository
       .createQueryBuilder('entry')
-      .where('entry.roomId = :roomId', {
+      .where('entry.roomId = :roomId AND entry.deleted = false', {
         roomId: room.id,
       })
       .leftJoin('entry.votes', 'votes')
@@ -158,5 +170,40 @@ export class EntriesService {
     entry.room = room;
     entry.photo = savedPhoto;
     return this.entryRepository.save(entry);
+  }
+
+  async createArticle(
+    newArticleData: NewArticleData,
+    user: User,
+  ): Promise<Entry> {
+    const { roomId, photo, title, description } = newArticleData;
+    let savedPhoto = null;
+    const room = await this.roomRepository.findOne({
+      id: roomId,
+    });
+    if (!room) throw new NotFoundException();
+    if (photo) {
+      savedPhoto = await this.photosService.savePhotoFromLink(photo, user);
+    }
+    const entry = new Entry();
+    const trimedTitle = trimString(title, 60);
+    entry.slug = `${slugify(trimedTitle, {
+      lower: true,
+      strict: true,
+    }).replace(/[^0-9a-zA-Z]/g, '-')}-${uuidv4()}`;
+    entry.author = user;
+    entry.description = description;
+    entry.title = title;
+    entry.type = EntryType.ARTICLE;
+    entry.room = room;
+    entry.photo = savedPhoto;
+    return this.entryRepository.save(entry);
+  }
+
+  async markDeleted(id: number): Promise<boolean> {
+    const entry = await this.getById(id);
+    entry.deleted = true;
+    await this.entryRepository.save(entry);
+    return true;
   }
 }

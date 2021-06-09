@@ -4,10 +4,6 @@ const useMarkdownStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     fontSize: 16,
     fontWeight: 600,
-    '& ul': {
-      paddingLeft: 30,
-      margin: 0,
-    },
     '& strong': {
       color: theme.palette.primary['A700'],
     },

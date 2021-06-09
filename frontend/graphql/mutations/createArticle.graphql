@@ -1,0 +1,5 @@
+mutation CreateArticle($newArticleData: NewArticleData!) {
+  createArticle(newArticleData: $newArticleData) {
+    ...HomeEntryFragment
+  }
+}

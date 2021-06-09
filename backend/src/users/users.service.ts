@@ -39,7 +39,7 @@ export class UsersService {
     return [...new Map(users.map((item) => [item['name'], item])).values()];
   }
 
-  async findById(id: number): Promise<User> {
+  async getById(id: number): Promise<User> {
     const user = await this.usersRepository
       .createQueryBuilder('user')
       .where('user.id = :id', { id })

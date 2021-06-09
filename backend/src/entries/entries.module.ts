@@ -6,9 +6,16 @@ import { Entry } from './entities/entry.entity';
 import { Link } from 'src/meta-scraper/entities/link.entity';
 import { Room } from 'src/rooms/entities/room.entity';
 import { PhotosModule } from 'src/photos/photos.module';
+import { CaslModule } from 'src/casl/casl.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Entry, Link, Room]), PhotosModule],
+  imports: [
+    TypeOrmModule.forFeature([Entry, Link, Room]),
+    PhotosModule,
+    CaslModule,
+    UsersModule,
+  ],
   providers: [EntriesService, EntriesResolver],
 })
 export class EntriesModule {}

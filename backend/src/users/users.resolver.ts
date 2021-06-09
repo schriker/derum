@@ -25,12 +25,12 @@ export class UsersResolver {
   @Query(() => User)
   @UseGuards(GQLSessionGuard)
   me(@CurrentUser() user: User): Promise<User> {
-    return this.usersService.findById(user.id);
+    return this.usersService.getById(user.id);
   }
 
   @Query(() => User)
   user(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.findById(id);
+    return this.usersService.getById(id);
   }
 
   @Query(() => [OnlineUser])

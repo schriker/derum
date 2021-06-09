@@ -51,9 +51,9 @@ const components: Partial<NormalComponents & SpecialComponents> = {
   },
   img(props) {
     return (
-      <div style={{ textAlign: 'center' }}>
+      <span style={{ display: 'block', textAlign: 'center' }}>
         <img {...props} />
-      </div>
+      </span>
     );
   },
   code({ node, inline, className, children, ...props }) {

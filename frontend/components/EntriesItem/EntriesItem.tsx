@@ -7,8 +7,9 @@ import EntriesItemAuthor from './EntriesItemAuthor';
 import EntiresItemPublisher from './EntriesItemPublisher';
 import EntriesItemRoom from './EntriesItemRoom';
 import useEntriesItemStyle from './EntriesItemStyles';
-import EntriesItemTitle from './EntriesItemTitle';
 import EntriesItemVote from './EntriesItemVote';
+import EntriesItemPhoto from './EntriesItemPhoto';
+import EntriesItemActions from './EntriesItemActions';
 
 const EntriesItem = ({ data, handleUserClick }: EntriesItemProps) => {
   const classes = useEntriesItemStyle();
@@ -22,7 +23,13 @@ const EntriesItem = ({ data, handleUserClick }: EntriesItemProps) => {
         voteScore={data.voteScore}
         id={data.id}
       />
-      <EntriesItemTitle link={link} image={data.photo.url} title={data.title} />
+      {data.photo && (
+        <EntriesItemPhoto
+          link={link}
+          image={data.photo.url}
+          title={data.title}
+        />
+      )}
       <CardContent>
         <NextLink href={link} passHref>
           <Link variant="h5" color="textPrimary">
@@ -40,7 +47,10 @@ const EntriesItem = ({ data, handleUserClick }: EntriesItemProps) => {
             {dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
           </Typography>
           <EntriesItemRoom link={roomLink} name={data.room.name} />
-          <EntiresItemPublisher publisher={data.publisher} url={data.url} />
+          {data.publisher && (
+            <EntiresItemPublisher publisher={data.publisher} url={data.url} />
+          )}
+          <EntriesItemActions id={data.id} />
         </Box>
         <Typography variant="body2" className={classes.description}>
           {data.description}

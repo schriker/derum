@@ -58,7 +58,7 @@ type Entry {
   body: String
   author: User!
   room: Room!
-  photo: Photo!
+  photo: Photo
   type: EntryType!
   voteScore: Int
   userVote: VoteValueEnum
@@ -140,6 +140,8 @@ type Mutation {
   createMessage(newMessageData: NewMessageInput!): Message!
   deleteMessage(id: Int!): Boolean!
   createLink(newLinkData: NewLinkData!): Entry!
+  createArticle(newArticleData: NewArticleData!): Entry!
+  deleteEntry(id: Int!): Boolean!
   vote(value: VoteValueEnum!, entryId: Int!): VoteResult!
 }
 
@@ -158,6 +160,14 @@ input NewLinkData {
   photo: String!
   description: String!
   linkId: Int!
+  roomId: Int!
+}
+
+input NewArticleData {
+  title: String!
+  photo: String
+  description: String!
+  body: String!
   roomId: Int!
 }
 
