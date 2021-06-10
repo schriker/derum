@@ -20,6 +20,7 @@ import { QueryEntriesInput } from './dto/query.input';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { EntrySort } from './types/entry-sort.enum';
 import { NewArticleData } from './dto/new-article.input';
+import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-publisher.entity';
 
 @Injectable()
 export class EntriesService {
@@ -30,6 +31,8 @@ export class EntriesService {
     private linkRepository: Repository<Link>,
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
+    @InjectRepository(BlacklistPublisher)
+    private blacklistPublisherRepository: Repository<BlacklistPublisher>,
     private photosService: PhotosService,
   ) {}
 
@@ -42,6 +45,14 @@ export class EntriesService {
       .getOne();
     if (!entry) throw new NotFoundException();
     return entry;
+  }
+
+  createSlug(title: string): string {
+    const trimedTitle = trimString(title, 60);
+    return `${slugify(trimedTitle, {
+      lower: true,
+      strict: true,
+    }).replace(/[^0-9a-zA-Z]/g, '-')}-${uuidv4()}`;
   }
 
   getNewest(
@@ -136,6 +147,15 @@ export class EntriesService {
     }
   }
 
+  async checkIfBlacklistedPublisher(name: string): Promise<BlacklistPublisher> {
+    const isBlacklisted = await this.blacklistPublisherRepository.findOne({
+      name: ILike(`%${name}%`),
+    });
+    if (isBlacklisted)
+      throw new BadRequestException(ERROR_MESSAGES.PUBLISHER_BLACKLISTED);
+    return isBlacklisted;
+  }
+
   checkIfAlreadyAdded(linkId: number, roomId: number): Promise<Entry[]> {
     return this.entryRepository.find({
       where: {
@@ -152,14 +172,14 @@ export class EntriesService {
     if (isLinkAdded.length)
       throw new BadRequestException(ERROR_MESSAGES.LINK_EXISTS);
     const link = await this.linkRepository.findOne({ id: newLinkData.linkId });
-    const room = await this.roomRepository.findOne({ id: newLinkData.roomId });
+    await this.checkIfBlacklistedPublisher(link.publisher);
+    const room = await this.roomRepository.findOne({
+      id: newLinkData.roomId,
+    });
     if (!link || !room) throw new NotFoundException();
     const savedPhoto = await this.photosService.savePhotoFromLink(photo, user);
     const entry = new Entry();
-    const trimedTitle = trimString(title, 60);
-    entry.slug = `${slugify(trimedTitle, {
-      lower: true,
-    }).replace(/[^0-9a-zA-Z]/g, '')}-${uuidv4()}`;
+    entry.slug = this.createSlug(title);
     entry.author = user;
     entry.description = description;
     entry.link = link;
@@ -186,11 +206,7 @@ export class EntriesService {
       savedPhoto = await this.photosService.savePhotoFromLink(photo, user);
     }
     const entry = new Entry();
-    const trimedTitle = trimString(title, 60);
-    entry.slug = `${slugify(trimedTitle, {
-      lower: true,
-      strict: true,
-    }).replace(/[^0-9a-zA-Z]/g, '-')}-${uuidv4()}`;
+    entry.slug = this.createSlug(title);
     entry.author = user;
     entry.description = description;
     entry.title = title;

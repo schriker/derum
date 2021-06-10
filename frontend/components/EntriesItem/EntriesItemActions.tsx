@@ -1,6 +1,10 @@
 import { ListItemText } from '@material-ui/core';
 import React from 'react';
-import { useDeleteEntryMutation, useMeQuery } from '../../generated/graphql';
+import {
+  useBlacklistPublisherMutation,
+  useDeleteEntryMutation,
+  useMeQuery,
+} from '../../generated/graphql';
 import useRoomData from '../../hooks/useRoomData';
 import { globalErrorVar } from '../../lib/apolloVars';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
@@ -14,6 +18,12 @@ const EntriesItemActions = ({ id }: { id: number }) => {
     fetchPolicy: 'cache-only',
   });
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [blacklistPublisher] = useBlacklistPublisherMutation({
+    onCompleted: () =>
+      globalErrorVar({ isOpen: true, message: 'Domena została zablokowana.' }),
+    onError: () =>
+      globalErrorVar({ isOpen: true, message: 'Błąd blokowania.' }),
+  });
   const [deleteEntry] = useDeleteEntryMutation({
     update: (cache) => {
       cache.modify({
@@ -43,6 +53,18 @@ const EntriesItemActions = ({ id }: { id: number }) => {
     setAnchorEl(null);
   };
 
+  const handleDelete = () => {
+    deleteEntry({ variables: { id } });
+  };
+
+  const handleBlacklist = () => {
+    blacklistPublisher({
+      variables: {
+        entryId: id,
+      },
+    });
+  };
+
   return data && isRoomAdmin ? (
     <>
       <ButtonIcon onClick={handleClick} size="small" color="secondary">
@@ -55,18 +77,18 @@ const EntriesItemActions = ({ id }: { id: number }) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <DropdownItem dense onClick={() => deleteEntry({ variables: { id } })}>
+        <DropdownItem dense onClick={handleDelete}>
           <ListItemText primary="Usuń" />
         </DropdownItem>
         {data?.me.isAdmin && (
-          <>
-            <DropdownItem dense onClick={() => console.log('asd')}>
-              <ListItemText primary="Zablokuj domene" />
-            </DropdownItem>
-            <DropdownItem dense onClick={() => console.log('asd')}>
-              <ListItemText primary="Zablokuj domene i usuń wpisy" />
-            </DropdownItem>
-          </>
+          <DropdownItem dense onClick={handleBlacklist}>
+            <ListItemText primary="Zablokuj domene" />
+          </DropdownItem>
+        )}
+        {data?.me.isAdmin && (
+          <DropdownItem dense onClick={() => console.log('asd')}>
+            <ListItemText primary="Zablokuj domene i usuń wpisy" />
+          </DropdownItem>
         )}
       </Dropdown>
     </>

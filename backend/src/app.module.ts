@@ -18,6 +18,7 @@ import { MetaScraperModule } from './meta-scraper/meta-scraper.module';
 import { PhotosModule } from './photos/photos.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { VotesModule } from './votes/votes.module';
+import { BlacklistPublishersModule } from './blacklist-publishers/blacklist-publishers.module';
 
 const parseUserSession = async (headerCookie) => {
   const cookies = cookie.parse(headerCookie);
@@ -95,6 +96,7 @@ const parseUserSession = async (headerCookie) => {
     MetaScraperModule,
     PhotosModule,
     VotesModule,
+    BlacklistPublishersModule,
   ],
   providers: [DateScalar],
 })

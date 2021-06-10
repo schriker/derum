@@ -1,11 +1,10 @@
 import dynamic from 'next/dynamic';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { NewArticleInputs } from '../../types/newArticle';
-import { NewLinkMetadataInputs } from '../../types/newLink';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import { CustomInput } from '../CustomInput/CustomInput';
 import FormInput from '../FormInput/FormInput';
@@ -15,6 +14,8 @@ import bodyDefaultValue from './bodyDefaultValue';
 import localforage from 'localforage';
 import { globalErrorVar } from '../../lib/apolloVars';
 import { useCreateArticleMutation } from '../../generated/graphql';
+import { Alert } from '@material-ui/lab';
+import { ButtonDefault } from '../Buttons/ButtonDefault';
 const Markdown = dynamic(() => import('../Markdown/Markdown'));
 
 const STORAGE_KEY_NAME = 'article';
@@ -59,6 +60,7 @@ const schema = yup.object().shape({
 
 const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
   const classes = useNewRoomLinkStyles();
+  const [oldSession, setOldSession] = useState<NewArticleInputs>(null);
 
   const {
     control,
@@ -89,16 +91,12 @@ const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
 
   useEffect(() => {
     const restoreValues = async () => {
-      const values = await localforage.getItem<NewLinkMetadataInputs>(
+      const values = await localforage.getItem<NewArticleInputs>(
         STORAGE_KEY_NAME
       );
-      if (values) {
-        for (let key in values) {
-          setValue(key as any, values[key]);
-        }
-      }
+      if (values) setOldSession(values);
     };
-    restoreValues();
+    if (!isSubmitted) restoreValues();
     return () => {
       if (
         !isSubmitted &&
@@ -109,7 +107,14 @@ const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
     };
   }, [isSubmitted]);
 
-  const onSubmit: SubmitHandler<NewLinkMetadataInputs> = (variables) => {
+  const handleResotreSession = () => {
+    for (let key in oldSession) {
+      setValue(key as any, oldSession[key]);
+    }
+    setOldSession(null);
+  };
+
+  const onSubmit: SubmitHandler<NewArticleInputs> = (variables) => {
     createArticle({
       variables: {
         newArticleData: {
@@ -122,6 +127,21 @@ const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {oldSession && (
+        <Box mb={1}>
+          <Alert
+            variant="filled"
+            severity="info"
+            action={
+              <ButtonDefault onClick={handleResotreSession} size="small">
+                Przywróć
+              </ButtonDefault>
+            }
+          >
+            Wygląda na to, że masz zapisaną sesję, przywrócić?
+          </Alert>
+        </Box>
+      )}
       <RoomSearchInput
         error={errors.roomId}
         onSelect={(id: number) =>

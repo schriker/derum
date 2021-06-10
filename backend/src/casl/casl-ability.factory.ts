@@ -6,6 +6,7 @@ import {
   ExtractSubjectType,
 } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
+import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-publisher.entity';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -13,7 +14,9 @@ import { Action } from './action.enum';
 import { FlatEntry, FlatMessage } from './flatTypes';
 
 type Subjects =
-  | InferSubjects<typeof Message | typeof Entry | typeof User>
+  | InferSubjects<
+      typeof Message | typeof Entry | typeof BlacklistPublisher | typeof User
+    >
   | 'all';
 
 export type AppAbility = Ability<[Action, Subjects]>;
@@ -30,15 +33,15 @@ export class CaslAbilityFactory {
     }
 
     if (user.isModerator) {
-      can(Action.Manage, Message);
-      can(Action.Manage, Entry);
+      can(Action.Delete, Message);
+      can(Action.Delete, Entry);
     }
 
-    can<FlatMessage>(Action.Manage, Message, {
+    can<FlatMessage>(Action.Delete, Message, {
       'room.author.id': user.id,
     });
 
-    can<FlatEntry>(Action.Manage, Entry, {
+    can<FlatEntry>(Action.Delete, Entry, {
       'room.author.id': user.id,
     });
 

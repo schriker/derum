@@ -63,9 +63,18 @@ function createApolloClient() {
             },
             entries: {
               keyArgs: [],
-              merge(existing, incoming, { args }) {
+              merge(existing, incoming, { args, readField }) {
                 if (args.queryData.offset === 0) return [...incoming];
-                return [...existing, ...incoming];
+
+                const filtered = incoming.filter(
+                  (item) =>
+                    !existing.some(
+                      (current) =>
+                        readField('id', current) === readField('id', item)
+                    )
+                );
+
+                return [...existing, ...filtered];
               },
               read(existing, { args, readField }) {
                 const filteredByRoom =

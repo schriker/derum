@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -21,8 +22,11 @@ export class VotesService {
     entryId: number,
     value: VoteValueEnum,
   ): Promise<VoteResult> {
-    const entry = await this.entriesRepository.findOne({ id: entryId });
-    if (!entry) throw new NotFoundException(entryId);
+    const entry = await this.entriesRepository.findOne({
+      id: entryId,
+      deleted: false,
+    });
+    if (!entry) throw new NotFoundException(ERROR_MESSAGES.ENTRY_NOT_FOUND);
 
     const alreadyVoted = await this.votesRepository.findOne({
       where: {

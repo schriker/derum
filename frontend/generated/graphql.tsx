@@ -34,6 +34,7 @@ export type Entry = {
   type: EntryType;
   voteScore?: Maybe<Scalars['Int']>;
   userVote?: Maybe<VoteValueEnum>;
+  deleted: Scalars['Boolean'];
 };
 
 export enum EntrySort {
@@ -87,6 +88,7 @@ export type Mutation = {
   createArticle: Entry;
   deleteEntry: Scalars['Boolean'];
   vote: VoteResult;
+  blacklistPublisher: Scalars['Boolean'];
 };
 
 
@@ -152,6 +154,11 @@ export type MutationDeleteEntryArgs = {
 
 export type MutationVoteArgs = {
   value: VoteValueEnum;
+  entryId: Scalars['Int'];
+};
+
+
+export type MutationBlacklistPublisherArgs = {
   entryId: Scalars['Int'];
 };
 
@@ -328,7 +335,7 @@ export type AuthorFragmentFragment = (
 
 export type HomeEntryFragmentFragment = (
   { __typename?: 'Entry' }
-  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'voteScore' | 'userVote' | 'type'>
+  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'voteScore' | 'userVote' | 'deleted' | 'type'>
   & { author: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'displayName' | 'isAdmin' | 'isModerator'>
@@ -348,6 +355,16 @@ export type RoomFragmentFragment = (
     { __typename?: 'User' }
     & AuthorFragmentFragment
   ) }
+);
+
+export type BlacklistPublisherMutationVariables = Exact<{
+  entryId: Scalars['Int'];
+}>;
+
+
+export type BlacklistPublisherMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'blacklistPublisher'>
 );
 
 export type CreateArticleMutationVariables = Exact<{
@@ -693,6 +710,7 @@ export const HomeEntryFragmentFragmentDoc = gql`
   description
   voteScore
   userVote
+  deleted
   author {
     id
     displayName
@@ -730,6 +748,37 @@ export const RoomFragmentFragmentDoc = gql`
   }
 }
     ${AuthorFragmentFragmentDoc}`;
+export const BlacklistPublisherDocument = gql`
+    mutation BlacklistPublisher($entryId: Int!) {
+  blacklistPublisher(entryId: $entryId)
+}
+    `;
+export type BlacklistPublisherMutationFn = Apollo.MutationFunction<BlacklistPublisherMutation, BlacklistPublisherMutationVariables>;
+
+/**
+ * __useBlacklistPublisherMutation__
+ *
+ * To run a mutation, you first call `useBlacklistPublisherMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBlacklistPublisherMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [blacklistPublisherMutation, { data, loading, error }] = useBlacklistPublisherMutation({
+ *   variables: {
+ *      entryId: // value for 'entryId'
+ *   },
+ * });
+ */
+export function useBlacklistPublisherMutation(baseOptions?: Apollo.MutationHookOptions<BlacklistPublisherMutation, BlacklistPublisherMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BlacklistPublisherMutation, BlacklistPublisherMutationVariables>(BlacklistPublisherDocument, options);
+      }
+export type BlacklistPublisherMutationHookResult = ReturnType<typeof useBlacklistPublisherMutation>;
+export type BlacklistPublisherMutationResult = Apollo.MutationResult<BlacklistPublisherMutation>;
+export type BlacklistPublisherMutationOptions = Apollo.BaseMutationOptions<BlacklistPublisherMutation, BlacklistPublisherMutationVariables>;
 export const CreateArticleDocument = gql`
     mutation CreateArticle($newArticleData: NewArticleData!) {
   createArticle(newArticleData: $newArticleData) {

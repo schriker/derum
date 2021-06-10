@@ -98,6 +98,7 @@ export class Entry {
   @Column({ select: false, insert: false, readonly: true, nullable: true })
   userVote: VoteValueEnum;
 
+  @Field(() => Boolean)
   @Column({ type: Boolean, default: false })
   deleted: boolean;
 }

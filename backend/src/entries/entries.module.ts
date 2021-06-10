@@ -8,10 +8,11 @@ import { Room } from 'src/rooms/entities/room.entity';
 import { PhotosModule } from 'src/photos/photos.module';
 import { CaslModule } from 'src/casl/casl.module';
 import { UsersModule } from 'src/users/users.module';
+import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-publisher.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Entry, Link, Room]),
+    TypeOrmModule.forFeature([Entry, Link, Room, BlacklistPublisher]),
     PhotosModule,
     CaslModule,
     UsersModule,

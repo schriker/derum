@@ -25,9 +25,11 @@ const RoomNewLinkExist = ({
         variant="filled"
         severity="warning"
         action={
-          <ButtonDefault onClick={handleClick} size="small">
-            Zobacz
-          </ButtonDefault>
+          !data[0].deleted ? (
+            <ButtonDefault onClick={handleClick} size="small">
+              Zobacz
+            </ButtonDefault>
+          ) : null
         }
       >
         Wygląda na to, że ten link jest już dodany.

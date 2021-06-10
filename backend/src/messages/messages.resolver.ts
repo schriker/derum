@@ -89,7 +89,7 @@ export class MessagesResolver {
     const message = await this.messagesService.getById(id);
     const user = await this.usersService.getById(session.id);
     const ability = this.caslAbilityFactory.createForUser(user);
-    if (!ability.can(Action.Manage, message)) throw new ForbiddenException();
+    if (!ability.can(Action.Delete, message)) throw new ForbiddenException();
     await this.messagesService.deleteById(message.id);
     this.pubSub.publish('messageDeleted', {
       messageDeleted: message,

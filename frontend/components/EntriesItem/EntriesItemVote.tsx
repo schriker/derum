@@ -11,7 +11,7 @@ import {
   useVoteMutation,
   VoteValueEnum,
 } from '../../generated/graphql';
-import { openModalVar } from '../../lib/apolloVars';
+import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
 
 const EntriesItemVote = ({
   id,
@@ -22,6 +22,7 @@ const EntriesItemVote = ({
   const classes = useEntriesItemStyle();
   const { data: userData } = useMeQuery();
   const [vote] = useVoteMutation({
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
     update: (cache, mutaionResult) => {
       cache.modify({
         id: cache.identify(data),

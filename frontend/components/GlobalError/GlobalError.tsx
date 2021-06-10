@@ -15,7 +15,7 @@ const GlobalError = () => {
     >
       <Alert
         onClose={() => globalErrorVar({ isOpen: false, message: globalError.message })}
-        severity="error"
+        severity='error'
         variant="filled"
       >
         {globalError.message}
