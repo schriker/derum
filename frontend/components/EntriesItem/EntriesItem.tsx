@@ -9,7 +9,7 @@ import EntriesItemRoom from './EntriesItemRoom';
 import useEntriesItemStyle from './EntriesItemStyles';
 import EntriesItemVote from './EntriesItemVote';
 import EntriesItemPhoto from './EntriesItemPhoto';
-import EntriesItemActions from './EntriesItemActions';
+import EntriesItemActions from '../EntryItemActions/EntriesItemActions';
 
 const EntriesItem = ({ data, handleUserClick }: EntriesItemProps) => {
   const classes = useEntriesItemStyle();
@@ -50,7 +50,7 @@ const EntriesItem = ({ data, handleUserClick }: EntriesItemProps) => {
           {data.publisher && (
             <EntiresItemPublisher publisher={data.publisher} url={data.url} />
           )}
-          <EntriesItemActions id={data.id} />
+          <EntriesItemActions entryData={data} />
         </Box>
         <Typography variant="body2" className={classes.description}>
           {data.description}

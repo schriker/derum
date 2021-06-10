@@ -1,0 +1,3 @@
+mutation BlacklistPublisherAndRemoveEntires($entryId: Int!) {
+  blacklistPublisherAndRemoveEntires(entryId: $entryId)
+}

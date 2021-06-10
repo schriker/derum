@@ -145,6 +145,7 @@ type Mutation {
   deleteEntry(id: Int!): Boolean!
   vote(value: VoteValueEnum!, entryId: Int!): VoteResult!
   blacklistPublisher(entryId: Int!): Boolean!
+  blacklistPublisherAndRemoveEntires(entryId: Int!): Boolean!
 }
 
 input NewRoomInput {

@@ -29,4 +29,19 @@ export class BlacklistPublishersResolver {
       throw new ForbiddenException();
     return this.blaclistPublishersService.addToBlacklist(entryId);
   }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GQLSessionGuard)
+  async blacklistPublisherAndRemoveEntires(
+    @Args('entryId', { type: () => Int }) entryId: number,
+    @CurrentUser() session: User,
+  ): Promise<boolean> {
+    const user = await this.usersService.getById(session.id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+    if (!ability.can(Action.Manage, BlacklistPublisher))
+      throw new ForbiddenException();
+    return this.blaclistPublishersService.addToBlacklistAndRemoveEntires(
+      entryId,
+    );
+  }
 }
