@@ -16,6 +16,7 @@ import { globalErrorVar } from '../../lib/apolloVars';
 import { useCreateArticleMutation } from '../../generated/graphql';
 import { Alert } from '@material-ui/lab';
 import { ButtonDefault } from '../Buttons/ButtonDefault';
+import { useRouter } from 'next/router';
 const Markdown = dynamic(() => import('../Markdown/Markdown'));
 
 const STORAGE_KEY_NAME = 'article';
@@ -34,23 +35,6 @@ const schema = yup.object().shape({
     .required('Opis jest wymagany.')
     .min(50, 'Opis min. 50 znaków.')
     .max(350, 'Zbyt długi opis.'),
-  photo: yup
-    .string()
-    .trim()
-    .notRequired()
-    .test('photo_check', 'Podaj poprawny adres url z https.', (value) => {
-      if (!!value) {
-        const schema = yup
-          .string()
-          .trim()
-          .matches(
-            /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/,
-            'Podaj poprawny adres url z https.'
-          );
-        return schema.isValidSync(value);
-      }
-      return true;
-    }),
   body: yup
     .string()
     .trim()
@@ -60,12 +44,12 @@ const schema = yup.object().shape({
 
 const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
   const classes = useNewRoomLinkStyles();
+  const router = useRouter();
   const [oldSession, setOldSession] = useState<NewArticleInputs>(null);
 
   const {
     control,
     handleSubmit,
-    reset,
     setValue,
     watch,
     getValues,
@@ -80,12 +64,11 @@ const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
   const [createArticle, { loading }] = useCreateArticleMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
     onCompleted: (data) => {
-      console.log(data);
       localforage.removeItem(STORAGE_KEY_NAME);
       closeModal();
-      // router.push(
-      //   `/p/${data.createLink.room.name}/${data.createLink.id}/${data.createLink.slug}`
-      // );
+      router.push(
+        `/p/${data.createArticle.room.name}/wpis/${data.createArticle.id}/${data.createArticle.slug}`
+      );
     },
   });
 
@@ -119,7 +102,6 @@ const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
       variables: {
         newArticleData: {
           ...variables,
-          photo: variables.photo.length ? variables.photo : null,
         },
       },
     });
@@ -158,20 +140,6 @@ const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
             bg="light"
             error={!!errors.title}
             inputProps={{ maxLength: 150, id: id }}
-            {...field}
-          />
-        )}
-      />
-      <FormInput
-        name="photo"
-        label="Miniaturka"
-        control={control}
-        error={errors.photo}
-        inputRender={(field, id) => (
-          <CustomInput
-            bg="light"
-            error={!!errors.photo}
-            inputProps={{ id: id }}
             {...field}
           />
         )}

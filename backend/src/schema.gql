@@ -160,7 +160,6 @@ input NewMessageInput {
 
 input NewLinkData {
   title: String!
-  photo: String!
   description: String!
   linkId: Int!
   roomId: Int!
@@ -168,7 +167,6 @@ input NewLinkData {
 
 input NewArticleData {
   title: String!
-  photo: String
   description: String!
   body: String!
   roomId: Int!

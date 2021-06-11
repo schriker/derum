@@ -15,12 +15,14 @@ const RoomNewLinkPreview = ({ metadata }: NewLinkPreviewProps) => {
 
   return (
     <Card className={classes.wrapper} elevation={0}>
-      <CardMedia
-        component="img"
-        className={classes.photo}
-        image={metadata.photo}
-        title={metadata.title}
-      />
+      {metadata.photo && (
+        <CardMedia
+          component="img"
+          className={classes.photo}
+          image={metadata.photo}
+          title={metadata.title}
+        />
+      )}
       <CardContent>
         <Typography component="h5" variant="h5">
           {metadata.title}

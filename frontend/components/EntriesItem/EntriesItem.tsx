@@ -14,7 +14,7 @@ import EntriesItemActions from '../EntryItemActions/EntriesItemActions';
 const EntriesItem = ({ data, handleUserClick }: EntriesItemProps) => {
   const classes = useEntriesItemStyle();
   const roomLink = `/p/${data.room.name}`;
-  const link = `/p/${data.room.name}/${data.id}/${data.slug}`;
+  const link = `/p/${data.room.name}/wpis/${data.id}/${data.slug}`;
   return (
     <Card className={classes.wrapper} elevation={0}>
       <EntriesItemVote

@@ -1,10 +1,8 @@
-import { NetworkStatus } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Chat from '../../../components/Chat/Chat';
 import Entries from '../../../components/Entries/Entires';
-import EntriesBackdrop from '../../../components/EntriesBackdrop/EntriesBackdrop';
 import EntriesSort from '../../../components/EntriesSort/EntiresSort';
 import EntriesWrapper from '../../../components/EntriesWrapper/EntriesWrapper';
 import Layout from '../../../components/Layout/Layout';
@@ -31,7 +29,7 @@ import Custom404 from '../../404';
 export default function Room() {
   const router = useRouter();
   const { roomData } = useRoomData();
-  const { hasMore, entriesData, networkStatus, ref } = useRoomEntries();
+  const { hasMore, entriesData, ref } = useRoomEntries();
 
   return roomData ? (
     <Layout
@@ -39,7 +37,6 @@ export default function Room() {
       ogDescription={roomData.room.description}
     >
       <EntriesWrapper>
-        <EntriesBackdrop open={networkStatus === NetworkStatus.refetch} />
         {router.query.room && <RoomHeader />}
         <RoomAddContentButtons />
         <EntriesSort />
@@ -69,15 +66,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     });
 
+    const sort = context.params.sort
+      ? EntrySort[context.params.sort[0].toUpperCase()]
+      : EntrySort.NEW;
+
     await apolloClient.query<EntriesQuery, EntriesQueryVariables>({
       query: EntriesDocument,
       variables: {
         queryData: {
           offset: 0,
           limit: PAGE_LIMIT,
-          sort: context.params.sort
-            ? EntrySort[context.params.sort[0].toUpperCase()]
-            : EntrySort.NEW,
+          sort: sort ? sort : EntrySort.NEW,
           roomName: context.params.room as string,
         },
       },

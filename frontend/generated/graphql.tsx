@@ -170,7 +170,6 @@ export type MutationBlacklistPublisherAndRemoveEntiresArgs = {
 
 export type NewArticleData = {
   title: Scalars['String'];
-  photo?: Maybe<Scalars['String']>;
   description: Scalars['String'];
   body: Scalars['String'];
   roomId: Scalars['Int'];
@@ -178,7 +177,6 @@ export type NewArticleData = {
 
 export type NewLinkData = {
   title: Scalars['String'];
-  photo: Scalars['String'];
   description: Scalars['String'];
   linkId: Scalars['Int'];
   roomId: Scalars['Int'];

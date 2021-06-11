@@ -37,14 +37,6 @@ const schema = yup.object().shape({
     .required('Opis jest wymagany.')
     .min(50, 'Opis min. 50 znaków.')
     .max(350, 'Zbyt długi opis.'),
-  photo: yup
-    .string()
-    .trim()
-    .required('Zdjęcie jest wymagane.')
-    .matches(
-      /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/,
-      'Podaj poprawny adres url z https.'
-    ),
 });
 
 const RoomNewLinkMetadataForm = ({
@@ -68,7 +60,6 @@ const RoomNewLinkMetadataForm = ({
     resolver: yupResolver(schema),
     defaultValues: {
       title: metadata.title ? metadata.title : '',
-      photo: metadata.photo ? metadata.photo : '',
       description: metadata.description ? metadata.description : '',
     },
   });
@@ -96,21 +87,19 @@ const RoomNewLinkMetadataForm = ({
   const [createLink, { loading: createLinkLoading }] = useCreateLinkMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
     onCompleted: (data) => {
-      console.log(data);
       closeModal();
-      // router.push(
-      //   `/p/${data.createLink.room.name}/${data.createLink.id}/${data.createLink.slug}`
-      // );
+      router.push(
+        `/p/${data.createLink.room.name}/wpis/${data.createLink.id}/${data.createLink.slug}`
+      );
     },
   });
 
   const onSubmit: SubmitHandler<NewLinkMetadataInputs> = (variables) => {
-    const { description, title, photo, roomId } = variables;
+    const { description, title, roomId } = variables;
     createLink({
       variables: {
         newLinkData: {
           description,
-          photo,
           title,
           roomId,
           linkId: metadata.id,
@@ -142,20 +131,6 @@ const RoomNewLinkMetadataForm = ({
         )}
       />
       <FormInput
-        name="photo"
-        label="Miniaturka"
-        control={control}
-        error={errors.photo}
-        inputRender={(field, id) => (
-          <CustomInput
-            bg="light"
-            error={!!errors.photo}
-            inputProps={{ id: id }}
-            {...field}
-          />
-        )}
-      />
-      <FormInput
         name="description"
         label="Opis"
         control={control}
@@ -180,7 +155,6 @@ const RoomNewLinkMetadataForm = ({
           ...metadata,
           title: watch('title'),
           description: watch('description'),
-          photo: watch('photo'),
         }}
       />
       <Box display="flex" justifyContent="flex-end">

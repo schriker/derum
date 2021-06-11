@@ -1,8 +1,13 @@
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { PAGE_LIMIT } from '../consts';
-import { useEntriesQuery, EntrySort, EntriesQuery } from '../generated/graphql';
+import { indexRoomVars, PAGE_LIMIT } from '../consts';
+import {
+  useEntriesQuery,
+  EntrySort,
+  EntriesQuery,
+  useMeQuery,
+} from '../generated/graphql';
 import { globalErrorVar } from '../lib/apolloVars';
 
 const useRoomEntries = () => {
@@ -10,13 +15,21 @@ const useRoomEntries = () => {
   const [isMounted, setIsMounted] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [isInView, setIsInView] = useState(false);
-
-  const { ref, inView } = useInView({
-    threshold: 0.5,
+  const { data } = useMeQuery({
+    fetchPolicy: 'cache-only',
   });
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
+  const sort = router.query.sort
+    ? EntrySort[router.query.sort[0].toUpperCase()]
+    : EntrySort.NEW;
   const vars = {
-    roomName: router.query.room as string,
+    roomName: router.query.room
+      ? (router.query.room as string)
+      : indexRoomVars.name,
     limit: PAGE_LIMIT,
+    sort: sort ? sort : EntrySort.NEW,
   };
   const {
     data: entriesData,
@@ -30,9 +43,6 @@ const useRoomEntries = () => {
       queryData: {
         ...vars,
         offset: 0,
-        sort: router.query.sort
-          ? EntrySort[router.query.sort[0].toUpperCase()]
-          : EntrySort.NEW,
       },
     },
   });
@@ -49,6 +59,12 @@ const useRoomEntries = () => {
   useEffect(() => {
     setHasMore(true);
     setIsInView(false);
+  }, [data]);
+
+  useEffect(() => {
+    setHasMore(true);
+    setIsInView(false);
+    refetch();
     () => {
       setHasMore(false);
       setIsInView(true);
@@ -71,9 +87,6 @@ const useRoomEntries = () => {
           variables: {
             queryData: {
               ...vars,
-              sort: router.query.sort
-                ? EntrySort[router.query.sort[0].toUpperCase()]
-                : EntrySort.NEW,
               offset: offset,
             },
           },
@@ -89,6 +102,8 @@ const useRoomEntries = () => {
     hasMore,
     networkStatus,
     entriesData,
+    isMounted,
+    refetch,
     ref,
   };
 };

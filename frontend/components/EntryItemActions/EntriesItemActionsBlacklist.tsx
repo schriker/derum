@@ -4,7 +4,10 @@ import { useBlacklistPublisherMutation } from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
 import DropdownItem from '../Dropdown/DropdownItem';
 
-const EntriesItemActionsBlacklist = ({ id }: { id: number }) => {
+const EntriesItemActionsBlacklist = React.forwardRef<
+  HTMLLIElement,
+  { id: number }
+>(({ id }, ref) => {
   const [blacklistPublisher] = useBlacklistPublisherMutation({
     onCompleted: () =>
       globalErrorVar({ isOpen: true, message: 'Domena została zablokowana.' }),
@@ -21,10 +24,10 @@ const EntriesItemActionsBlacklist = ({ id }: { id: number }) => {
   };
 
   return (
-    <DropdownItem dense onClick={handleBlacklist}>
+    <DropdownItem ref={ref} dense onClick={handleBlacklist}>
       <ListItemText primary="Zablokuj domene" />
     </DropdownItem>
   );
-};
+});
 
 export default EntriesItemActionsBlacklist;

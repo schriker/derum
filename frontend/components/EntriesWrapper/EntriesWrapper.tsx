@@ -3,6 +3,7 @@ import React from 'react';
 
 const useStyles = makeStyles((theme: Theme) => ({
   contentWrapper: {
+    position: 'relative',
     flex: '1 1 calc(100% - 60px)',
     paddingTop: theme.spacing(2),
     paddingLeft: theme.spacing(2),

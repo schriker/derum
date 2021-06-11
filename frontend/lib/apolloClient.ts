@@ -11,6 +11,7 @@ import isEqual from 'lodash/isEqual';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
+import { indexRoomVars } from '../consts';
 
 let authLink;
 
@@ -64,8 +65,7 @@ function createApolloClient() {
             entries: {
               keyArgs: [],
               merge(existing, incoming, { args, readField }) {
-                if (args.queryData.offset === 0) return [...incoming];
-
+                if (args.queryData.offset === 0) return incoming;
                 const filtered = incoming.filter(
                   (item) =>
                     !existing.some(
@@ -73,10 +73,11 @@ function createApolloClient() {
                         readField('id', current) === readField('id', item)
                     )
                 );
-
                 return [...existing, ...filtered];
               },
               read(existing, { args, readField }) {
+                if (args.queryData.roomName === indexRoomVars.name)
+                  return existing;
                 const filteredByRoom =
                   existing &&
                   existing.filter((item) => {

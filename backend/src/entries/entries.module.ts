@@ -9,6 +9,7 @@ import { PhotosModule } from 'src/photos/photos.module';
 import { CaslModule } from 'src/casl/casl.module';
 import { UsersModule } from 'src/users/users.module';
 import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-publisher.entity';
+import { DerumGuard } from './guards/derum.guard';
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-
     CaslModule,
     UsersModule,
   ],
-  providers: [EntriesService, EntriesResolver],
+  providers: [EntriesService, EntriesResolver, DerumGuard],
 })
 export class EntriesModule {}

@@ -11,6 +11,7 @@ import { NewLinkData } from './dto/new-link.input';
 import { QueryEntriesInput } from './dto/query.input';
 import { Entry } from './entities/entry.entity';
 import { EntriesService } from './entries.service';
+import { DerumGuard } from './guards/derum.guard';
 
 @Resolver(() => Entry)
 export class EntriesResolver {
@@ -29,7 +30,7 @@ export class EntriesResolver {
   }
 
   @Mutation(() => Entry)
-  @UseGuards(GQLSessionGuard)
+  @UseGuards(GQLSessionGuard, DerumGuard)
   createLink(
     @Args('newLinkData') newLinkData: NewLinkData,
     @CurrentUser() user: User,
@@ -38,7 +39,7 @@ export class EntriesResolver {
   }
 
   @Mutation(() => Entry)
-  @UseGuards(GQLSessionGuard)
+  @UseGuards(GQLSessionGuard, DerumGuard)
   createArticle(
     @Args('newArticleData') newArticleData: NewArticleData,
     @CurrentUser() user: User,

@@ -14,13 +14,13 @@ import { ILike, Repository } from 'typeorm';
 import { NewLinkData } from './dto/new-link.input';
 import { Entry } from './entities/entry.entity';
 import { EntryType } from './types/entry-type.enum';
-import { v4 as uuidv4 } from 'uuid';
 import trimString from 'src/helpers/trimString';
 import { QueryEntriesInput } from './dto/query.input';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { EntrySort } from './types/entry-sort.enum';
 import { NewArticleData } from './dto/new-article.input';
 import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-publisher.entity';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EntriesService {
@@ -34,6 +34,7 @@ export class EntriesService {
     @InjectRepository(BlacklistPublisher)
     private blacklistPublisherRepository: Repository<BlacklistPublisher>,
     private photosService: PhotosService,
+    private configService: ConfigService,
   ) {}
 
   async getById(id: number): Promise<Entry> {
@@ -52,7 +53,7 @@ export class EntriesService {
     return `${slugify(trimedTitle, {
       lower: true,
       strict: true,
-    }).replace(/[^0-9a-zA-Z]/g, '-')}-${uuidv4()}`;
+    }).replace(/[^0-9a-zA-Z]/g, '-')}`;
   }
 
   getNewest(
@@ -61,10 +62,18 @@ export class EntriesService {
     user: User,
   ): Promise<Entry[]> {
     const { limit, offset } = queryData;
-    const whereQuery =
+    const isHomePage =
+      parseInt(this.configService.get<string>('HOME_ROOM_ID')) === room.id;
+    let whereQuery =
       offset > 0
         ? 'entry.roomId = :roomId AND entry.id < :offset AND entry.deleted = false'
         : 'entry.roomId = :roomId AND entry.deleted = false';
+    if (isHomePage) {
+      whereQuery =
+        offset > 0
+          ? 'entry.id < :offset AND entry.deleted = false'
+          : 'entry.deleted = false';
+    }
     return this.entryRepository
       .createQueryBuilder('entry')
       .where(whereQuery, {
@@ -100,9 +109,17 @@ export class EntriesService {
   ): Promise<Entry[]> {
     const { limit, offset } = queryData;
 
+    const isHomePage =
+      parseInt(this.configService.get<string>('HOME_ROOM_ID')) === room.id;
+
+    let whereQuery = 'entry.roomId = :roomId AND entry.deleted = false';
+    if (isHomePage) {
+      whereQuery = 'entry.deleted = false';
+    }
+
     return this.entryRepository
       .createQueryBuilder('entry')
-      .where('entry.roomId = :roomId AND entry.deleted = false', {
+      .where(whereQuery, {
         roomId: room.id,
       })
       .leftJoin('entry.votes', 'votes')
@@ -167,7 +184,7 @@ export class EntriesService {
   }
 
   async createLink(newLinkData: NewLinkData, user: User): Promise<Entry> {
-    const { description, title, photo, roomId, linkId } = newLinkData;
+    const { description, title, roomId, linkId } = newLinkData;
     const isLinkAdded = await this.checkIfAlreadyAdded(linkId, roomId);
     if (isLinkAdded.length)
       throw new BadRequestException(ERROR_MESSAGES.LINK_EXISTS);
@@ -177,7 +194,10 @@ export class EntriesService {
       id: newLinkData.roomId,
     });
     if (!link || !room) throw new NotFoundException();
-    const savedPhoto = await this.photosService.savePhotoFromLink(photo, user);
+    let photo = null;
+    if (link.photo) {
+      photo = await this.photosService.savePhotoFromLink(link.photo, user);
+    }
     const entry = new Entry();
     entry.slug = this.createSlug(title);
     entry.author = user;
@@ -188,7 +208,7 @@ export class EntriesService {
     entry.url = link.url;
     entry.type = EntryType.LINK;
     entry.room = room;
-    entry.photo = savedPhoto;
+    entry.photo = photo;
     return this.entryRepository.save(entry);
   }
 
@@ -196,15 +216,11 @@ export class EntriesService {
     newArticleData: NewArticleData,
     user: User,
   ): Promise<Entry> {
-    const { roomId, photo, title, description } = newArticleData;
-    let savedPhoto = null;
+    const { roomId, title, description } = newArticleData;
     const room = await this.roomRepository.findOne({
       id: roomId,
     });
     if (!room) throw new NotFoundException();
-    if (photo) {
-      savedPhoto = await this.photosService.savePhotoFromLink(photo, user);
-    }
     const entry = new Entry();
     entry.slug = this.createSlug(title);
     entry.author = user;
@@ -212,7 +228,6 @@ export class EntriesService {
     entry.title = title;
     entry.type = EntryType.ARTICLE;
     entry.room = room;
-    entry.photo = savedPhoto;
     return this.entryRepository.save(entry);
   }
 

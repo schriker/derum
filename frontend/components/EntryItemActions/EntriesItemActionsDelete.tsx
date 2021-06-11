@@ -4,7 +4,10 @@ import { useDeleteEntryMutation } from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
 import DropdownItem from '../Dropdown/DropdownItem';
 
-const EntriesItemActionsDelete = ({ id }: { id: number }) => {
+const EntriesItemActionsDelete = React.forwardRef<
+  HTMLLIElement,
+  { id: number }
+>(({ id }, ref) => {
   const [deleteEntry] = useDeleteEntryMutation({
     update: (cache) => {
       cache.modify({
@@ -26,10 +29,10 @@ const EntriesItemActionsDelete = ({ id }: { id: number }) => {
   };
 
   return (
-    <DropdownItem dense onClick={handleDelete}>
+    <DropdownItem ref={ref} dense onClick={handleDelete}>
       <ListItemText primary="Usuń" />
     </DropdownItem>
   );
-};
+});
 
 export default EntriesItemActionsDelete;

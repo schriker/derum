@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import got from 'got';
 import { Repository } from 'typeorm';
 import { NewLink } from './dto/new-link';
 import { BadRequestException, Injectable } from '@nestjs/common';
@@ -7,7 +6,7 @@ import { Link } from './entities/link.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
-import * as iconv from 'iconv-lite';
+import { exec } from 'child_process';
 
 const metascraper = require('metascraper')([
   require('metascraper-author')(),
@@ -27,29 +26,42 @@ export class MetaScraperService {
     private linkRepository: Repository<Link>,
   ) {}
 
+  getEncoding(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      exec(
+        `curl -I '${url}' | grep -Fi content-type:`,
+        async (error, stdout) => {
+          if (error) reject(error);
+          const encoding = stdout.trim().split('=');
+          resolve(encoding.length > 1 ? encoding[1] : 'UTF-8');
+        },
+      );
+    });
+  }
+
+  getUrlData(url: string, encoding: string): Promise<any> {
+    return new Promise(async (resolve, reject) => {
+      exec(
+        `curl '${url}' | iconv -f ${encoding} -t UTF-8`,
+        async (error, stdout) => {
+          if (error) reject(error);
+          resolve(metascraper({ html: stdout, url }));
+        },
+      );
+    });
+  }
+
   async getMetadata(newLink: NewLink, user: User): Promise<Link> {
     try {
-      const {
-        body: html,
-        url,
-        headers,
-      } = await got(newLink.url, {
-        responseType: 'buffer',
-      });
-      const ctype = headers['content-type']
-        ? headers['content-type'].split('=')
-        : [];
-      const data =
-        ctype.length > 1
-          ? iconv.decode(html, ctype[1])
-          : iconv.decode(html, 'UTF-8');
+      const encoding = await this.getEncoding(newLink.url);
       const {
         author,
         description,
         image,
         title,
         url: linkUrl,
-      } = await metascraper({ html: data, url });
+      } = await this.getUrlData(newLink.url, encoding);
+
       const isScraped = await this.linkRepository.findOne({ url: linkUrl });
       if (isScraped) return isScraped;
       const link = new Link();
