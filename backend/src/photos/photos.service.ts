@@ -7,7 +7,6 @@ import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { Photo } from './entities/photo.entity';
 import { join } from 'path';
 import * as sharp from 'sharp';
-import * as mkdirp from 'mkdirp';
 import { v4 as uuidv4 } from 'uuid';
 import { User } from 'src/users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,12 +14,14 @@ import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { exec } from 'child_process';
 import { unlinkSync } from 'fs';
+import { AwsService } from 'src/aws/aws.service';
 
 @Injectable()
 export class PhotosService {
   constructor(
     @InjectRepository(Photo) private photosRepository: Repository<Photo>,
     private configService: ConfigService,
+    private awsService: AwsService,
   ) {}
 
   getPhotoData(url: string, fileName: string): Promise<void> {
@@ -40,22 +41,26 @@ export class PhotosService {
       const metaData = await sharp(tempFile).metadata();
       if (metaData.width < 100 || metaData.height < 100)
         throw new BadRequestException(ERROR_MESSAGES.PHOTO_FETCHING_ERROR);
-      await mkdirp(join(__dirname, '..', '..', '..', 'uploads', name));
-      await sharp(tempFile)
+      const resizedPhoto = await sharp(tempFile)
         .resize({
-          width: 650,
-          height: 350,
+          width: 500,
+          height: 300,
           fit: 'cover',
           position: 'top',
         })
-        .png()
-        .toFile(
-          join(__dirname, '..', '..', '..', 'uploads', name, `${name}.png`),
-        );
+        .jpeg({
+          quality: 50,
+        })
+        .toBuffer();
       unlinkSync(tempFile);
+      await this.awsService.upload(resizedPhoto, `thumbs/${name}`);
       const photo = new Photo();
       photo.name = `${name}.png`;
-      photo.url = `${this.configService.get('HOST')}/${name}/${name}.png`;
+      photo.url = `https://${this.configService.get(
+        'AWS_PUBLIC_BUCKET_NAME',
+      )}.s3.${this.configService.get(
+        'AWS_PUBLIC_BUCKET_REGION',
+      )}.amazonaws.com/thumbs/${name}`;
       photo.user = user;
       return this.photosRepository.save(photo);
     } catch (e) {

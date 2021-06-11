@@ -22,6 +22,9 @@
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.3.0",
+    "@aws-sdk/node-http-handler": "^3.3.0",
+    "@aws-sdk/types": "^3.3.0",
     "@casl/ability": "^5.3.1",
     "@nestjs/common": "^7.6.17",
     "@nestjs/config": "^0.6.3",
@@ -52,7 +55,6 @@
     "metascraper-title": "^5.21.10",
     "metascraper-url": "^5.21.10",
     "metascraper-video": "^5.21.10",
-    "mkdirp": "^1.0.4",
     "passport": "^0.4.1",
     "passport-facebook-token": "^4.0.0",
     "passport-local": "^1.0.0",
@@ -77,7 +79,7 @@
     "@types/ioredis": "^4.26.4",
     "@types/jest": "^26.0.22",
     "@types/mkdirp": "^1.0.1",
-    "@types/node": "^14.17.0",
+    "@types/node": "^14.17.3",
     "@types/passport-facebook-token": "^0.4.34",
     "@types/passport-local": "^1.0.33",
     "@types/sharp": "^0.28.2",

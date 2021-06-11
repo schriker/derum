@@ -19,6 +19,7 @@ import { PhotosModule } from './photos/photos.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { VotesModule } from './votes/votes.module';
 import { BlacklistPublishersModule } from './blacklist-publishers/blacklist-publishers.module';
+import { AwsModule } from './aws/aws.module';
 
 const parseUserSession = async (headerCookie) => {
   const cookies = cookie.parse(headerCookie);
@@ -97,6 +98,7 @@ const parseUserSession = async (headerCookie) => {
     PhotosModule,
     VotesModule,
     BlacklistPublishersModule,
+    AwsModule,
   ],
   providers: [DateScalar],
 })
