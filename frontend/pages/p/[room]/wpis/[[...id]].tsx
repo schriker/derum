@@ -20,8 +20,6 @@ export default function Entry() {
   const router = useRouter();
   const { roomData } = useRoomData();
 
-  console.log(router.query);
-
   return roomData ? (
     <Layout
       title={roomData.room.name}

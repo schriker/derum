@@ -1,4 +1,10 @@
-import { Field, Int, ObjectType, registerEnumType } from '@nestjs/graphql';
+import {
+  Directive,
+  Field,
+  Int,
+  ObjectType,
+  registerEnumType,
+} from '@nestjs/graphql';
 import { Link } from 'src/meta-scraper/entities/link.entity';
 import { Photo } from 'src/photos/entities/photo.entity';
 import { Room } from 'src/rooms/entities/room.entity';
@@ -23,6 +29,7 @@ registerEnumType(EntryType, {
   name: 'EntryType',
 });
 
+@Directive('@cacheControl(maxAge: 240)')
 @ObjectType()
 @Entity('entry')
 export class Entry {
@@ -90,14 +97,17 @@ export class Entry {
   @OneToMany(() => Vote, (vote) => vote.entry)
   votes: Vote[];
 
+  @Directive('@cacheControl(maxAge: 0)')
   @Field(() => Int, { nullable: true })
   @Column({ select: false, insert: false, readonly: true, nullable: true })
   voteScore: number;
 
+  @Directive('@cacheControl(maxAge: 0)')
   @Field(() => VoteValueEnum, { nullable: true })
   @Column({ select: false, insert: false, readonly: true, nullable: true })
   userVote: VoteValueEnum;
 
+  @Directive('@cacheControl(maxAge: 0)')
   @Field(() => Boolean)
   @Column({ type: Boolean, default: false })
   deleted: boolean;

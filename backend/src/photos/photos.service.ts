@@ -55,7 +55,7 @@ export class PhotosService {
       unlinkSync(tempFile);
       await this.awsService.upload(resizedPhoto, `thumbs/${name}`);
       const photo = new Photo();
-      photo.name = `${name}.png`;
+      photo.name = name;
       photo.url = `https://${this.configService.get(
         'AWS_PUBLIC_BUCKET_NAME',
       )}.s3.${this.configService.get(

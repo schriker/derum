@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import * as depthLimit from 'graphql-depth-limit';
@@ -20,6 +20,10 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { VotesModule } from './votes/votes.module';
 import { BlacklistPublishersModule } from './blacklist-publishers/blacklist-publishers.module';
 import { AwsModule } from './aws/aws.module';
+import { BaseRedisCache } from 'apollo-server-cache-redis';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const responseCachePlugin = require('apollo-server-plugin-response-cache');
+import Redis from 'ioredis';
 
 const parseUserSession = async (headerCookie) => {
   const cookies = cookie.parse(headerCookie);
@@ -43,8 +47,11 @@ const parseUserSession = async (headerCookie) => {
     TypeOrmModule.forRoot(),
     GraphQLModule.forRootAsync({
       imports: [UsersModule],
-      inject: [UsersService],
-      useFactory: async (usersService: UsersService) => ({
+      inject: [UsersService, ConfigService],
+      useFactory: async (
+        usersService: UsersService,
+        configService: ConfigService,
+      ) => ({
         playground:
           process.env.NODE_ENV === 'production'
             ? false
@@ -82,6 +89,10 @@ const parseUserSession = async (headerCookie) => {
           credentials: true,
           origin: true,
         },
+        plugins: [responseCachePlugin()],
+        cache: new BaseRedisCache({
+          client: new Redis(configService.get('REDIS_PORT')),
+        }),
         uploads: false,
         validationRules: [depthLimit(3)],
         installSubscriptionHandlers: true,

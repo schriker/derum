@@ -10,6 +10,7 @@ import useRoomData from '../../hooks/useRoomData';
 import { RoomSearchProps } from '../../types/room';
 import { CustomInput } from '../CustomInput/CustomInput';
 import SearchIcon from '../Icons/SearchIcon';
+import SidebarDrawerItem from '../Sidebar/SidebarDrawerItem';
 import useRoomSearchAutocompleteStyles from './RoomSearchAutocompleteStyles';
 import useRoomSearchInputStyles from './RoomSearchInputStyles';
 
@@ -69,6 +70,12 @@ const RoomSearchInput = ({ error, onSelect, placeholder }: RoomSearchProps) => {
         classes={autoCompleteClasses}
         id="combo-box-demo"
         options={options}
+        renderOption={(option) => (
+          <SidebarDrawerItem
+            name={option.name}
+            usersNumber={option.usersNumber}
+          />
+        )}
         getOptionLabel={(option) => option.name}
         loading={isLoading}
         onChange={handleSelect}

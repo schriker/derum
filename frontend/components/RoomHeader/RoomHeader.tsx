@@ -2,22 +2,17 @@ import React from 'react';
 import useHeaderStyles from './RoomHeaderStyles';
 import useRoomData from '../../hooks/useRoomData';
 import { Box, Typography } from '@material-ui/core';
-import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import RoomHeaderJoinButton from './RoomHeaderJoinButton';
 import numbro from 'numbro';
 import UserIcon from '../Icons/UserIcon';
+import RoomHeaderPhoto from './RoomHeaderPhoto';
 
 const RoomHeader = () => {
   const { roomData } = useRoomData();
   const classes = useHeaderStyles();
   return (
     <Box className={classes.wrapper}>
-      <AvatarPhoto
-        className={classes.photo}
-        name={roomData.room.name}
-        src={null}
-        color="#FF026A"
-      />
+      <RoomHeaderPhoto roomData={roomData} />
       <Box className={classes.content}>
         <Box className={classes.title}>
           <Typography variant="h4">{roomData.room.name}</Typography>

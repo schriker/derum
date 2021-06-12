@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Directive, Field, Int, ObjectType } from '@nestjs/graphql';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { Link } from 'src/meta-scraper/entities/link.entity';
@@ -17,6 +17,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+@Directive('@cacheControl(maxAge: 240)')
 @ObjectType()
 @Entity('user')
 export class User {
@@ -75,10 +76,12 @@ export class User {
   @Column({ default: false })
   isModerator: boolean;
 
+  @Directive('@cacheControl(maxAge: 0)')
   @Field(() => [Room])
   @ManyToMany(() => Room, (room) => room.users)
   joinedRooms: Room[];
 
+  @Directive('@cacheControl(maxAge: 0)')
   @Field(() => [User])
   @ManyToMany(() => User)
   @JoinTable()

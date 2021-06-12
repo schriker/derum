@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Directive, Field, Int, ObjectType } from '@nestjs/graphql';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -11,6 +11,7 @@ import {
 
 @ObjectType()
 @Entity('photo')
+@Directive('@cacheControl(maxAge: 240)')
 export class Photo {
   @PrimaryGeneratedColumn()
   @Field(() => Int)

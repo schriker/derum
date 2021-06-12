@@ -30,6 +30,7 @@ export class MetaScraperService {
     return new Promise((resolve, reject) => {
       exec(
         `curl -I '${url}' | grep -Fi content-type:`,
+        { maxBuffer: 5 * 1024 * 1024 },
         async (error, stdout) => {
           if (error) reject(error);
           const encoding = stdout.trim().split('=');
@@ -43,6 +44,7 @@ export class MetaScraperService {
     return new Promise(async (resolve, reject) => {
       exec(
         `curl '${url}' | iconv -f ${encoding} -t UTF-8`,
+        { maxBuffer: 5 * 1024 * 1024 },
         async (error, stdout) => {
           if (error) reject(error);
           resolve(metascraper({ html: stdout, url }));

@@ -662,7 +662,7 @@ export type SearchRoomQuery = (
   { __typename?: 'Query' }
   & { searchRooms: Array<(
     { __typename?: 'Room' }
-    & Pick<Room, 'id' | 'name'>
+    & Pick<Room, 'id' | 'name' | 'usersNumber'>
   )> }
 );
 
@@ -1583,6 +1583,7 @@ export const SearchRoomDocument = gql`
   searchRooms(name: $name) {
     id
     name
+    usersNumber
   }
 }
     `;

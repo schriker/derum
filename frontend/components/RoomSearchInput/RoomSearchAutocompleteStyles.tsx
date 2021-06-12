@@ -5,6 +5,9 @@ const useRoomSearchAutocompleteStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.grey[900],
     boxShadow: theme.shadows[5],
   },
+  option: {
+    padding: 0,
+  },
 }));
 
 export default useRoomSearchAutocompleteStyles;

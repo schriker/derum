@@ -30,6 +30,13 @@ const useHeaderStyles = makeStyles((theme: Theme) => ({
     marginRight: theme.spacing(4),
     wordBreak: 'break-word',
   },
+  input: {
+    display: 'none',
+  },
+  uploadButton: {
+    padding: 0,
+    cursor: 'pointer',
+  },
 }));
 
 export default useHeaderStyles;
