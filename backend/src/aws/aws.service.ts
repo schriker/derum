@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import {
-  S3Client,
-  PutObjectCommand,
-  PutObjectCommandOutput,
-} from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AwsService {
@@ -24,15 +21,32 @@ export class AwsService {
     });
   }
 
-  upload(file: Buffer, fileName: string): Promise<PutObjectCommandOutput> {
-    return this.s3.send(
+  async upload(
+    file: Buffer,
+    folder: string,
+  ): Promise<{
+    name: string;
+    url: string;
+  }> {
+    const name = uuidv4();
+
+    await this.s3.send(
       new PutObjectCommand({
         Bucket: this.configService.get<string>('AWS_PUBLIC_BUCKET_NAME'),
-        Key: fileName,
+        Key: `${folder}/${name}`,
         Body: file,
         ContentType: 'image/jpeg',
         ACL: 'public-read',
       }),
     );
+
+    return {
+      name: name,
+      url: `https://${this.configService.get(
+        'AWS_PUBLIC_BUCKET_NAME',
+      )}.s3.${this.configService.get(
+        'AWS_PUBLIC_BUCKET_REGION',
+      )}.amazonaws.com/${folder}/${name}`,
+    };
   }
 }

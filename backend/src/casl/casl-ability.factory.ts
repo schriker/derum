@@ -9,13 +9,18 @@ import { Injectable } from '@nestjs/common';
 import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-publisher.entity';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
+import { Room } from 'src/rooms/entities/room.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Action } from './action.enum';
-import { FlatEntry, FlatMessage } from './flatTypes';
+import { FlatEntry, FlatMessage, FlatRoom } from './flatTypes';
 
 type Subjects =
   | InferSubjects<
-      typeof Message | typeof Entry | typeof BlacklistPublisher | typeof User
+      | typeof Message
+      | typeof Entry
+      | typeof BlacklistPublisher
+      | typeof User
+      | typeof Room
     >
   | 'all';
 
@@ -35,7 +40,12 @@ export class CaslAbilityFactory {
     if (user.isModerator) {
       can(Action.Delete, Message);
       can(Action.Delete, Entry);
+      can(Action.Update, Room);
     }
+
+    can<FlatRoom>(Action.Update, Room, {
+      'author.id': user.id,
+    });
 
     can<FlatMessage>(Action.Delete, Message, {
       'room.author.id': user.id,

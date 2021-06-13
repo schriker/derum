@@ -72,6 +72,7 @@ const RoomSearchInput = ({ error, onSelect, placeholder }: RoomSearchProps) => {
         options={options}
         renderOption={(option) => (
           <SidebarDrawerItem
+            photo={option.photo?.url}
             name={option.name}
             usersNumber={option.usersNumber}
           />

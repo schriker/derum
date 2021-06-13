@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('blacklistPublisher')
+@Entity('blacklist_publisher')
 @ObjectType()
 export class BlacklistPublisher {
   @PrimaryGeneratedColumn()

@@ -16,6 +16,7 @@ fragment HomeEntryFragment on Entry {
     isModerator
   }
   photo {
+    id
     url
     name
   }

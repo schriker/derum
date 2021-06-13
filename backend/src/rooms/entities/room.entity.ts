@@ -1,16 +1,19 @@
 import { Directive, Field, Int, ObjectType } from '@nestjs/graphql';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
+import { Photo } from 'src/photos/entities/photo.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -56,4 +59,9 @@ export class Room {
 
   @Field(() => Int)
   usersNumber: number;
+
+  @Field(() => Photo, { nullable: true })
+  @OneToOne(() => Photo, { nullable: true })
+  @JoinColumn()
+  photo: Photo;
 }

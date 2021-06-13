@@ -3,6 +3,9 @@ fragment RoomFragment on Room {
   name
   description
   usersNumber
+  photo {
+    ...PhotoFragment
+  }
   author {
     ...AuthorFragment
   }

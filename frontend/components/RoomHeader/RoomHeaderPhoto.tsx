@@ -1,5 +1,11 @@
 import React from 'react';
-import { RoomQuery, useMeQuery } from '../../generated/graphql';
+import {
+  PhotoFragmentFragmentDoc,
+  RoomQuery,
+  useMeQuery,
+  useUploadRoomPhotoMutation,
+} from '../../generated/graphql';
+import { globalErrorVar } from '../../lib/apolloVars';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import useHeaderStyles from './RoomHeaderStyles';
@@ -9,6 +15,24 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
+  const [uploadRoomPhoto] = useUploadRoomPhotoMutation({
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
+    update: (cache, result) => {
+      cache.modify({
+        id: cache.identify(roomData.room),
+        fields: {
+          photo() {
+            const newPhoto = cache.writeFragment({
+              data: result.data.uploadRoomPhoto,
+              fragment: PhotoFragmentFragmentDoc,
+              fragmentName: 'PhotoFragment',
+            });
+            return newPhoto;
+          },
+        },
+      });
+    },
+  });
 
   const isRoomAdmin =
     data?.me.isAdmin ||
@@ -16,18 +40,17 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
     data?.me.id === roomData?.room.author.id;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.files[0])
-
-         // Create an object of formData 
-         const formData = new FormData(); 
-     
-         // Update the formData object 
-         formData.append( 
-           "roomPhoto", 
-           e.target.files[0],
-           e.target.files[0].name
-         ); 
-  }
+    const {
+      target: { validity, files },
+    } = e;
+    if (validity.valid)
+      uploadRoomPhoto({
+        variables: {
+          attachment: files[0],
+          roomId: roomData.room.id,
+        },
+      });
+  };
 
   return isRoomAdmin ? (
     <>
@@ -43,7 +66,10 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
           <AvatarPhoto
             className={classes.photo}
             name={roomData.room.name}
-            src={null}
+            src={roomData.room.photo?.url}
+            styles={{
+              border: '2px solid #FF026A',
+            }}
             color="#FF026A"
           />
         </label>
@@ -53,7 +79,10 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
     <AvatarPhoto
       className={classes.photo}
       name={roomData.room.name}
-      src={null}
+      src={roomData.room.photo?.url}
+      styles={{
+        border: '2px solid #FF026A',
+      }}
       color="#FF026A"
     />
   );

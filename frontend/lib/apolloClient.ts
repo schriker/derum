@@ -12,10 +12,16 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
 import { indexRoomVars } from '../consts';
+import { createUploadLink } from 'apollo-upload-client';
 
 let authLink;
 
-const httpLink = new HttpLink({
+// const httpLink = new HttpLink({
+//   uri: process.env.NEXT_PUBLIC_GRAPHQL,
+//   credentials: 'include',
+// });
+
+const httpLink = createUploadLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL,
   credentials: 'include',
 });

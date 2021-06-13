@@ -1,0 +1,5 @@
+fragment PhotoFragment on Photo {
+  id
+  name
+  url
+}

@@ -1,0 +1,5 @@
+mutation UploadRoomPhoto($attachment: Upload!, $roomId: Int!) {
+  uploadRoomPhoto(attachment: $attachment, roomId: $roomId) {
+    ...PhotoFragment
+  }
+}

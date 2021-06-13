@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
+import { Photo } from 'src/photos/entities/photo.entity';
 import { User } from 'src/users/entities/user.entity';
 import { ILike, Repository } from 'typeorm';
 import { NewRoomInput } from './dto/new-room.input';
@@ -22,6 +23,7 @@ export class RoomsService {
       .createQueryBuilder('room')
       .where('room.name ILIKE :name', { name })
       .leftJoinAndSelect('room.author', 'author')
+      .leftJoinAndSelect('room.photo', 'photo')
       .leftJoinAndSelect('room.users', 'users')
       .loadRelationCountAndMap('room.usersNumber', 'room.users')
       .getOne();
@@ -37,6 +39,7 @@ export class RoomsService {
       .where('room.id = :id', { id })
       .leftJoinAndSelect('room.author', 'author')
       .leftJoinAndSelect('room.users', 'users')
+      .leftJoinAndSelect('room.photo', 'photo')
       .loadRelationCountAndMap('room.usersNumber', 'room.users')
       .getOne();
     if (!room) {
@@ -54,7 +57,9 @@ export class RoomsService {
       })
       .addSelect('COUNT(users.id) as usersNumber')
       .leftJoin('room.users', 'users')
+      .leftJoinAndSelect('room.photo', 'photo')
       .groupBy('room.id')
+      .addGroupBy('photo.id')
       .orderBy('usersNumber', 'DESC')
       .loadRelationCountAndMap('room.usersNumber', 'room.users')
       .limit(15)
@@ -67,7 +72,11 @@ export class RoomsService {
       .orderBy('room.createdAt', 'DESC')
       .limit(5)
       .leftJoinAndSelect('room.author', 'author')
+      .leftJoinAndSelect('room.photo', 'photo')
       .leftJoin('room.users', 'users')
+      .groupBy('room.id')
+      .addGroupBy('photo.id')
+      .addGroupBy('author.id')
       .loadRelationCountAndMap('room.usersNumber', 'room.users')
       .getMany();
   }
@@ -78,9 +87,11 @@ export class RoomsService {
       .where('room.name NOT LIKE :name', { name: 'Derum' })
       .addSelect('COUNT(users.id) as usersNumber')
       .leftJoinAndSelect('room.author', 'author')
+      .leftJoinAndSelect('room.photo', 'photo')
       .leftJoin('room.users', 'users')
       .groupBy('room.id')
       .addGroupBy('author.id')
+      .addGroupBy('photo.id')
       .orderBy('usersNumber', 'DESC')
       .loadRelationCountAndMap('room.usersNumber', 'room.users')
       .limit(limit > 20 ? 20 : limit)
@@ -125,5 +136,11 @@ export class RoomsService {
       .of(roomId)
       .remove(user);
     return true;
+  }
+
+  async updatePhoto(photo: Photo, id: number): Promise<void> {
+    const room = await this.findOneById(id);
+    room.photo = photo;
+    await this.roomsRepository.save(room);
   }
 }

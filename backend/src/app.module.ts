@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -24,6 +24,7 @@ import { BaseRedisCache } from 'apollo-server-cache-redis';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const responseCachePlugin = require('apollo-server-plugin-response-cache');
 import Redis from 'ioredis';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 const parseUserSession = async (headerCookie) => {
   const cookies = cookie.parse(headerCookie);
@@ -89,7 +90,21 @@ const parseUserSession = async (headerCookie) => {
           credentials: true,
           origin: true,
         },
-        plugins: [responseCachePlugin()],
+        plugins: [
+          responseCachePlugin({
+            sessionId: (requestContext) => {
+              if (requestContext.context.req.headers.cookie) {
+                const cookies = cookie.parse(
+                  requestContext.context.req.headers.cookie,
+                );
+                if (cookies['connect.sid']) {
+                  return cookies['connect.sid'];
+                }
+              }
+              return 'not_loged_user';
+            },
+          }),
+        ],
         cache: new BaseRedisCache({
           client: new Redis(configService.get('REDIS_PORT')),
         }),
@@ -113,4 +128,15 @@ const parseUserSession = async (headerCookie) => {
   ],
   providers: [DateScalar],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(
+        graphqlUploadExpress({
+          maxFileSize: 5000000,
+          maxFiles: 1,
+        }),
+      )
+      .forRoutes('graphql');
+  }
+}

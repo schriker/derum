@@ -8,5 +8,6 @@ export const ERROR_MESSAGES = {
   LINK_EXISTS: 'Podany link jest już dodany.',
   PHOTO_FETCHING_ERROR: 'Błąd pobierania zdjęcia.',
   ENTRY_NOT_FOUND: 'Brak takiego wpisu.',
+  WRONG_FILE_TYPE: 'Zły format pliku.',
   PUBLISHER_BLACKLISTED: 'Nie można dodawać linków z tej domeny.',
 };

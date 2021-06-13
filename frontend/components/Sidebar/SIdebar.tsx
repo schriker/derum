@@ -34,7 +34,11 @@ const Sidebar = () => {
         <SidebarHomeLink />
         {data
           ? data.me.joinedRooms.map((room) => (
-              <RoomAvatar key={room.id} name={room.name} />
+              <RoomAvatar
+                photo={room.photo?.url}
+                key={room.id}
+                name={room.name}
+              />
             ))
           : null}
       </Box>

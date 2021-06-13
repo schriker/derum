@@ -14,6 +14,8 @@ export type Scalars = {
   Float: number;
   /** Date custom scalar type */
   Date: any;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
 };
 
 
@@ -87,6 +89,7 @@ export type Mutation = {
   createLink: Entry;
   createArticle: Entry;
   deleteEntry: Scalars['Boolean'];
+  uploadRoomPhoto: Photo;
   vote: VoteResult;
   blacklistPublisher: Scalars['Boolean'];
   blacklistPublisherAndRemoveEntires: Scalars['Boolean'];
@@ -150,6 +153,12 @@ export type MutationCreateArticleArgs = {
 
 export type MutationDeleteEntryArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationUploadRoomPhotoArgs = {
+  attachment: Scalars['Upload'];
+  roomId: Scalars['Int'];
 };
 
 
@@ -288,6 +297,7 @@ export type Room = {
   description: Scalars['String'];
   author: User;
   usersNumber: Scalars['Int'];
+  photo?: Maybe<Photo>;
 };
 
 export type Subscription = {
@@ -305,6 +315,7 @@ export type SubscriptionMessageAddedArgs = {
 export type SubscriptionMessageDeletedArgs = {
   roomId: Scalars['Int'];
 };
+
 
 export type User = {
   __typename?: 'User';
@@ -345,17 +356,25 @@ export type HomeEntryFragmentFragment = (
     & Pick<User, 'id' | 'displayName' | 'isAdmin' | 'isModerator'>
   ), photo?: Maybe<(
     { __typename?: 'Photo' }
-    & Pick<Photo, 'url' | 'name'>
+    & Pick<Photo, 'id' | 'url' | 'name'>
   )>, room: (
     { __typename?: 'Room' }
     & Pick<Room, 'name'>
   ) }
 );
 
+export type PhotoFragmentFragment = (
+  { __typename?: 'Photo' }
+  & Pick<Photo, 'id' | 'name' | 'url'>
+);
+
 export type RoomFragmentFragment = (
   { __typename?: 'Room' }
   & Pick<Room, 'id' | 'name' | 'description' | 'usersNumber'>
-  & { author: (
+  & { photo?: Maybe<(
+    { __typename?: 'Photo' }
+    & PhotoFragmentFragment
+  )>, author: (
     { __typename?: 'User' }
     & AuthorFragmentFragment
   ) }
@@ -513,6 +532,20 @@ export type RemoveIgnoreUserMutation = (
   & Pick<Mutation, 'removeIgnoreUser'>
 );
 
+export type UploadRoomPhotoMutationVariables = Exact<{
+  attachment: Scalars['Upload'];
+  roomId: Scalars['Int'];
+}>;
+
+
+export type UploadRoomPhotoMutation = (
+  { __typename?: 'Mutation' }
+  & { uploadRoomPhoto: (
+    { __typename?: 'Photo' }
+    & PhotoFragmentFragment
+  ) }
+);
+
 export type VoteMutationVariables = Exact<{
   value: VoteValueEnum;
   entryId: Scalars['Int'];
@@ -663,6 +696,10 @@ export type SearchRoomQuery = (
   & { searchRooms: Array<(
     { __typename?: 'Room' }
     & Pick<Room, 'id' | 'name' | 'usersNumber'>
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & Pick<Photo, 'id' | 'name' | 'url'>
+    )> }
   )> }
 );
 
@@ -732,6 +769,7 @@ export const HomeEntryFragmentFragmentDoc = gql`
     isModerator
   }
   photo {
+    id
     url
     name
   }
@@ -739,6 +777,13 @@ export const HomeEntryFragmentFragmentDoc = gql`
   room {
     name
   }
+}
+    `;
+export const PhotoFragmentFragmentDoc = gql`
+    fragment PhotoFragment on Photo {
+  id
+  name
+  url
 }
     `;
 export const AuthorFragmentFragmentDoc = gql`
@@ -757,11 +802,15 @@ export const RoomFragmentFragmentDoc = gql`
   name
   description
   usersNumber
+  photo {
+    ...PhotoFragment
+  }
   author {
     ...AuthorFragment
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${PhotoFragmentFragmentDoc}
+${AuthorFragmentFragmentDoc}`;
 export const BlacklistPublisherDocument = gql`
     mutation BlacklistPublisher($entryId: Int!) {
   blacklistPublisher(entryId: $entryId)
@@ -1205,6 +1254,40 @@ export function useRemoveIgnoreUserMutation(baseOptions?: Apollo.MutationHookOpt
 export type RemoveIgnoreUserMutationHookResult = ReturnType<typeof useRemoveIgnoreUserMutation>;
 export type RemoveIgnoreUserMutationResult = Apollo.MutationResult<RemoveIgnoreUserMutation>;
 export type RemoveIgnoreUserMutationOptions = Apollo.BaseMutationOptions<RemoveIgnoreUserMutation, RemoveIgnoreUserMutationVariables>;
+export const UploadRoomPhotoDocument = gql`
+    mutation UploadRoomPhoto($attachment: Upload!, $roomId: Int!) {
+  uploadRoomPhoto(attachment: $attachment, roomId: $roomId) {
+    ...PhotoFragment
+  }
+}
+    ${PhotoFragmentFragmentDoc}`;
+export type UploadRoomPhotoMutationFn = Apollo.MutationFunction<UploadRoomPhotoMutation, UploadRoomPhotoMutationVariables>;
+
+/**
+ * __useUploadRoomPhotoMutation__
+ *
+ * To run a mutation, you first call `useUploadRoomPhotoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadRoomPhotoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadRoomPhotoMutation, { data, loading, error }] = useUploadRoomPhotoMutation({
+ *   variables: {
+ *      attachment: // value for 'attachment'
+ *      roomId: // value for 'roomId'
+ *   },
+ * });
+ */
+export function useUploadRoomPhotoMutation(baseOptions?: Apollo.MutationHookOptions<UploadRoomPhotoMutation, UploadRoomPhotoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadRoomPhotoMutation, UploadRoomPhotoMutationVariables>(UploadRoomPhotoDocument, options);
+      }
+export type UploadRoomPhotoMutationHookResult = ReturnType<typeof useUploadRoomPhotoMutation>;
+export type UploadRoomPhotoMutationResult = Apollo.MutationResult<UploadRoomPhotoMutation>;
+export type UploadRoomPhotoMutationOptions = Apollo.BaseMutationOptions<UploadRoomPhotoMutation, UploadRoomPhotoMutationVariables>;
 export const VoteDocument = gql`
     mutation Vote($value: VoteValueEnum!, $entryId: Int!) {
   vote(value: $value, entryId: $entryId) {
@@ -1584,6 +1667,11 @@ export const SearchRoomDocument = gql`
     id
     name
     usersNumber
+    photo {
+      id
+      name
+      url
+    }
   }
 }
     `;

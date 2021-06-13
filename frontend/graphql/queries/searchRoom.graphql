@@ -3,5 +3,10 @@ query SearchRoom($name: String!) {
     id
     name
     usersNumber
+    photo {
+      id
+      name
+      url
+    }
   }
 }

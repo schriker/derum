@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }),
 }));
 
-const RoomAvatar = ({ name }: { name: string }) => {
+const RoomAvatar = ({ name, photo }: { name: string; photo: string }) => {
   const router = useRouter();
   const classes = useStyles({ isActive: router.query.room === name });
 
@@ -30,7 +30,7 @@ const RoomAvatar = ({ name }: { name: string }) => {
           <AvatarPhoto
             color="#FF026A"
             name={name}
-            src={null}
+            src={photo}
             className={classes.photo}
           />
         </ButtonIcon>
