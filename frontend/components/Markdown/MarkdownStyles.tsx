@@ -4,6 +4,7 @@ const useMarkdownStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     fontSize: 16,
     fontWeight: 600,
+    display: 'inline-block',
     '& strong': {
       color: theme.palette.primary['A700'],
     },

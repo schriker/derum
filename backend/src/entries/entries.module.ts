@@ -18,6 +18,7 @@ import { DerumGuard } from './guards/derum.guard';
     CaslModule,
     UsersModule,
   ],
+  exports: [EntriesService],
   providers: [EntriesService, EntriesResolver, DerumGuard],
 })
 export class EntriesModule {}

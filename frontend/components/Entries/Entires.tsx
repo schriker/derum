@@ -33,6 +33,7 @@ const Entries = React.forwardRef<
         ) : (
           entriesData.entries.map((entry) => (
             <EntriesItem
+              preview
               handleUserClick={handlerUserClick}
               key={entry.id}
               data={entry}

@@ -11,10 +11,13 @@ import EntriesItemVote from './EntriesItemVote';
 import EntriesItemPhoto from './EntriesItemPhoto';
 import EntriesItemActions from '../EntryItemActions/EntriesItemActions';
 
-const EntriesItem = ({ data, handleUserClick }: EntriesItemProps) => {
+const EntriesItem = ({ data, handleUserClick, preview }: EntriesItemProps) => {
   const classes = useEntriesItemStyle();
   const roomLink = `/p/${data.room.name}`;
-  const link = `/p/${data.room.name}/wpis/${data.id}/${data.slug}`;
+  const link =
+    preview || !data.url
+      ? `/p/${data.room.name}/wpis/${data.id}/${data.slug}`
+      : data.url;
   return (
     <Card className={classes.wrapper} elevation={0}>
       <EntriesItemVote

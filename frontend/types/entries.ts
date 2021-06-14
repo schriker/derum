@@ -2,6 +2,7 @@ import { HomeEntryFragmentFragment, VoteValueEnum } from '../generated/graphql';
 
 export type EntriesItemProps = {
   data: HomeEntryFragmentFragment;
+  preview: boolean;
   handleUserClick: (id: number) => void;
 };
 

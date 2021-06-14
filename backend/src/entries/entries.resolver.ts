@@ -21,6 +21,14 @@ export class EntriesResolver {
     private caslAbilityFactory: CaslAbilityFactory,
   ) {}
 
+  @Query(() => Entry)
+  entry(
+    @Args('entryId', { type: () => Int }) entryId: number,
+    @CurrentUser() session: User,
+  ) {
+    return this.entriesService.getSingle(entryId, session);
+  }
+
   @Query(() => [Entry])
   entries(
     @Args('queryData') queryData: QueryEntriesInput,

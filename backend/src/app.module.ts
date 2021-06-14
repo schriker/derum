@@ -25,6 +25,7 @@ import { BaseRedisCache } from 'apollo-server-cache-redis';
 const responseCachePlugin = require('apollo-server-plugin-response-cache');
 import Redis from 'ioredis';
 import { graphqlUploadExpress } from 'graphql-upload';
+import { CommentsModule } from './comments/comments.module';
 
 const parseUserSession = async (headerCookie) => {
   const cookies = cookie.parse(headerCookie);
@@ -125,6 +126,7 @@ const parseUserSession = async (headerCookie) => {
     VotesModule,
     BlacklistPublishersModule,
     AwsModule,
+    CommentsModule,
   ],
   providers: [DateScalar],
 })

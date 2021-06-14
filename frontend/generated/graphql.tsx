@@ -18,6 +18,16 @@ export type Scalars = {
   Upload: any;
 };
 
+export type Comment = {
+  __typename?: 'Comment';
+  id: Scalars['Int'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+  author: User;
+  body: Scalars['String'];
+  parentId?: Maybe<Scalars['Int']>;
+};
+
 
 export type Entry = {
   __typename?: 'Entry';
@@ -34,6 +44,7 @@ export type Entry = {
   room: Room;
   photo?: Maybe<Photo>;
   type: EntryType;
+  comments: Comment;
   voteScore?: Maybe<Scalars['Int']>;
   userVote?: Maybe<VoteValueEnum>;
   deleted: Scalars['Boolean'];
@@ -93,6 +104,7 @@ export type Mutation = {
   vote: VoteResult;
   blacklistPublisher: Scalars['Boolean'];
   blacklistPublisherAndRemoveEntires: Scalars['Boolean'];
+  createComment: Comment;
 };
 
 
@@ -177,11 +189,22 @@ export type MutationBlacklistPublisherAndRemoveEntiresArgs = {
   entryId: Scalars['Int'];
 };
 
+
+export type MutationCreateCommentArgs = {
+  commentData: NewCommentData;
+};
+
 export type NewArticleData = {
   title: Scalars['String'];
   description: Scalars['String'];
   body: Scalars['String'];
   roomId: Scalars['Int'];
+};
+
+export type NewCommentData = {
+  body: Scalars['String'];
+  entryId: Scalars['Int'];
+  parentId?: Maybe<Scalars['Int']>;
 };
 
 export type NewLinkData = {
@@ -230,6 +253,7 @@ export type Query = {
   searchRooms: Array<Room>;
   popularRooms: Array<Room>;
   initialMessages: Array<Message>;
+  entry: Entry;
   entries: Array<Entry>;
   checkLinkExsits: Array<Entry>;
   metadata: Link;
@@ -263,6 +287,11 @@ export type QueryPopularRoomsArgs = {
 
 export type QueryInitialMessagesArgs = {
   roomId: Scalars['Int'];
+};
+
+
+export type QueryEntryArgs = {
+  entryId: Scalars['Int'];
 };
 
 
@@ -410,6 +439,23 @@ export type CreateArticleMutation = (
   & { createArticle: (
     { __typename?: 'Entry' }
     & HomeEntryFragmentFragment
+  ) }
+);
+
+export type CreateCommentMutationVariables = Exact<{
+  commentData: NewCommentData;
+}>;
+
+
+export type CreateCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { createComment: (
+    { __typename?: 'Comment' }
+    & Pick<Comment, 'id' | 'createdAt' | 'body' | 'parentId'>
+    & { author: (
+      { __typename?: 'User' }
+      & AuthorFragmentFragment
+    ) }
   ) }
 );
 
@@ -585,6 +631,29 @@ export type EntriesQuery = (
     { __typename?: 'Entry' }
     & HomeEntryFragmentFragment
   )> }
+);
+
+export type EntryQueryVariables = Exact<{
+  entryId: Scalars['Int'];
+}>;
+
+
+export type EntryQuery = (
+  { __typename?: 'Query' }
+  & { entry: (
+    { __typename?: 'Entry' }
+    & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'body' | 'type' | 'voteScore' | 'userVote' | 'deleted'>
+    & { author: (
+      { __typename?: 'User' }
+      & AuthorFragmentFragment
+    ), room: (
+      { __typename?: 'Room' }
+      & Pick<Room, 'id' | 'name'>
+    ), photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )> }
+  ) }
 );
 
 export type InitialMessagesQueryVariables = Exact<{
@@ -906,6 +975,45 @@ export function useCreateArticleMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateArticleMutationHookResult = ReturnType<typeof useCreateArticleMutation>;
 export type CreateArticleMutationResult = Apollo.MutationResult<CreateArticleMutation>;
 export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<CreateArticleMutation, CreateArticleMutationVariables>;
+export const CreateCommentDocument = gql`
+    mutation CreateComment($commentData: NewCommentData!) {
+  createComment(commentData: $commentData) {
+    id
+    createdAt
+    author {
+      ...AuthorFragment
+    }
+    body
+    parentId
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
+
+/**
+ * __useCreateCommentMutation__
+ *
+ * To run a mutation, you first call `useCreateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCommentMutation, { data, loading, error }] = useCreateCommentMutation({
+ *   variables: {
+ *      commentData: // value for 'commentData'
+ *   },
+ * });
+ */
+export function useCreateCommentMutation(baseOptions?: Apollo.MutationHookOptions<CreateCommentMutation, CreateCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCommentMutation, CreateCommentMutationVariables>(CreateCommentDocument, options);
+      }
+export type CreateCommentMutationHookResult = ReturnType<typeof useCreateCommentMutation>;
+export type CreateCommentMutationResult = Apollo.MutationResult<CreateCommentMutation>;
+export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateCommentMutation, CreateCommentMutationVariables>;
 export const CreateLinkDocument = gql`
     mutation CreateLink($newLinkData: NewLinkData!) {
   createLink(newLinkData: $newLinkData) {
@@ -1394,6 +1502,63 @@ export function useEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<En
 export type EntriesQueryHookResult = ReturnType<typeof useEntriesQuery>;
 export type EntriesLazyQueryHookResult = ReturnType<typeof useEntriesLazyQuery>;
 export type EntriesQueryResult = Apollo.QueryResult<EntriesQuery, EntriesQueryVariables>;
+export const EntryDocument = gql`
+    query Entry($entryId: Int!) {
+  entry(entryId: $entryId) {
+    id
+    createdAt
+    url
+    slug
+    title
+    publisher
+    description
+    body
+    author {
+      ...AuthorFragment
+    }
+    room {
+      id
+      name
+    }
+    photo {
+      ...PhotoFragment
+    }
+    type
+    voteScore
+    userVote
+    deleted
+  }
+}
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
+
+/**
+ * __useEntryQuery__
+ *
+ * To run a query within a React component, call `useEntryQuery` and pass it any options that fit your needs.
+ * When your component renders, `useEntryQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useEntryQuery({
+ *   variables: {
+ *      entryId: // value for 'entryId'
+ *   },
+ * });
+ */
+export function useEntryQuery(baseOptions: Apollo.QueryHookOptions<EntryQuery, EntryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<EntryQuery, EntryQueryVariables>(EntryDocument, options);
+      }
+export function useEntryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<EntryQuery, EntryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<EntryQuery, EntryQueryVariables>(EntryDocument, options);
+        }
+export type EntryQueryHookResult = ReturnType<typeof useEntryQuery>;
+export type EntryLazyQueryHookResult = ReturnType<typeof useEntryLazyQuery>;
+export type EntryQueryResult = Apollo.QueryResult<EntryQuery, EntryQueryVariables>;
 export const InitialMessagesDocument = gql`
     query InitialMessages($roomId: Int!) {
   initialMessages(roomId: $roomId) {

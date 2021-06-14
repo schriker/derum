@@ -53,6 +53,15 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
       });
   };
 
+  const Photo = (
+    <AvatarPhoto
+      className={classes.photo}
+      name={roomData.room.name}
+      src={roomData.room.photo?.url}
+      color="#FF026A"
+    />
+  );
+
   return isRoomAdmin ? (
     <Box className={classes.photoWrapper}>
       <input
@@ -64,23 +73,13 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
       />
       <ButtonIcon className={classes.uploadButton}>
         <label htmlFor="room-photo-file" className={classes.uploadButton}>
-          <AvatarPhoto
-            className={classes.photo}
-            name={roomData.room.name}
-            src={roomData.room.photo?.url}
-            color="#FF026A"
-          />
+          {Photo}
         </label>
       </ButtonIcon>
       {loading && <CircularProgress size={60} className={classes.progress} />}
     </Box>
   ) : (
-    <AvatarPhoto
-      className={classes.photo}
-      name={roomData.room.name}
-      src={roomData.room.photo?.url}
-      color="#FF026A"
-    />
+    Photo
   );
 };
 

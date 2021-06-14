@@ -5,6 +5,7 @@ import {
   ObjectType,
   registerEnumType,
 } from '@nestjs/graphql';
+import { Comment } from 'src/comments/entities/comment.entity';
 import { Link } from 'src/meta-scraper/entities/link.entity';
 import { Photo } from 'src/photos/entities/photo.entity';
 import { Room } from 'src/rooms/entities/room.entity';
@@ -96,6 +97,10 @@ export class Entry {
 
   @OneToMany(() => Vote, (vote) => vote.entry)
   votes: Vote[];
+
+  @Field(() => Comment)
+  @OneToMany(() => Comment, (comment) => comment.entry)
+  comments: Comment[];
 
   @Field(() => Int, { nullable: true })
   @Column({ select: false, insert: false, readonly: true, nullable: true })

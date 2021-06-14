@@ -48,6 +48,33 @@ export class EntriesService {
     return entry;
   }
 
+  async getSingle(id: number, user: User): Promise<Entry> {
+    const entry = await this.entryRepository
+      .createQueryBuilder('entry')
+      .where('entry.id = :id', { id })
+      .leftJoinAndSelect('entry.room', 'room')
+      .leftJoinAndSelect('entry.author', 'author')
+      .leftJoinAndSelect('entry.photo', 'photo')
+      .leftJoinAndSelect('room.author', 'roomAuthor')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('SUM(value)')
+          .from(Vote, 'vote')
+          .where('vote.entryId = entry.id');
+      }, 'entry_voteScore')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('value')
+          .from(Vote, 'vote')
+          .where('vote.entryId = entry.id AND vote.userId = :userId', {
+            userId: user ? user.id : null,
+          });
+      }, 'entry_userVote')
+      .getOne();
+    if (!entry) throw new NotFoundException();
+    return entry;
+  }
+
   createSlug(title: string): string {
     const trimedTitle = trimString(title, 100);
     return `${slugify(trimedTitle, {
@@ -216,7 +243,7 @@ export class EntriesService {
     newArticleData: NewArticleData,
     user: User,
   ): Promise<Entry> {
-    const { roomId, title, description } = newArticleData;
+    const { roomId, title, description, body } = newArticleData;
     const room = await this.roomRepository.findOne({
       id: roomId,
     });
@@ -224,6 +251,7 @@ export class EntriesService {
     const entry = new Entry();
     entry.slug = this.createSlug(title);
     entry.author = user;
+    entry.body = body;
     entry.description = description;
     entry.title = title;
     entry.type = EntryType.ARTICLE;

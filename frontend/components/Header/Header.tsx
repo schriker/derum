@@ -28,7 +28,7 @@ const Header = ({ title, ogImage, ogDescription }: HeadProps) => {
           href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
           rel="stylesheet"
         />
-        <link
+        {/* <link
           rel="apple-touch-icon"
           sizes="57x57"
           href="/apple-icon-57x57.png"
@@ -97,7 +97,7 @@ const Header = ({ title, ogImage, ogDescription }: HeadProps) => {
           sizes="16x16"
           href="/favicon-16x16.png"
         />
-        <link rel="manifest" href="/manifest.json"></link>
+        <link rel="manifest" href="/manifest.json"></link> */}
       </Head>
     </>
   );
