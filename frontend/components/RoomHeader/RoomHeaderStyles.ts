@@ -37,6 +37,16 @@ const useHeaderStyles = makeStyles((theme: Theme) => ({
     padding: 0,
     cursor: 'pointer',
   },
+  photoWrapper: {
+    position: 'relative',
+  },
+  progress: {
+    top: -5,
+    left: -5,
+    zIndex: 1,
+    color: theme.palette.primary['A700'],
+    position: 'absolute',
+  },
 }));
 
 export default useHeaderStyles;

@@ -11,7 +11,7 @@ import {
 
 @ObjectType()
 @Entity('photo')
-@Directive('@cacheControl(maxAge: 240)')
+@Directive('@cacheControl(maxAge: 120)')
 export class Photo {
   @PrimaryGeneratedColumn()
   @Field(() => Int)

@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { Photo } from './entities/photo.entity';
 import { join } from 'path';
@@ -25,10 +21,17 @@ export class PhotosService {
 
   savePhotoFromLinkToFile(url: string, fileName: string): Promise<void> {
     return new Promise(async (resolve, reject) => {
-      exec(`curl -o ${fileName} '${url}'`, async (error) => {
-        if (error) reject(error);
-        resolve();
-      });
+      exec(
+        `curl -o ${fileName} -L -A 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0' '${url}'`,
+        { maxBuffer: 5 * 1024 * 1024 },
+        async (error) => {
+          if (error) {
+            unlinkSync(fileName);
+            reject();
+          }
+          resolve();
+        },
+      );
     });
   }
 
@@ -90,13 +93,15 @@ export class PhotosService {
   }
 
   async savePhotoFromLink(url: string, user: User): Promise<Photo> {
+    const tmpName = uuidv4();
+    const tmpFile = join(process.cwd(), tmpName);
     try {
-      const tmpName = uuidv4();
-      const tmpFile = join(process.cwd(), tmpName);
       await this.savePhotoFromLinkToFile(url, tmpName);
       const metaData = await sharp(tmpFile).metadata();
-      if (metaData.width < 100 || metaData.height < 100)
-        throw new BadRequestException(ERROR_MESSAGES.PHOTO_FETCHING_ERROR);
+      if (metaData.width < 100 || metaData.height < 100) {
+        unlinkSync(tmpFile);
+        return null;
+      }
       const resizedPhoto = await this.resizePhoto(500, 300, tmpFile);
       unlinkSync(tmpFile);
       const { name, url: awsUrl } = await this.awsService.upload(
@@ -109,10 +114,8 @@ export class PhotosService {
       photo.user = user;
       return this.photosRepository.save(photo);
     } catch (e) {
-      console.log(e);
-      throw new InternalServerErrorException(
-        ERROR_MESSAGES.PHOTO_FETCHING_ERROR,
-      );
+      unlinkSync(tmpFile);
+      return null;
     }
   }
 }

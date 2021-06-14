@@ -49,7 +49,7 @@ export class EntriesService {
   }
 
   createSlug(title: string): string {
-    const trimedTitle = trimString(title, 60);
+    const trimedTitle = trimString(title, 100);
     return `${slugify(trimedTitle, {
       lower: true,
       strict: true,

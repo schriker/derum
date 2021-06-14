@@ -29,7 +29,7 @@ export class MetaScraperService {
   getEncoding(url: string): Promise<string> {
     return new Promise((resolve, reject) => {
       exec(
-        `curl -I '${url}' | grep -Fi content-type:`,
+        `curl -I '${url}' -A 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0' | grep -Fi content-type:`,
         { maxBuffer: 5 * 1024 * 1024 },
         async (error, stdout) => {
           if (error) reject(error);
@@ -43,7 +43,7 @@ export class MetaScraperService {
   getUrlData(url: string, encoding: string): Promise<any> {
     return new Promise(async (resolve, reject) => {
       exec(
-        `curl '${url}' | iconv -f ${encoding} -t UTF-8`,
+        `curl '${url}' -A 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:89.0) Gecko/20100101 Firefox/89.0' | iconv -f ${encoding} -t UTF-8`,
         { maxBuffer: 5 * 1024 * 1024 },
         async (error, stdout) => {
           if (error) reject(error);

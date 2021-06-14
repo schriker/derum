@@ -17,7 +17,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Directive('@cacheControl(maxAge: 240)')
+@Directive('@cacheControl(maxAge: 120)')
 @ObjectType()
 @Entity('user')
 export class User {

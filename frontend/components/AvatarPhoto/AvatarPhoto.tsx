@@ -16,7 +16,7 @@ const AvatarPhoto = ({
       className={className}
       style={{
         ...styles,
-        backgroundColor: color,
+        backgroundColor: src ? null : color,
       }}
       alt={name}
       src={src ? src : null}

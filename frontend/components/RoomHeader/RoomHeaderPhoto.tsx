@@ -1,3 +1,4 @@
+import { Box, CircularProgress } from '@material-ui/core';
 import React from 'react';
 import {
   PhotoFragmentFragmentDoc,
@@ -15,7 +16,7 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
-  const [uploadRoomPhoto] = useUploadRoomPhotoMutation({
+  const [uploadRoomPhoto, { loading }] = useUploadRoomPhotoMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
     update: (cache, result) => {
       cache.modify({
@@ -53,7 +54,7 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
   };
 
   return isRoomAdmin ? (
-    <>
+    <Box className={classes.photoWrapper}>
       <input
         accept="image/*"
         className={classes.input}
@@ -67,22 +68,17 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
             className={classes.photo}
             name={roomData.room.name}
             src={roomData.room.photo?.url}
-            styles={{
-              border: '2px solid #FF026A',
-            }}
             color="#FF026A"
           />
         </label>
       </ButtonIcon>
-    </>
+      {loading && <CircularProgress size={60} className={classes.progress} />}
+    </Box>
   ) : (
     <AvatarPhoto
       className={classes.photo}
       name={roomData.room.name}
       src={roomData.room.photo?.url}
-      styles={{
-        border: '2px solid #FF026A',
-      }}
       color="#FF026A"
     />
   );

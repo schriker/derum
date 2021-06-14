@@ -3,7 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 const useSidebarStyles = makeStyles((theme: Theme) => ({
   photo: (props: any) => ({
     fontWeight: 400,
-    border: '2px solid',
+    border: props.isActive ? '2px solid' : '0',
     borderColor: props.isActive ? theme.palette.primary['A400'] : 'transparent',
     marginRight: 15,
     width: 25,
