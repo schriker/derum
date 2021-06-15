@@ -45,6 +45,7 @@ export type Entry = {
   photo?: Maybe<Photo>;
   type: EntryType;
   comments: Comment;
+  commentsNumber?: Maybe<Scalars['Int']>;
   voteScore?: Maybe<Scalars['Int']>;
   userVote?: Maybe<VoteValueEnum>;
   deleted: Scalars['Boolean'];
@@ -377,18 +378,18 @@ export type AuthorFragmentFragment = (
   & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName'>
 );
 
-export type HomeEntryFragmentFragment = (
+export type EntryFragmentFragment = (
   { __typename?: 'Entry' }
-  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'voteScore' | 'userVote' | 'deleted' | 'type'>
+  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'voteScore' | 'userVote' | 'deleted' | 'commentsNumber' | 'type'>
   & { author: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'displayName' | 'isAdmin' | 'isModerator'>
+    & AuthorFragmentFragment
   ), photo?: Maybe<(
     { __typename?: 'Photo' }
-    & Pick<Photo, 'id' | 'url' | 'name'>
+    & PhotoFragmentFragment
   )>, room: (
     { __typename?: 'Room' }
-    & Pick<Room, 'name'>
+    & Pick<Room, 'id' | 'name'>
   ) }
 );
 
@@ -438,7 +439,7 @@ export type CreateArticleMutation = (
   { __typename?: 'Mutation' }
   & { createArticle: (
     { __typename?: 'Entry' }
-    & HomeEntryFragmentFragment
+    & EntryFragmentFragment
   ) }
 );
 
@@ -468,7 +469,7 @@ export type CreateLinkMutation = (
   { __typename?: 'Mutation' }
   & { createLink: (
     { __typename?: 'Entry' }
-    & HomeEntryFragmentFragment
+    & EntryFragmentFragment
   ) }
 );
 
@@ -616,7 +617,7 @@ export type CheckLinkExsitsQuery = (
   { __typename?: 'Query' }
   & { checkLinkExsits: Array<(
     { __typename?: 'Entry' }
-    & HomeEntryFragmentFragment
+    & EntryFragmentFragment
   )> }
 );
 
@@ -629,7 +630,7 @@ export type EntriesQuery = (
   { __typename?: 'Query' }
   & { entries: Array<(
     { __typename?: 'Entry' }
-    & HomeEntryFragmentFragment
+    & EntryFragmentFragment
   )> }
 );
 
@@ -642,17 +643,8 @@ export type EntryQuery = (
   { __typename?: 'Query' }
   & { entry: (
     { __typename?: 'Entry' }
-    & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'body' | 'type' | 'voteScore' | 'userVote' | 'deleted'>
-    & { author: (
-      { __typename?: 'User' }
-      & AuthorFragmentFragment
-    ), room: (
-      { __typename?: 'Room' }
-      & Pick<Room, 'id' | 'name'>
-    ), photo?: Maybe<(
-      { __typename?: 'Photo' }
-      & PhotoFragmentFragment
-    )> }
+    & Pick<Entry, 'body'>
+    & EntryFragmentFragment
   ) }
 );
 
@@ -819,42 +811,6 @@ export type MessageDeletedSubscription = (
   ) }
 );
 
-export const HomeEntryFragmentFragmentDoc = gql`
-    fragment HomeEntryFragment on Entry {
-  id
-  createdAt
-  url
-  slug
-  title
-  publisher
-  description
-  voteScore
-  userVote
-  deleted
-  author {
-    id
-    displayName
-    isAdmin
-    isModerator
-  }
-  photo {
-    id
-    url
-    name
-  }
-  type
-  room {
-    name
-  }
-}
-    `;
-export const PhotoFragmentFragmentDoc = gql`
-    fragment PhotoFragment on Photo {
-  id
-  name
-  url
-}
-    `;
 export const AuthorFragmentFragmentDoc = gql`
     fragment AuthorFragment on User {
   id
@@ -865,6 +821,41 @@ export const AuthorFragmentFragmentDoc = gql`
   displayName
 }
     `;
+export const PhotoFragmentFragmentDoc = gql`
+    fragment PhotoFragment on Photo {
+  id
+  name
+  url
+}
+    `;
+export const EntryFragmentFragmentDoc = gql`
+    fragment EntryFragment on Entry {
+  id
+  createdAt
+  url
+  slug
+  title
+  publisher
+  description
+  voteScore
+  userVote
+  deleted
+  commentsNumber
+  type
+  deleted
+  author {
+    ...AuthorFragment
+  }
+  photo {
+    ...PhotoFragment
+  }
+  room {
+    id
+    name
+  }
+}
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
 export const RoomFragmentFragmentDoc = gql`
     fragment RoomFragment on Room {
   id
@@ -945,10 +936,10 @@ export type BlacklistPublisherAndRemoveEntiresMutationOptions = Apollo.BaseMutat
 export const CreateArticleDocument = gql`
     mutation CreateArticle($newArticleData: NewArticleData!) {
   createArticle(newArticleData: $newArticleData) {
-    ...HomeEntryFragment
+    ...EntryFragment
   }
 }
-    ${HomeEntryFragmentFragmentDoc}`;
+    ${EntryFragmentFragmentDoc}`;
 export type CreateArticleMutationFn = Apollo.MutationFunction<CreateArticleMutation, CreateArticleMutationVariables>;
 
 /**
@@ -1017,10 +1008,10 @@ export type CreateCommentMutationOptions = Apollo.BaseMutationOptions<CreateComm
 export const CreateLinkDocument = gql`
     mutation CreateLink($newLinkData: NewLinkData!) {
   createLink(newLinkData: $newLinkData) {
-    ...HomeEntryFragment
+    ...EntryFragment
   }
 }
-    ${HomeEntryFragmentFragmentDoc}`;
+    ${EntryFragmentFragmentDoc}`;
 export type CreateLinkMutationFn = Apollo.MutationFunction<CreateLinkMutation, CreateLinkMutationVariables>;
 
 /**
@@ -1434,10 +1425,10 @@ export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteM
 export const CheckLinkExsitsDocument = gql`
     query CheckLinkExsits($linkId: Int!, $roomId: Int!) {
   checkLinkExsits(linkId: $linkId, roomId: $roomId) {
-    ...HomeEntryFragment
+    ...EntryFragment
   }
 }
-    ${HomeEntryFragmentFragmentDoc}`;
+    ${EntryFragmentFragmentDoc}`;
 
 /**
  * __useCheckLinkExsitsQuery__
@@ -1470,10 +1461,10 @@ export type CheckLinkExsitsQueryResult = Apollo.QueryResult<CheckLinkExsitsQuery
 export const EntriesDocument = gql`
     query Entries($queryData: QueryEntriesInput!) {
   entries(queryData: $queryData) {
-    ...HomeEntryFragment
+    ...EntryFragment
   }
 }
-    ${HomeEntryFragmentFragmentDoc}`;
+    ${EntryFragmentFragmentDoc}`;
 
 /**
  * __useEntriesQuery__
@@ -1505,32 +1496,11 @@ export type EntriesQueryResult = Apollo.QueryResult<EntriesQuery, EntriesQueryVa
 export const EntryDocument = gql`
     query Entry($entryId: Int!) {
   entry(entryId: $entryId) {
-    id
-    createdAt
-    url
-    slug
-    title
-    publisher
-    description
+    ...EntryFragment
     body
-    author {
-      ...AuthorFragment
-    }
-    room {
-      id
-      name
-    }
-    photo {
-      ...PhotoFragment
-    }
-    type
-    voteScore
-    userVote
-    deleted
   }
 }
-    ${AuthorFragmentFragmentDoc}
-${PhotoFragmentFragmentDoc}`;
+    ${EntryFragmentFragmentDoc}`;
 
 /**
  * __useEntryQuery__

@@ -43,6 +43,7 @@ export class EntriesResolver {
     @Args('newLinkData') newLinkData: NewLinkData,
     @CurrentUser() user: User,
   ): Promise<Entry> {
+    // Check if BAN
     return this.entriesService.createLink(newLinkData, user);
   }
 
@@ -52,6 +53,7 @@ export class EntriesResolver {
     @Args('newArticleData') newArticleData: NewArticleData,
     @CurrentUser() user: User,
   ): Promise<Entry> {
+    // Check if BAN
     return this.entriesService.createArticle(newArticleData, user);
   }
 
@@ -72,7 +74,8 @@ export class EntriesResolver {
   checkLinkExsits(
     @Args('roomId', { type: () => Int }) roomId: number,
     @Args('linkId', { type: () => Int }) linkId: number,
+    @CurrentUser() session: User,
   ): Promise<Entry[]> {
-    return this.entriesService.checkIfAlreadyAdded(linkId, roomId);
+    return this.entriesService.checkIfAlreadyAdded(linkId, roomId, session);
   }
 }

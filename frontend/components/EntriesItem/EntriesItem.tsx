@@ -10,6 +10,8 @@ import useEntriesItemStyle from './EntriesItemStyles';
 import EntriesItemVote from './EntriesItemVote';
 import EntriesItemPhoto from './EntriesItemPhoto';
 import EntriesItemActions from '../EntryItemActions/EntriesItemActions';
+import CommentIcon from '../Icons/CommentIcon';
+import EntriesComments from './EntriesComments';
 
 const EntriesItem = ({ data, handleUserClick, preview }: EntriesItemProps) => {
   const classes = useEntriesItemStyle();
@@ -49,6 +51,8 @@ const EntriesItem = ({ data, handleUserClick, preview }: EntriesItemProps) => {
           <Typography variant="body2" color="textSecondary">
             {dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
           </Typography>
+          <CommentIcon className={classes.commentIcon} />
+          <EntriesComments data={data} />
           <EntriesItemRoom link={roomLink} name={data.room.name} />
           {data.publisher && (
             <EntiresItemPublisher publisher={data.publisher} url={data.url} />

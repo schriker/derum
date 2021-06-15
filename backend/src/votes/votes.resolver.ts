@@ -29,6 +29,7 @@ export class VotesResolver {
     @Args('entryId', { type: () => Int }) entryId: number,
     @Args('value', { type: () => VoteValueEnum }) value: VoteValueEnum,
   ): Promise<VoteResult> {
+    // Check if BAN
     return this.votesService.vote(user, entryId, value);
   }
 }

@@ -60,6 +60,7 @@ export class MessagesResolver {
     @Args('newMessageData') newMessageData: NewMessageInput,
     @CurrentUser() user: User,
   ): Promise<Message> {
+    // Check if BAN
     const message = await this.messagesService.create(newMessageData, user);
     this.pubSub.publish('messageAdded', {
       messageAdded: message,

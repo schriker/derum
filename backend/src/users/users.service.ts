@@ -45,6 +45,7 @@ export class UsersService {
       .where('user.id = :id', { id })
       .leftJoinAndSelect('user.ignore', 'ignore')
       .leftJoinAndSelect('user.joinedRooms', 'joinedRooms')
+      .leftJoinAndSelect('joinedRooms.photo', 'roomPhoto')
       .leftJoinAndSelect('joinedRooms.author', 'roomAuthor')
       .loadRelationCountAndMap('joinedRooms.usersNumber', 'joinedRooms.users')
       .getOne();

@@ -1,5 +1,5 @@
 query CheckLinkExsits($linkId: Int!, $roomId: Int!) {
   checkLinkExsits(linkId: $linkId, roomId: $roomId) {
-    ...HomeEntryFragment
+    ...EntryFragment
   }
 }

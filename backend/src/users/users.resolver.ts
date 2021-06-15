@@ -60,6 +60,7 @@ export class UsersResolver {
     @Args() displayName: NewDisplayNameData,
     @Context() ctx,
   ): Promise<User> {
+    // Check if BAN
     const savedUser = await this.usersService.changeDisplayName(
       user,
       displayName,

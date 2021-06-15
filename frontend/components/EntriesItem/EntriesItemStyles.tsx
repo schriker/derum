@@ -23,6 +23,14 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
   voteText: {
     margin: '5px 0',
   },
+  commentIcon: {
+    fontSize: 16,
+    color: theme.palette.text.secondary,
+    marginRight: 5,
+  },
+  commentsNumber: {
+    marginRight: 10,
+  },
   description: {
     color: theme.palette.grey[500],
   },

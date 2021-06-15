@@ -17,6 +17,7 @@ export class CommentsResolver {
     @Args('commentData') commentData: NewCommentData,
     @CurrentUser() session: User,
   ): Promise<Comment> {
+    // Check if BAN
     return this.commentsService.create(commentData, session);
   }
 }

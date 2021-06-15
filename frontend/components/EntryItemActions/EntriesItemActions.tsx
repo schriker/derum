@@ -1,7 +1,7 @@
 import React from 'react';
 import {
+  EntryFragmentFragment,
   EntryType,
-  HomeEntryFragmentFragment,
   useMeQuery,
 } from '../../generated/graphql';
 import useRoomData from '../../hooks/useRoomData';
@@ -15,7 +15,7 @@ import EntriesItemActionsDelete from './EntriesItemActionsDelete';
 const EntriesItemActions = ({
   entryData,
 }: {
-  entryData: HomeEntryFragmentFragment;
+  entryData: EntryFragmentFragment;
 }) => {
   const { roomData } = useRoomData();
   const { data } = useMeQuery({

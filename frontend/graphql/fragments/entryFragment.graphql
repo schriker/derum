@@ -1,4 +1,4 @@
-fragment HomeEntryFragment on Entry {
+fragment EntryFragment on Entry {
   id
   createdAt
   url
@@ -9,19 +9,17 @@ fragment HomeEntryFragment on Entry {
   voteScore
   userVote
   deleted
+  commentsNumber
+  type
+  deleted
   author {
-    id
-    displayName
-    isAdmin
-    isModerator
+    ...AuthorFragment
   }
   photo {
-    id
-    url
-    name
+    ...PhotoFragment
   }
-  type
   room {
+    id
     name
   }
 }

@@ -29,6 +29,7 @@ export class PhotosResolver {
     @Args('attachment', { type: () => GraphQLUpload })
     attachment: FileUpload,
   ): Promise<Photo> {
+    // Check if BAN
     const user = await this.usersService.getById(session.id);
     const room = await this.roomsService.findOneById(roomId);
     const ability = this.caslAbilityFactory.createForUser(user);

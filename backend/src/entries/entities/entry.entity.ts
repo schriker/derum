@@ -104,6 +104,10 @@ export class Entry {
 
   @Field(() => Int, { nullable: true })
   @Column({ select: false, insert: false, readonly: true, nullable: true })
+  commentsNumber: number;
+
+  @Field(() => Int, { nullable: true })
+  @Column({ select: false, insert: false, readonly: true, nullable: true })
   voteScore: number;
 
   @Field(() => VoteValueEnum, { nullable: true })

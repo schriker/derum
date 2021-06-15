@@ -1,26 +1,6 @@
 query Entry($entryId: Int!) {
   entry(entryId: $entryId) {
-    id
-    createdAt
-    url
-    slug
-    title
-    publisher
-    description
+    ...EntryFragment
     body
-    author {
-      ...AuthorFragment
-    }
-    room {
-      id
-      name
-    }
-    photo {
-      ...PhotoFragment
-    }
-    type
-    voteScore
-    userVote
-    deleted
   }
 }

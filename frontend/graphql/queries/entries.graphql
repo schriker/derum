@@ -1,5 +1,5 @@
 query Entries($queryData: QueryEntriesInput!) {
   entries(queryData: $queryData) {
-    ...HomeEntryFragment
+    ...EntryFragment
   }
 }

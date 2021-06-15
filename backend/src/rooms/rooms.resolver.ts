@@ -39,6 +39,7 @@ export class RoomsResolver {
     @Args('newRoomData') newRoomData: NewRoomInput,
     @CurrentUser() user: User,
   ): Promise<Room> {
+    // Check if BAN
     return this.roomsService.create(newRoomData, user);
   }
 

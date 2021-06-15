@@ -2,12 +2,13 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Message {
+type Comment {
   id: Int!
   createdAt: Date!
   updatedAt: Date!
   author: User!
   body: String!
+  parentId: Int
 }
 
 """Date custom scalar type"""
@@ -33,26 +34,23 @@ type Photo {
   url: String!
 }
 
-type User {
-  id: Int!
-  createdAt: Date!
-  updatedAt: Date!
-  displayName: String!
-  email: String!
-  photo: String
-  isAdmin: Boolean!
-  isModerator: Boolean!
-  joinedRooms: [Room!]!
-  ignore: [User!]!
-}
-
-type Comment {
+type Message {
   id: Int!
   createdAt: Date!
   updatedAt: Date!
   author: User!
   body: String!
-  parentId: Int
+}
+
+type Room {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  name: String!
+  description: String!
+  author: User!
+  usersNumber: Int!
+  photo: Photo
 }
 
 type Entry {
@@ -70,6 +68,7 @@ type Entry {
   photo: Photo
   type: EntryType!
   comments: Comment!
+  commentsNumber: Int
   voteScore: Int
   userVote: VoteValueEnum
   deleted: Boolean!
@@ -88,15 +87,17 @@ enum VoteValueEnum {
   NONE
 }
 
-type Room {
+type User {
   id: Int!
   createdAt: Date!
   updatedAt: Date!
-  name: String!
-  description: String!
-  author: User!
-  usersNumber: Int!
-  photo: Photo
+  displayName: String!
+  email: String!
+  photo: String
+  isAdmin: Boolean!
+  isModerator: Boolean!
+  joinedRooms: [Room!]!
+  ignore: [User!]!
 }
 
 type OnlineUser {

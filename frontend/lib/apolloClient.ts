@@ -88,7 +88,8 @@ function createApolloClient() {
                   existing &&
                   existing.filter((item) => {
                     const room: any = readField('room', item);
-                    return room.name === args.queryData.roomName;
+                    const roomName: any = readField('name', room);
+                    return roomName === args.queryData.roomName;
                   });
                 return filteredByRoom;
               },

@@ -21,6 +21,8 @@ import { EntrySort } from './types/entry-sort.enum';
 import { NewArticleData } from './dto/new-article.input';
 import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-publisher.entity';
 import { ConfigService } from '@nestjs/config';
+import { homeEntiresNewestQuery } from './home-entries-newest.sql';
+import rawQueryToEntity from 'src/helpers/rawQueryToEntity';
 
 @Injectable()
 export class EntriesService {
@@ -52,13 +54,14 @@ export class EntriesService {
     const entry = await this.entryRepository
       .createQueryBuilder('entry')
       .where('entry.id = :id', { id })
+      .leftJoin('entry.comments', 'comments')
+      .addSelect('COUNT(DISTINCT(comments.id))', 'entry_commentsNumber')
       .leftJoinAndSelect('entry.room', 'room')
       .leftJoinAndSelect('entry.author', 'author')
       .leftJoinAndSelect('entry.photo', 'photo')
-      .leftJoinAndSelect('room.author', 'roomAuthor')
       .addSelect((subQuery) => {
         return subQuery
-          .select('SUM(value)')
+          .select('COALESCE(SUM(value), 0)')
           .from(Vote, 'vote')
           .where('vote.entryId = entry.id');
       }, 'entry_voteScore')
@@ -70,6 +73,10 @@ export class EntriesService {
             userId: user ? user.id : null,
           });
       }, 'entry_userVote')
+      .groupBy('entry.id')
+      .addGroupBy('author.id')
+      .addGroupBy('photo.id')
+      .addGroupBy('room.id')
       .getOne();
     if (!entry) throw new NotFoundException();
     return entry;
@@ -83,35 +90,45 @@ export class EntriesService {
     }).replace(/[^0-9a-zA-Z]/g, '-')}`;
   }
 
-  getNewest(
+  async getNewest(
     queryData: QueryEntriesInput,
     room: Room,
     user: User,
   ): Promise<Entry[]> {
     const { limit, offset } = queryData;
+    const take = limit > 25 ? 25 : limit;
     const isHomePage =
       parseInt(this.configService.get<string>('HOME_ROOM_ID')) === room.id;
-    let whereQuery =
+    const whereQuery =
       offset > 0
         ? 'entry.roomId = :roomId AND entry.id < :offset AND entry.deleted = false'
         : 'entry.roomId = :roomId AND entry.deleted = false';
-    if (isHomePage) {
-      whereQuery =
-        offset > 0
-          ? 'entry.id < :offset AND entry.deleted = false'
-          : 'entry.deleted = false';
-    }
+
+    const homeResult = await this.entryRepository.query(
+      homeEntiresNewestQuery(offset > 0 ? 'AND ("entry"."id" < $3)' : ''),
+      offset > 0
+        ? [user ? user.id : null, take, offset]
+        : [user ? user.id : null, take],
+    );
+
+    if (isHomePage)
+      return this.entryRepository.create(
+        rawQueryToEntity(Entry, homeResult as Record<string, unknown>[]),
+      );
+
     return this.entryRepository
       .createQueryBuilder('entry')
       .where(whereQuery, {
         roomId: room.id,
         offset,
       })
+      .take(take)
       .orderBy('entry.createdAt', 'DESC')
-      .take(limit > 25 ? 25 : limit)
+      .leftJoin('entry.comments', 'comments')
+      .addSelect('COUNT(DISTINCT(comments.id))', 'entry_commentsNumber')
       .addSelect((subQuery) => {
         return subQuery
-          .select('SUM(value)')
+          .select('COALESCE(SUM(value), 0)')
           .from(Vote, 'vote')
           .where('vote.entryId = entry.id');
       }, 'entry_voteScore')
@@ -126,6 +143,10 @@ export class EntriesService {
       .leftJoinAndSelect('entry.author', 'author')
       .leftJoinAndSelect('entry.photo', 'photo')
       .leftJoinAndSelect('entry.room', 'room')
+      .groupBy('entry.id')
+      .addGroupBy('author.id')
+      .addGroupBy('photo.id')
+      .addGroupBy('room.id')
       .getMany();
   }
 
@@ -151,18 +172,14 @@ export class EntriesService {
       })
       .leftJoin('entry.votes', 'votes')
       .addSelect('COALESCE(SUM(votes.value), 0)', 'score')
+      .leftJoin('entry.comments', 'comments')
+      .addSelect('COUNT(DISTINCT(comments.id))', 'entry_commentsNumber')
       .groupBy('entry.id')
       .orderBy('score', 'DESC', 'NULLS LAST')
       .addOrderBy('entry.createdAt', 'DESC')
-      .leftJoinAndSelect('entry.author', 'author')
-      .leftJoinAndSelect('entry.photo', 'photo')
-      .leftJoinAndSelect('entry.room', 'room')
-      .addGroupBy('author.id')
-      .addGroupBy('photo.id')
-      .addGroupBy('room.id')
       .addSelect((subQuery) => {
         return subQuery
-          .select('SUM(value)')
+          .select('COALESCE(SUM(value), 0)')
           .from(Vote, 'vote')
           .where('vote.entryId = entry.id');
       }, 'entry_voteScore')
@@ -176,6 +193,12 @@ export class EntriesService {
       }, 'entry_userVote')
       .skip(offset)
       .take(limit > 25 ? 25 : limit)
+      .leftJoinAndSelect('entry.author', 'author')
+      .leftJoinAndSelect('entry.photo', 'photo')
+      .leftJoinAndSelect('entry.room', 'room')
+      .addGroupBy('author.id')
+      .addGroupBy('photo.id')
+      .addGroupBy('room.id')
       .getMany();
   }
 
@@ -200,19 +223,46 @@ export class EntriesService {
     return isBlacklisted;
   }
 
-  checkIfAlreadyAdded(linkId: number, roomId: number): Promise<Entry[]> {
-    return this.entryRepository.find({
-      where: {
-        room: roomId,
-        link: linkId,
-      },
-      relations: ['author', 'photo', 'room'],
-    });
+  checkIfAlreadyAdded(
+    linkId: number,
+    roomId: number,
+    user: User,
+  ): Promise<Entry[]> {
+    return this.entryRepository
+      .createQueryBuilder('entry')
+      .where('entry.linkId = :linkId AND entry.roomId = :roomId', {
+        linkId,
+        roomId,
+      })
+      .leftJoin('entry.comments', 'comments')
+      .addSelect('COUNT(DISTINCT(comments.id))', 'entry_commentsNumber')
+      .leftJoinAndSelect('entry.room', 'room')
+      .leftJoinAndSelect('entry.author', 'author')
+      .leftJoinAndSelect('entry.photo', 'photo')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COALESCE(SUM(value), 0)')
+          .from(Vote, 'vote')
+          .where('vote.entryId = entry.id');
+      }, 'entry_voteScore')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('value')
+          .from(Vote, 'vote')
+          .where('vote.entryId = entry.id AND vote.userId = :userId', {
+            userId: user ? user.id : null,
+          });
+      }, 'entry_userVote')
+      .groupBy('entry.id')
+      .addGroupBy('author.id')
+      .addGroupBy('photo.id')
+      .addGroupBy('room.id')
+      .getMany();
   }
 
   async createLink(newLinkData: NewLinkData, user: User): Promise<Entry> {
     const { description, title, roomId, linkId } = newLinkData;
-    const isLinkAdded = await this.checkIfAlreadyAdded(linkId, roomId);
+    const isLinkAdded = await this.checkIfAlreadyAdded(linkId, roomId, user);
     if (isLinkAdded.length)
       throw new BadRequestException(ERROR_MESSAGES.LINK_EXISTS);
     const link = await this.linkRepository.findOne({ id: newLinkData.linkId });
