@@ -11,9 +11,9 @@ export const CustomInput = withStyles((theme: Theme) => ({
     borderRadius: theme.shape.borderRadius,
     backgroundColor: styledBy('bg', {
       dark: theme.palette.background.paper,
-      light: theme.palette.grey[800],
+      light: theme.palette.divider,
     }),
-    transition: theme.transitions.create(['border-color', 'background-color']),
+    transition: theme.transitions.create(['border-color', 'background-color'], { duration: 200 }),
     'label + &': {
       marginTop: theme.spacing(3),
     },

@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { Length } from 'class-validator';
+import { Length, MinLength } from 'class-validator';
 import { Transform } from 'class-transformer';
 
 @InputType()
@@ -15,6 +15,7 @@ export class NewArticleData {
   description: string;
 
   @Field()
+  @MinLength(150)
   @Transform(({ value }) => value.trim())
   body: string;
 

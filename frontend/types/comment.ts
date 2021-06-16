@@ -5,3 +5,12 @@ export type CommentItemPropsType = {
   setUserId: (id: number) => void;
   handleOpen: () => void;
 };
+
+export type NewCommentPropsType = {
+  entryId: number;
+  parentId?: number;
+};
+
+export type NewCommentInputs = {
+  body: string;
+};

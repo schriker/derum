@@ -11,9 +11,6 @@ const EntiresItemLoading = () => {
       borderRadius={3}
       p={2}
     >
-      <Box mr={2}>
-        <Skeleton variant="rect" width={35} height={120} />
-      </Box>
       <Skeleton variant="rect" width={195} height={120} />
       <Box ml={2} flex="1 1 auto">
         <Skeleton />
