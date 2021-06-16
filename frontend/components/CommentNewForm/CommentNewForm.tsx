@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
-import React from 'react';
+import React, { useRef } from 'react';
+import { useEffect } from 'react';
 import { SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -20,8 +21,13 @@ const schema = yup.object().shape({
   body: yup.string().trim().required('Treść jest wymagana.'),
 });
 
-const CommentNewForm = ({ entryId, parentId }: NewCommentPropsType) => {
+const CommentNewForm = ({
+  entryId,
+  parentId,
+  setParentId,
+}: NewCommentPropsType) => {
   const classes = useRoomNewLinkStyles();
+  const bodyFieldRef = useRef<HTMLTextAreaElement | null>(null);
   const {
     control,
     handleSubmit,
@@ -31,13 +37,19 @@ const CommentNewForm = ({ entryId, parentId }: NewCommentPropsType) => {
   } = useForm<NewCommentInputs>({
     resolver: yupResolver(schema),
   });
+  useEffect(() => {
+    if (parentId) {
+      bodyFieldRef.current.focus();
+    }
+  }, [parentId]);
 
   const [createComment, { loading }] = useCreateCommentMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
-    onCompleted: () =>
+    onCompleted: () => {
       reset({
         body: '',
-      }),
+      });
+    },
     update: (cache, { data }) => {
       cache.modify({
         fields: {
@@ -53,7 +65,6 @@ const CommentNewForm = ({ entryId, parentId }: NewCommentPropsType) => {
       });
     },
   });
-
   const onSubmit: SubmitHandler<NewCommentInputs> = (variables) => {
     createComment({
       variables: {
@@ -83,6 +94,10 @@ const CommentNewForm = ({ entryId, parentId }: NewCommentPropsType) => {
               rows={2}
               rowsMax={60}
               {...field}
+              inputRef={(e) => {
+                field.ref(e);
+                bodyFieldRef.current = e;
+              }}
             />
           )}
         />

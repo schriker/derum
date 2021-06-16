@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import React from 'react';
 import { VoteValueEnum } from '../../generated/graphql';
 import { CommentItemPropsType } from '../../types/comment';
+import CommentNewForm from '../CommentNewForm/CommentNewForm';
 import Markdown from '../Markdown/Markdown';
 import Vote from '../Vote/Vote';
 import CommentsItemHeader from './CommentsItemHeader';
@@ -25,6 +26,13 @@ const CommentsItem = (props: CommentItemPropsType) => {
         <Box className={classes.body}>
           <Markdown value={props.data.body} />
         </Box>
+        {props.parentId === props.data.id && (
+          <CommentNewForm
+            setParentId={props.setParentId}
+            entryId={props.entryId}
+            parentId={props.parentId}
+          />
+        )}
       </Box>
     </Box>
   );

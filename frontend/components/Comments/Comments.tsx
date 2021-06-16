@@ -17,8 +17,10 @@ const Comments = () => {
   });
   const classes = useCommentsStyles();
   const [userId, setUserId] = useState(null);
+  const [parentId, setParentId] = useState(null);
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
   const { data, loading } = useCommentsQuery({
+    fetchPolicy: 'network-only',
     variables: {
       entryId,
     },
@@ -26,11 +28,14 @@ const Comments = () => {
 
   return (
     <Box id="comments" className={classes.wrapper}>
-      {userData && <CommentNewForm entryId={entryId} />}
+      {userData && !parentId && <CommentNewForm entryId={entryId} />}
       {loading && <EntryBodyLoading />}
       {!!data?.comments.length &&
         data.comments.map((comment) => (
           <CommentsItem
+            entryId={entryId}
+            parentId={parentId}
+            setParentId={setParentId}
             setUserId={setUserId}
             handleOpen={handleOpen}
             key={comment.id}
