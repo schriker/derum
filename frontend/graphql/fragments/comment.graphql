@@ -1,0 +1,9 @@
+fragment CommentFragment on Comment {
+  id
+  createdAt
+  body
+  parentId
+  author {
+    ...AuthorFragment
+  }
+}

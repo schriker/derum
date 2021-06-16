@@ -127,6 +127,7 @@ type Query {
   entries(queryData: QueryEntriesInput!): [Entry!]!
   checkLinkExsits(linkId: Int!, roomId: Int!): [Entry!]!
   metadata(url: String!): Link!
+  comments(entryId: Int!): [Comment!]!
 }
 
 input QueryEntriesInput {

@@ -258,6 +258,7 @@ export type Query = {
   entries: Array<Entry>;
   checkLinkExsits: Array<Entry>;
   metadata: Link;
+  comments: Array<Comment>;
 };
 
 
@@ -309,6 +310,11 @@ export type QueryCheckLinkExsitsArgs = {
 
 export type QueryMetadataArgs = {
   url: Scalars['String'];
+};
+
+
+export type QueryCommentsArgs = {
+  entryId: Scalars['Int'];
 };
 
 export type QueryEntriesInput = {
@@ -376,6 +382,15 @@ export enum VoteValueEnum {
 export type AuthorFragmentFragment = (
   { __typename?: 'User' }
   & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName'>
+);
+
+export type CommentFragmentFragment = (
+  { __typename?: 'Comment' }
+  & Pick<Comment, 'id' | 'createdAt' | 'body' | 'parentId'>
+  & { author: (
+    { __typename?: 'User' }
+    & AuthorFragmentFragment
+  ) }
 );
 
 export type EntryFragmentFragment = (
@@ -452,11 +467,7 @@ export type CreateCommentMutation = (
   { __typename?: 'Mutation' }
   & { createComment: (
     { __typename?: 'Comment' }
-    & Pick<Comment, 'id' | 'createdAt' | 'body' | 'parentId'>
-    & { author: (
-      { __typename?: 'User' }
-      & AuthorFragmentFragment
-    ) }
+    & CommentFragmentFragment
   ) }
 );
 
@@ -618,6 +629,19 @@ export type CheckLinkExsitsQuery = (
   & { checkLinkExsits: Array<(
     { __typename?: 'Entry' }
     & EntryFragmentFragment
+  )> }
+);
+
+export type CommentsQueryVariables = Exact<{
+  entryId: Scalars['Int'];
+}>;
+
+
+export type CommentsQuery = (
+  { __typename?: 'Query' }
+  & { comments: Array<(
+    { __typename?: 'Comment' }
+    & CommentFragmentFragment
   )> }
 );
 
@@ -821,6 +845,17 @@ export const AuthorFragmentFragmentDoc = gql`
   displayName
 }
     `;
+export const CommentFragmentFragmentDoc = gql`
+    fragment CommentFragment on Comment {
+  id
+  createdAt
+  body
+  parentId
+  author {
+    ...AuthorFragment
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
 export const PhotoFragmentFragmentDoc = gql`
     fragment PhotoFragment on Photo {
   id
@@ -969,16 +1004,10 @@ export type CreateArticleMutationOptions = Apollo.BaseMutationOptions<CreateArti
 export const CreateCommentDocument = gql`
     mutation CreateComment($commentData: NewCommentData!) {
   createComment(commentData: $commentData) {
-    id
-    createdAt
-    author {
-      ...AuthorFragment
-    }
-    body
-    parentId
+    ...CommentFragment
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${CommentFragmentFragmentDoc}`;
 export type CreateCommentMutationFn = Apollo.MutationFunction<CreateCommentMutation, CreateCommentMutationVariables>;
 
 /**
@@ -1458,6 +1487,41 @@ export function useCheckLinkExsitsLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type CheckLinkExsitsQueryHookResult = ReturnType<typeof useCheckLinkExsitsQuery>;
 export type CheckLinkExsitsLazyQueryHookResult = ReturnType<typeof useCheckLinkExsitsLazyQuery>;
 export type CheckLinkExsitsQueryResult = Apollo.QueryResult<CheckLinkExsitsQuery, CheckLinkExsitsQueryVariables>;
+export const CommentsDocument = gql`
+    query Comments($entryId: Int!) {
+  comments(entryId: $entryId) {
+    ...CommentFragment
+  }
+}
+    ${CommentFragmentFragmentDoc}`;
+
+/**
+ * __useCommentsQuery__
+ *
+ * To run a query within a React component, call `useCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCommentsQuery({
+ *   variables: {
+ *      entryId: // value for 'entryId'
+ *   },
+ * });
+ */
+export function useCommentsQuery(baseOptions: Apollo.QueryHookOptions<CommentsQuery, CommentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CommentsQuery, CommentsQueryVariables>(CommentsDocument, options);
+      }
+export function useCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CommentsQuery, CommentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CommentsQuery, CommentsQueryVariables>(CommentsDocument, options);
+        }
+export type CommentsQueryHookResult = ReturnType<typeof useCommentsQuery>;
+export type CommentsLazyQueryHookResult = ReturnType<typeof useCommentsLazyQuery>;
+export type CommentsQueryResult = Apollo.QueryResult<CommentsQuery, CommentsQueryVariables>;
 export const EntriesDocument = gql`
     query Entries($queryData: QueryEntriesInput!) {
   entries(queryData: $queryData) {

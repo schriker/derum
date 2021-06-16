@@ -30,7 +30,7 @@ const useFacebookSDK = () => {
         appId: process.env.NEXT_PUBLIC_FB_APP_ID,
         cookie: true,
         xfbml: true,
-        version: 'v10.0',
+        version: 'v11.0',
       });
       setFbSDKLoaded(true);
     };

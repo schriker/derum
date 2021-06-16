@@ -10,13 +10,15 @@ import { NewArticleData } from './dto/new-article.input';
 import { NewLinkData } from './dto/new-link.input';
 import { QueryEntriesInput } from './dto/query.input';
 import { Entry } from './entities/entry.entity';
-import { EntriesService } from './entries.service';
+import { EntriesService } from './services/entries.service';
 import { DerumGuard } from './guards/derum.guard';
+import { EntriesQueryService } from './services/entries-query.service';
 
 @Resolver(() => Entry)
 export class EntriesResolver {
   constructor(
     private entriesService: EntriesService,
+    private entriesQueryService: EntriesQueryService,
     private usersService: UsersService,
     private caslAbilityFactory: CaslAbilityFactory,
   ) {}
@@ -26,7 +28,7 @@ export class EntriesResolver {
     @Args('entryId', { type: () => Int }) entryId: number,
     @CurrentUser() session: User,
   ) {
-    return this.entriesService.getSingle(entryId, session);
+    return this.entriesQueryService.getSingle(entryId, session);
   }
 
   @Query(() => [Entry])
@@ -34,7 +36,7 @@ export class EntriesResolver {
     @Args('queryData') queryData: QueryEntriesInput,
     @CurrentUser() user: User,
   ) {
-    return this.entriesService.findMany(queryData, user);
+    return this.entriesQueryService.findMany(queryData, user);
   }
 
   @Mutation(() => Entry)
@@ -64,7 +66,7 @@ export class EntriesResolver {
     @CurrentUser() session: User,
   ): Promise<boolean> {
     const user = await this.usersService.getById(session.id);
-    const entry = await this.entriesService.getById(id);
+    const entry = await this.entriesQueryService.getById(id);
     const ability = this.caslAbilityFactory.createForUser(user);
     if (!ability.can(Action.Delete, entry)) throw new ForbiddenException();
     return this.entriesService.markDeleted(id);

@@ -4,6 +4,7 @@ import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import EntriesItem from '../EntriesItem/EntriesItem';
 import UserModal from '../UserModal/UserModal';
 import EntryBody from './EntryBody';
+import Comments from '../Comments/Comments';
 
 const SingleEntry = ({ data }: { data: EntryQuery }) => {
   const [userId, setUserId] = useState(null);
@@ -22,6 +23,7 @@ const SingleEntry = ({ data }: { data: EntryQuery }) => {
         preview={false}
       />
       {data.entry.body && <EntryBody body={data.entry.body} />}
+      <Comments />
       {userId && (
         <UserModal
           openModal={openModal}

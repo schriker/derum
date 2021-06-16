@@ -20,7 +20,7 @@ export class FacebookStrategy {
         {
           clientID: this.configService.get<string>('FACEBOOK_APP_ID'),
           clientSecret: this.configService.get<string>('FACEBOOK_APP_SECRET'),
-          fbGraphVersion: 'v10.0',
+          fbGraphVersion: 'v11.0',
         },
         async (
           _accessToken: string,

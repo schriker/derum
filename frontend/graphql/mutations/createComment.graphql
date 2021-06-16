@@ -1,11 +1,5 @@
 mutation CreateComment($commentData: NewCommentData!) {
   createComment(commentData: $commentData) {
-    id
-    createdAt
-    author {
-      ...AuthorFragment
-    }
-    body
-    parentId
+    ...CommentFragment
   }
 }

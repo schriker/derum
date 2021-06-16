@@ -3,7 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 const useMarkdownStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     fontSize: 16,
-    fontWeight: 600,
+    fontWeight: 400,
     display: 'inline-block',
     '& strong': {
       color: theme.palette.primary['A700'],

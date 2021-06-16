@@ -55,7 +55,7 @@ FROM (
   FROM "entry" "entry"
   WHERE ("entry"."deleted" = false)
   ${offset}
-  ORDER BY coalesce("entry"."linkId", random()) desc, "entry"."createdAt" desc
+  ORDER BY coalesce("entry"."linkId", random()) desc, "entry"."createdAt" asc
 ) AS "entry"
 LEFT JOIN "comment" "comments" ON "comments"."entryId" = "entry"."id"
 LEFT JOIN "user" "author" ON "author"."id" = "entry"."authorId"

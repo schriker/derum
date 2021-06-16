@@ -3,8 +3,9 @@ import useEntriesItemStyle from './EntriesItemStyles';
 import NextLink from 'next/link';
 import { Link } from '@material-ui/core';
 import { EntryFragmentFragment } from '../../generated/graphql';
+import { polishPlurals } from 'polish-plurals';
 
-const EntriesComments = ({ data }: { data: EntryFragmentFragment }) => {
+const EntriesItemComments = ({ data }: { data: EntryFragmentFragment }) => {
   const classes = useEntriesItemStyle();
 
   return (
@@ -17,10 +18,16 @@ const EntriesComments = ({ data }: { data: EntryFragmentFragment }) => {
         variant="body2"
         color="textSecondary"
       >
-        {data.commentsNumber ? data.commentsNumber : 0} komentarzy
+        {data.commentsNumber ? data.commentsNumber : 0}
+        {polishPlurals(
+          ' komentarz',
+          ' komentarze',
+          ' komentarzy',
+          data.commentsNumber
+        )}
       </Link>
     </NextLink>
   );
 };
 
-export default EntriesComments;
+export default EntriesItemComments;

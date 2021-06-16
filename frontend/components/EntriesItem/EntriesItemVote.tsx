@@ -1,17 +1,12 @@
 import React from 'react';
-import { CardContent, Typography } from '@material-ui/core';
-import useEntriesItemStyle from './EntriesItemStyles';
-import { EntriesItemVoteProps } from '../../types/entries';
-import { ButtonIcon } from '../Buttons/ButtonIcon';
-import PlusIcon from '../Icons/PlusIcon';
-import MinusIcon from '../Icons/MinusIcon';
-import numbro from 'numbro';
 import {
   useMeQuery,
   useVoteMutation,
   VoteValueEnum,
 } from '../../generated/graphql';
 import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
+import { EntriesItemVoteProps } from '../../types/entries';
+import Vote from '../Vote/Vote';
 
 const EntriesItemVote = ({
   id,
@@ -19,7 +14,6 @@ const EntriesItemVote = ({
   userVote,
   data,
 }: EntriesItemVoteProps) => {
-  const classes = useEntriesItemStyle();
   const { data: userData } = useMeQuery();
   const [vote] = useVoteMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
@@ -43,7 +37,7 @@ const EntriesItemVote = ({
     },
   });
 
-  const handleCLick = (value: VoteValueEnum) => {
+  const handleClick = (value: VoteValueEnum) => {
     if (!userData) return openModalVar(true);
     vote({
       variables: {
@@ -54,37 +48,7 @@ const EntriesItemVote = ({
   };
 
   return (
-    <CardContent className={classes.vote}>
-      <ButtonIcon
-        onClick={() =>
-          handleCLick(
-            userVote === VoteValueEnum.UP
-              ? VoteValueEnum.NONE
-              : VoteValueEnum.UP
-          )
-        }
-        color={userVote === VoteValueEnum.UP ? 'default' : 'secondary'}
-        size="small"
-      >
-        <PlusIcon style={{ fontSize: 18 }} />
-      </ButtonIcon>
-      <Typography className={classes.voteText} variant="subtitle1">
-        {numbro(voteScore ? voteScore : 0).format({ average: true })}
-      </Typography>
-      <ButtonIcon
-        onClick={() =>
-          handleCLick(
-            userVote === VoteValueEnum.DOWN
-              ? VoteValueEnum.NONE
-              : VoteValueEnum.DOWN
-          )
-        }
-        color={userVote === VoteValueEnum.DOWN ? 'default' : 'secondary'}
-        size="small"
-      >
-        <MinusIcon style={{ fontSize: 18 }} />
-      </ButtonIcon>
-    </CardContent>
+    <Vote voteScore={voteScore} userVote={userVote} handleClick={handleClick} />
   );
 };
 
