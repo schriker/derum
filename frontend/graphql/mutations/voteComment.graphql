@@ -1,0 +1,6 @@
+mutation VoteComment($value: VoteValueEnum!, $commentId: Int!) {
+  voteComment(value: $value, commentId: $commentId) {
+    userValue
+    voteScore
+  }
+}

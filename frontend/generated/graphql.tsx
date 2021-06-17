@@ -26,6 +26,8 @@ export type Comment = {
   author: User;
   body: Scalars['String'];
   parentId?: Maybe<Scalars['Int']>;
+  voteScore?: Maybe<Scalars['Int']>;
+  userVote?: Maybe<VoteValueEnum>;
 };
 
 
@@ -103,9 +105,10 @@ export type Mutation = {
   deleteEntry: Scalars['Boolean'];
   uploadRoomPhoto: Photo;
   vote: VoteResult;
+  voteComment: VoteResult;
+  createComment: Comment;
   blacklistPublisher: Scalars['Boolean'];
   blacklistPublisherAndRemoveEntires: Scalars['Boolean'];
-  createComment: Comment;
 };
 
 
@@ -181,6 +184,17 @@ export type MutationVoteArgs = {
 };
 
 
+export type MutationVoteCommentArgs = {
+  value: VoteValueEnum;
+  commentId: Scalars['Int'];
+};
+
+
+export type MutationCreateCommentArgs = {
+  commentData: NewCommentData;
+};
+
+
 export type MutationBlacklistPublisherArgs = {
   entryId: Scalars['Int'];
 };
@@ -188,11 +202,6 @@ export type MutationBlacklistPublisherArgs = {
 
 export type MutationBlacklistPublisherAndRemoveEntiresArgs = {
   entryId: Scalars['Int'];
-};
-
-
-export type MutationCreateCommentArgs = {
-  commentData: NewCommentData;
 };
 
 export type NewArticleData = {
@@ -386,7 +395,7 @@ export type AuthorFragmentFragment = (
 
 export type CommentFragmentFragment = (
   { __typename?: 'Comment' }
-  & Pick<Comment, 'id' | 'createdAt' | 'body' | 'parentId'>
+  & Pick<Comment, 'id' | 'createdAt' | 'body' | 'parentId' | 'voteScore' | 'userVote'>
   & { author: (
     { __typename?: 'User' }
     & AuthorFragmentFragment
@@ -613,6 +622,20 @@ export type VoteMutationVariables = Exact<{
 export type VoteMutation = (
   { __typename?: 'Mutation' }
   & { vote: (
+    { __typename?: 'VoteResult' }
+    & Pick<VoteResult, 'userValue' | 'voteScore'>
+  ) }
+);
+
+export type VoteCommentMutationVariables = Exact<{
+  value: VoteValueEnum;
+  commentId: Scalars['Int'];
+}>;
+
+
+export type VoteCommentMutation = (
+  { __typename?: 'Mutation' }
+  & { voteComment: (
     { __typename?: 'VoteResult' }
     & Pick<VoteResult, 'userValue' | 'voteScore'>
   ) }
@@ -851,6 +874,8 @@ export const CommentFragmentFragmentDoc = gql`
   createdAt
   body
   parentId
+  voteScore
+  userVote
   author {
     ...AuthorFragment
   }
@@ -1451,6 +1476,41 @@ export function useVoteMutation(baseOptions?: Apollo.MutationHookOptions<VoteMut
 export type VoteMutationHookResult = ReturnType<typeof useVoteMutation>;
 export type VoteMutationResult = Apollo.MutationResult<VoteMutation>;
 export type VoteMutationOptions = Apollo.BaseMutationOptions<VoteMutation, VoteMutationVariables>;
+export const VoteCommentDocument = gql`
+    mutation VoteComment($value: VoteValueEnum!, $commentId: Int!) {
+  voteComment(value: $value, commentId: $commentId) {
+    userValue
+    voteScore
+  }
+}
+    `;
+export type VoteCommentMutationFn = Apollo.MutationFunction<VoteCommentMutation, VoteCommentMutationVariables>;
+
+/**
+ * __useVoteCommentMutation__
+ *
+ * To run a mutation, you first call `useVoteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVoteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [voteCommentMutation, { data, loading, error }] = useVoteCommentMutation({
+ *   variables: {
+ *      value: // value for 'value'
+ *      commentId: // value for 'commentId'
+ *   },
+ * });
+ */
+export function useVoteCommentMutation(baseOptions?: Apollo.MutationHookOptions<VoteCommentMutation, VoteCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VoteCommentMutation, VoteCommentMutationVariables>(VoteCommentDocument, options);
+      }
+export type VoteCommentMutationHookResult = ReturnType<typeof useVoteCommentMutation>;
+export type VoteCommentMutationResult = Apollo.MutationResult<VoteCommentMutation>;
+export type VoteCommentMutationOptions = Apollo.BaseMutationOptions<VoteCommentMutation, VoteCommentMutationVariables>;
 export const CheckLinkExsitsDocument = gql`
     query CheckLinkExsits($linkId: Int!, $roomId: Int!) {
   checkLinkExsits(linkId: $linkId, roomId: $roomId) {

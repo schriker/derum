@@ -32,4 +32,15 @@ export class VotesResolver {
     // Check if BAN
     return this.votesService.vote(user, entryId, value);
   }
+
+  @Mutation(() => VoteResult)
+  @UseGuards(GQLSessionGuard)
+  voteComment(
+    @CurrentUser() user: User,
+    @Args('commentId', { type: () => Int }) commentId: number,
+    @Args('value', { type: () => VoteValueEnum }) value: VoteValueEnum,
+  ): Promise<VoteResult> {
+    // Check if BAN
+    return this.votesService.voteComment(user, commentId, value);
+  }
 }

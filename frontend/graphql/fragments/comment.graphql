@@ -3,6 +3,8 @@ fragment CommentFragment on Comment {
   createdAt
   body
   parentId
+  voteScore
+  userVote
   author {
     ...AuthorFragment
   }

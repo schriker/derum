@@ -1,4 +1,4 @@
-import { CommentFragmentFragment } from '../generated/graphql';
+import { CommentFragmentFragment, VoteValueEnum } from '../generated/graphql';
 
 export interface MapedComments extends CommentFragmentFragment {
   childrens: MapedComments[];
@@ -22,4 +22,11 @@ export type NewCommentPropsType = {
 
 export type NewCommentInputs = {
   body: string;
+};
+
+export type CommentsItemVoteProps = {
+  userVote: VoteValueEnum;
+  id: number;
+  data: CommentFragmentFragment;
+  voteScore: number;
 };

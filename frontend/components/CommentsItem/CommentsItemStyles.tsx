@@ -1,16 +1,16 @@
 import { makeStyles, Theme } from '@material-ui/core';
 import { CommentsItemStyles } from '../../types/styles';
 
-const MAX_NEST_LEVEL = 2;
+const MAX_NEST_LEVEL = 1;
 
 const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
   (theme: Theme) => ({
     wrapper: {
       paddingLeft: (props) =>
         props.level > MAX_NEST_LEVEL
-          ? MAX_NEST_LEVEL * 22
+          ? MAX_NEST_LEVEL * 44
           : props.level > 0
-          ? 22 * props.level
+          ? 44 * props.level
           : 0,
       display: 'flex',
       '&:hover $replyButton': {
@@ -21,6 +21,7 @@ const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
       width: '100%',
     },
     body: {
+      width: '100%',
       paddingLeft: theme.spacing(2),
       paddingRight: theme.spacing(2),
     },

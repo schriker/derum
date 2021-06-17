@@ -1,13 +1,12 @@
 import { Box } from '@material-ui/core';
 import dynamic from 'next/dynamic';
 import React from 'react';
-import { VoteValueEnum } from '../../generated/graphql';
 import { CommentItemPropsType } from '../../types/comment';
 import CommentNewForm from '../CommentNewForm/CommentNewForm';
 const Markdown = dynamic(() => import('../Markdown/Markdown'));
-import Vote from '../Vote/Vote';
 import CommentsItemHeader from './CommentsItemHeader';
 import useCommentsItemStyles from './CommentsItemStyles';
+import CommentsItemVote from './CommentsItemVote';
 
 const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
   const classes = useCommentsItemStyles({
@@ -18,16 +17,18 @@ const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
   return (
     <>
       <Box className={classes.wrapper}>
-        <Vote
-          comments
-          voteScore={0}
-          userVote={VoteValueEnum.NONE}
-          handleClick={() => console.log('Vote on comment')}
+        <CommentsItemVote
+          voteScore={props.data.voteScore}
+          data={props.data}
+          id={props.data.id}
+          userVote={props.data.userVote}
         />
         <Box className={classes.content}>
           <CommentsItemHeader {...props} />
           <Box className={classes.body}>
-            <Markdown>{props.data.body}</Markdown>
+            <Markdown disallowedElements={['h1', 'h2', 'h3', 'h4']}>
+              {props.data.body}
+            </Markdown>
           </Box>
           {props.parentId === props.data.id && (
             <CommentNewForm

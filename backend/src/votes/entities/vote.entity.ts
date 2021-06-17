@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Directive, Field, Int, ObjectType } from '@nestjs/graphql';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -17,6 +17,7 @@ import { Comment } from '../../comments/entities/comment.entity';
 @Entity('vote')
 @ObjectType()
 @Unique('vote_user_entry', ['user', 'entry'])
+@Directive('@cacheControl(maxAge: 30, scope: PRIVATE)')
 export class Vote {
   @PrimaryGeneratedColumn()
   @Field(() => Int)

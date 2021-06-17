@@ -22,6 +22,7 @@ const Comments = (): JSX.Element => {
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
   const { data, loading } = useCommentsQuery({
     fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-only',
     variables: {
       entryId,
     },

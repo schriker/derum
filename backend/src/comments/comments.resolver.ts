@@ -14,8 +14,9 @@ export class CommentsResolver {
   @Query(() => [Comment])
   comments(
     @Args('entryId', { type: () => Int }) entryId: number,
+    @CurrentUser() session: User,
   ): Promise<Comment[]> {
-    return this.commentsService.getByEntryId(entryId);
+    return this.commentsService.getByEntryId(entryId, session);
   }
 
   @Mutation(() => Comment)

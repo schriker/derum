@@ -161,9 +161,10 @@ type Mutation {
   deleteEntry(id: Int!): Boolean!
   uploadRoomPhoto(attachment: Upload!, roomId: Int!): Photo!
   vote(value: VoteValueEnum!, entryId: Int!): VoteResult!
+  voteComment(value: VoteValueEnum!, commentId: Int!): VoteResult!
+  createComment(commentData: NewCommentData!): Comment!
   blacklistPublisher(entryId: Int!): Boolean!
   blacklistPublisherAndRemoveEntires(entryId: Int!): Boolean!
-  createComment(commentData: NewCommentData!): Comment!
 }
 
 input NewRoomInput {
