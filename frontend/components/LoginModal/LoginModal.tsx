@@ -8,7 +8,7 @@ import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
 import { useReactiveVar } from '@apollo/client';
 
-const LoginModal = () => {
+const LoginModal = (): JSX.Element => {
   const openModal = useReactiveVar(openModalVar);
   const [loading, setLoading] = useState(false);
 

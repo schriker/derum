@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import {
   ApolloClient,
-  HttpLink,
+  ApolloLink,
   InMemoryCache,
   NormalizedCacheObject,
   split,
@@ -9,17 +9,13 @@ import {
 import merge from 'deepmerge';
 import isEqual from 'lodash/isEqual';
 import { WebSocketLink } from '@apollo/client/link/ws';
-import { getMainDefinition } from '@apollo/client/utilities';
+import { getMainDefinition, Reference } from '@apollo/client/utilities';
 import { setContext } from '@apollo/client/link/context';
 import { indexRoomVars } from '../consts';
 import { createUploadLink } from 'apollo-upload-client';
+import { GetServerSidePropsResult } from 'next';
 
-let authLink;
-
-// const httpLink = new HttpLink({
-//   uri: process.env.NEXT_PUBLIC_GRAPHQL,
-//   credentials: 'include',
-// });
+let authLink: ApolloLink;
 
 const httpLink = createUploadLink({
   uri: process.env.NEXT_PUBLIC_GRAPHQL,
@@ -87,8 +83,8 @@ function createApolloClient() {
                 const filteredByRoom =
                   existing &&
                   existing.filter((item) => {
-                    const room: any = readField('room', item);
-                    const roomName: any = readField('name', room);
+                    const room: Reference = readField('room', item);
+                    const roomName: Reference = readField('name', room);
                     return roomName === args.queryData.roomName;
                   });
                 return filteredByRoom;
@@ -143,7 +139,10 @@ export function initializeApollo(
   return _apolloClient;
 }
 
-export function addApolloState(client, pageProps) {
+export function addApolloState(
+  client: ApolloClient<NormalizedCacheObject>,
+  pageProps: { props: { [key: string]: unknown } }
+): GetServerSidePropsResult<{ [key: string]: unknown }> {
   if (pageProps?.props) {
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
   }
@@ -151,7 +150,9 @@ export function addApolloState(client, pageProps) {
   return pageProps;
 }
 
-export function useApollo(pageProps) {
+export function useApollo(pageProps: {
+  [key: string]: unknown;
+}): ApolloClient<NormalizedCacheObject> {
   const state = pageProps[APOLLO_STATE_PROP_NAME];
   const store = useMemo(() => initializeApollo(state), [state]);
   return store;

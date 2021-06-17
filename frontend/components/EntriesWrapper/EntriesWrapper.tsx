@@ -13,7 +13,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const EntriesWrapper = ({ children }: { children: React.ReactNode }) => {
+const EntriesWrapper = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): JSX.Element => {
   const classes = useStyles();
 
   return (

@@ -4,7 +4,7 @@ import { CardActionArea, CardMedia } from '@material-ui/core';
 import useEntriesItemStyle from './EntriesItemStyles';
 import { EntiresItemTitleProps } from '../../types/entries';
 
-const EntriesItemPhoto = ({ link, image, title }: EntiresItemTitleProps) => {
+const EntriesItemPhoto = ({ link, image, title }: EntiresItemTitleProps): JSX.Element => {
   const classes = useEntriesItemStyle();
 
   return (

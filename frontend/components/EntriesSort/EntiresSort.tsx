@@ -19,7 +19,7 @@ const sortButtons = [
   },
 ];
 
-const EntriesSort = () => {
+const EntriesSort = (): JSX.Element => {
   const router = useRouter();
   const classes = useEntriesSortStyles();
 

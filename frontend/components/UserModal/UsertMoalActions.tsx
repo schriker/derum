@@ -15,7 +15,7 @@ import MessageIcon from '../Icons/MessageIcon';
 import UnLockIcon from '../Icons/UnLockIcon';
 import useUserModalStyles from './UserModalStyles';
 
-const UserModalActions = ({ id }: { id: number }) => {
+const UserModalActions = ({ id }: { id: number }): JSX.Element => {
   const classes = useUserModalStyles();
   const { data: me } = useMeQuery({
     fetchPolicy: 'cache-only',

@@ -12,7 +12,7 @@ const CommentsItemHeader = ({
   handleOpen,
   setParentId,
   parentId,
-}: CommentItemPropsType) => {
+}: CommentItemPropsType): JSX.Element => {
   const classes = useCommentsItemStyles({
     userColor: '#FF026A',
   });

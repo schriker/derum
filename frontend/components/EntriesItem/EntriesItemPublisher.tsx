@@ -3,8 +3,11 @@ import React from 'react';
 import { EntriesPublisherProps } from '../../types/entries';
 import useEntriesItemStyle from './EntriesItemStyles';
 
-const EntiresItemPublisher = ({ publisher, url }: EntriesPublisherProps) => {
-  const classes = useEntriesItemStyle()
+const EntiresItemPublisher = ({
+  publisher,
+  url,
+}: EntriesPublisherProps): JSX.Element => {
+  const classes = useEntriesItemStyle();
 
   return (
     <Chip

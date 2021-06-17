@@ -7,7 +7,7 @@ import OnlineUsers from '../OnlineUsers/OnlineUsers';
 import DarkTooltip from '../Tooltip/Tooltip';
 import UserDropdown from '../UserDropdown/UserDropdown';
 
-const NavBarUser = () => {
+const NavBarUser = (): JSX.Element => {
   return (
     <Box
       display="flex"

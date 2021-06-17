@@ -5,21 +5,32 @@ import React from 'react';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import DarkTooltip from '../Tooltip/Tooltip';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
+import { RoomAvatarSidebarStyles } from '../../types/styles';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  button: {
-    padding: 0,
-    marginTop: 10,
-  },
-  photo: (props: any) => ({
-    border: props.isActive ? '2px solid' : '0',
-    width: 35,
-    height: 35,
-    borderColor: props.isActive ? theme.palette.primary['A400'] : 'transparent',
-  }),
-}));
+const useStyles = makeStyles<Theme, RoomAvatarSidebarStyles>(
+  (theme: Theme) => ({
+    button: {
+      padding: 0,
+      marginTop: 10,
+    },
+    photo: (props) => ({
+      border: props.isActive ? '2px solid' : '0',
+      width: 35,
+      height: 35,
+      borderColor: props.isActive
+        ? theme.palette.primary['A400']
+        : 'transparent',
+    }),
+  })
+);
 
-const RoomAvatar = ({ name, photo }: { name: string; photo: string }) => {
+const RoomAvatar = ({
+  name,
+  photo,
+}: {
+  name: string;
+  photo: string;
+}): JSX.Element => {
   const router = useRouter();
   const classes = useStyles({ isActive: router.query.room === name });
 

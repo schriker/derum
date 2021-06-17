@@ -5,7 +5,11 @@ import { Link } from '@material-ui/core';
 import { EntryFragmentFragment } from '../../generated/graphql';
 import { polishPlurals } from 'polish-plurals';
 
-const EntriesItemComments = ({ data }: { data: EntryFragmentFragment }) => {
+const EntriesItemComments = ({
+  data,
+}: {
+  data: EntryFragmentFragment;
+}): JSX.Element => {
   const classes = useEntriesItemStyle();
 
   return (

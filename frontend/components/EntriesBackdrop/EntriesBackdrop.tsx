@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const EntriesBackdrop = ({ open }: { open: boolean }) => {
+const EntriesBackdrop = ({ open }: { open: boolean }): JSX.Element => {
   const classes = useStyles();
 
   return (

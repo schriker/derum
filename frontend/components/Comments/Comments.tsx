@@ -10,7 +10,7 @@ import EntryBodyLoading from '../EntryBodyLoading/EntryBodyLoading';
 import UserModal from '../UserModal/UserModal';
 import useCommentsStyles from './CommentsStyles';
 
-const Comments = () => {
+const Comments = (): JSX.Element => {
   const router = useRouter();
   const entryId = parseInt(router.query.id[0]);
   const { data: userData } = useMeQuery({

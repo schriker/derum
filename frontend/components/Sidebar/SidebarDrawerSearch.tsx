@@ -4,10 +4,10 @@ import React from 'react';
 import { openDrawerVar } from '../../lib/apolloVars';
 import RoomSearchInput from '../RoomSearchInput/RoomSearchInput';
 
-const SidebarDrawerSearch = () => {
+const SidebarDrawerSearch = (): JSX.Element => {
   const router = useRouter();
 
-  const clickHandler = (_, name: string) => {
+  const clickHandler = (_: number, name: string) => {
     router.push(`/p/${name}`);
     openDrawerVar(false);
   };

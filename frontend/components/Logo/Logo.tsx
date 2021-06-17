@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../../public/logo.png';
 
-const Logo = () => {
+const Logo = (): JSX.Element => {
   return (
     <Link href="/">
       <a>

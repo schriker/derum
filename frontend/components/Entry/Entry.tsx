@@ -6,7 +6,7 @@ import UserModal from '../UserModal/UserModal';
 import EntryBody from './EntryBody';
 import Comments from '../Comments/Comments';
 
-const SingleEntry = ({ data }: { data: EntryQuery }) => {
+const SingleEntry = ({ data }: { data: EntryQuery }): JSX.Element => {
   const [userId, setUserId] = useState(null);
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
 

@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import React from 'react';
 
-const ChatMessagesSkeleton = () => {
+const ChatMessagesSkeleton = (): JSX.Element => {
   return (
     <Box flex="1 1 auto" overflow="auto" pr={2} pt={2} height="100%">
       <Skeleton height={30} />

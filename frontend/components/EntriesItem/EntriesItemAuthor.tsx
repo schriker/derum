@@ -7,7 +7,7 @@ const EntriesItemAuthor = ({
   name,
   color,
   id,
-}: EntriesItemAuthorProps) => {
+}: EntriesItemAuthorProps): JSX.Element => {
   return (
     <Link
       onClick={() => handleUserClick(id)}

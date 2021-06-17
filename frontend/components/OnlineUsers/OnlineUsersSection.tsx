@@ -14,10 +14,10 @@ const OnlineUsersSection = ({
   title: string;
   data: OnlineUser[];
   handleUserClick: (id: number) => void;
-}) => {
+}): JSX.Element => {
   const classes = useOnlineUsersStyles();
 
-  return !!data.length ? (
+  return data.length ? (
     <Box>
       <Typography className={classes.sectionTitle} variant="subtitle1">
         {title}

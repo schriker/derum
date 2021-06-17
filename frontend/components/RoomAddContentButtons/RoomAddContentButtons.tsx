@@ -5,7 +5,7 @@ import useRoomAddContentButtonsStyles from './RoomAddContentButtonsStyles';
 import RoomAddLink from '../RoomAddLink/RoomAddLink';
 import RoomAddVideo from '../RoomAddVideo/RoomAddVideo';
 
-const RoomAddContentButtons = () => {
+const RoomAddContentButtons = (): JSX.Element => {
   const classes = useRoomAddContentButtonsStyles();
 
   return (
@@ -13,8 +13,8 @@ const RoomAddContentButtons = () => {
       <RoomAddArticle />
       <Divider orientation="vertical" flexItem />
       <RoomAddLink />
-      {/* <Divider orientation="vertical" flexItem />
-      <RoomAddVideo /> */}
+      <Divider orientation="vertical" flexItem />
+      <RoomAddVideo />
     </Box>
   );
 };

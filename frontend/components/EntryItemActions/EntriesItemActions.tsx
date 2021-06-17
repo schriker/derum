@@ -16,7 +16,7 @@ const EntriesItemActions = ({
   entryData,
 }: {
   entryData: EntryFragmentFragment;
-}) => {
+}): JSX.Element => {
   const { roomData } = useRoomData();
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',

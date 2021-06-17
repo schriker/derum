@@ -4,7 +4,7 @@ import { ButtonIcon } from '../Buttons/ButtonIcon';
 import HomeIcon from '../Icons/HomeIcon';
 import DarkTooltip from '../Tooltip/Tooltip';
 
-const SidebarHomeLink = () => {
+const SidebarHomeLink = (): JSX.Element => {
   return (
     <Link href="/" passHref>
       <DarkTooltip title="Główna" enterDelay={500} placement="right">

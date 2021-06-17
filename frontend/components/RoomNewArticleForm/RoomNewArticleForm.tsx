@@ -42,7 +42,11 @@ const schema = yup.object().shape({
     .min(150, 'Trść min. 150 znaków.'),
 });
 
-const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
+const RoomNewArticleForm = ({
+  closeModal,
+}: {
+  closeModal: () => void;
+}): JSX.Element => {
   const classes = useNewRoomLinkStyles();
   const router = useRouter();
   const [oldSession, setOldSession] = useState<NewArticleInputs>(null);
@@ -91,8 +95,11 @@ const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
   }, [isSubmitted, getValues, touchedFields]);
 
   const handleResotreSession = () => {
-    for (let key in oldSession) {
-      setValue(key as any, oldSession[key]);
+    for (const key in oldSession) {
+      setValue(
+        key as 'roomId' | 'title' | 'description' | 'body',
+        oldSession[key]
+      );
     }
     setOldSession(null);
   };

@@ -12,7 +12,7 @@ const ChatMessagesItem = ({
   setUserId,
   userId,
   handleOpen,
-}: ChatMessagesItemProps) => {
+}: ChatMessagesItemProps): JSX.Element => {
   const [showActions, setShowActions] = useState(false);
   const classes = useChatMessageItemStyles({
     userColor: '#FF026A',

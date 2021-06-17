@@ -14,7 +14,7 @@ import SidebarDrawerSearch from './SidebarDrawerSearch';
 import SidebarDrawerSection from './SidebarDrawerSection';
 import SidebarSkeleton from './SidebarSkeleton';
 
-const SidebarDrawer = () => {
+const SidebarDrawer = (): JSX.Element => {
   const isOpen = useReactiveVar(openDrawerVar);
   const { data: userData, loading: userLoading } = useMeQuery({
     fetchPolicy: 'cache-only',

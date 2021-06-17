@@ -8,7 +8,7 @@ import Vote from '../Vote/Vote';
 import CommentsItemHeader from './CommentsItemHeader';
 import useCommentsItemStyles from './CommentsItemStyles';
 
-const CommentsItem = (props: CommentItemPropsType) => {
+const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
   const classes = useCommentsItemStyles({
     userColor: '#FF026A',
   });

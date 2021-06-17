@@ -13,7 +13,11 @@ import EntriesItemActions from '../EntryItemActions/EntriesItemActions';
 import CommentIcon from '../Icons/CommentIcon';
 import EntriesItemComments from './EntriesItemComments';
 
-const EntriesItem = ({ data, handleUserClick, preview }: EntriesItemProps) => {
+const EntriesItem = ({
+  data,
+  handleUserClick,
+  preview,
+}: EntriesItemProps): JSX.Element => {
   const classes = useEntriesItemStyle();
   const roomLink = `/p/${data.room.name}`;
   const link =

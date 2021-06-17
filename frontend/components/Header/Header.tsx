@@ -3,8 +3,8 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { HeadProps } from '../../types/head';
 
-const Header = ({ title, ogImage, ogDescription }: HeadProps) => {
-  let router = useRouter();
+const Header = ({ title, ogImage, ogDescription }: HeadProps): JSX.Element => {
+  const router = useRouter();
   return (
     <>
       <Head>

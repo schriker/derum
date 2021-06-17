@@ -8,9 +8,11 @@ import { ButtonIcon } from '../Buttons/ButtonIcon';
 import CloseIcon from '../Icons/CloseIcon';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
-const ChatMessageActions = ({ messageId }: MessageActionProps) => {
+const ChatMessageActions = ({ messageId }: MessageActionProps): JSX.Element => {
   const { roomData } = useRoomData();
-  const classes = useChatMessageItemStyles({ userColor: '#FF026A' });
+  const classes = useChatMessageItemStyles({
+    userColor: '#FF026A',
+  });
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',
   });

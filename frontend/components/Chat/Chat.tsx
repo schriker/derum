@@ -5,7 +5,7 @@ import ChatInput from '../ChatInput/ChatInput';
 import ChatMessages from '../ChatMessages/ChatMessages';
 import ChatMessagesSkeleton from '../ChatMessages/ChatMessagesSkeleton';
 
-const Chat = ({ roomId }: { roomId: number }) => {
+const Chat = ({ roomId }: { roomId: number }): JSX.Element => {
   const { data } = useChatSubscriptions(roomId);
 
   return (

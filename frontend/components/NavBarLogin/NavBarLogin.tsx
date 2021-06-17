@@ -4,7 +4,7 @@ import { useMeQuery } from '../../generated/graphql';
 import LoginButton from '../LoginButton/LoginButton';
 import NavBarUser from '../NavBarUser/NavBarUser';
 
-const NavBarLogin = () => {
+const NavBarLogin = (): JSX.Element => {
   const { data } = useMeQuery({
     nextFetchPolicy: 'cache-only',
   });

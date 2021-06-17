@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
-import React, { useState } from 'react';
+import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { useMetadataLazyQuery } from '../../generated/graphql';
@@ -17,12 +17,12 @@ const schema = yup.object().shape({
     .trim()
     .required('Adres jest wymagany.')
     .matches(
-      /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/,
+      /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?/,
       'Podaj poprawny adres url z https.'
     ),
 });
 
-const RoomNewLinkForm = ({ setLinkMetadata }: NewLinkProps) => {
+const RoomNewLinkForm = ({ setLinkMetadata }: NewLinkProps): JSX.Element => {
   const classes = useRoomNewLinkStyles();
   const {
     control,
@@ -48,8 +48,6 @@ const RoomNewLinkForm = ({ setLinkMetadata }: NewLinkProps) => {
       variables,
     });
   };
-
-  const [d, setD] = useState(false);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

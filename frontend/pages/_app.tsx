@@ -8,14 +8,15 @@ import theme from '../lib/theme';
 import '../css/scrollBar.css';
 import NextNprogress from 'nextjs-progressbar';
 import Script from 'next/script';
+import { FacebookSDK } from '../types/facebook';
 
 declare global {
   interface Window {
-    FB: any;
+    FB: FacebookSDK;
   }
 }
 
-function MyApp({ Component, pageProps, ...rest }: AppProps) {
+function MyApp({ Component, pageProps }: AppProps): JSX.Element {
   const apolloClient = useApollo(pageProps);
 
   useEffect(() => {

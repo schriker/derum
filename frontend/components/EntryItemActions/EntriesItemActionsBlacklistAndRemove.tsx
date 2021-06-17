@@ -1,9 +1,6 @@
 import React from 'react';
 import { ListItemText } from '@material-ui/core';
-import {
-  EntriesDocument,
-  useBlacklistPublisherAndRemoveEntiresMutation,
-} from '../../generated/graphql';
+import { useBlacklistPublisherAndRemoveEntiresMutation } from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
 import DropdownItem from '../Dropdown/DropdownItem';
 

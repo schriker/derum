@@ -15,7 +15,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const SearchInput = ({ value, onChange, placeholder, style }: SearchInputProps) => {
+const SearchInput = ({
+  value,
+  onChange,
+  placeholder,
+  style,
+}: SearchInputProps): JSX.Element => {
   const classes = useStyles();
 
   return (

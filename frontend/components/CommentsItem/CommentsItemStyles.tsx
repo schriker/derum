@@ -1,6 +1,7 @@
 import { makeStyles, Theme } from '@material-ui/core';
+import { CommentsItemStyles } from '../../types/styles';
 
-const useCommentsItemStyles = makeStyles<Theme, { userColor: string }>(
+const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
   (theme: Theme) => ({
     wrapper: {
       display: 'flex',

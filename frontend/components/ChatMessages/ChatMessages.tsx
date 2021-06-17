@@ -9,7 +9,7 @@ const ChatMessages = ({
   messages,
 }: {
   messages: InitialMessagesQuery['initialMessages'];
-}) => {
+}): JSX.Element => {
   const { data } = useMeQuery();
   const [userId, setUserId] = useState(null);
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();

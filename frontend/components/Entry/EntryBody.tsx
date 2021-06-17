@@ -9,7 +9,7 @@ const Markdown = dynamic(() => import('../Markdown/Markdown'), {
   },
 });
 
-const EntryBody = ({ body }: { body: string }) => {
+const EntryBody = ({ body }: { body: string }): JSX.Element => {
   const classes = useEntryStyles();
 
   return (

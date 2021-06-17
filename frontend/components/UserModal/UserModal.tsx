@@ -10,7 +10,11 @@ import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import useUserModalStyles from './UserModalStyles';
 import UserModalActions from './UsertMoalActions';
 
-const UserModal = ({ id, openModal, handleClose }: UserModalProps) => {
+const UserModal = ({
+  id,
+  openModal,
+  handleClose,
+}: UserModalProps): JSX.Element => {
   const { roomData } = useRoomData();
   const classes = useUserModalStyles();
   const { data } = useUserQuery({

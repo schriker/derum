@@ -16,7 +16,7 @@ const schema = yup.object().shape({
   body: yup.string().trim().required(),
 });
 
-const ChatInput = ({ roomId }: { roomId: number }) => {
+const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
   const isConnected = useIsConnected();
   const { control, handleSubmit, reset } = useForm<ChatInputs>({
     resolver: yupResolver(schema),

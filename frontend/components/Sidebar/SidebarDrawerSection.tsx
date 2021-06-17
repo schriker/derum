@@ -9,8 +9,8 @@ import useSidebarStyles from './SidebarStyles';
 const SidebarDrawerSection = ({
   title,
   sectionData,
-}: SidebarDrawerSectionProps) => {
-  const classes = useSidebarStyles({});
+}: SidebarDrawerSectionProps): JSX.Element => {
+  const classes = useSidebarStyles({ isActive: false });
   const router = useRouter();
 
   const handleClick = (name: string) => {

@@ -1,6 +1,6 @@
-import { makeStyles, Theme } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
-const useEntriesStyles = makeStyles((theme: Theme) => ({
+const useEntriesStyles = makeStyles(() => ({
   wrapper: {
     display: 'flex',
     flexDirection: 'column',

@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function Custom404() {
+export default function Custom404(): JSX.Element {
   const classes = useStyles();
 
   return (

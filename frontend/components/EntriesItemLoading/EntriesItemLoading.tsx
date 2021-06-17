@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import React from 'react';
 
-const EntiresItemLoading = () => {
+const EntiresItemLoading = (): JSX.Element => {
   return (
     <Box
       alignItems="center"

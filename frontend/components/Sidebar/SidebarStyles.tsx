@@ -1,7 +1,8 @@
 import { makeStyles, Theme } from '@material-ui/core';
+import { SidebarStyles } from '../../types/styles';
 
-const useSidebarStyles = makeStyles((theme: Theme) => ({
-  photo: (props: any) => ({
+const useSidebarStyles = makeStyles<Theme, SidebarStyles>((theme: Theme) => ({
+  photo: (props) => ({
     fontWeight: 400,
     border: props.isActive ? '2px solid' : '0',
     borderColor: props.isActive ? theme.palette.primary['A400'] : 'transparent',

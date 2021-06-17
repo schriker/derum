@@ -11,7 +11,11 @@ import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import useHeaderStyles from './RoomHeaderStyles';
 
-const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
+const RoomHeaderPhoto = ({
+  roomData,
+}: {
+  roomData: RoomQuery;
+}): JSX.Element => {
   const classes = useHeaderStyles();
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',

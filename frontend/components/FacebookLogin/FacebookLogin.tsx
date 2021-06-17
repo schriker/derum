@@ -7,7 +7,11 @@ import { SocialLoginProps } from '../../types/socialLogin';
 import { ButtonSocialLogin } from '../Buttons/ButtonSocialLogin';
 import FacebookIcon from '../Icons/FacebookIcon';
 
-const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
+const FacebookLogin = ({
+  onSuccess,
+  onError,
+  onLoading,
+}: SocialLoginProps): JSX.Element => {
   const hadleError = () => {
     onLoading(false);
     onError(true);
@@ -37,7 +41,7 @@ const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
     onError(false);
     if (window.FB) {
       window.FB.login(
-        (response: any) => {
+        (response) => {
           if (!response.authResponse) return onLoading(false);
 
           login({

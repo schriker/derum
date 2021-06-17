@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const UserDropdown = () => {
+const UserDropdown = (): JSX.Element => {
   const classes = useStyles();
   const [logout] = useLogoutMutation({
     onError: () => {

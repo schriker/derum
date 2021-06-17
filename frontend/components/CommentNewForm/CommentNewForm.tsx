@@ -24,8 +24,7 @@ const schema = yup.object().shape({
 const CommentNewForm = ({
   entryId,
   parentId,
-  setParentId,
-}: NewCommentPropsType) => {
+}: NewCommentPropsType): JSX.Element => {
   const classes = useRoomNewLinkStyles();
   const bodyFieldRef = useRef<HTMLTextAreaElement | null>(null);
   const {

@@ -7,7 +7,7 @@ import NavBar from '../NavBar/NavBar';
 import Sidebar from '../Sidebar/SIdebar';
 import SidebarDrawer from '../Sidebar/SidebarDrawer';
 
-const Layout = ({ children, ...rest }: LayoutProps) => {
+const Layout = ({ children, ...rest }: LayoutProps): JSX.Element => {
   return (
     <>
       <Header {...rest} />

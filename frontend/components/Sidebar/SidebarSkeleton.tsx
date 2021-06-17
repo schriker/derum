@@ -1,7 +1,7 @@
 import { Skeleton } from '@material-ui/lab';
 import React from 'react';
 
-const SidebarSkeleton = () => {
+const SidebarSkeleton = (): JSX.Element => {
   return (
     <Skeleton
       style={{ marginTop: 10 }}
