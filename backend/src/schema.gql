@@ -9,10 +9,18 @@ type Comment {
   author: User!
   body: String!
   parentId: Int
+  voteScore: Int
+  userVote: VoteValueEnum
 }
 
 """Date custom scalar type"""
 scalar Date
+
+enum VoteValueEnum {
+  UP
+  DOWN
+  NONE
+}
 
 type Link {
   id: Int!
@@ -79,12 +87,6 @@ enum EntryType {
   ARTICLE
   IMAGE
   VIDEO
-}
-
-enum VoteValueEnum {
-  UP
-  DOWN
-  NONE
 }
 
 type User {

@@ -32,3 +32,5 @@ export const ButtonBlank = React.forwardRef((props: ButtonProps, ref) => {
     </Button>
   );
 });
+
+ButtonBlank.displayName = 'ButtonBlank';

@@ -9,7 +9,6 @@ const Header = ({ title, ogImage, ogDescription }: HeadProps) => {
     <>
       <Head>
         <title>{title}</title>
-        <meta name="theme-color" content="#FF0000" />
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
         <meta
@@ -24,10 +23,10 @@ const Header = ({ title, ogImage, ogDescription }: HeadProps) => {
           content="width=device-width, initial-scale=1, viewport-fit=auto"
         ></meta>
         <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
+        {/* <link
           href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
           rel="stylesheet"
-        />
+        /> */}
         {/* <link
           rel="apple-touch-icon"
           sizes="57x57"

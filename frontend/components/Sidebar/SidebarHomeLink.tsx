@@ -6,7 +6,7 @@ import DarkTooltip from '../Tooltip/Tooltip';
 
 const SidebarHomeLink = () => {
   return (
-    <Link href="/">
+    <Link href="/" passHref>
       <DarkTooltip title="Główna" enterDelay={500} placement="right">
         <ButtonIcon color="secondary">
           <HomeIcon style={{ fontSize: 16 }} />

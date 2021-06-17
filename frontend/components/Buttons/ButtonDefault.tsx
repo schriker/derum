@@ -35,3 +35,5 @@ export const ButtonDefault = React.forwardRef((props: ButtonProps, ref) => {
     </Button>
   );
 });
+
+ButtonDefault.displayName = 'ButtonDefault';

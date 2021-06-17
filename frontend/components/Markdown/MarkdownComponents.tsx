@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import {
@@ -52,7 +53,7 @@ const components: Partial<NormalComponents & SpecialComponents> = {
   img(props) {
     return (
       <span style={{ display: 'block', textAlign: 'center' }}>
-        <img {...props} />
+        <img {...props} alt="" />
       </span>
     );
   },
@@ -64,11 +65,14 @@ const components: Partial<NormalComponents & SpecialComponents> = {
         style={vscDarkPlus}
         language={match[1]}
         PreTag="div"
-        children={String(children).replace(/\n$/, '')}
         {...props}
-      />
+      >
+        {String(children).replace(/\n$/, '')}
+      </SyntaxHighlighter>
     ) : (
-      <code className="md-inline-code" {...props} children={children} />
+      <code className="md-inline-code" {...props}>
+        {children}
+      </code>
     );
   },
 };

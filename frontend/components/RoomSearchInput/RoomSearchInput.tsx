@@ -37,7 +37,7 @@ const RoomSearchInput = ({ error, onSelect, placeholder }: RoomSearchProps) => {
     if (roomData && !placeholder && roomData.room.name !== indexRoomVars.name) {
       onSelect(roomData.room.id, roomData.room.name);
     }
-  }, [roomData]);
+  }, [roomData, onSelect, placeholder]);
 
   const isLoading = searchLoading || popularRoomsLoading;
 

@@ -2,6 +2,7 @@ import { Box } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useCommentsQuery, useMeQuery } from '../../generated/graphql';
+import createCommentTree from '../../helpers/createCommentsTree';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import CommentNewForm from '../CommentNewForm/CommentNewForm';
 import CommentsItem from '../CommentsItem/CommentsItem';
@@ -25,6 +26,10 @@ const Comments = () => {
       entryId,
     },
   });
+
+  if (data) {
+    console.log(createCommentTree(data));
+  }
 
   return (
     <Box id="comments" className={classes.wrapper}>

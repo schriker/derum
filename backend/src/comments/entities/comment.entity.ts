@@ -1,6 +1,8 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Vote } from 'src/votes/entities/vote.entity';
+import { VoteValueEnum } from 'src/votes/types/value.enum';
 import {
   Column,
   CreateDateColumn,
@@ -8,6 +10,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -46,4 +49,15 @@ export class Comment {
   @ManyToOne(() => Comment, (comment) => comment.id, { nullable: true })
   @JoinColumn()
   parent: Comment;
+
+  @OneToMany(() => Vote, (vote) => vote.comment)
+  votes: Vote[];
+
+  @Field(() => Int, { nullable: true })
+  @Column({ select: false, insert: false, readonly: true, nullable: true })
+  voteScore: number;
+
+  @Field(() => VoteValueEnum, { nullable: true })
+  @Column({ select: false, insert: false, readonly: true, nullable: true })
+  userVote: VoteValueEnum;
 }

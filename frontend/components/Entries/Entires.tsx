@@ -57,3 +57,5 @@ const Entries = React.forwardRef<
 });
 
 export default Entries;
+
+Entries.displayName = 'Entries';

@@ -88,7 +88,7 @@ const RoomNewArticleForm = ({ closeModal }: { closeModal: () => void }) => {
         localforage.setItem(STORAGE_KEY_NAME, getValues());
       }
     };
-  }, [isSubmitted]);
+  }, [isSubmitted, getValues, touchedFields]);
 
   const handleResotreSession = () => {
     for (let key in oldSession) {

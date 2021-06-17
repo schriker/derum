@@ -73,6 +73,8 @@ const RoomNewLinkMetadataForm = ({
       },
     });
 
+  const roomId = watch('roomId');
+
   useEffect(() => {
     if (watch('roomId')) {
       checkIfExists({
@@ -82,7 +84,7 @@ const RoomNewLinkMetadataForm = ({
         },
       });
     }
-  }, [watch('roomId')]);
+  }, [roomId, watch, checkIfExists, metadata.id]);
 
   const [createLink, { loading: createLinkLoading }] = useCreateLinkMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),

@@ -12,6 +12,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { VoteValueEnum } from '../types/value.enum';
+import { Comment } from '../../comments/entities/comment.entity';
 
 @Entity('vote')
 @ObjectType()
@@ -34,8 +35,12 @@ export class Vote {
   user: User;
 
   @Index()
-  @ManyToOne(() => Entry, (entry) => entry.votes)
+  @ManyToOne(() => Entry, (entry) => entry.votes, { nullable: true })
   entry: Entry;
+
+  @Index()
+  @ManyToOne(() => Comment, (comment) => comment.votes, { nullable: true })
+  comment: Comment;
 
   @Column()
   @Field(() => Int)

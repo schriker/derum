@@ -4,7 +4,9 @@ import React from 'react';
 import EntryBodyLoading from '../EntryBodyLoading/EntryBodyLoading';
 import useEntryStyles from './EntryStyles';
 const Markdown = dynamic(() => import('../Markdown/Markdown'), {
-  loading: () => <EntryBodyLoading />,
+  loading: function Loading() {
+    return <EntryBodyLoading />;
+  },
 });
 
 const EntryBody = ({ body }: { body: string }) => {
