@@ -1,6 +1,7 @@
 import { CommentsQuery } from '../generated/graphql';
+import { MapedComments } from '../types/comment';
 
-const createCommentTree = (data: CommentsQuery) => {
+const createCommentTree = (data: CommentsQuery): MapedComments[] => {
   const { comments } = data;
 
   const hashTable = Object.create(null);

@@ -14,7 +14,7 @@ const EntryBody = ({ body }: { body: string }): JSX.Element => {
 
   return (
     <Box className={classes.bodyWrapper}>
-      <Markdown value={body} />
+      <Markdown>{body}</Markdown>
     </Box>
   );
 };

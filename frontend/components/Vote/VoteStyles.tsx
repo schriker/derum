@@ -12,6 +12,7 @@ const useVoteStyle = makeStyles<Theme, VoteStyles>((theme: Theme) => ({
     backgroundColor: theme.palette.grey[900],
   },
   voteText: {
+    fontSize: 14,
     margin: '5px 0',
   },
 }));

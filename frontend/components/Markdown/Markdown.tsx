@@ -1,9 +1,9 @@
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown, { ReactMarkdownOptions } from 'react-markdown';
 import gfm from 'remark-gfm';
 import components from './MarkdownComponents';
 import useMarkdownStyles from './MarkdownStyles';
 
-const Markdown = ({ value }: { value: string }): JSX.Element => {
+const Markdown = (props: ReactMarkdownOptions): JSX.Element => {
   const classes = useMarkdownStyles();
 
   return (
@@ -11,8 +11,9 @@ const Markdown = ({ value }: { value: string }): JSX.Element => {
       className={classes.wrapper}
       components={components}
       remarkPlugins={[gfm]}
+      {...props}
     >
-      {value}
+      {props.children}
     </ReactMarkdown>
   );
 };

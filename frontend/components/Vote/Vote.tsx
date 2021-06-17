@@ -31,7 +31,7 @@ const Vote = ({
         color={userVote === VoteValueEnum.UP ? 'default' : 'secondary'}
         size="small"
       >
-        <PlusIcon style={{ fontSize: 14 }} />
+        <PlusIcon style={{ fontSize: 13 }} />
       </ButtonIcon>
       <Typography className={classes.voteText} variant="subtitle1">
         {numbro(voteScore ? voteScore : 0).format({ average: true })}
@@ -47,7 +47,7 @@ const Vote = ({
         color={userVote === VoteValueEnum.DOWN ? 'default' : 'secondary'}
         size="small"
       >
-        <MinusIcon style={{ fontSize: 14 }} />
+        <MinusIcon style={{ fontSize: 13 }} />
       </ButtonIcon>
     </CardContent>
   );

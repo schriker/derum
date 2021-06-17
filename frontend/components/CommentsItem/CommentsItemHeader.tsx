@@ -4,6 +4,7 @@ import React from 'react';
 import { CommentItemPropsType } from '../../types/comment';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import { ButtonDefault } from '../Buttons/ButtonDefault';
+import CommentsItemResponseTo from './CommentsItemResponseTo';
 import useCommentsItemStyles from './CommentsItemStyles';
 
 const CommentsItemHeader = ({
@@ -24,29 +25,36 @@ const CommentsItemHeader = ({
 
   return (
     <Box className={classes.headerWrapper}>
-      <Box className={classes.header}>
-        <AvatarPhoto
-          styles={{
-            width: 30,
-            height: 30,
-          }}
-          color="#FF026A"
-          onClick={() => handleUserSelect(data.author.id)}
-          className={classes.photo}
-          src={data.author.photo}
-          name={data.author.displayName}
-        />
-        <Typography
-          variant="subtitle1"
-          component="span"
-          className={classes.author}
-          onClick={() => handleUserSelect(data.author.id)}
-        >
-          {data.author.displayName}
-        </Typography>
-        <Typography color="textSecondary" variant="subtitle2" component="span">
-          {dayjs(data.createdAt.createdAt).format('DD.MM.YYYY - HH:mm')}
-        </Typography>
+      <Box display="flex">
+        <Box className={classes.header}>
+          <AvatarPhoto
+            styles={{
+              width: 30,
+              height: 30,
+            }}
+            color="#FF026A"
+            onClick={() => handleUserSelect(data.author.id)}
+            className={classes.photo}
+            src={data.author.photo}
+            name={data.author.displayName}
+          />
+          <Typography
+            variant="subtitle1"
+            component="span"
+            className={classes.author}
+            onClick={() => handleUserSelect(data.author.id)}
+          >
+            {data.author.displayName}
+          </Typography>
+          <Typography
+            color="textSecondary"
+            variant="subtitle2"
+            component="span"
+          >
+            {dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm:ss')}
+          </Typography>
+        </Box>
+        {data.parentId && <CommentsItemResponseTo data={data} />}
       </Box>
       <ButtonDefault
         onClick={() => setParentId(data.id === parentId ? null : data.id)}

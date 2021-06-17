@@ -185,7 +185,7 @@ const RoomNewArticleForm = ({
           />
         )}
       />
-      <Markdown value={watch('body')} />
+      <Markdown>{watch('body')}</Markdown>
       <Box display="flex" justifyContent="flex-end">
         <ButtonPrimary
           disabled={loading}

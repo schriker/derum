@@ -5,6 +5,7 @@ export type ChatMessageItemStyles = {
 };
 
 export type CommentsItemStyles = {
+  level?: number;
   userColor: string;
 };
 

@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
+import dynamic from 'next/dynamic';
 import React, { useRef } from 'react';
 import { useEffect } from 'react';
 import { SubmitHandler } from 'react-hook-form';
@@ -14,7 +15,7 @@ import { NewCommentInputs, NewCommentPropsType } from '../../types/comment';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import { CustomInput } from '../CustomInput/CustomInput';
 import FormInput from '../FormInput/FormInput';
-import Markdown from '../Markdown/Markdown';
+const Markdown = dynamic(() => import('../Markdown/Markdown'));
 import useRoomNewLinkStyles from '../RoomNewLinkForm/RoomNewLinkFormStyles';
 
 const schema = yup.object().shape({
@@ -100,7 +101,7 @@ const CommentNewForm = ({
             />
           )}
         />
-        <Markdown value={watch('body')} />
+        <Markdown>{watch('body')}</Markdown>
         <Box display="flex" justifyContent="flex-end">
           <ButtonPrimary
             disabled={loading}

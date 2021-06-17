@@ -1,7 +1,12 @@
 import { CommentFragmentFragment } from '../generated/graphql';
 
+export interface MapedComments extends CommentFragmentFragment {
+  childrens: MapedComments[];
+}
+
 export type CommentItemPropsType = {
-  data: CommentFragmentFragment;
+  level: number;
+  data: MapedComments;
   setUserId: (id: number) => void;
   handleOpen: () => void;
   setParentId: (id: number) => void;

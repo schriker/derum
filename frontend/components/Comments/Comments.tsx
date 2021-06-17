@@ -27,17 +27,14 @@ const Comments = (): JSX.Element => {
     },
   });
 
-  if (data) {
-    console.log(createCommentTree(data));
-  }
-
   return (
     <Box id="comments" className={classes.wrapper}>
       {userData && !parentId && <CommentNewForm entryId={entryId} />}
       {loading && <EntryBodyLoading />}
       {!!data?.comments.length &&
-        data.comments.map((comment) => (
+        createCommentTree(data).map((comment) => (
           <CommentsItem
+            level={0}
             entryId={entryId}
             parentId={parentId}
             setParentId={setParentId}
