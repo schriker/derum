@@ -163,6 +163,7 @@ export type MutationCreateLinkArgs = {
 
 
 export type MutationCreateArticleArgs = {
+  photo?: Maybe<Scalars['Upload']>;
   newArticleData: NewArticleData;
 };
 
@@ -456,6 +457,7 @@ export type BlacklistPublisherAndRemoveEntiresMutation = (
 
 export type CreateArticleMutationVariables = Exact<{
   newArticleData: NewArticleData;
+  photo?: Maybe<Scalars['Upload']>;
 }>;
 
 
@@ -994,8 +996,8 @@ export type BlacklistPublisherAndRemoveEntiresMutationHookResult = ReturnType<ty
 export type BlacklistPublisherAndRemoveEntiresMutationResult = Apollo.MutationResult<BlacklistPublisherAndRemoveEntiresMutation>;
 export type BlacklistPublisherAndRemoveEntiresMutationOptions = Apollo.BaseMutationOptions<BlacklistPublisherAndRemoveEntiresMutation, BlacklistPublisherAndRemoveEntiresMutationVariables>;
 export const CreateArticleDocument = gql`
-    mutation CreateArticle($newArticleData: NewArticleData!) {
-  createArticle(newArticleData: $newArticleData) {
+    mutation CreateArticle($newArticleData: NewArticleData!, $photo: Upload) {
+  createArticle(newArticleData: $newArticleData, photo: $photo) {
     ...EntryFragment
   }
 }
@@ -1016,6 +1018,7 @@ export type CreateArticleMutationFn = Apollo.MutationFunction<CreateArticleMutat
  * const [createArticleMutation, { data, loading, error }] = useCreateArticleMutation({
  *   variables: {
  *      newArticleData: // value for 'newArticleData'
+ *      photo: // value for 'photo'
  *   },
  * });
  */

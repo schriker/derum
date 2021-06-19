@@ -15,7 +15,7 @@ export class NewArticleData {
   description: string;
 
   @Field()
-  @MinLength(150)
+  @MinLength(10)
   @Transform(({ value }) => value.trim())
   body: string;
 

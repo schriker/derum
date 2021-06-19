@@ -5,6 +5,7 @@ import { MapedComments } from '../../types/comment';
 import useCommentsItemStyles from './CommentsItemStyles';
 import { CommentFragmentFragmentDoc } from '../../generated/graphql';
 import { Popover, Typography } from '@material-ui/core';
+import trimString from '../../helpers/trimString';
 
 const CommentsItemResponseTo = ({
   data,
@@ -54,15 +55,11 @@ const CommentsItemResponseTo = ({
             variant="body2"
             color="textPrimary"
           >
-            W odpowiedzi do: {parentComment.body}
+            Odpowiedzź do: {trimString(parentComment.body, 70)}
           </Typography>
         </Popover>
       )}
-      <ButtonText
-        onClick={handleClick}
-        className={classes.replyButton}
-        size="small"
-      >
+      <ButtonText style={{ marginLeft: 8 }} onClick={handleClick} size="small">
         #{data.parentId}
       </ButtonText>
     </>

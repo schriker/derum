@@ -14,7 +14,11 @@ import SidebarDrawerItem from '../Sidebar/SidebarDrawerItem';
 import useRoomSearchAutocompleteStyles from './RoomSearchAutocompleteStyles';
 import useRoomSearchInputStyles from './RoomSearchInputStyles';
 
-const RoomSearchInput = ({ error, onSelect, placeholder }: RoomSearchProps): JSX.Element => {
+const RoomSearchInput = ({
+  error,
+  onSelect,
+  placeholder,
+}: RoomSearchProps): JSX.Element => {
   const classes = useRoomSearchInputStyles();
   const { roomData } = useRoomData();
   const autoCompleteClasses = useRoomSearchAutocompleteStyles();

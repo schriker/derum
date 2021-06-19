@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { NewArticleInputs } from '../../types/newArticle';
@@ -20,6 +20,8 @@ import { useRouter } from 'next/router';
 const Markdown = dynamic(() => import('../Markdown/Markdown'));
 
 const STORAGE_KEY_NAME = 'article';
+const FILE_SIZE = 5000000;
+const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
 
 const schema = yup.object().shape({
   roomId: yup.number().required('Wybierz pokój.'),
@@ -39,7 +41,18 @@ const schema = yup.object().shape({
     .string()
     .trim()
     .required('Treść jest wymagana.')
-    .min(150, 'Trść min. 150 znaków.'),
+    .min(10, 'Trść min. 10 znaków.'),
+  photo: yup
+    .mixed()
+    .notRequired()
+    .test('fileSize', 'Rozmiar zdjęcia max 5mb.', (value) => {
+      if (!value) return true;
+      if (value.length) return value[0].size <= FILE_SIZE;
+    })
+    .test('fileType', 'Zły format pliku.', (value) => {
+      if (!value) return true;
+      if (value.length) return SUPPORTED_FORMATS.includes(value[0].type);
+    }),
 });
 
 const RoomNewArticleForm = ({
@@ -56,6 +69,7 @@ const RoomNewArticleForm = ({
     handleSubmit,
     setValue,
     watch,
+    register,
     getValues,
     formState: { errors, touchedFields, isSubmitted },
   } = useForm<NewArticleInputs>({
@@ -89,7 +103,10 @@ const RoomNewArticleForm = ({
         !isSubmitted &&
         Object.entries(touchedFields).some((value) => value)
       ) {
-        localforage.setItem(STORAGE_KEY_NAME, getValues());
+        localforage.setItem(STORAGE_KEY_NAME, {
+          ...getValues(),
+          photo: null,
+        });
       }
     };
   }, [isSubmitted, getValues, touchedFields]);
@@ -108,11 +125,22 @@ const RoomNewArticleForm = ({
     createArticle({
       variables: {
         newArticleData: {
-          ...variables,
+          roomId: variables.roomId,
+          title: variables.title,
+          description: variables.description,
+          body: variables.body,
         },
+        photo: variables.photo[0] ? variables.photo[0] : null,
       },
     });
   };
+
+  const onSelect = useCallback(
+    (id: number) => {
+      setValue('roomId', id, { shouldValidate: true });
+    },
+    [setValue]
+  );
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -131,12 +159,7 @@ const RoomNewArticleForm = ({
           </Alert>
         </Box>
       )}
-      <RoomSearchInput
-        error={errors.roomId}
-        onSelect={(id: number) =>
-          setValue('roomId', id, { shouldValidate: true })
-        }
-      />
+      <RoomSearchInput error={errors.roomId} onSelect={onSelect} />
       <FormInput
         name="title"
         label="Tytuł"
@@ -168,6 +191,7 @@ const RoomNewArticleForm = ({
           />
         )}
       />
+      <input name="photo" type="file" accept="image/*" {...register('photo')} />
       <FormInput
         name="body"
         label="Treść"

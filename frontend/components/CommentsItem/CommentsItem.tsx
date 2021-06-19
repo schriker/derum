@@ -1,12 +1,11 @@
-import { Box } from '@material-ui/core';
-import dynamic from 'next/dynamic';
 import React from 'react';
-import { CommentItemPropsType } from '../../types/comment';
-import CommentNewForm from '../CommentNewForm/CommentNewForm';
-const Markdown = dynamic(() => import('../Markdown/Markdown'));
+import { Box } from '@material-ui/core';
+import Markdown from '../Markdown/Markdown';
+import CommentsItemVote from './CommentsItemVote';
 import CommentsItemHeader from './CommentsItemHeader';
 import useCommentsItemStyles from './CommentsItemStyles';
-import CommentsItemVote from './CommentsItemVote';
+import { CommentItemPropsType } from '../../types/comment';
+import CommentNewForm from '../CommentNewForm/CommentNewForm';
 
 const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
   const classes = useCommentsItemStyles({
@@ -26,9 +25,7 @@ const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
         <Box className={classes.content}>
           <CommentsItemHeader {...props} />
           <Box className={classes.body}>
-            <Markdown disallowedElements={['h1', 'h2', 'h3', 'h4']}>
-              {props.data.body}
-            </Markdown>
+            <Markdown>{props.data.body}</Markdown>
           </Box>
           {props.parentId === props.data.id && (
             <CommentNewForm

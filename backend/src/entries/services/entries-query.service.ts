@@ -3,9 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import rawQueryToEntity from 'src/helpers/rawQueryToEntity';
 import { Room } from 'src/rooms/entities/room.entity';
+import { RoomsService } from 'src/rooms/rooms.service';
 import { User } from 'src/users/entities/user.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
-import { ILike, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { QueryEntriesInput } from '../dto/query.input';
 import { Entry } from '../entities/entry.entity';
 import { homeEntiresNewestQuery } from '../sql/home-entries-newest.sql';
@@ -16,8 +17,7 @@ export class EntriesQueryService {
   constructor(
     @InjectRepository(Entry)
     private entryRepository: Repository<Entry>,
-    @InjectRepository(Room)
-    private roomRepository: Repository<Room>,
+    private roomsService: RoomsService,
     private configService: ConfigService,
   ) {}
 
@@ -178,8 +178,7 @@ export class EntriesQueryService {
 
   async findMany(queryData: QueryEntriesInput, user: User): Promise<Entry[]> {
     const { roomName } = queryData;
-    const room = await this.roomRepository.findOne({ name: ILike(roomName) });
-    if (!room) throw new NotFoundException(roomName);
+    const room = await this.roomsService.findOneByName(roomName);
     switch (queryData.sort) {
       case EntrySort.NEW:
         return this.getNewest(queryData, room, user);

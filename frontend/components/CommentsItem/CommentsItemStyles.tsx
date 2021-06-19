@@ -27,12 +27,15 @@ const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
     },
     headerWrapper: {
       display: 'flex',
-      padding: theme.spacing(1),
+      paddingTop: 4,
+      paddingLeft: 8,
+      paddingRight: 8,
+      paddingBottom: 4,
       justifyContent: 'space-between',
       backgroundColor: theme.palette.grey[900],
     },
     replyButton: {
-      marginLeft: 10,
+      marginLeft: 8,
       opacity: 0,
       transition: theme.transitions.create('opacity', { duration: 200 }),
     },
@@ -40,7 +43,7 @@ const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
       display: 'flex',
       alignItems: 'center',
       '& span': {
-        marginLeft: 10,
+        marginLeft: 8,
       },
     },
     photo: {

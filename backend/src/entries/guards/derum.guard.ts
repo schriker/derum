@@ -15,8 +15,8 @@ export class DerumGuard implements CanActivate {
     const homeRoomId = this.configService.get<string>('HOME_ROOM_ID');
     const ctx = GqlExecutionContext.create(context);
     const vars = ctx.getContext().req.body.variables;
-    for (const key in vars) {
-      if (vars[key].roomId === parseInt(homeRoomId))
+    for (const key in vars.newArticleData) {
+      if (vars.newArticleData[key].roomId === parseInt(homeRoomId))
         throw new UnauthorizedException();
     }
     return true;

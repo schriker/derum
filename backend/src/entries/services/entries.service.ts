@@ -8,7 +8,6 @@ import slugify from 'slugify';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { Link } from 'src/meta-scraper/entities/link.entity';
 import { PhotosService } from 'src/photos/photos.service';
-import { Room } from 'src/rooms/entities/room.entity';
 import { User } from 'src/users/entities/user.entity';
 import { ILike, Repository } from 'typeorm';
 import { NewLinkData } from '../dto/new-link.input';
@@ -19,6 +18,8 @@ import { Vote } from 'src/votes/entities/vote.entity';
 import { NewArticleData } from '../dto/new-article.input';
 import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-publisher.entity';
 import { EntriesQueryService } from './entries-query.service';
+import { RoomsService } from 'src/rooms/rooms.service';
+import { FileUpload } from 'graphql-upload';
 
 @Injectable()
 export class EntriesService {
@@ -27,8 +28,7 @@ export class EntriesService {
     private entryRepository: Repository<Entry>,
     @InjectRepository(Link)
     private linkRepository: Repository<Link>,
-    @InjectRepository(Room)
-    private roomRepository: Repository<Room>,
+    private roomsService: RoomsService,
     @InjectRepository(BlacklistPublisher)
     private blacklistPublisherRepository: Repository<BlacklistPublisher>,
     private photosService: PhotosService,
@@ -95,9 +95,7 @@ export class EntriesService {
       throw new BadRequestException(ERROR_MESSAGES.LINK_EXISTS);
     const link = await this.linkRepository.findOne({ id: newLinkData.linkId });
     await this.checkIfBlacklistedPublisher(link.publisher);
-    const room = await this.roomRepository.findOne({
-      id: newLinkData.roomId,
-    });
+    const room = await this.roomsService.findOneById(roomId);
     if (!link || !room) throw new NotFoundException();
     let photo = null;
     if (link.photo) {
@@ -119,14 +117,16 @@ export class EntriesService {
 
   async createArticle(
     newArticleData: NewArticleData,
+    photo: FileUpload,
     user: User,
   ): Promise<Entry> {
     const { roomId, title, description, body } = newArticleData;
-    const room = await this.roomRepository.findOne({
-      id: roomId,
-    });
-    if (!room) throw new NotFoundException();
+    const room = await this.roomsService.findOneById(roomId);
     const entry = new Entry();
+    if (photo) {
+      const savedPhoto = await this.photosService.saveArticlePhoto(photo, user);
+      entry.photo = savedPhoto;
+    }
     entry.slug = this.createSlug(title);
     entry.author = user;
     entry.body = body;

@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import {
@@ -109,14 +110,16 @@ const RoomNewLinkMetadataForm = ({
     });
   };
 
+  const onSelect = useCallback(
+    (id: number) => {
+      setValue('roomId', id, { shouldValidate: true });
+    },
+    [setValue]
+  );
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <RoomSearchInput
-        error={errors.roomId}
-        onSelect={(id: number) =>
-          setValue('roomId', id, { shouldValidate: true })
-        }
-      />
+      <RoomSearchInput error={errors.roomId} onSelect={onSelect} />
       <FormInput
         name="title"
         label="Tytuł"

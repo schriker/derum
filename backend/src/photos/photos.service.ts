@@ -118,4 +118,33 @@ export class PhotosService {
       return null;
     }
   }
+
+  async saveArticlePhoto(photo: FileUpload, user: User): Promise<Photo> {
+    const { mimetype, createReadStream } = photo;
+    this.checkMimetype(mimetype);
+    return new Promise((resolve) => {
+      const stream = createReadStream();
+      const imgData: Buffer[] = [];
+      stream.on('data', (chunk: Buffer) => {
+        imgData.push(chunk);
+      });
+      stream.on('end', async () => {
+        const resizedPhoto = await this.resizePhoto(
+          500,
+          300,
+          Buffer.concat(imgData),
+        );
+        const { name, url } = await this.awsService.upload(
+          resizedPhoto,
+          'article',
+        );
+        const photo = new Photo();
+        photo.name = name;
+        photo.url = url;
+        photo.user = user;
+
+        resolve(this.photosRepository.save(photo));
+      });
+    });
+  }
 }

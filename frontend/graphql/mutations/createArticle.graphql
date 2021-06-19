@@ -1,5 +1,5 @@
-mutation CreateArticle($newArticleData: NewArticleData!) {
-  createArticle(newArticleData: $newArticleData) {
+mutation CreateArticle($newArticleData: NewArticleData!, $photo: Upload) {
+  createArticle(newArticleData: $newArticleData, photo: $photo) {
     ...EntryFragment
   }
 }

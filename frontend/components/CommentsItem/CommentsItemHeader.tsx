@@ -1,6 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
 import React from 'react';
+import { useMeQuery } from '../../generated/graphql';
 import { CommentItemPropsType } from '../../types/comment';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import { ButtonDefault } from '../Buttons/ButtonDefault';
@@ -17,6 +18,9 @@ const CommentsItemHeader = ({
   const classes = useCommentsItemStyles({
     userColor: '#FF026A',
   });
+  const { data: userdata } = useMeQuery({
+    fetchPolicy: 'cache-only',
+  });
 
   const handleUserSelect = (id: number) => {
     setUserId(id);
@@ -29,8 +33,8 @@ const CommentsItemHeader = ({
         <Box className={classes.header}>
           <AvatarPhoto
             styles={{
-              width: 30,
-              height: 30,
+              width: 25,
+              height: 25,
             }}
             color="#FF026A"
             onClick={() => handleUserSelect(data.author.id)}
@@ -56,13 +60,15 @@ const CommentsItemHeader = ({
         </Box>
         {data.parentId && <CommentsItemResponseTo data={data} />}
       </Box>
-      <ButtonDefault
-        onClick={() => setParentId(data.id === parentId ? null : data.id)}
-        className={classes.replyButton}
-        size="small"
-      >
-        {data.id === parentId ? 'Anuluj' : 'Odpowiedz'}
-      </ButtonDefault>
+      {userdata && (
+        <ButtonDefault
+          onClick={() => setParentId(data.id === parentId ? null : data.id)}
+          className={classes.replyButton}
+          size="small"
+        >
+          {data.id === parentId ? 'Anuluj' : 'Odpowiedz'}
+        </ButtonDefault>
+      )}
     </Box>
   );
 };

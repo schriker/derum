@@ -157,7 +157,7 @@ type Mutation {
   createMessage(newMessageData: NewMessageInput!): Message!
   deleteMessage(id: Int!): Boolean!
   createLink(newLinkData: NewLinkData!): Entry!
-  createArticle(newArticleData: NewArticleData!): Entry!
+  createArticle(photo: Upload, newArticleData: NewArticleData!): Entry!
   deleteEntry(id: Int!): Boolean!
   uploadRoomPhoto(attachment: Upload!, roomId: Int!): Photo!
   vote(value: VoteValueEnum!, entryId: Int!): VoteResult!
@@ -184,15 +184,15 @@ input NewLinkData {
   roomId: Int!
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 input NewArticleData {
   title: String!
   description: String!
   body: String!
   roomId: Int!
 }
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
 
 input NewCommentData {
   body: String!

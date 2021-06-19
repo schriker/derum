@@ -13,6 +13,7 @@ import { Entry } from './entities/entry.entity';
 import { EntriesService } from './services/entries.service';
 import { DerumGuard } from './guards/derum.guard';
 import { EntriesQueryService } from './services/entries-query.service';
+import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
 @Resolver(() => Entry)
 export class EntriesResolver {
@@ -53,10 +54,12 @@ export class EntriesResolver {
   @UseGuards(GQLSessionGuard, DerumGuard)
   createArticle(
     @Args('newArticleData') newArticleData: NewArticleData,
+    @Args('photo', { type: () => GraphQLUpload, nullable: true })
+    photo: FileUpload,
     @CurrentUser() user: User,
   ): Promise<Entry> {
     // Check if BAN
-    return this.entriesService.createArticle(newArticleData, user);
+    return this.entriesService.createArticle(newArticleData, photo, user);
   }
 
   @Mutation(() => Boolean)
