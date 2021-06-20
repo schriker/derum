@@ -3,7 +3,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
 import React, { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import * as yup from 'yup';
 import { NewArticleInputs } from '../../types/newArticle';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import { CustomInput } from '../CustomInput/CustomInput';
@@ -17,43 +16,11 @@ import { useCreateArticleMutation } from '../../generated/graphql';
 import { Alert } from '@material-ui/lab';
 import { ButtonDefault } from '../Buttons/ButtonDefault';
 import { useRouter } from 'next/router';
+import PhotoUploadInput from '../PhotoUploadInput/PhotoUploadInput';
+import schema from './RoomNewArticleSchema';
 const Markdown = dynamic(() => import('../Markdown/Markdown'));
 
 const STORAGE_KEY_NAME = 'article';
-const FILE_SIZE = 5000000;
-const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/gif', 'image/png'];
-
-const schema = yup.object().shape({
-  roomId: yup.number().required('Wybierz pokój.'),
-  title: yup
-    .string()
-    .trim()
-    .required('Tytuł jest wymagany.')
-    .min(10, 'Tytuł min. 10 znaków.')
-    .max(150, 'Zbyt długi tytuł.'),
-  description: yup
-    .string()
-    .trim()
-    .required('Opis jest wymagany.')
-    .min(50, 'Opis min. 50 znaków.')
-    .max(350, 'Zbyt długi opis.'),
-  body: yup
-    .string()
-    .trim()
-    .required('Treść jest wymagana.')
-    .min(10, 'Trść min. 10 znaków.'),
-  photo: yup
-    .mixed()
-    .notRequired()
-    .test('fileSize', 'Rozmiar zdjęcia max 5mb.', (value) => {
-      if (!value) return true;
-      if (value.length) return value[0].size <= FILE_SIZE;
-    })
-    .test('fileType', 'Zły format pliku.', (value) => {
-      if (!value) return true;
-      if (value.length) return SUPPORTED_FORMATS.includes(value[0].type);
-    }),
-});
 
 const RoomNewArticleForm = ({
   closeModal,
@@ -130,7 +97,7 @@ const RoomNewArticleForm = ({
           description: variables.description,
           body: variables.body,
         },
-        photo: variables.photo[0] ? variables.photo[0] : null,
+        photo: variables.photo ? variables.photo[0] : null,
       },
     });
   };
@@ -191,7 +158,17 @@ const RoomNewArticleForm = ({
           />
         )}
       />
-      <input name="photo" type="file" accept="image/*" {...register('photo')} />
+      <PhotoUploadInput
+        inputProps={{
+          id: 'photo',
+          name: 'photo',
+          type: 'file',
+          accept: 'image/*',
+          ...register('photo'),
+        }}
+        error={errors.photo}
+        clear={() => setValue('photo', null)}
+      />
       <FormInput
         name="body"
         label="Treść"

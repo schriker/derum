@@ -26,14 +26,16 @@ const useClasses = makeStyles((theme: Theme) => ({
   },
 }));
 
-export const ButtonDefault = React.forwardRef((props: ButtonProps, ref) => {
-  const classes = useClasses();
+export const ButtonDefault = React.forwardRef(
+  (props: ButtonProps & { component?: string }, ref) => {
+    const classes = useClasses();
 
-  return (
-    <Button innerRef={ref} disableElevation classes={classes} {...props}>
-      {props.children}
-    </Button>
-  );
-});
+    return (
+      <Button innerRef={ref} disableElevation classes={classes} {...props}>
+        {props.children}
+      </Button>
+    );
+  }
+);
 
 ButtonDefault.displayName = 'ButtonDefault';
