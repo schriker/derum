@@ -42,6 +42,7 @@ export class CaslAbilityFactory {
     if (user.isModerator) {
       can(Action.Delete, Message);
       can(Action.Delete, Entry);
+      can(Action.Delete, Comment);
       can(Action.Update, Room);
     }
 

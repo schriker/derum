@@ -101,7 +101,6 @@ const CommentNewForm = ({
             />
           )}
         />
-        <Markdown>{watch('body')}</Markdown>
         <Box display="flex" justifyContent="flex-end">
           <ButtonPrimary
             disabled={loading}
@@ -111,6 +110,7 @@ const CommentNewForm = ({
             Dodaj komentarz
           </ButtonPrimary>
         </Box>
+        <Markdown>{watch('body')}</Markdown>
       </form>
     </Box>
   );

@@ -23,6 +23,13 @@ export class VotesService {
     value: VoteValueEnum,
   ): Promise<VoteResult> {
     const entry = await this.entiriesQueryService.getById(entryId);
+
+    if (entry.deleted)
+      return {
+        userValue: VoteValueEnum.NONE,
+        voteScore: 0,
+      };
+
     const alreadyVoted = await this.votesRepository.findOne({
       where: {
         user: user,
@@ -57,6 +64,12 @@ export class VotesService {
     value: VoteValueEnum,
   ): Promise<VoteResult> {
     const comment = await this.commentsService.getById(commentId);
+
+    if (comment.deleted)
+      return {
+        userValue: VoteValueEnum.NONE,
+        voteScore: 0,
+      };
 
     const alreadyVoted = await this.votesRepository.findOne({
       where: {

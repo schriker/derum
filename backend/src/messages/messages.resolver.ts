@@ -9,7 +9,7 @@ import {
   Context,
 } from '@nestjs/graphql';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
-import { GQLSessionGuard } from 'src/common/guards/session-gql-auth.guard';
+import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { Action } from 'src/casl/action.enum';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
@@ -18,6 +18,8 @@ import { UsersService } from 'src/users/users.service';
 import { NewMessageInput } from './dto/new-message.input';
 import { Message } from './entities/message.entity';
 import { MessagesService } from './messages.service';
+import { GQLWSThrottlerGuard } from 'src/common/guards/gql-ws-throttle.guard';
+import { Throttle } from '@nestjs/throttler';
 
 @Resolver(() => Message)
 export class MessagesResolver {
@@ -55,7 +57,8 @@ export class MessagesResolver {
   }
 
   @Mutation(() => Message)
-  @UseGuards(GQLSessionGuard)
+  @UseGuards(GQLSessionGuard, GQLWSThrottlerGuard)
+  @Throttle(1, 10)
   async createMessage(
     @Args('newMessageData') newMessageData: NewMessageInput,
     @CurrentUser() user: User,

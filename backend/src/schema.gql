@@ -7,10 +7,11 @@ type Comment {
   createdAt: Date!
   updatedAt: Date!
   author: User!
-  body: String!
+  body: String
   parentId: Int
   voteScore: Int
   userVote: VoteValueEnum
+  deleted: Boolean!
 }
 
 """Date custom scalar type"""
@@ -164,6 +165,7 @@ type Mutation {
   vote(value: VoteValueEnum!, entryId: Int!): VoteResult!
   voteComment(value: VoteValueEnum!, commentId: Int!): VoteResult!
   createComment(commentData: NewCommentData!): Comment!
+  deleteComment(commentId: Int!): Boolean!
   blacklistPublisher(entryId: Int!): Boolean!
   blacklistPublisherAndRemoveEntires(entryId: Int!): Boolean!
 }

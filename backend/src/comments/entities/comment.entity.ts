@@ -39,7 +39,7 @@ export class Comment {
   @ManyToOne(() => Entry, (entry) => entry.comments)
   entry: Entry;
 
-  @Field()
+  @Field({ nullable: true })
   @Column()
   body: string;
 
@@ -61,4 +61,8 @@ export class Comment {
   @Field(() => VoteValueEnum, { nullable: true })
   @Column({ select: false, insert: false, readonly: true, nullable: true })
   userVote: VoteValueEnum;
+
+  @Field(() => Boolean)
+  @Column({ type: Boolean, default: false })
+  deleted: boolean;
 }

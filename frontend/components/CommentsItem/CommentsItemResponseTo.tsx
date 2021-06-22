@@ -50,13 +50,23 @@ const CommentsItemResponseTo = ({
             horizontal: 'center',
           }}
         >
-          <Typography
-            className={classes.popover}
-            variant="body2"
-            color="textPrimary"
-          >
-            Odpowiedzź do: {trimString(parentComment.body, 70)}
-          </Typography>
+          {parentComment.body ? (
+            <Typography
+              className={classes.popover}
+              variant="body2"
+              color="textPrimary"
+            >
+              Odpowiedź do: {trimString(parentComment.body, 70)}
+            </Typography>
+          ) : (
+            <Typography
+              className={classes.popover}
+              variant="body2"
+              color="textSecondary"
+            >
+              Komentarz usunięty.
+            </Typography>
+          )}
         </Popover>
       )}
       <ButtonText style={{ marginLeft: 8 }} onClick={handleClick} size="small">

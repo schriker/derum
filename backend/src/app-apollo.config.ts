@@ -35,11 +35,11 @@ const apolloConfig = {
               'request.credentials': 'include',
             },
           },
-    context: async ({ req, connection }) => {
+    context: async ({ req, connection, ...rest }) => {
       if (connection) {
-        return { req: connection.context };
+        return { req: connection.context, ...rest };
       }
-      return { req };
+      return { req, ...rest };
     },
     subscriptions: {
       keepAlive: 10000,
@@ -49,6 +49,7 @@ const apolloConfig = {
           return {
             session,
             cId: context.request.headers['sec-websocket-key'],
+            ...context,
           };
         }
       },

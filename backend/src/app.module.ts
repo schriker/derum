@@ -1,6 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { graphqlUploadExpress } from 'graphql-upload';
 import apolloConfig from './app-apollo.config';
@@ -37,6 +38,10 @@ import { VotesModule } from './votes/votes.module';
     BlacklistPublishersModule,
     AwsModule,
     CommentsModule,
+    ThrottlerModule.forRoot({
+      ttl: 60,
+      limit: 10,
+    }),
   ],
   providers: [DateScalar],
 })

@@ -11,4 +11,5 @@ export const ERROR_MESSAGES = {
   WRONG_FILE_TYPE: 'Zły format pliku.',
   PUBLISHER_BLACKLISTED: 'Nie można dodawać linków z tej domeny.',
   BANNED: 'Twoje konto zostało zablokowane.',
+  MESSAGE_LIMIT: 'Musisz odczekać 10s.',
 };

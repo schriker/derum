@@ -1,6 +1,6 @@
 import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
-import { GQLSessionGuard } from 'src/common/guards/session-gql-auth.guard';
+import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { Action } from 'src/casl/action.enum';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';

@@ -39,6 +39,10 @@ const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
       opacity: 0,
       transition: theme.transitions.create('opacity', { duration: 200 }),
     },
+    deleted: {
+      marginTop: theme.spacing(1),
+      fontStyle: 'italic',
+    },
     header: {
       display: 'flex',
       alignItems: 'center',

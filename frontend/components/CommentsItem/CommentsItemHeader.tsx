@@ -5,6 +5,7 @@ import { useMeQuery } from '../../generated/graphql';
 import { CommentItemPropsType } from '../../types/comment';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import { ButtonDefault } from '../Buttons/ButtonDefault';
+import CommentsItemDelete from './CommentsItemDelete';
 import CommentsItemResponseTo from './CommentsItemResponseTo';
 import useCommentsItemStyles from './CommentsItemStyles';
 
@@ -60,15 +61,20 @@ const CommentsItemHeader = ({
         </Box>
         {data.parentId && <CommentsItemResponseTo data={data} />}
       </Box>
-      {userdata && (
-        <ButtonDefault
-          onClick={() => setParentId(data.id === parentId ? null : data.id)}
-          className={classes.replyButton}
-          size="small"
-        >
-          {data.id === parentId ? 'Anuluj' : 'Odpowiedz'}
-        </ButtonDefault>
-      )}
+      <Box>
+        {userdata && (
+          <ButtonDefault
+            onClick={() => setParentId(data.id === parentId ? null : data.id)}
+            className={classes.replyButton}
+            size="small"
+          >
+            {data.id === parentId ? 'Anuluj' : 'Odpowiedz'}
+          </ButtonDefault>
+        )}
+        {userdata.me.isAdmin || userdata.me.isModerator ? (
+          <CommentsItemDelete comment={data} />
+        ) : null}
+      </Box>
     </Box>
   );
 };

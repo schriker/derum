@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@material-ui/core';
+import { Box, Typography } from '@material-ui/core';
 import Markdown from '../Markdown/Markdown';
 import CommentsItemVote from './CommentsItemVote';
 import CommentsItemHeader from './CommentsItemHeader';
@@ -25,7 +25,17 @@ const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
         <Box className={classes.content}>
           <CommentsItemHeader {...props} />
           <Box className={classes.body}>
-            <Markdown>{props.data.body}</Markdown>
+            {props.data.body ? (
+              <Markdown>{props.data.body}</Markdown>
+            ) : (
+              <Typography
+                className={classes.deleted}
+                variant="body2"
+                color="textSecondary"
+              >
+                Komentarz usunięty.
+              </Typography>
+            )}
           </Box>
           {props.parentId === props.data.id && (
             <CommentNewForm

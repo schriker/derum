@@ -1,15 +1,32 @@
-import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver, Query, Int } from '@nestjs/graphql';
-import { GQLSessionGuard } from 'src/common/guards/session-gql-auth.guard';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
+import {
+  Args,
+  Mutation,
+  Resolver,
+  Query,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
+import { Throttle } from '@nestjs/throttler';
+import { Action } from 'src/casl/action.enum';
+import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
+import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
+import { GQLThrottlerGuard } from 'src/common/guards/gql-throttle.guard';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { CommentsService } from './comments.service';
 import { NewCommentData } from './dto/new-comment.input';
 import { Comment } from './entities/comment.entity';
 
 @Resolver(() => Comment)
 export class CommentsResolver {
-  constructor(private commentsService: CommentsService) {}
+  constructor(
+    private commentsService: CommentsService,
+    private usersService: UsersService,
+    private caslAbilityFactory: CaslAbilityFactory,
+  ) {}
 
   @Query(() => [Comment])
   comments(
@@ -20,11 +37,30 @@ export class CommentsResolver {
   }
 
   @Mutation(() => Comment)
-  @UseGuards(GQLSessionGuard)
+  @UseGuards(GQLSessionGuard, GQLThrottlerGuard)
+  @Throttle(1, 10)
   async createComment(
     @Args('commentData') commentData: NewCommentData,
     @CurrentUser() session: User,
   ): Promise<Comment> {
     return this.commentsService.create(commentData, session);
+  }
+
+  @ResolveField()
+  body(@Parent() comment: Comment) {
+    if (comment.deleted) return null;
+    return comment.body;
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GQLSessionGuard)
+  async deleteComment(
+    @Args('commentId', { type: () => Int }) commentId: number,
+    @CurrentUser() session: User,
+  ): Promise<boolean> {
+    const user = await this.usersService.getById(session.id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+    if (!ability.can(Action.Delete, Comment)) throw new ForbiddenException();
+    return this.commentsService.markDeleted(commentId);
   }
 }

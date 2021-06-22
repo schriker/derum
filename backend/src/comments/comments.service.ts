@@ -37,6 +37,13 @@ export class CommentsService {
     return this.commentsRespository.save(comment);
   }
 
+  async markDeleted(id: number): Promise<boolean> {
+    const comment = await this.getById(id);
+    comment.deleted = true;
+    await this.commentsRespository.save(comment);
+    return true;
+  }
+
   async getByEntryId(entryId: number, user: User): Promise<Comment[]> {
     return this.commentsRespository
       .createQueryBuilder('comment')

@@ -2,7 +2,7 @@ import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
 import { Photo } from './entities/photo.entity';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { ForbiddenException, UseGuards } from '@nestjs/common';
-import { GQLSessionGuard } from 'src/common/guards/session-gql-auth.guard';
+import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { PhotosService } from './photos.service';
