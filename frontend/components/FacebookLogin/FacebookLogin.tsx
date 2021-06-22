@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client';
 import React from 'react';
 import {
   useLoginUserWithFacebookMutation,
@@ -12,9 +13,9 @@ const FacebookLogin = ({
   onError,
   onLoading,
 }: SocialLoginProps): JSX.Element => {
-  const hadleError = () => {
+  const hadleError = (error: ApolloError) => {
     onLoading(false);
-    onError(true);
+    onError(true, error);
   };
 
   const [fetchUser] = useMeLazyQuery({

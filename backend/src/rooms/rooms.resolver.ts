@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Query, Args, Mutation, Int } from '@nestjs/graphql';
-import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
+import { GQLSessionGuard } from 'src/common/guards/session-gql-auth.guard';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { NewRoomInput } from './dto/new-room.input';
@@ -39,7 +39,6 @@ export class RoomsResolver {
     @Args('newRoomData') newRoomData: NewRoomInput,
     @CurrentUser() user: User,
   ): Promise<Room> {
-    // Check if BAN
     return this.roomsService.create(newRoomData, user);
   }
 

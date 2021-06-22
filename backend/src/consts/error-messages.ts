@@ -10,4 +10,5 @@ export const ERROR_MESSAGES = {
   ENTRY_NOT_FOUND: 'Brak takiego wpisu.',
   WRONG_FILE_TYPE: 'Zły format pliku.',
   PUBLISHER_BLACKLISTED: 'Nie można dodawać linków z tej domeny.',
+  BANNED: 'Twoje konto zostało zablokowane.',
 };

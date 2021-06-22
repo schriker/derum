@@ -10,6 +10,7 @@ import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-
 import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { Room } from 'src/rooms/entities/room.entity';
+import { Comment } from 'src/comments/entities/comment.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Action } from './action.enum';
 import { FlatEntry, FlatMessage, FlatRoom } from './flatTypes';
@@ -18,6 +19,7 @@ type Subjects =
   | InferSubjects<
       | typeof Message
       | typeof Entry
+      | typeof Comment
       | typeof BlacklistPublisher
       | typeof User
       | typeof Room

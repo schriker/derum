@@ -98,6 +98,7 @@ type User {
   photo: String
   isAdmin: Boolean!
   isModerator: Boolean!
+  isBanned: Boolean!
   joinedRooms: [Room!]!
   ignore: [User!]!
 }

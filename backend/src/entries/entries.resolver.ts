@@ -1,6 +1,6 @@
 import { ForbiddenException, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver, Query, Int } from '@nestjs/graphql';
-import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
+import { GQLSessionGuard } from 'src/common/guards/session-gql-auth.guard';
 import { Action } from 'src/casl/action.enum';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
@@ -11,7 +11,7 @@ import { NewLinkData } from './dto/new-link.input';
 import { QueryEntriesInput } from './dto/query.input';
 import { Entry } from './entities/entry.entity';
 import { EntriesService } from './services/entries.service';
-import { DerumGuard } from './guards/derum.guard';
+import { DerumGuard } from '../common/guards/derum.guard';
 import { EntriesQueryService } from './services/entries-query.service';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 
@@ -46,7 +46,6 @@ export class EntriesResolver {
     @Args('newLinkData') newLinkData: NewLinkData,
     @CurrentUser() user: User,
   ): Promise<Entry> {
-    // Check if BAN
     return this.entriesService.createLink(newLinkData, user);
   }
 
@@ -58,7 +57,6 @@ export class EntriesResolver {
     photo: FileUpload,
     @CurrentUser() user: User,
   ): Promise<Entry> {
-    // Check if BAN
     return this.entriesService.createArticle(newArticleData, photo, user);
   }
 

@@ -26,7 +26,7 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
   });
   const [sendNewMessage] = useCreateMessageMutation({
     onCompleted: () => reset({ body: '' }),
-    onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera!' }),
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
   });
 
   const connecting = !isConnected && !loading;

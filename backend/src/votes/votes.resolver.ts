@@ -6,7 +6,7 @@ import {
   registerEnumType,
   Resolver,
 } from '@nestjs/graphql';
-import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
+import { GQLSessionGuard } from 'src/common/guards/session-gql-auth.guard';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { VoteResult } from './dto/vote-result';
@@ -29,7 +29,6 @@ export class VotesResolver {
     @Args('entryId', { type: () => Int }) entryId: number,
     @Args('value', { type: () => VoteValueEnum }) value: VoteValueEnum,
   ): Promise<VoteResult> {
-    // Check if BAN
     return this.votesService.vote(user, entryId, value);
   }
 
@@ -40,7 +39,6 @@ export class VotesResolver {
     @Args('commentId', { type: () => Int }) commentId: number,
     @Args('value', { type: () => VoteValueEnum }) value: VoteValueEnum,
   ): Promise<VoteResult> {
-    // Check if BAN
     return this.votesService.voteComment(user, commentId, value);
   }
 }

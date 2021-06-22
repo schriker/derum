@@ -77,6 +77,10 @@ export class User {
   @Column({ default: false })
   isModerator: boolean;
 
+  @Field(() => Boolean)
+  @Column({ default: false })
+  isBanned: boolean;
+
   @Directive('@cacheControl(maxAge: 0)')
   @Field(() => [Room])
   @ManyToMany(() => Room, (room) => room.users)

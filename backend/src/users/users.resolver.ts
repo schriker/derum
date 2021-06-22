@@ -9,8 +9,8 @@ import {
   Parent,
   Int,
 } from '@nestjs/graphql';
-import { FacebookAuthGuard } from 'src/auth/guards/facebook-auth.guard';
-import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
+import { FacebookAuthGuard } from 'src/common/guards/facebook-auth.guard';
+import { GQLSessionGuard } from 'src/common/guards/session-gql-auth.guard';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { OnlineUser } from './dto/online-user';
@@ -60,7 +60,6 @@ export class UsersResolver {
     @Args() displayName: NewDisplayNameData,
     @Context() ctx,
   ): Promise<User> {
-    // Check if BAN
     const savedUser = await this.usersService.changeDisplayName(
       user,
       displayName,

@@ -9,7 +9,7 @@ import {
   Context,
 } from '@nestjs/graphql';
 import { RedisPubSub } from 'graphql-redis-subscriptions';
-import { GQLSessionGuard } from 'src/auth/guards/session-gql-auth.guard';
+import { GQLSessionGuard } from 'src/common/guards/session-gql-auth.guard';
 import { Action } from 'src/casl/action.enum';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
@@ -60,7 +60,6 @@ export class MessagesResolver {
     @Args('newMessageData') newMessageData: NewMessageInput,
     @CurrentUser() user: User,
   ): Promise<Message> {
-    // Check if BAN
     const message = await this.messagesService.create(newMessageData, user);
     this.pubSub.publish('messageAdded', {
       messageAdded: message,

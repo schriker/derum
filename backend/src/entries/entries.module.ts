@@ -8,7 +8,7 @@ import { PhotosModule } from 'src/photos/photos.module';
 import { CaslModule } from 'src/casl/casl.module';
 import { UsersModule } from 'src/users/users.module';
 import { BlacklistPublisher } from 'src/blacklist-publishers/entities/blacklist-publisher.entity';
-import { DerumGuard } from './guards/derum.guard';
+import { DerumGuard } from '../common/guards/derum.guard';
 import { EntriesQueryService } from './services/entries-query.service';
 import { RoomsModule } from 'src/rooms/rooms.module';
 

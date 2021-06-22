@@ -6,7 +6,7 @@ import TwitterIcon from '../Icons/TwitterIcon';
 import FacebookLogin from '../FacebookLogin/FacebookLogin';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
-import { useReactiveVar } from '@apollo/client';
+import { ApolloError, useReactiveVar } from '@apollo/client';
 
 const LoginModal = (): JSX.Element => {
   const openModal = useReactiveVar(openModalVar);
@@ -20,11 +20,14 @@ const LoginModal = (): JSX.Element => {
     setLoading(loading);
   };
 
-  const handleError = (error: boolean) => {
-    if (error) {
+  const handleError = (open: boolean, error?: ApolloError) => {
+    if (open) {
       setLoading(false);
     }
-    globalErrorVar({ isOpen: error, message: 'Błąd podczas logowania!' });
+    globalErrorVar({
+      isOpen: open,
+      message: error ? error.message : 'Błąd podczas logowania.',
+    });
   };
 
   const handleExited = () => {
