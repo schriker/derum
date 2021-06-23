@@ -58,7 +58,7 @@ export class CommentsResolver {
     @Args('commentId', { type: () => Int }) commentId: number,
     @CurrentUser() session: User,
   ): Promise<boolean> {
-    const user = await this.usersService.getById(session.id);
+    const user = await this.usersService.getByIdBasic(session.id);
     const ability = this.caslAbilityFactory.createForUser(user);
     if (!ability.can(Action.Delete, Comment)) throw new ForbiddenException();
     return this.commentsService.markDeleted(commentId);

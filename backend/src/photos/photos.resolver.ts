@@ -29,7 +29,7 @@ export class PhotosResolver {
     @Args('attachment', { type: () => GraphQLUpload })
     attachment: FileUpload,
   ): Promise<Photo> {
-    const user = await this.usersService.getById(session.id);
+    const user = await this.usersService.getByIdBasic(session.id);
     const room = await this.roomsService.findOneById(roomId);
     const ability = this.caslAbilityFactory.createForUser(user);
     if (!ability.can(Action.Update, room)) throw new ForbiddenException();

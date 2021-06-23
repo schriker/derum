@@ -18,6 +18,7 @@ const SingleEntry = ({ data }: { data: EntryQuery }): JSX.Element => {
   return (
     <>
       <EntriesItem
+        fullView
         data={data.entry}
         handleUserClick={handlerUserClick}
         preview={false}

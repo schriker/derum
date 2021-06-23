@@ -4,12 +4,21 @@ import { CardActionArea, CardMedia } from '@material-ui/core';
 import useEntriesItemStyle from './EntriesItemStyles';
 import { EntiresItemTitleProps } from '../../types/entries';
 
-const EntriesItemPhoto = ({ link, image, title }: EntiresItemTitleProps): JSX.Element => {
+const EntriesItemPhoto = ({
+  link,
+  image,
+  title,
+  fullView,
+}: EntiresItemTitleProps): JSX.Element => {
   const classes = useEntriesItemStyle();
 
   return (
     <NextLink href={link} passHref>
-      <CardActionArea component="a" className={classes.action}>
+      <CardActionArea
+        target={fullView ? '_blank' : '_self'}
+        component="a"
+        className={classes.action}
+      >
         <CardMedia
           component="img"
           className={classes.photo}

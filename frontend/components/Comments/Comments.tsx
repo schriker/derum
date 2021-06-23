@@ -8,6 +8,7 @@ import CommentNewForm from '../CommentNewForm/CommentNewForm';
 import CommentsItem from '../CommentsItem/CommentsItem';
 import EntryBodyLoading from '../EntryBodyLoading/EntryBodyLoading';
 import UserModal from '../UserModal/UserModal';
+import CommentsEmpty from './CommentsEmpty';
 import useCommentsStyles from './CommentsStyles';
 
 const Comments = (): JSX.Element => {
@@ -45,6 +46,7 @@ const Comments = (): JSX.Element => {
             data={comment}
           />
         ))}
+      {!loading && data?.comments.length === 0 && <CommentsEmpty />}
       {userId && (
         <UserModal
           openModal={openModal}

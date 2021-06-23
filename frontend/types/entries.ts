@@ -3,6 +3,7 @@ import { EntryFragmentFragment, VoteValueEnum } from '../generated/graphql';
 export type EntriesItemProps = {
   data: EntryFragmentFragment;
   preview: boolean;
+  fullView?: boolean;
   handleUserClick: (id: number) => void;
 };
 
@@ -10,6 +11,7 @@ export type EntiresItemTitleProps = {
   link: string;
   title: string;
   image: string;
+  fullView?: boolean;
 };
 
 export type EntriesItemAuthorProps = {

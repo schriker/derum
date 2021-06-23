@@ -71,7 +71,7 @@ const CommentsItemHeader = ({
             {data.id === parentId ? 'Anuluj' : 'Odpowiedz'}
           </ButtonDefault>
         )}
-        {userdata.me.isAdmin || userdata.me.isModerator ? (
+        {userdata?.me.isAdmin || userdata?.me.isModerator ? (
           <CommentsItemDelete comment={data} />
         ) : null}
       </Box>

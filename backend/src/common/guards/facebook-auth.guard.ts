@@ -6,9 +6,14 @@ import {
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class FacebookAuthGuard extends AuthGuard('facebook-token') {
+  constructor(private usersService: UsersService) {
+    super();
+  }
+
   async canActivate(context: ExecutionContext): Promise<boolean> {
     try {
       const ctx = GqlExecutionContext.create(context);
@@ -19,6 +24,7 @@ export class FacebookAuthGuard extends AuthGuard('facebook-token') {
       };
       const result = (await super.canActivate(context)) as boolean;
       await super.logIn(request);
+      this.usersService.saveSession(request);
       return result;
     } catch (e) {
       throw new BadRequestException(e);

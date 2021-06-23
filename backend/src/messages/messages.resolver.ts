@@ -58,7 +58,7 @@ export class MessagesResolver {
 
   @Mutation(() => Message)
   @UseGuards(GQLSessionGuard, GQLWSThrottlerGuard)
-  @Throttle(1, 10)
+  @Throttle(1, 100)
   async createMessage(
     @Args('newMessageData') newMessageData: NewMessageInput,
     @CurrentUser() user: User,
@@ -90,7 +90,7 @@ export class MessagesResolver {
     @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {
     const message = await this.messagesService.getById(id);
-    const user = await this.usersService.getById(session.id);
+    const user = await this.usersService.getByIdBasic(session.id);
     const ability = this.caslAbilityFactory.createForUser(user);
     if (!ability.can(Action.Delete, message)) throw new ForbiddenException();
     await this.messagesService.deleteById(message.id);

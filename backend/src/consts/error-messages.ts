@@ -12,4 +12,5 @@ export const ERROR_MESSAGES = {
   PUBLISHER_BLACKLISTED: 'Nie można dodawać linków z tej domeny.',
   BANNED: 'Twoje konto zostało zablokowane.',
   MESSAGE_LIMIT: 'Musisz odczekać 10s.',
+  COMMENTS_LIMIT: 'Musisz odczekać 10s.',
 };

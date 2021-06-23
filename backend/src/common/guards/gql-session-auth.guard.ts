@@ -19,7 +19,7 @@ export class GQLSessionGuard implements CanActivate {
     try {
       if (!request.session.passport) throw new UnauthorizedException();
       if (request.session.passport.user) {
-        const user = await this.usersService.getById(
+        const user = await this.usersService.getByIdBasic(
           request.session.passport.user.id,
         );
         if (user.isBanned) {

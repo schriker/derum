@@ -5,6 +5,7 @@ import { ILike, Repository } from 'typeorm';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { OnlineUser } from './dto/online-user';
 import { ProviderUser } from './dto/provider-user.interface';
+import { UserSession } from './entities/user-session.entity';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -14,6 +15,8 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(UserSession)
+    private userSessionsRepository: Repository<UserSession>,
   ) {}
 
   addOnlineUser(user: User, roomId: number, cId: string) {
@@ -50,6 +53,10 @@ export class UsersService {
       .loadRelationCountAndMap('joinedRooms.usersNumber', 'joinedRooms.users')
       .getOne();
     return user;
+  }
+
+  async getByIdBasic(id: number): Promise<User> {
+    return this.usersRepository.findOne(id);
   }
 
   async ignore(user: User, id: number): Promise<boolean> {
@@ -141,5 +148,28 @@ export class UsersService {
     }
 
     return this.createWithAuthProvider(userData);
+  }
+
+  async saveSession(req: any): Promise<UserSession> {
+    const ip =
+      req.headers['x-forwarded-for']?.split(',').shift() ||
+      req.socket?.remoteAddress;
+    const sessionId = req.sessionID;
+    const user = req.user as User;
+    const userAgent = req.headers['user-agent'];
+
+    const sessionExists = await this.userSessionsRepository.findOne({
+      sessionId,
+    });
+
+    if (sessionExists) return sessionExists;
+
+    const session = new UserSession();
+    session.ip = ip;
+    session.sessionId = sessionId;
+    session.user = user;
+    session.userAgent = userAgent;
+
+    return this.userSessionsRepository.save(session);
   }
 }

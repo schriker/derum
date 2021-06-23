@@ -15,6 +15,7 @@ import EntriesItemComments from './EntriesItemComments';
 
 const EntriesItem = ({
   data,
+  fullView = false,
   handleUserClick,
   preview,
 }: EntriesItemProps): JSX.Element => {
@@ -34,6 +35,7 @@ const EntriesItem = ({
       />
       {data.photo && (
         <EntriesItemPhoto
+          fullView={fullView}
           link={link}
           image={data.photo.url}
           title={data.title}
@@ -41,7 +43,11 @@ const EntriesItem = ({
       )}
       <CardContent>
         <NextLink href={link} passHref>
-          <Link variant="h5" color="textPrimary">
+          <Link
+            target={fullView ? '_blank' : '_self'}
+            variant="h5"
+            color="textPrimary"
+          >
             {data.title}
           </Link>
         </NextLink>

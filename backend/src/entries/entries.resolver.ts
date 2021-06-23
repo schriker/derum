@@ -66,7 +66,7 @@ export class EntriesResolver {
     @Args('id', { type: () => Int }) id: number,
     @CurrentUser() session: User,
   ): Promise<boolean> {
-    const user = await this.usersService.getById(session.id);
+    const user = await this.usersService.getByIdBasic(session.id);
     const entry = await this.entriesQueryService.getById(id);
     const ability = this.caslAbilityFactory.createForUser(user);
     if (!ability.can(Action.Delete, entry)) throw new ForbiddenException();
