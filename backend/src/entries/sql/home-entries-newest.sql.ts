@@ -24,6 +24,7 @@ export const homeEntiresNewestQuery = (
 "author"."authProvider" AS "author.authProvider",
 "author"."authId" AS "author.authId",
 "author"."isAdmin" AS "author.isAdmin",
+"author"."isBanned" AS "author.isBanned",
 "author"."isModerator" AS "author.isModerator",
 "photo"."id" AS "photo.id",
 "photo"."createdAt" AS "photo.createdAt",

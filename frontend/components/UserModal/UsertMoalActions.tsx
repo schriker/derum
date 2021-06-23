@@ -13,6 +13,7 @@ import { ButtonSecondary } from '../Buttons/ButtonSecondary';
 import LockIcon from '../Icons/LockIcon';
 import MessageIcon from '../Icons/MessageIcon';
 import UnLockIcon from '../Icons/UnLockIcon';
+import UserModalAdminActions from './UserModalAdminActions';
 import useUserModalStyles from './UserModalStyles';
 
 const UserModalActions = ({ id }: { id: number }): JSX.Element => {
@@ -84,6 +85,7 @@ const UserModalActions = ({ id }: { id: number }): JSX.Element => {
       >
         {isIgnored ? 'Odblokuj' : 'Zablokuj'}
       </ButtonSecondary>
+      {me.me.isAdmin && <UserModalAdminActions userData={data} />}
     </Box>
   ) : null;
 };

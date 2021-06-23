@@ -26,6 +26,8 @@ const useUserModalStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   buttons: {
+    display: 'flex',
+    alignItems: 'center',
     marginTop: 20,
     '& > :first-child': {
       marginRight: 10,

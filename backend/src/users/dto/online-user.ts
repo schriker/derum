@@ -20,5 +20,8 @@ export class OnlineUser {
   @Field()
   isModerator: boolean;
 
+  @Field()
+  isBanned: boolean;
+
   connectionId: string;
 }

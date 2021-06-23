@@ -47,7 +47,10 @@ export class Comment {
   @Column({ nullable: true })
   parentId: number;
 
-  @ManyToOne(() => Comment, (comment) => comment.id, { nullable: true })
+  @ManyToOne(() => Comment, (comment) => comment.id, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   @JoinColumn()
   parent: Comment;
 

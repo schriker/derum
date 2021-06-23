@@ -38,7 +38,7 @@ export class CommentsResolver {
 
   @Mutation(() => Comment)
   @UseGuards(GQLSessionGuard, GQLThrottlerGuard)
-  @Throttle(1, 10)
+  @Throttle(1, 20)
   async createComment(
     @Args('commentData') commentData: NewCommentData,
     @CurrentUser() session: User,

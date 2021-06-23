@@ -2,25 +2,48 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Comment {
+type Photo {
   id: Int!
   createdAt: Date!
   updatedAt: Date!
-  author: User!
-  body: String
-  parentId: Int
-  voteScore: Int
-  userVote: VoteValueEnum
-  deleted: Boolean!
+  name: String!
+  url: String!
 }
 
 """Date custom scalar type"""
 scalar Date
 
-enum VoteValueEnum {
-  UP
-  DOWN
-  NONE
+type Room {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  name: String!
+  description: String!
+  author: User!
+  usersNumber: Int!
+  photo: Photo
+}
+
+type Message {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  author: User!
+  body: String!
+}
+
+type User {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  displayName: String!
+  email: String!
+  photo: String
+  isAdmin: Boolean!
+  isModerator: Boolean!
+  isBanned: Boolean!
+  joinedRooms: [Room!]!
+  ignore: [User!]!
 }
 
 type Link {
@@ -33,33 +56,6 @@ type Link {
   title: String
   description: String
   photo: String
-}
-
-type Photo {
-  id: Int!
-  createdAt: Date!
-  updatedAt: Date!
-  name: String!
-  url: String!
-}
-
-type Message {
-  id: Int!
-  createdAt: Date!
-  updatedAt: Date!
-  author: User!
-  body: String!
-}
-
-type Room {
-  id: Int!
-  createdAt: Date!
-  updatedAt: Date!
-  name: String!
-  description: String!
-  author: User!
-  usersNumber: Int!
-  photo: Photo
 }
 
 type Entry {
@@ -90,18 +86,22 @@ enum EntryType {
   VIDEO
 }
 
-type User {
+enum VoteValueEnum {
+  UP
+  DOWN
+  NONE
+}
+
+type Comment {
   id: Int!
   createdAt: Date!
   updatedAt: Date!
-  displayName: String!
-  email: String!
-  photo: String
-  isAdmin: Boolean!
-  isModerator: Boolean!
-  isBanned: Boolean!
-  joinedRooms: [Room!]!
-  ignore: [User!]!
+  author: User!
+  body: String
+  parentId: Int
+  voteScore: Int
+  userVote: VoteValueEnum
+  deleted: Boolean!
 }
 
 type OnlineUser {
@@ -111,6 +111,7 @@ type OnlineUser {
   photo: String
   isAdmin: Boolean!
   isModerator: Boolean!
+  isBanned: Boolean!
 }
 
 type VoteResult {
@@ -153,6 +154,8 @@ type Mutation {
   changeUserDisplayName(name: String!): User!
   ignoreUser(id: Int!): Boolean!
   removeIgnoreUser(id: Int!): Boolean!
+  banUser(id: Int!): Boolean!
+  deleteUserContent(id: Int!): Boolean!
   createRoom(newRoomData: NewRoomInput!): Room!
   joinRoom(id: Int!): Boolean!
   leaveRoom(id: Int!): Boolean!

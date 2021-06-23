@@ -3,7 +3,7 @@ import { MenuItem, withStyles } from '@material-ui/core';
 const DropdownItem = withStyles((theme) => ({
   root: {
     borderBottom: `1px solid ${theme.palette.divider}`,
-    paddingRight: theme.spacing(5),
+    paddingRight: theme.spacing(3),
     '&:hover': {
       backgroundColor: theme.palette.secondary['800'],
     },

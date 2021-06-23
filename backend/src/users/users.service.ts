@@ -1,6 +1,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Comment } from 'src/comments/entities/comment.entity';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
+import { Entry } from 'src/entries/entities/entry.entity';
+import { Message } from 'src/messages/entities/message.entity';
+import { Vote } from 'src/votes/entities/vote.entity';
 import { ILike, Repository } from 'typeorm';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { OnlineUser } from './dto/online-user';
@@ -15,6 +19,14 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    @InjectRepository(Vote)
+    private votesRepository: Repository<Vote>,
+    @InjectRepository(Entry)
+    private entriesRepository: Repository<Entry>,
+    @InjectRepository(Message)
+    private messagesRepository: Repository<Message>,
+    @InjectRepository(Comment)
+    private commentsRepository: Repository<Comment>,
     @InjectRepository(UserSession)
     private userSessionsRepository: Repository<UserSession>,
   ) {}
@@ -27,6 +39,7 @@ export class UsersService {
       photo: user.photo ? user.photo : '',
       isAdmin: user.isAdmin,
       isModerator: user.isModerator,
+      isBanned: user.isBanned,
       connectionId: cId,
     });
   }
@@ -40,6 +53,36 @@ export class UsersService {
   getOnlineUsers(roomId: number): OnlineUser[] {
     const users = this.onlineUsers.filter((user) => user.roomId === roomId);
     return [...new Map(users.map((item) => [item['name'], item])).values()];
+  }
+
+  async ban(userId: number): Promise<boolean> {
+    const user = await this.getByIdBasic(userId);
+    user.isBanned = !user.isBanned;
+    await this.usersRepository.save(user);
+    return true;
+  }
+
+  async deleteContent(userId: number): Promise<boolean> {
+    const user = await this.getByIdBasic(userId);
+    await this.commentsRepository.delete({
+      author: user,
+    });
+    await this.votesRepository.delete({
+      user: user,
+    });
+    await this.messagesRepository.delete({
+      author: user,
+    });
+    await this.entriesRepository
+      .createQueryBuilder('entry')
+      .leftJoinAndSelect('entry.author', 'author')
+      .update(Entry)
+      .where('author.id = :id', {
+        id: user.id,
+      })
+      .set({ deleted: true })
+      .execute();
+    return true;
   }
 
   async getById(id: number): Promise<User> {

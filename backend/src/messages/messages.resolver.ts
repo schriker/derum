@@ -58,7 +58,7 @@ export class MessagesResolver {
 
   @Mutation(() => Message)
   @UseGuards(GQLSessionGuard, GQLWSThrottlerGuard)
-  @Throttle(1, 100)
+  @Throttle(2, 10)
   async createMessage(
     @Args('newMessageData') newMessageData: NewMessageInput,
     @CurrentUser() user: User,

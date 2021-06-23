@@ -36,11 +36,17 @@ export class Vote {
   user: User;
 
   @Index()
-  @ManyToOne(() => Entry, (entry) => entry.votes, { nullable: true })
+  @ManyToOne(() => Entry, (entry) => entry.votes, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   entry: Entry;
 
   @Index()
-  @ManyToOne(() => Comment, (comment) => comment.votes, { nullable: true })
+  @ManyToOne(() => Comment, (comment) => comment.votes, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   comment: Comment;
 
   @Column()

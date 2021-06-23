@@ -1,4 +1,4 @@
-import { UseGuards } from '@nestjs/common';
+import { ForbiddenException, UseGuards } from '@nestjs/common';
 import {
   Args,
   Context,
@@ -9,6 +9,8 @@ import {
   Parent,
   Int,
 } from '@nestjs/graphql';
+import { Action } from 'src/casl/action.enum';
+import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { FacebookAuthGuard } from 'src/common/guards/facebook-auth.guard';
 import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { CurrentUser } from './decorators/currentUser.decorator';
@@ -20,7 +22,10 @@ import { UsersService } from './users.service';
 
 @Resolver(() => User)
 export class UsersResolver {
-  constructor(private usersService: UsersService) {}
+  constructor(
+    private usersService: UsersService,
+    private caslAbilityFactory: CaslAbilityFactory,
+  ) {}
 
   @Query(() => User)
   @UseGuards(GQLSessionGuard)
@@ -84,6 +89,32 @@ export class UsersResolver {
     @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {
     return this.usersService.removeIgnore(currentUser, id);
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GQLSessionGuard)
+  async banUser(
+    @CurrentUser() session: User,
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<boolean> {
+    const user = await this.usersService.getByIdBasic(session.id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+
+    if (!ability.can(Action.Manage, User)) throw new ForbiddenException();
+    return this.usersService.ban(id);
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GQLSessionGuard)
+  async deleteUserContent(
+    @CurrentUser() session: User,
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<boolean> {
+    const user = await this.usersService.getByIdBasic(session.id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+
+    if (!ability.can(Action.Manage, User)) throw new ForbiddenException();
+    return this.usersService.deleteContent(id);
   }
 
   @ResolveField()

@@ -96,6 +96,8 @@ export type Mutation = {
   changeUserDisplayName: User;
   ignoreUser: Scalars['Boolean'];
   removeIgnoreUser: Scalars['Boolean'];
+  banUser: Scalars['Boolean'];
+  deleteUserContent: Scalars['Boolean'];
   createRoom: Room;
   joinRoom: Scalars['Boolean'];
   leaveRoom: Scalars['Boolean'];
@@ -130,6 +132,16 @@ export type MutationIgnoreUserArgs = {
 
 
 export type MutationRemoveIgnoreUserArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationBanUserArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteUserContentArgs = {
   id: Scalars['Int'];
 };
 
@@ -250,6 +262,7 @@ export type OnlineUser = {
   photo?: Maybe<Scalars['String']>;
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
+  isBanned: Scalars['Boolean'];
 };
 
 export type Photo = {
@@ -399,7 +412,7 @@ export enum VoteValueEnum {
 
 export type AuthorFragmentFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName'>
+  & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName' | 'isBanned'>
 );
 
 export type CommentFragmentFragment = (
@@ -441,6 +454,16 @@ export type RoomFragmentFragment = (
     { __typename?: 'User' }
     & AuthorFragmentFragment
   ) }
+);
+
+export type BanUserMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type BanUserMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'banUser'>
 );
 
 export type BlacklistPublisherMutationVariables = Exact<{
@@ -559,6 +582,16 @@ export type DeleteMessageMutationVariables = Exact<{
 export type DeleteMessageMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteMessage'>
+);
+
+export type DeleteUserContentMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteUserContentMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteUserContent'>
 );
 
 export type IgnoreUserMutationVariables = Exact<{
@@ -886,6 +919,7 @@ export const AuthorFragmentFragmentDoc = gql`
   createdAt
   isModerator
   displayName
+  isBanned
 }
     `;
 export const CommentFragmentFragmentDoc = gql`
@@ -951,6 +985,37 @@ export const RoomFragmentFragmentDoc = gql`
 }
     ${PhotoFragmentFragmentDoc}
 ${AuthorFragmentFragmentDoc}`;
+export const BanUserDocument = gql`
+    mutation BanUser($id: Int!) {
+  banUser(id: $id)
+}
+    `;
+export type BanUserMutationFn = Apollo.MutationFunction<BanUserMutation, BanUserMutationVariables>;
+
+/**
+ * __useBanUserMutation__
+ *
+ * To run a mutation, you first call `useBanUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useBanUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [banUserMutation, { data, loading, error }] = useBanUserMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useBanUserMutation(baseOptions?: Apollo.MutationHookOptions<BanUserMutation, BanUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<BanUserMutation, BanUserMutationVariables>(BanUserDocument, options);
+      }
+export type BanUserMutationHookResult = ReturnType<typeof useBanUserMutation>;
+export type BanUserMutationResult = Apollo.MutationResult<BanUserMutation>;
+export type BanUserMutationOptions = Apollo.BaseMutationOptions<BanUserMutation, BanUserMutationVariables>;
 export const BlacklistPublisherDocument = gql`
     mutation BlacklistPublisher($entryId: Int!) {
   blacklistPublisher(entryId: $entryId)
@@ -1274,6 +1339,37 @@ export function useDeleteMessageMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteMessageMutationHookResult = ReturnType<typeof useDeleteMessageMutation>;
 export type DeleteMessageMutationResult = Apollo.MutationResult<DeleteMessageMutation>;
 export type DeleteMessageMutationOptions = Apollo.BaseMutationOptions<DeleteMessageMutation, DeleteMessageMutationVariables>;
+export const DeleteUserContentDocument = gql`
+    mutation DeleteUserContent($id: Int!) {
+  deleteUserContent(id: $id)
+}
+    `;
+export type DeleteUserContentMutationFn = Apollo.MutationFunction<DeleteUserContentMutation, DeleteUserContentMutationVariables>;
+
+/**
+ * __useDeleteUserContentMutation__
+ *
+ * To run a mutation, you first call `useDeleteUserContentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUserContentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUserContentMutation, { data, loading, error }] = useDeleteUserContentMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteUserContentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteUserContentMutation, DeleteUserContentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteUserContentMutation, DeleteUserContentMutationVariables>(DeleteUserContentDocument, options);
+      }
+export type DeleteUserContentMutationHookResult = ReturnType<typeof useDeleteUserContentMutation>;
+export type DeleteUserContentMutationResult = Apollo.MutationResult<DeleteUserContentMutation>;
+export type DeleteUserContentMutationOptions = Apollo.BaseMutationOptions<DeleteUserContentMutation, DeleteUserContentMutationVariables>;
 export const IgnoreUserDocument = gql`
     mutation IgnoreUser($id: Int!) {
   ignoreUser(id: $id)

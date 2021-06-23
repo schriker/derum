@@ -1,0 +1,3 @@
+mutation DeleteUserContent($id: Int!) {
+  deleteUserContent(id: $id)
+}

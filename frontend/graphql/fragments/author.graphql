@@ -5,4 +5,5 @@ fragment AuthorFragment on User {
   createdAt
   isModerator
   displayName
+  isBanned
 }

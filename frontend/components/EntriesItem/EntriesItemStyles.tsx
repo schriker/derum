@@ -28,6 +28,7 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
   },
   info: {
     display: 'flex',
+    flexWrap: 'wrap',
     alignItems: 'center',
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
