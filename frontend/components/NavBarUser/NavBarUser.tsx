@@ -2,10 +2,10 @@ import { Box } from '@material-ui/core';
 import React from 'react';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import BellIcon from '../Icons/BellIcon';
-import SettingsIcon from '../Icons/SettingsIcon';
 import OnlineUsers from '../OnlineUsers/OnlineUsers';
 import DarkTooltip from '../Tooltip/Tooltip';
 import UserDropdown from '../UserDropdown/UserDropdown';
+import UserSettings from '../UserSettings/UserSettings';
 
 const NavBarUser = (): JSX.Element => {
   return (
@@ -25,13 +25,7 @@ const NavBarUser = (): JSX.Element => {
           </DarkTooltip>
         </Box>
         <OnlineUsers />
-        <Box mx="5px">
-          <DarkTooltip title="Ustawienia" enterDelay={500}>
-            <ButtonIcon color="secondary">
-              <SettingsIcon style={{ fontSize: 18 }} />
-            </ButtonIcon>
-          </DarkTooltip>
-        </Box>
+        <UserSettings />
       </Box>
     </Box>
   );

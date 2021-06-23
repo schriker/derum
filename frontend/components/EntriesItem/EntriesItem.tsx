@@ -61,6 +61,7 @@ const EntriesItem = ({
           <Typography variant="body2" color="textSecondary">
             {dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
           </Typography>
+
           <CommentIcon className={classes.commentIcon} />
           <EntriesItemComments data={data} />
           <EntriesItemRoom link={roomLink} name={data.room.name} />
