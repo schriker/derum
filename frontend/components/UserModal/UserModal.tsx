@@ -42,8 +42,8 @@ const UserModal = ({
             className={classes.avatar}
             src={data.user.photo}
             name={data.user.displayName}
-            styles={{ border: '3px solid #FF026A' }}
-            color="#FF026A"
+            styles={{ border: `3px solid ${data.user.color}` }}
+            color={data.user.color}
           />
           <Box className={classes.name}>
             {isOnline && <Box className={classes.online}></Box>}

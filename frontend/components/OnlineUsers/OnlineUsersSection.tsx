@@ -32,7 +32,7 @@ const OnlineUsersSection = ({
               className={classes.avatar}
               src={user.photo}
               name={user.name}
-              color="#FF026A"
+              color={user.color}
             />
             <Typography variant="body1">{user.name}</Typography>
           </ButtonBlank>

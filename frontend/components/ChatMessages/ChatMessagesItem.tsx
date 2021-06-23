@@ -15,7 +15,7 @@ const ChatMessagesItem = ({
 }: ChatMessagesItemProps): JSX.Element => {
   const [showActions, setShowActions] = useState(false);
   const classes = useChatMessageItemStyles({
-    userColor: '#FF026A',
+    userColor: message.author.color,
     selectedUser: userId,
     isSelected: message.author.id === userId,
   });
@@ -50,7 +50,7 @@ const ChatMessagesItem = ({
             width: 30,
             height: 30,
           }}
-          color="#FF026A"
+          color={message.author.color}
           className={classes.avatar}
           onClick={(e) => handlerUserSelect(message.author.id, e)}
           src={message.author.photo}

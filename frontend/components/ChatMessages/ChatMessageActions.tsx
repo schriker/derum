@@ -10,11 +10,11 @@ import useChatMessageItemStyles from './ChatMessageItemStyles';
 
 const ChatMessageActions = ({ messageId }: MessageActionProps): JSX.Element => {
   const { roomData } = useRoomData();
-  const classes = useChatMessageItemStyles({
-    userColor: '#FF026A',
-  });
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',
+  });
+  const classes = useChatMessageItemStyles({
+    userColor: data?.me.color,
   });
 
   const [deleteMessage] = useDeleteMessageMutation({

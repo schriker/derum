@@ -8,7 +8,6 @@ export const USER_COLORS = [
   '#F4E12F',
   '#42E766',
   '#1FE7DB',
-  '#3045FC',
   '#AC1CB9',
   '#DC108B',
 ];

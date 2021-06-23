@@ -5,5 +5,6 @@ query OnlineUsers($roomId: Int!) {
     photo
     isAdmin
     isModerator
+    color
   }
 }

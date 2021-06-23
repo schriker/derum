@@ -14,6 +14,7 @@ import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { FacebookAuthGuard } from 'src/common/guards/facebook-auth.guard';
 import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { CurrentUser } from './decorators/currentUser.decorator';
+import { NewUserColor } from './dto/new-color';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { OnlineUser } from './dto/online-user';
 import { ProviderUserInput } from './dto/provider-user.input';
@@ -89,6 +90,18 @@ export class UsersResolver {
     @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean> {
     return this.usersService.removeIgnore(currentUser, id);
+  }
+
+  @Mutation(() => User)
+  @UseGuards(GQLSessionGuard)
+  async changeUserColor(
+    @CurrentUser() currentUser: User,
+    @Args() data: NewUserColor,
+    @Context() ctx,
+  ): Promise<User> {
+    const user = await this.usersService.changeColor(data, currentUser);
+    this.usersService.updateSession(ctx, user);
+    return user;
   }
 
   @Mutation(() => Boolean)

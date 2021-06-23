@@ -23,5 +23,8 @@ export class OnlineUser {
   @Field()
   isBanned: boolean;
 
+  @Field()
+  color: string;
+
   connectionId: string;
 }

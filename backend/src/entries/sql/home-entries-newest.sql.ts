@@ -19,6 +19,7 @@ export const homeEntiresNewestQuery = (
 "author"."createdAt" AS "author.createdAt",
 "author"."updatedAt" AS "author.updatedAt",
 "author"."displayName" AS "author.displayName",
+"author"."color" AS "author.color",
 "author"."email" AS "author.email",
 "author"."photo" AS "author.photo",
 "author"."authProvider" AS "author.authProvider",

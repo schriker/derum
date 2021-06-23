@@ -25,7 +25,7 @@ const UserButton = ({
             width: 40,
             height: 40,
           }}
-          color="#FF026A"
+          color={data.me.color}
           name={data.me.displayName}
           src={data.me.photo}
         />

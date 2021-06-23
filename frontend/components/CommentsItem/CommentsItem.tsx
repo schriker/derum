@@ -9,7 +9,7 @@ import CommentNewForm from '../CommentNewForm/CommentNewForm';
 
 const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
   const classes = useCommentsItemStyles({
-    userColor: '#FF026A',
+    userColor: props.data.author.color,
     level: props.level,
   });
 

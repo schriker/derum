@@ -55,7 +55,7 @@ const EntriesItem = ({
           <EntriesItemAuthor
             id={data.author.id}
             name={data.author.displayName}
-            color="#FF026A"
+            color={data.author.color}
             handleUserClick={handleUserClick}
           />
           <Typography variant="body2" color="textSecondary">

@@ -6,4 +6,5 @@ fragment AuthorFragment on User {
   isModerator
   displayName
   isBanned
+  color
 }

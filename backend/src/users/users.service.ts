@@ -6,6 +6,7 @@ import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { ILike, Repository } from 'typeorm';
+import { NewUserColor } from './dto/new-color';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { OnlineUser } from './dto/online-user';
 import { ProviderUser } from './dto/provider-user.interface';
@@ -41,6 +42,7 @@ export class UsersService {
       isModerator: user.isModerator,
       isBanned: user.isBanned,
       connectionId: cId,
+      color: user.color,
     });
   }
 
@@ -214,5 +216,11 @@ export class UsersService {
     session.userAgent = userAgent;
 
     return this.userSessionsRepository.save(session);
+  }
+
+  async changeColor(data: NewUserColor, session: User): Promise<User> {
+    const user = await this.getByIdBasic(session.id);
+    user.color = data.color;
+    return this.usersRepository.save(user);
   }
 }

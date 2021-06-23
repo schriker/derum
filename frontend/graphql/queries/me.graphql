@@ -2,6 +2,9 @@ query Me {
   me {
     ...AuthorFragment
     email
+    showAvatars
+    showColorNames
+    showNotifications
     ignore {
       id
       displayName

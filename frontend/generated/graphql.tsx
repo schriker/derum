@@ -96,6 +96,7 @@ export type Mutation = {
   changeUserDisplayName: User;
   ignoreUser: Scalars['Boolean'];
   removeIgnoreUser: Scalars['Boolean'];
+  changeUserColor: User;
   banUser: Scalars['Boolean'];
   deleteUserContent: Scalars['Boolean'];
   createRoom: Room;
@@ -133,6 +134,11 @@ export type MutationIgnoreUserArgs = {
 
 export type MutationRemoveIgnoreUserArgs = {
   id: Scalars['Int'];
+};
+
+
+export type MutationChangeUserColorArgs = {
+  color: Scalars['String'];
 };
 
 
@@ -263,6 +269,7 @@ export type OnlineUser = {
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
   isBanned: Scalars['Boolean'];
+  color: Scalars['String'];
 };
 
 export type Photo = {
@@ -394,6 +401,10 @@ export type User = {
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
   isBanned: Scalars['Boolean'];
+  showNotifications: Scalars['Boolean'];
+  showAvatars: Scalars['Boolean'];
+  showColorNames: Scalars['Boolean'];
+  color: Scalars['String'];
   joinedRooms: Array<Room>;
   ignore: Array<User>;
 };
@@ -412,7 +423,7 @@ export enum VoteValueEnum {
 
 export type AuthorFragmentFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName' | 'isBanned'>
+  & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName' | 'isBanned' | 'color'>
 );
 
 export type CommentFragmentFragment = (
@@ -484,6 +495,19 @@ export type BlacklistPublisherAndRemoveEntiresMutationVariables = Exact<{
 export type BlacklistPublisherAndRemoveEntiresMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'blacklistPublisherAndRemoveEntires'>
+);
+
+export type ChangeUserColorMutationVariables = Exact<{
+  color: Scalars['String'];
+}>;
+
+
+export type ChangeUserColorMutation = (
+  { __typename?: 'Mutation' }
+  & { changeUserColor: (
+    { __typename?: 'User' }
+    & AuthorFragmentFragment
+  ) }
 );
 
 export type CreateArticleMutationVariables = Exact<{
@@ -772,7 +796,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me: (
     { __typename?: 'User' }
-    & Pick<User, 'email'>
+    & Pick<User, 'email' | 'showAvatars' | 'showColorNames' | 'showNotifications'>
     & { ignore: Array<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'displayName'>
@@ -817,7 +841,7 @@ export type OnlineUsersQuery = (
   { __typename?: 'Query' }
   & { onlineUsers: Array<(
     { __typename?: 'OnlineUser' }
-    & Pick<OnlineUser, 'userId' | 'name' | 'photo' | 'isAdmin' | 'isModerator'>
+    & Pick<OnlineUser, 'userId' | 'name' | 'photo' | 'isAdmin' | 'isModerator' | 'color'>
   )> }
 );
 
@@ -920,6 +944,7 @@ export const AuthorFragmentFragmentDoc = gql`
   isModerator
   displayName
   isBanned
+  color
 }
     `;
 export const CommentFragmentFragmentDoc = gql`
@@ -1078,6 +1103,39 @@ export function useBlacklistPublisherAndRemoveEntiresMutation(baseOptions?: Apol
 export type BlacklistPublisherAndRemoveEntiresMutationHookResult = ReturnType<typeof useBlacklistPublisherAndRemoveEntiresMutation>;
 export type BlacklistPublisherAndRemoveEntiresMutationResult = Apollo.MutationResult<BlacklistPublisherAndRemoveEntiresMutation>;
 export type BlacklistPublisherAndRemoveEntiresMutationOptions = Apollo.BaseMutationOptions<BlacklistPublisherAndRemoveEntiresMutation, BlacklistPublisherAndRemoveEntiresMutationVariables>;
+export const ChangeUserColorDocument = gql`
+    mutation ChangeUserColor($color: String!) {
+  changeUserColor(color: $color) {
+    ...AuthorFragment
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+export type ChangeUserColorMutationFn = Apollo.MutationFunction<ChangeUserColorMutation, ChangeUserColorMutationVariables>;
+
+/**
+ * __useChangeUserColorMutation__
+ *
+ * To run a mutation, you first call `useChangeUserColorMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeUserColorMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeUserColorMutation, { data, loading, error }] = useChangeUserColorMutation({
+ *   variables: {
+ *      color: // value for 'color'
+ *   },
+ * });
+ */
+export function useChangeUserColorMutation(baseOptions?: Apollo.MutationHookOptions<ChangeUserColorMutation, ChangeUserColorMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeUserColorMutation, ChangeUserColorMutationVariables>(ChangeUserColorDocument, options);
+      }
+export type ChangeUserColorMutationHookResult = ReturnType<typeof useChangeUserColorMutation>;
+export type ChangeUserColorMutationResult = Apollo.MutationResult<ChangeUserColorMutation>;
+export type ChangeUserColorMutationOptions = Apollo.BaseMutationOptions<ChangeUserColorMutation, ChangeUserColorMutationVariables>;
 export const CreateArticleDocument = gql`
     mutation CreateArticle($newArticleData: NewArticleData!, $photo: Upload) {
   createArticle(newArticleData: $newArticleData, photo: $photo) {
@@ -1846,6 +1904,9 @@ export const MeDocument = gql`
   me {
     ...AuthorFragment
     email
+    showAvatars
+    showColorNames
+    showNotifications
     ignore {
       id
       displayName
@@ -1967,6 +2028,7 @@ export const OnlineUsersDocument = gql`
     photo
     isAdmin
     isModerator
+    color
   }
 }
     `;

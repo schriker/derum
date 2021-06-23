@@ -16,11 +16,11 @@ const CommentsItemHeader = ({
   setParentId,
   parentId,
 }: CommentItemPropsType): JSX.Element => {
-  const classes = useCommentsItemStyles({
-    userColor: '#FF026A',
-  });
   const { data: userdata } = useMeQuery({
     fetchPolicy: 'cache-only',
+  });
+  const classes = useCommentsItemStyles({
+    userColor: data.author.color,
   });
 
   const handleUserSelect = (id: number) => {
@@ -37,7 +37,7 @@ const CommentsItemHeader = ({
               width: 25,
               height: 25,
             }}
-            color="#FF026A"
+            color={data.author.color}
             onClick={() => handleUserSelect(data.author.id)}
             className={classes.photo}
             src={data.author.photo}

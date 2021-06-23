@@ -42,6 +42,10 @@ type User {
   isAdmin: Boolean!
   isModerator: Boolean!
   isBanned: Boolean!
+  showNotifications: Boolean!
+  showAvatars: Boolean!
+  showColorNames: Boolean!
+  color: String!
   joinedRooms: [Room!]!
   ignore: [User!]!
 }
@@ -112,6 +116,7 @@ type OnlineUser {
   isAdmin: Boolean!
   isModerator: Boolean!
   isBanned: Boolean!
+  color: String!
 }
 
 type VoteResult {
@@ -154,6 +159,7 @@ type Mutation {
   changeUserDisplayName(name: String!): User!
   ignoreUser(id: Int!): Boolean!
   removeIgnoreUser(id: Int!): Boolean!
+  changeUserColor(color: String!): User!
   banUser(id: Int!): Boolean!
   deleteUserContent(id: Int!): Boolean!
   createRoom(newRoomData: NewRoomInput!): Room!

@@ -82,6 +82,22 @@ export class User {
   @Column({ default: false })
   isBanned: boolean;
 
+  @Field(() => Boolean)
+  @Column({ default: true })
+  showNotifications: boolean;
+
+  @Field(() => Boolean)
+  @Column({ default: true })
+  showAvatars: boolean;
+
+  @Field(() => Boolean)
+  @Column({ default: true })
+  showColorNames: boolean;
+
+  @Field()
+  @Column({ default: '#42E766' })
+  color: string;
+
   @Directive('@cacheControl(maxAge: 0)')
   @Field(() => [Room])
   @ManyToMany(() => Room, (room) => room.users)
