@@ -25,6 +25,7 @@ export class EntriesQueryService {
     const entry = await this.entryRepository
       .createQueryBuilder('entry')
       .where('entry.id = :id', { id })
+      .leftJoinAndSelect('entry.author', 'author')
       .leftJoinAndSelect('entry.room', 'room')
       .leftJoinAndSelect('room.author', 'roomAuthor')
       .getOne();

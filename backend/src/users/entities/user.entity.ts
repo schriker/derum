@@ -6,6 +6,7 @@ import { Photo } from 'src/photos/entities/photo.entity';
 import { Room } from 'src/rooms/entities/room.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
+import { Notification } from 'src/notifications/entities/notification.entity';
 import {
   Column,
   CreateDateColumn,
@@ -108,6 +109,10 @@ export class User {
   @ManyToMany(() => User)
   @JoinTable()
   ignore: User[];
+
+  @Field(() => [Notification])
+  @OneToMany(() => Notification, (notification) => notification.user)
+  notifications: Notification[];
 
   @OneToMany(() => Vote, (vote) => vote.user)
   votes: Vote[];

@@ -7,7 +7,7 @@ export class UserSettings1624454412285 implements MigrationInterface {
         await queryRunner.query(`ALTER TABLE "user" ADD "showNotifications" boolean NOT NULL DEFAULT true`);
         await queryRunner.query(`ALTER TABLE "user" ADD "showAvatars" boolean NOT NULL DEFAULT true`);
         await queryRunner.query(`ALTER TABLE "user" ADD "showColorNames" boolean NOT NULL DEFAULT true`);
-        await queryRunner.query(`ALTER TABLE "user" ADD "color" character varying NOT NULL DEFAULT '#3045FC'`);
+        await queryRunner.query(`ALTER TABLE "user" ADD "color" character varying NOT NULL DEFAULT '#42E766'`);
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

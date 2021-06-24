@@ -13,7 +13,7 @@ const EntriesItemAuthor = ({
       onClick={() => handleUserClick(id)}
       style={{ marginRight: 10, color: color }}
       component="button"
-      variant="body1"
+      variant="subtitle1"
       color="textPrimary"
     >
       {name}

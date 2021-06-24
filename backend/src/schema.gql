@@ -32,6 +32,24 @@ type Message {
   body: String!
 }
 
+type Notification {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  user: User!
+  triggeredBy: User!
+  url: String!
+  objectId: Int!
+  parentId: Int!
+  objectType: ObjectTypeEnum!
+  readed: Boolean!
+}
+
+enum ObjectTypeEnum {
+  REPLY
+  COMMENT
+}
+
 type User {
   id: Int!
   createdAt: Date!
@@ -48,6 +66,7 @@ type User {
   color: String!
   joinedRooms: [Room!]!
   ignore: [User!]!
+  notifications: [Notification!]!
 }
 
 type Link {
@@ -138,6 +157,8 @@ type Query {
   checkLinkExsits(linkId: Int!, roomId: Int!): [Entry!]!
   metadata(url: String!): Link!
   comments(entryId: Int!): [Comment!]!
+  newNotificationsNumber: Int!
+  notifications: [Notification!]!
 }
 
 input QueryEntriesInput {
@@ -160,6 +181,7 @@ type Mutation {
   ignoreUser(id: Int!): Boolean!
   removeIgnoreUser(id: Int!): Boolean!
   changeUserColor(color: String!): User!
+  updateUserSettings(newSettingsData: NewSettingsData!): User!
   banUser(id: Int!): Boolean!
   deleteUserContent(id: Int!): Boolean!
   createRoom(newRoomData: NewRoomInput!): Room!
@@ -175,8 +197,16 @@ type Mutation {
   voteComment(value: VoteValueEnum!, commentId: Int!): VoteResult!
   createComment(commentData: NewCommentData!): Comment!
   deleteComment(commentId: Int!): Boolean!
+  readAllNotification: Boolean!
+  readNotification(id: Int!): Notification!
   blacklistPublisher(entryId: Int!): Boolean!
   blacklistPublisherAndRemoveEntires(entryId: Int!): Boolean!
+}
+
+input NewSettingsData {
+  showNotifications: Boolean
+  showAvatars: Boolean
+  showColorNames: Boolean
 }
 
 input NewRoomInput {
@@ -215,4 +245,5 @@ input NewCommentData {
 type Subscription {
   messageAdded(roomId: Int!): Message!
   messageDeleted(roomId: Int!): Message!
+  notification: Notification!
 }

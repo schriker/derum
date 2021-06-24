@@ -98,7 +98,7 @@ export class PhotosService {
     try {
       await this.savePhotoFromLinkToFile(url, tmpName);
       const metaData = await sharp(tmpFile).metadata();
-      if (metaData.width < 100 || metaData.height < 100) {
+      if (metaData.width < 70 || metaData.height < 70) {
         unlinkSync(tmpFile);
         return null;
       }

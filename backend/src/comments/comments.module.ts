@@ -6,6 +6,7 @@ import { Comment } from './entities/comment.entity';
 import { EntriesModule } from 'src/entries/entries.module';
 import { UsersModule } from 'src/users/users.module';
 import { CaslModule } from 'src/casl/casl.module';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
   exports: [CommentsService],
@@ -14,6 +15,7 @@ import { CaslModule } from 'src/casl/casl.module';
     EntriesModule,
     UsersModule,
     CaslModule,
+    NotificationsModule,
   ],
   providers: [CommentsService, CommentsResolver],
 })

@@ -6,7 +6,7 @@ import { EntiresItemRoomProps } from '../../types/entries';
 const EntriesItemRoom = ({ link, name }: EntiresItemRoomProps): JSX.Element => {
   return (
     <NextLink href={link} passHref>
-      <Link variant="body2" style={{ marginRight: 10 }} color="textSecondary">
+      <Link variant="subtitle2" style={{ marginRight: 10 }} color="textSecondary">
         p/{name}
       </Link>
     </NextLink>

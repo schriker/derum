@@ -1,0 +1,5 @@
+mutation ReadNotification($id: Int!) {
+  readNotification(id: $id) {
+    ...NotificationFragment
+  }
+}

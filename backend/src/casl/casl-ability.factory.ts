@@ -13,7 +13,13 @@ import { Room } from 'src/rooms/entities/room.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Action } from './action.enum';
-import { FlatEntry, FlatMessage, FlatRoom } from './flatTypes';
+import {
+  FlatEntry,
+  FlatMessage,
+  FlatNotification,
+  FlatRoom,
+} from './flatTypes';
+import { Notification } from 'src/notifications/entities/notification.entity';
 
 type Subjects =
   | InferSubjects<
@@ -23,6 +29,7 @@ type Subjects =
       | typeof BlacklistPublisher
       | typeof User
       | typeof Room
+      | typeof Notification
     >
   | 'all';
 
@@ -45,6 +52,10 @@ export class CaslAbilityFactory {
       can(Action.Delete, Comment);
       can(Action.Update, Room);
     }
+
+    can<FlatNotification>(Action.Update, Notification, {
+      'user.id': user.id,
+    });
 
     can<FlatRoom>(Action.Update, Room, {
       'author.id': user.id,

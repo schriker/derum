@@ -45,7 +45,7 @@ const EntriesItem = ({
           title={data.title}
         />
       )}
-      <CardContent>
+      <CardContent className={classes.content}>
         <NextLink href={link} passHref>
           <Link
             target={fullView ? '_blank' : '_self'}
@@ -66,13 +66,9 @@ const EntriesItem = ({
             }
             handleUserClick={handleUserClick}
           />
-          <Typography variant="body2" color="textSecondary">
+          <Typography variant="subtitle2" color="textSecondary">
             {dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
           </Typography>
-
-          <CommentIcon className={classes.commentIcon} />
-          <EntriesItemComments data={data} />
-          <EntriesItemRoom link={roomLink} name={data.room.name} />
           {data.publisher && (
             <EntiresItemPublisher publisher={data.publisher} url={data.url} />
           )}
@@ -81,6 +77,11 @@ const EntriesItem = ({
         <Typography variant="body2" className={classes.description}>
           {data.description}
         </Typography>
+        <Box className={classes.info}>
+          <CommentIcon className={classes.commentIcon} />
+          <EntriesItemComments data={data} />
+          <EntriesItemRoom link={roomLink} name={data.room.name} />
+        </Box>
       </CardContent>
     </Card>
   );

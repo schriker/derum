@@ -8,6 +8,7 @@ import { Vote } from 'src/votes/entities/vote.entity';
 import { ILike, Repository } from 'typeorm';
 import { NewUserColor } from './dto/new-color';
 import { NewDisplayNameData } from './dto/new-display-name';
+import { NewSettingsData } from './dto/new-settings';
 import { OnlineUser } from './dto/online-user';
 import { ProviderUser } from './dto/provider-user.interface';
 import { UserSession } from './entities/user-session.entity';
@@ -221,6 +222,17 @@ export class UsersService {
   async changeColor(data: NewUserColor, session: User): Promise<User> {
     const user = await this.getByIdBasic(session.id);
     user.color = data.color;
+    return this.usersRepository.save(user);
+  }
+
+  async updateSettings(data: NewSettingsData, session: User): Promise<User> {
+    if (!Object.keys(data).length) return session;
+    const user = await this.getByIdBasic(session.id);
+
+    for (const key in data) {
+      user[key] = data[key];
+    }
+
     return this.usersRepository.save(user);
   }
 }

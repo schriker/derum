@@ -16,6 +16,7 @@ import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { NewUserColor } from './dto/new-color';
 import { NewDisplayNameData } from './dto/new-display-name';
+import { NewSettingsData } from './dto/new-settings';
 import { OnlineUser } from './dto/online-user';
 import { ProviderUserInput } from './dto/provider-user.input';
 import { User } from './entities/user.entity';
@@ -100,6 +101,18 @@ export class UsersResolver {
     @Context() ctx,
   ): Promise<User> {
     const user = await this.usersService.changeColor(data, currentUser);
+    this.usersService.updateSession(ctx, user);
+    return user;
+  }
+
+  @Mutation(() => User)
+  @UseGuards(GQLSessionGuard)
+  async updateUserSettings(
+    @CurrentUser() currentUser: User,
+    @Args('newSettingsData') data: NewSettingsData,
+    @Context() ctx,
+  ): Promise<User> {
+    const user = await this.usersService.updateSettings(data, currentUser);
     this.usersService.updateSession(ctx, user);
     return user;
   }

@@ -19,7 +19,7 @@ const EntriesItemComments = ({
     >
       <Link
         className={classes.commentsNumber}
-        variant="body2"
+        variant="subtitle2"
         color="textSecondary"
       >
         {data.commentsNumber ? data.commentsNumber : 0}

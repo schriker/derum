@@ -1,0 +1,12 @@
+fragment NotificationFragment on Notification {
+  id
+  url
+  createdAt
+  objectType
+  objectId
+  parentId
+  readed
+  triggeredBy {
+    ...AuthorFragment
+  }
+}

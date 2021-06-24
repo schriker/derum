@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntriesQueryService } from 'src/entries/services/entries-query.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
 import { User } from 'src/users/entities/user.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { Repository } from 'typeorm';
@@ -13,6 +14,7 @@ export class CommentsService {
     @InjectRepository(Comment)
     private commentsRespository: Repository<Comment>,
     private entriesQueryService: EntriesQueryService,
+    private notificationsService: NotificationsService,
   ) {}
 
   async getById(id: number): Promise<Comment> {
@@ -34,7 +36,12 @@ export class CommentsService {
     comment.parentId = parentId;
     comment.entry = entry;
 
-    return this.commentsRespository.save(comment);
+    const newComment = await this.commentsRespository.save(comment);
+
+    if (!parentId) {
+      this.notificationsService.createForNewComment(entry, user, newComment);
+    }
+    return newComment;
   }
 
   async markDeleted(id: number): Promise<boolean> {

@@ -20,7 +20,8 @@ const CommentsItemHeader = ({
     fetchPolicy: 'cache-only',
   });
   const classes = useCommentsItemStyles({
-    userColor: data.author.color,
+    userColor:
+      !userdata || userdata?.me.showColorNames ? data.author.color : '#fff',
   });
 
   const handleUserSelect = (id: number) => {
@@ -32,17 +33,19 @@ const CommentsItemHeader = ({
     <Box className={classes.headerWrapper}>
       <Box display="flex">
         <Box className={classes.header}>
-          <AvatarPhoto
-            styles={{
-              width: 25,
-              height: 25,
-            }}
-            color={data.author.color}
-            onClick={() => handleUserSelect(data.author.id)}
-            className={classes.photo}
-            src={data.author.photo}
-            name={data.author.displayName}
-          />
+          {!userdata || userdata?.me.showAvatars ? (
+            <AvatarPhoto
+              styles={{
+                width: 25,
+                height: 25,
+              }}
+              color={data.author.color}
+              onClick={() => handleUserSelect(data.author.id)}
+              className={classes.photo}
+              src={data.author.photo}
+              name={data.author.displayName}
+            />
+          ) : null}
           <Typography
             variant="subtitle1"
             component="span"

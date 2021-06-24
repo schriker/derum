@@ -82,7 +82,7 @@ const theme = createMuiTheme({
     subtitle2: {
       fontSize: 15,
       fontWeight: 400,
-      lineHeight: 1,
+      lineHeight: 1.2,
     },
   },
   shape: {

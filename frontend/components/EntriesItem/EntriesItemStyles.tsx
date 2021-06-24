@@ -1,6 +1,11 @@
 import { makeStyles, Theme } from '@material-ui/core';
 
 const useEntriesItemStyle = makeStyles((theme: Theme) => ({
+  content: {
+    '&:last-child': {
+      paddingBottom: theme.spacing(2),
+    },
+  },
   wrapper: {
     display: 'flex',
     position: 'relative',
@@ -13,7 +18,7 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
     height: '100%',
   },
   commentIcon: {
-    fontSize: 16,
+    fontSize: 14,
     color: theme.palette.text.secondary,
     marginRight: 5,
   },
@@ -21,10 +26,12 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
     marginRight: 10,
   },
   description: {
-    color: theme.palette.grey[500],
+    color: theme.palette.grey[400],
   },
   publisher: {
+    fontSize: 14,
     marginRight: 10,
+    marginLeft: 10,
   },
   info: {
     display: 'flex',

@@ -18,6 +18,7 @@ import { RoomsModule } from './rooms/rooms.module';
 import { DateScalar } from './scalars/date.scalar';
 import { UsersModule } from './users/users.module';
 import { VotesModule } from './votes/votes.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { VotesModule } from './votes/votes.module';
       ttl: 60,
       limit: 10,
     }),
+    NotificationsModule,
   ],
   providers: [DateScalar],
 })
