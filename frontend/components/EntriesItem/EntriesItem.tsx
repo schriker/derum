@@ -12,6 +12,7 @@ import EntriesItemPhoto from './EntriesItemPhoto';
 import EntriesItemActions from '../EntryItemActions/EntriesItemActions';
 import CommentIcon from '../Icons/CommentIcon';
 import EntriesItemComments from './EntriesItemComments';
+import { useMeQuery } from '../../generated/graphql';
 
 const EntriesItem = ({
   data,
@@ -19,6 +20,9 @@ const EntriesItem = ({
   handleUserClick,
   preview,
 }: EntriesItemProps): JSX.Element => {
+  const { data: userData } = useMeQuery({
+    fetchPolicy: 'cache-only',
+  });
   const classes = useEntriesItemStyle();
   const roomLink = `/p/${data.room.name}`;
   const link =
@@ -55,7 +59,11 @@ const EntriesItem = ({
           <EntriesItemAuthor
             id={data.author.id}
             name={data.author.displayName}
-            color={data.author.color}
+            color={
+              !userData || userData.me.showColorNames
+                ? data.author.color
+                : '#fff'
+            }
             handleUserClick={handleUserClick}
           />
           <Typography variant="body2" color="textSecondary">
@@ -78,4 +86,13 @@ const EntriesItem = ({
   );
 };
 
-export default EntriesItem;
+const areEqual = (prevProps: EntriesItemProps, nextProps: EntriesItemProps) => {
+  if (
+    prevProps.data.userVote !== nextProps.data.userVote ||
+    prevProps.data.voteScore !== nextProps.data.voteScore
+  )
+    return false;
+  return true;
+};
+
+export default React.memo(EntriesItem, areEqual);

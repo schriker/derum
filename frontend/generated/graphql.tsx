@@ -97,6 +97,7 @@ export type Mutation = {
   ignoreUser: Scalars['Boolean'];
   removeIgnoreUser: Scalars['Boolean'];
   changeUserColor: User;
+  updateUserSettings: User;
   banUser: Scalars['Boolean'];
   deleteUserContent: Scalars['Boolean'];
   createRoom: Room;
@@ -139,6 +140,11 @@ export type MutationRemoveIgnoreUserArgs = {
 
 export type MutationChangeUserColorArgs = {
   color: Scalars['String'];
+};
+
+
+export type MutationUpdateUserSettingsArgs = {
+  newSettingsData: NewSettingsData;
 };
 
 
@@ -258,6 +264,12 @@ export type NewMessageInput = {
 export type NewRoomInput = {
   name: Scalars['String'];
   description: Scalars['String'];
+};
+
+export type NewSettingsData = {
+  showNotifications?: Maybe<Scalars['Boolean']>;
+  showAvatars?: Maybe<Scalars['Boolean']>;
+  showColorNames?: Maybe<Scalars['Boolean']>;
 };
 
 export type OnlineUser = {
@@ -674,6 +686,20 @@ export type RemoveIgnoreUserMutationVariables = Exact<{
 export type RemoveIgnoreUserMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'removeIgnoreUser'>
+);
+
+export type UpdateUserSettingsMutationVariables = Exact<{
+  newSettingsData: NewSettingsData;
+}>;
+
+
+export type UpdateUserSettingsMutation = (
+  { __typename?: 'Mutation' }
+  & { updateUserSettings: (
+    { __typename?: 'User' }
+    & Pick<User, 'showAvatars' | 'showColorNames' | 'showNotifications'>
+    & AuthorFragmentFragment
+  ) }
 );
 
 export type UploadRoomPhotoMutationVariables = Exact<{
@@ -1613,6 +1639,42 @@ export function useRemoveIgnoreUserMutation(baseOptions?: Apollo.MutationHookOpt
 export type RemoveIgnoreUserMutationHookResult = ReturnType<typeof useRemoveIgnoreUserMutation>;
 export type RemoveIgnoreUserMutationResult = Apollo.MutationResult<RemoveIgnoreUserMutation>;
 export type RemoveIgnoreUserMutationOptions = Apollo.BaseMutationOptions<RemoveIgnoreUserMutation, RemoveIgnoreUserMutationVariables>;
+export const UpdateUserSettingsDocument = gql`
+    mutation UpdateUserSettings($newSettingsData: NewSettingsData!) {
+  updateUserSettings(newSettingsData: $newSettingsData) {
+    ...AuthorFragment
+    showAvatars
+    showColorNames
+    showNotifications
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+export type UpdateUserSettingsMutationFn = Apollo.MutationFunction<UpdateUserSettingsMutation, UpdateUserSettingsMutationVariables>;
+
+/**
+ * __useUpdateUserSettingsMutation__
+ *
+ * To run a mutation, you first call `useUpdateUserSettingsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateUserSettingsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateUserSettingsMutation, { data, loading, error }] = useUpdateUserSettingsMutation({
+ *   variables: {
+ *      newSettingsData: // value for 'newSettingsData'
+ *   },
+ * });
+ */
+export function useUpdateUserSettingsMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserSettingsMutation, UpdateUserSettingsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateUserSettingsMutation, UpdateUserSettingsMutationVariables>(UpdateUserSettingsDocument, options);
+      }
+export type UpdateUserSettingsMutationHookResult = ReturnType<typeof useUpdateUserSettingsMutation>;
+export type UpdateUserSettingsMutationResult = Apollo.MutationResult<UpdateUserSettingsMutation>;
+export type UpdateUserSettingsMutationOptions = Apollo.BaseMutationOptions<UpdateUserSettingsMutation, UpdateUserSettingsMutationVariables>;
 export const UploadRoomPhotoDocument = gql`
     mutation UploadRoomPhoto($attachment: Upload!, $roomId: Int!) {
   uploadRoomPhoto(attachment: $attachment, roomId: $roomId) {

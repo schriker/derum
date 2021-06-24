@@ -1,6 +1,7 @@
 import { Box, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
+import { useMeQuery } from '../../generated/graphql';
 import useIsConnected from '../../hooks/useIsConnected';
 import { ChatMessagesItemProps } from '../../types/messages';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
@@ -13,9 +14,13 @@ const ChatMessagesItem = ({
   userId,
   handleOpen,
 }: ChatMessagesItemProps): JSX.Element => {
+  const { data: userData } = useMeQuery({
+    fetchPolicy: 'cache-only',
+  });
   const [showActions, setShowActions] = useState(false);
   const classes = useChatMessageItemStyles({
-    userColor: message.author.color,
+    userColor:
+      !userData || userData?.me.showColorNames ? message.author.color : '#fff',
     selectedUser: userId,
     isSelected: message.author.id === userId,
   });
@@ -44,19 +49,21 @@ const ChatMessagesItem = ({
       {showActions && isConnected && (
         <ChatMessageActions messageId={message.id} />
       )}
-      <Box mr={1}>
-        <AvatarPhoto
-          styles={{
-            width: 30,
-            height: 30,
-          }}
-          color={message.author.color}
-          className={classes.avatar}
-          onClick={(e) => handlerUserSelect(message.author.id, e)}
-          src={message.author.photo}
-          name={message.author.displayName}
-        />
-      </Box>
+      {userData?.me.showAvatars || !userData ? (
+        <Box mr={1}>
+          <AvatarPhoto
+            styles={{
+              width: 30,
+              height: 30,
+            }}
+            color={message.author.color}
+            className={classes.avatar}
+            onClick={(e) => handlerUserSelect(message.author.id, e)}
+            src={message.author.photo}
+            name={message.author.displayName}
+          />
+        </Box>
+      ) : null}
       <Box>
         <Box display="flex" alignItems="center">
           <Typography
@@ -83,4 +90,4 @@ const ChatMessagesItem = ({
   );
 };
 
-export default ChatMessagesItem;
+export default React.memo(ChatMessagesItem, () => true);

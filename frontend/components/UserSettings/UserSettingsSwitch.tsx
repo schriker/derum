@@ -4,20 +4,20 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import React from 'react';
+import { SettingsSwitchPropsType } from '../../types/settings';
 import Switch from '../Switch/Switch';
 
 const UserSettingsSwitch = ({
   text,
+  value,
+  settingKey,
   onChange,
-}: {
-  text: string;
-  onChange: (value: boolean) => void;
-}): JSX.Element => {
-  const [checked, setChecked] = React.useState(true);
+}: SettingsSwitchPropsType): JSX.Element => {
+  const [checked, setChecked] = React.useState(value);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
-    onChange(event.target.checked);
+    onChange(settingKey, event.target.checked);
   };
 
   return (

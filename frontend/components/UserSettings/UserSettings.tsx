@@ -1,17 +1,38 @@
 import { Box, List } from '@material-ui/core';
 import React from 'react';
+import {
+  useMeQuery,
+  useUpdateUserSettingsMutation,
+} from '../../generated/graphql';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
+import { globalErrorVar } from '../../lib/apolloVars';
+import { SettingsKey } from '../../types/settings';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import SettingsIcon from '../Icons/SettingsIcon';
 import Modal from '../Modal/Modal';
 import DarkTooltip from '../Tooltip/Tooltip';
 import UserSettingsColor from './UserSettingsColor';
-import UserSettingsColorNames from './UserSettingsColorNames';
-import UserSettingsNotifications from './UserSettingsNotifications';
-import UserSettingsShowAvatars from './UserSettingsShowAvatars';
+import UserSettingsSwitch from './UserSettingsSwitch';
 
 const UserSettings = (): JSX.Element => {
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
+  const { data } = useMeQuery({
+    fetchPolicy: 'cache-only',
+  });
+
+  const [updateUserSettings] = useUpdateUserSettingsMutation({
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
+  });
+
+  const handleChange = (key: SettingsKey, value: boolean) => {
+    updateUserSettings({
+      variables: {
+        newSettingsData: {
+          [key]: value,
+        },
+      },
+    });
+  };
 
   return (
     <Box mx="5px">
@@ -28,9 +49,24 @@ const UserSettings = (): JSX.Element => {
         close={handleClose}
       >
         <List>
-          <UserSettingsNotifications />
-          <UserSettingsShowAvatars />
-          <UserSettingsColorNames />
+          <UserSettingsSwitch
+            text="Powiadomienia"
+            onChange={handleChange}
+            settingKey="showNotifications"
+            value={data.me.showNotifications}
+          />
+          <UserSettingsSwitch
+            text="Pokazuj avatary"
+            onChange={handleChange}
+            settingKey="showAvatars"
+            value={data.me.showAvatars}
+          />
+          <UserSettingsSwitch
+            text="Kolorowe nazwy"
+            onChange={handleChange}
+            settingKey="showColorNames"
+            value={data.me.showColorNames}
+          />
           <UserSettingsColor />
         </List>
       </Modal>

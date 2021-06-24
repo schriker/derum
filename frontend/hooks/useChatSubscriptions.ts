@@ -18,21 +18,23 @@ const useChatSubscriptions = (roomId: number) => {
     },
   });
 
-  useEffect(() => {
-    refetch();
-  }, [roomId]);
-
   const { data: user } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
 
   useEffect(() => {
+    refetch();
+  }, [roomId]);
+
+  useEffect(() => {
     // Reestablish ws connection with new user credentials hacky as hell :(
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     wsLink?.subscriptionClient.close();
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     wsLink?.subscriptionClient.connect();
-  }, [user?.me.id, roomId]);
+  }, [user?.me.id, user?.me.color, roomId]);
 
   useEffect(() => {
     subscribeToMore<MessageAddedSubscription>({
@@ -82,7 +84,7 @@ const useChatSubscriptions = (roomId: number) => {
         });
       },
     });
-  }, [user?.me.id, roomId]);
+  }, [user?.me.id, user?.me.color, roomId]);
 
   return {
     data,

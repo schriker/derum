@@ -35,10 +35,11 @@ const UserSettingsColor = (): JSX.Element => {
             onClick={() => handleClick(color)}
             style={{
               backgroundColor: color,
-              height: 30,
-              width: 30,
               marginRight: 8,
-              border: color === data?.me.color ? '5px solid white' : 'none',
+              border:
+                color === data?.me.color
+                  ? '5px solid white'
+                  : '5px solid transparent',
             }}
           />
         ))}

@@ -1,0 +1,8 @@
+mutation UpdateUserSettings($newSettingsData: NewSettingsData!) {
+  updateUserSettings(newSettingsData: $newSettingsData) {
+    ...AuthorFragment
+    showAvatars
+    showColorNames
+    showNotifications
+  }
+}
