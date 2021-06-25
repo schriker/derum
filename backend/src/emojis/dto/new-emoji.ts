@@ -1,22 +1,19 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { Length } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { IsNotEmpty } from 'class-validator';
 
 @InputType()
-export class NewLinkData {
+export class NewEmojiData {
   @Field()
-  @Length(10, 150)
   @Transform(({ value }) => value.trim())
-  title: string;
+  @IsNotEmpty()
+  name: string;
 
   @Field()
-  @Length(30, 350)
   @Transform(({ value }) => value.trim())
-  description: string;
+  @IsNotEmpty()
+  url: string;
 
-  @Field(() => Int)
-  linkId: number;
-
-  @Field(() => Int)
-  roomId: number;
+  @Field(() => Int, { nullable: true })
+  roomId?: number;
 }

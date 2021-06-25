@@ -127,6 +127,15 @@ type Comment {
   deleted: Boolean!
 }
 
+type Emoji {
+  id: Int!
+  createdAt: Date!
+  updatedAt: Date!
+  name: String!
+  file: String!
+  roomId: Int
+}
+
 type OnlineUser {
   userId: Int!
   roomId: Int!
@@ -159,6 +168,7 @@ type Query {
   comments(entryId: Int!): [Comment!]!
   newNotificationsNumber: Int!
   notifications(offsetId: Int!): [Notification!]!
+  globalEmojis: [Emoji!]!
 }
 
 input QueryEntriesInput {
@@ -201,6 +211,7 @@ type Mutation {
   readNotification(id: Int!): Notification!
   blacklistPublisher(entryId: Int!): Boolean!
   blacklistPublisherAndRemoveEntires(entryId: Int!): Boolean!
+  createEmoji(newEmojiData: NewEmojiData!): Boolean!
 }
 
 input NewSettingsData {
@@ -240,6 +251,12 @@ input NewCommentData {
   body: String!
   entryId: Int!
   parentId: Int
+}
+
+input NewEmojiData {
+  name: String!
+  url: String!
+  roomId: Int
 }
 
 type Subscription {

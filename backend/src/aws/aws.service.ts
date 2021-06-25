@@ -22,20 +22,20 @@ export class AwsService {
   }
 
   async upload(
-    file: Buffer,
+    file: Buffer | string,
     folder: string,
+    ContentType = 'image/jpeg',
+    name = uuidv4(),
   ): Promise<{
     name: string;
     url: string;
   }> {
-    const name = uuidv4();
-
     await this.s3.send(
       new PutObjectCommand({
         Bucket: this.configService.get<string>('AWS_PUBLIC_BUCKET_NAME'),
         Key: `${folder}/${name}`,
         Body: file,
-        ContentType: 'image/jpeg',
+        ContentType: ContentType,
         ACL: 'public-read',
       }),
     );

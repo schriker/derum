@@ -13,4 +13,5 @@ export const ERROR_MESSAGES = {
   BANNED: 'Twoje konto zostało zablokowane.',
   MESSAGE_LIMIT: 'Przekroczyłeś limit zapytań.',
   COMMENTS_LIMIT: 'Przekroczyłeś limit zapytań.',
+  EMOJI_EXISTS: 'Emotka z taką nazwą już istnieje.',
 };

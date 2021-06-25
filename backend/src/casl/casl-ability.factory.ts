@@ -20,6 +20,7 @@ import {
   FlatRoom,
 } from './flatTypes';
 import { Notification } from 'src/notifications/entities/notification.entity';
+import { Emoji } from 'src/emojis/entities/emoji.entity';
 
 type Subjects =
   | InferSubjects<
@@ -30,6 +31,7 @@ type Subjects =
       | typeof User
       | typeof Room
       | typeof Notification
+      | typeof Emoji
     >
   | 'all';
 

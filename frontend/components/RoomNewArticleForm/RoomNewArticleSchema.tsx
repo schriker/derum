@@ -14,7 +14,7 @@ const schema = yup.object().shape({
     .string()
     .trim()
     .required('Opis jest wymagany.')
-    .min(50, 'Opis min. 50 znaków.')
+    .min(30, 'Opis min. 30 znaków.')
     .max(350, 'Zbyt długi opis.'),
   body: yup
     .string()

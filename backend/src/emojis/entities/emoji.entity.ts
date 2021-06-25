@@ -1,4 +1,4 @@
-import { Directive, Field, Int } from '@nestjs/graphql';
+import { Directive, Field, Int, ObjectType } from '@nestjs/graphql';
 import { Room } from 'src/rooms/entities/room.entity';
 import {
   Column,
@@ -12,6 +12,7 @@ import {
 
 @Directive('@cacheControl(maxAge: 120)')
 @Entity('emoji')
+@ObjectType()
 export class Emoji {
   @PrimaryGeneratedColumn()
   @Field(() => Int)
