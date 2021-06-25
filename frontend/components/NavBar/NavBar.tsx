@@ -3,6 +3,7 @@ import React from 'react';
 import { openDrawerVar } from '../../lib/apolloVars';
 import { ButtonMenu } from '../Buttons/ButtonMenu';
 import MenuIcon from '../Icons/MenuIcon';
+import Logo from '../Logo/Logo';
 import NavBarLogin from '../NavBarLogin/NavBarLogin';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -37,6 +38,7 @@ const NavBar = (): JSX.Element => {
         >
           <MenuIcon />
         </ButtonMenu>
+        <Logo />
       </Box>
       <Box className={classes.search}>Wyszukiwarka</Box>
       <NavBarLogin />

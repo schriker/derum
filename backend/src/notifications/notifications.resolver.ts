@@ -35,8 +35,11 @@ export class NotificationsResolver {
 
   @Query(() => [Notification])
   @UseGuards(GQLSessionGuard)
-  notifications(@CurrentUser() session: User): Promise<Notification[]> {
-    return this.notificationsService.get(session);
+  notifications(
+    @Args('offsetId', { type: () => Int }) offsetId: number,
+    @CurrentUser() session: User,
+  ): Promise<Notification[]> {
+    return this.notificationsService.get(offsetId, session);
   }
 
   @Mutation(() => Boolean)

@@ -19,6 +19,7 @@ import { DateScalar } from './scalars/date.scalar';
 import { UsersModule } from './users/users.module';
 import { VotesModule } from './votes/votes.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { EmojisModule } from './emojis/emojis.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { NotificationsModule } from './notifications/notifications.module';
       limit: 10,
     }),
     NotificationsModule,
+    EmojisModule,
   ],
   providers: [DateScalar],
 })

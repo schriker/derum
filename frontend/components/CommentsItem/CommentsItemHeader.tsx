@@ -82,4 +82,4 @@ const CommentsItemHeader = ({
   );
 };
 
-export default CommentsItemHeader;
+export default React.memo(CommentsItemHeader, () => true);

@@ -65,7 +65,7 @@ function createApolloClient() {
               },
             },
             entries: {
-              keyArgs: [],
+              keyArgs: false,
               merge(existing, incoming, { args, readField }) {
                 if (args.queryData.offset === 0) return incoming;
                 const filtered = incoming.filter(

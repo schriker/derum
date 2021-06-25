@@ -1,13 +1,16 @@
+import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import { NotificationsDropdownPropsType } from '../../types/notifications';
 import Dropdown from '../Dropdown/Dropdown';
 import NotificationsItem from './NotificationsItem';
+import NotificationsLoadMore from './NotificationsLoadMore';
 import NotificationsReadAll from './NotificationsReadAll';
 
 const NotificationsDropdown = ({
   anchorEl,
   handleClose,
   data,
+  fetchMore,
 }: NotificationsDropdownPropsType): JSX.Element => {
   return data ? (
     <Dropdown
@@ -18,9 +21,18 @@ const NotificationsDropdown = ({
       onClose={handleClose}
     >
       <NotificationsReadAll />
-      {data.notifications.map((item) => (
-        <NotificationsItem key={item.id} data={item} />
-      ))}
+      {data.notifications.length ? (
+        data.notifications.map((item) => (
+          <NotificationsItem key={item.id} data={item} />
+        ))
+      ) : (
+        <Box width={320} textAlign="center" py={2}>
+          <Typography variant="body1" color="textSecondary">
+            Brak powiadomień.
+          </Typography>
+        </Box>
+      )}
+      {!!data.notifications.length && <NotificationsLoadMore fetchMore={fetchMore} />}
     </Dropdown>
   ) : null;
 };

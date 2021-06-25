@@ -158,7 +158,7 @@ type Query {
   metadata(url: String!): Link!
   comments(entryId: Int!): [Comment!]!
   newNotificationsNumber: Int!
-  notifications: [Notification!]!
+  notifications(offsetId: Int!): [Notification!]!
 }
 
 input QueryEntriesInput {

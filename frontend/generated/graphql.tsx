@@ -394,6 +394,11 @@ export type QueryCommentsArgs = {
   entryId: Scalars['Int'];
 };
 
+
+export type QueryNotificationsArgs = {
+  offsetId: Scalars['Int'];
+};
+
 export type QueryEntriesInput = {
   roomName: Scalars['String'];
   limit: Scalars['Int'];
@@ -926,7 +931,9 @@ export type NewRoomsQuery = (
   )> }
 );
 
-export type NotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+export type NotificationsQueryVariables = Exact<{
+  offsetId: Scalars['Int'];
+}>;
 
 
 export type NotificationsQuery = (
@@ -2282,8 +2289,8 @@ export type NewRoomsQueryHookResult = ReturnType<typeof useNewRoomsQuery>;
 export type NewRoomsLazyQueryHookResult = ReturnType<typeof useNewRoomsLazyQuery>;
 export type NewRoomsQueryResult = Apollo.QueryResult<NewRoomsQuery, NewRoomsQueryVariables>;
 export const NotificationsDocument = gql`
-    query Notifications {
-  notifications {
+    query Notifications($offsetId: Int!) {
+  notifications(offsetId: $offsetId) {
     ...NotificationFragment
   }
 }
@@ -2301,10 +2308,11 @@ export const NotificationsDocument = gql`
  * @example
  * const { data, loading, error } = useNotificationsQuery({
  *   variables: {
+ *      offsetId: // value for 'offsetId'
  *   },
  * });
  */
-export function useNotificationsQuery(baseOptions?: Apollo.QueryHookOptions<NotificationsQuery, NotificationsQueryVariables>) {
+export function useNotificationsQuery(baseOptions: Apollo.QueryHookOptions<NotificationsQuery, NotificationsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<NotificationsQuery, NotificationsQueryVariables>(NotificationsDocument, options);
       }

@@ -26,11 +26,17 @@ export class NotificationsService {
       .getCount();
   }
 
-  get(user: User): Promise<Notification[]> {
+  get(offsetId: number, user: User): Promise<Notification[]> {
+    const whereQuery =
+      offsetId > 0
+        ? 'notification.userId = :userId AND notification.id < :offset'
+        : 'notification.userId = :userId';
+
     return this.notificationRepository
       .createQueryBuilder('notification')
-      .where('notification.userId = :userId', {
+      .where(whereQuery, {
         userId: user.id,
+        offset: offsetId,
       })
       .leftJoinAndSelect('notification.triggeredBy', 'triggeredBy')
       .addOrderBy('notification.createdAt', 'DESC')
@@ -73,6 +79,7 @@ export class NotificationsService {
     user: User,
     comment: Comment,
   ): Promise<void> {
+    if (entry.author.id === user.id) return;
     const notification = new Notification();
     notification.user = entry.author;
     notification.url = `p/${entry.room.name}/wpis/${entry.id}/${entry.slug}`;
@@ -80,6 +87,27 @@ export class NotificationsService {
     notification.objectId = comment.id;
     notification.triggeredBy = user;
     notification.parentId = entry.id;
+    const result = await this.notificationRepository.save(notification);
+
+    this.pubSub.publish('notification', {
+      notification: result,
+    });
+  }
+
+  async createForReply(
+    entry: Entry,
+    comment: Comment,
+    user: User,
+    reply: Comment,
+  ): Promise<void> {
+    if (comment.author.id === user.id) return;
+    const notification = new Notification();
+    notification.user = comment.author;
+    notification.url = `p/${entry.room.name}/wpis/${entry.id}/${entry.slug}`;
+    notification.objectType = ObjectTypeEnum.REPLY;
+    notification.objectId = reply.id;
+    notification.triggeredBy = user;
+    notification.parentId = comment.id;
     const result = await this.notificationRepository.save(notification);
 
     this.pubSub.publish('notification', {

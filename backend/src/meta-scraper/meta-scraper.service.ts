@@ -26,43 +26,52 @@ export class MetaScraperService {
     private linkRepository: Repository<Link>,
   ) {}
 
-  getEncoding(url: string): Promise<string> {
+  getEncoding(comand: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      exec(
-        `curl -I '${url}' -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" | grep -Fi content-type:`,
-        { maxBuffer: 5 * 1024 * 1024 },
-        async (error, stdout) => {
-          if (error) reject(error);
-          const encoding = stdout.trim().split('=');
-          resolve(encoding.length > 1 ? encoding[1] : 'UTF-8');
-        },
-      );
+      exec(comand, { maxBuffer: 5 * 1024 * 1024 }, async (error, stdout) => {
+        if (error) reject(error);
+        const encoding = stdout.trim().split('=');
+        resolve(encoding.length > 1 ? encoding[1] : 'UTF-8');
+      });
     });
   }
 
-  getUrlData(url: string, encoding: string): Promise<any> {
+  getUrlData(comand: string, encoding: string, url): Promise<any> {
     return new Promise(async (resolve, reject) => {
-      exec(
-        `curl '${url}' -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" | iconv -f ${encoding} -t UTF-8`,
-        { maxBuffer: 5 * 1024 * 1024 },
-        async (error, stdout) => {
-          if (error) reject(error);
-          resolve(metascraper({ html: stdout, url }));
-        },
-      );
+      exec(comand, { maxBuffer: 5 * 1024 * 1024 }, async (error, stdout) => {
+        if (error) reject(error);
+        resolve(metascraper({ html: stdout, url }));
+      });
     });
   }
 
   async getMetadata(newLink: NewLink, user: User): Promise<Link> {
     try {
-      const encoding = await this.getEncoding(newLink.url);
-      const {
-        author,
-        description,
-        image,
-        title,
-        url: linkUrl,
-      } = await this.getUrlData(newLink.url, encoding);
+      let encoding = await this.getEncoding(
+        `curl -I '${newLink.url}' -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" | grep -Fi content-type:`,
+      );
+      let result = await this.getUrlData(
+        `curl '${newLink.url}' -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" | iconv -f ${encoding} -t UTF-8`,
+        encoding,
+        newLink.url,
+      );
+
+      if (
+        !result.author &&
+        !result.description &&
+        !result.image &&
+        !result.title
+      ) {
+        encoding = await this.getEncoding(
+          `curl -I '${newLink.url}' | grep -Fi content-type:`,
+        );
+        result = await this.getUrlData(
+          `curl '${newLink.url}' | iconv -f ${encoding} -t UTF-8`,
+          encoding,
+          newLink.url,
+        );
+      }
+      const { author, description, image, title, url: linkUrl } = result;
 
       const isScraped = await this.linkRepository.findOne({ url: linkUrl });
       if (isScraped) return isScraped;

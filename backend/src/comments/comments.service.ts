@@ -40,6 +40,14 @@ export class CommentsService {
 
     if (!parentId) {
       this.notificationsService.createForNewComment(entry, user, newComment);
+    } else {
+      const parentComment = await this.getById(parentId);
+      this.notificationsService.createForReply(
+        entry,
+        parentComment,
+        user,
+        newComment,
+      );
     }
     return newComment;
   }

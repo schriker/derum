@@ -39,7 +39,7 @@ const NotificationsReadAll = React.forwardRef(() => {
   return (
     <Box display="flex" justifyContent="center" mb={2} mt={1}>
       <ButtonSecondary onClick={clickHandler}>
-        Oznacz wszystkie jako odczytane.
+        Oznacz wszystkie jako odczytane
       </ButtonSecondary>
     </Box>
   );

@@ -2,27 +2,23 @@ import { makeStyles, Theme } from '@material-ui/core';
 
 const useNotificiationsStyles = makeStyles((theme: Theme) => ({
   wrapper: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingBottom: theme.spacing(1),
-    paddingTop: theme.spacing(1),
+    width: 320,
     borderBottom: `1px solid ${theme.palette.divider}`,
-  },
-  link: {
-    display: 'block',
-    textDecoration: 'none',
-    color: theme.palette.text.primary,
     '&:hover': {
       backgroundColor: theme.palette.divider,
     },
-    transition: theme.transitions.create(['background-color'], {
-      duration: 200,
-    }),
+    '&:focus': {
+      backgroundColor: theme.palette.divider,
+      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+        color: theme.palette.common.white,
+      },
+    },
   },
   photo: {
-    marginRight: theme.spacing(1),
+    minWidth: 40,
   },
   status: {
+    cursor: 'pointer',
     width: 10,
     height: 10,
     borderRadius: '50%',
@@ -34,9 +30,6 @@ const useNotificiationsStyles = makeStyles((theme: Theme) => ({
     '&:hover': {
       backgroundColor: theme.palette.error.main,
     },
-  },
-  message: {
-    flex: '1 1 auto',
   },
 }));
 

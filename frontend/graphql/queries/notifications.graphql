@@ -1,5 +1,5 @@
-query Notifications {
-  notifications {
+query Notifications($offsetId: Int!) {
+  notifications(offsetId: $offsetId) {
     ...NotificationFragment
   }
 }

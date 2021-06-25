@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import {
   NotificationDocument,
   NotificationSubscription,
+  useMeQuery,
   useNewNotificationsNumberQuery,
   useNotificationsQuery,
 } from '../../generated/graphql';
@@ -26,10 +27,37 @@ const StyledBadge = withStyles(() =>
 const Notifications = (): JSX.Element => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const { data, subscribeToMore: subscribeToMoreNotifications } =
-    useNotificationsQuery({
-      onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
+  const { data: userData } = useMeQuery({
+    fetchPolicy: 'cache-only',
+  });
+
+  const {
+    data,
+    subscribeToMore: subscribeToMoreNotifications,
+    fetchMore,
+  } = useNotificationsQuery({
+    variables: {
+      offsetId: 0,
+    },
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
+  });
+
+  const handleFetchMore = () => {
+    fetchMore({
+      variables: {
+        offsetId: data.notifications[data.notifications.length - 1].id,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return Object.assign({}, prev, {
+          notifications: [
+            ...prev.notifications,
+            ...fetchMoreResult.notifications,
+          ],
+        });
+      },
     });
+  };
 
   useEffect(() => {
     if (subscribeToMoreNotifications) {
@@ -76,7 +104,7 @@ const Notifications = (): JSX.Element => {
         <ButtonIcon onClick={handleClick} color="secondary">
           <StyledBadge
             badgeContent={
-              !newNotificationsNumber
+              !userData.me.showNotifications || !newNotificationsNumber
                 ? 0
                 : newNotificationsNumber.newNotificationsNumber
             }
@@ -87,6 +115,7 @@ const Notifications = (): JSX.Element => {
         </ButtonIcon>
       </DarkTooltip>
       <NotificationsDropdown
+        fetchMore={handleFetchMore}
         data={data}
         handleClose={handleClose}
         anchorEl={anchorEl}

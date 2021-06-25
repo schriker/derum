@@ -26,4 +26,4 @@ const AvatarPhoto = ({
   );
 };
 
-export default AvatarPhoto;
+export default React.memo(AvatarPhoto, () => true);
