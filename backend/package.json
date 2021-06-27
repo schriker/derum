@@ -87,7 +87,7 @@
     "@types/node": "^14.17.3",
     "@types/passport-facebook-token": "^0.4.34",
     "@types/passport-local": "^1.0.33",
-    "@types/sharp": "^0.28.2",
+    "@types/sharp": "^0.28.3",
     "@types/supertest": "^2.0.10",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.24.0",

@@ -1,0 +1,7 @@
+query GlobalEmojis {
+  globalEmojis {
+    id
+    name
+    file
+  }
+}

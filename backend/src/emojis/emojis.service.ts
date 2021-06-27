@@ -53,7 +53,7 @@ export class EmojisService {
     height: number,
     file: Buffer | string,
   ): Promise<Buffer> {
-    return sharp(file)
+    return sharp(file, { animated: true })
       .resize({
         width: width,
         height: height,
@@ -68,7 +68,10 @@ export class EmojisService {
   }
 
   getGlobal(): Promise<Emoji[]> {
-    return this.emojisRepository.find({ roomId: null });
+    return this.emojisRepository.find({
+      where: { roomId: null },
+      order: { name: 'ASC' },
+    });
   }
 
   async create(data: NewEmojiData): Promise<boolean> {

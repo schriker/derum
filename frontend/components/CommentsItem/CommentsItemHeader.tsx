@@ -82,4 +82,12 @@ const CommentsItemHeader = ({
   );
 };
 
-export default React.memo(CommentsItemHeader, () => true);
+const areEqual = (
+  prevProps: CommentItemPropsType,
+  nextProps: CommentItemPropsType
+) => {
+  if (prevProps.parentId !== nextProps.parentId) return false;
+  return true;
+};
+
+export default React.memo(CommentsItemHeader, areEqual);

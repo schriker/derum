@@ -1,16 +1,16 @@
-import { Box, InputAdornment } from '@material-ui/core';
-import React from 'react';
-import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Box } from '@material-ui/core';
+import React, { useRef } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import * as yup from 'yup';
 import { useCreateMessageMutation, useMeQuery } from '../../generated/graphql';
+import useIsConnected from '../../hooks/useIsConnected';
+import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
+import { ChatInputs } from '../../types/chatInputs';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import { CustomInput } from '../CustomInput/CustomInput';
-import EmoticonsIcon from '../Icons/EmoticonsIcon';
+import Emojis from '../Emojis/Emojis';
 import SendIcon from '../Icons/SendIcon';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { ChatInputs } from '../../types/chatInputs';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import useIsConnected from '../../hooks/useIsConnected';
 
 const schema = yup.object().shape({
   body: yup.string().trim().required(),
@@ -18,9 +18,11 @@ const schema = yup.object().shape({
 
 const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
   const isConnected = useIsConnected();
-  const { control, handleSubmit, reset } = useForm<ChatInputs>({
-    resolver: yupResolver(schema),
-  });
+  const bodyFieldRef = useRef<HTMLTextAreaElement | null>(null);
+  const { control, handleSubmit, reset, getValues, setValue } =
+    useForm<ChatInputs>({
+      resolver: yupResolver(schema),
+    });
   const { data, loading } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
@@ -49,6 +51,14 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
     }
   };
 
+  const handleSetInputFocus = () => {
+    bodyFieldRef.current.focus();
+  };
+
+  const handleEmojiSelect = (name: string) => {
+    setValue('body', getValues('body') + ` ${name} `);
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Box
@@ -72,14 +82,17 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
                 rowsMax={20}
                 placeholder={!connecting ? 'Wiadomość' : 'Łącze z serwerem...'}
                 endAdornment={
-                  <InputAdornment position="end">
-                    <ButtonIcon color="secondary" size="small">
-                      <EmoticonsIcon style={{ fontSize: 24 }} />
-                    </ButtonIcon>
-                  </InputAdornment>
+                  <Emojis
+                    setInpuFocus={handleSetInputFocus}
+                    onSelect={handleEmojiSelect}
+                  />
                 }
                 {...field}
                 onKeyDown={handleKeyDown}
+                inputRef={(e) => {
+                  field.ref(e);
+                  bodyFieldRef.current = e;
+                }}
               />
             )}
           />

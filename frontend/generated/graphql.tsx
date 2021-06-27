@@ -32,6 +32,16 @@ export type Comment = {
 };
 
 
+export type Emoji = {
+  __typename?: 'Emoji';
+  id: Scalars['Int'];
+  createdAt: Scalars['Date'];
+  updatedAt: Scalars['Date'];
+  name: Scalars['String'];
+  file: Scalars['String'];
+  roomId?: Maybe<Scalars['Int']>;
+};
+
 export type Entry = {
   __typename?: 'Entry';
   id: Scalars['Int'];
@@ -117,6 +127,7 @@ export type Mutation = {
   readNotification: Notification;
   blacklistPublisher: Scalars['Boolean'];
   blacklistPublisherAndRemoveEntires: Scalars['Boolean'];
+  createEmoji: Scalars['Boolean'];
 };
 
 
@@ -243,6 +254,11 @@ export type MutationBlacklistPublisherAndRemoveEntiresArgs = {
   entryId: Scalars['Int'];
 };
 
+
+export type MutationCreateEmojiArgs = {
+  newEmojiData: NewEmojiData;
+};
+
 export type NewArticleData = {
   title: Scalars['String'];
   description: Scalars['String'];
@@ -254,6 +270,12 @@ export type NewCommentData = {
   body: Scalars['String'];
   entryId: Scalars['Int'];
   parentId?: Maybe<Scalars['Int']>;
+};
+
+export type NewEmojiData = {
+  name: Scalars['String'];
+  url: Scalars['String'];
+  roomId?: Maybe<Scalars['Int']>;
 };
 
 export type NewLinkData = {
@@ -336,6 +358,7 @@ export type Query = {
   comments: Array<Comment>;
   newNotificationsNumber: Scalars['Int'];
   notifications: Array<Notification>;
+  globalEmojis: Array<Emoji>;
 };
 
 
@@ -861,6 +884,17 @@ export type EntryQuery = (
     & Pick<Entry, 'body'>
     & EntryFragmentFragment
   ) }
+);
+
+export type GlobalEmojisQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GlobalEmojisQuery = (
+  { __typename?: 'Query' }
+  & { globalEmojis: Array<(
+    { __typename?: 'Emoji' }
+    & Pick<Emoji, 'id' | 'name' | 'file'>
+  )> }
 );
 
 export type InitialMessagesQueryVariables = Exact<{
@@ -2095,6 +2129,42 @@ export function useEntryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Entr
 export type EntryQueryHookResult = ReturnType<typeof useEntryQuery>;
 export type EntryLazyQueryHookResult = ReturnType<typeof useEntryLazyQuery>;
 export type EntryQueryResult = Apollo.QueryResult<EntryQuery, EntryQueryVariables>;
+export const GlobalEmojisDocument = gql`
+    query GlobalEmojis {
+  globalEmojis {
+    id
+    name
+    file
+  }
+}
+    `;
+
+/**
+ * __useGlobalEmojisQuery__
+ *
+ * To run a query within a React component, call `useGlobalEmojisQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGlobalEmojisQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGlobalEmojisQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGlobalEmojisQuery(baseOptions?: Apollo.QueryHookOptions<GlobalEmojisQuery, GlobalEmojisQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GlobalEmojisQuery, GlobalEmojisQueryVariables>(GlobalEmojisDocument, options);
+      }
+export function useGlobalEmojisLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GlobalEmojisQuery, GlobalEmojisQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GlobalEmojisQuery, GlobalEmojisQueryVariables>(GlobalEmojisDocument, options);
+        }
+export type GlobalEmojisQueryHookResult = ReturnType<typeof useGlobalEmojisQuery>;
+export type GlobalEmojisLazyQueryHookResult = ReturnType<typeof useGlobalEmojisLazyQuery>;
+export type GlobalEmojisQueryResult = Apollo.QueryResult<GlobalEmojisQuery, GlobalEmojisQueryVariables>;
 export const InitialMessagesDocument = gql`
     query InitialMessages($roomId: Int!) {
   initialMessages(roomId: $roomId) {
