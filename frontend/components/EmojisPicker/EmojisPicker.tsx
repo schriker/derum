@@ -40,7 +40,6 @@ const EmojisPicker = ({
       onExited={() => {
         setInpuFocus();
       }}
-      elevation={7}
       open={isOpen}
       anchorEl={anchorEl}
       onClose={handleClose}

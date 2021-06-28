@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.grey[500],
   },
   search: {
-    backgroundColor: theme.palette.grey[800],
+    backgroundColor: theme.palette.divider,
   },
 }));
 
@@ -25,6 +25,7 @@ const SearchInput = ({
 
   return (
     <CustomInput
+      autoFocus
       style={style}
       value={value}
       onChange={onChange}

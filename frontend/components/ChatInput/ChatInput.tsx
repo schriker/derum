@@ -1,13 +1,21 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
 import React, { useRef } from 'react';
+import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useDebouncedCallback } from 'use-debounce';
 import * as yup from 'yup';
-import { useCreateMessageMutation, useMeQuery } from '../../generated/graphql';
+import {
+  GlobalEmojisQuery,
+  useCreateMessageMutation,
+  useGlobalEmojisQuery,
+  useMeQuery,
+} from '../../generated/graphql';
 import useIsConnected from '../../hooks/useIsConnected';
 import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
 import { ChatInputs } from '../../types/chatInputs';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
+import ChatInputQuickBar from '../ChatInputQuickBar/ChatInputQuickBar';
 import { CustomInput } from '../CustomInput/CustomInput';
 import Emojis from '../Emojis/Emojis';
 import SendIcon from '../Icons/SendIcon';
@@ -18,14 +26,21 @@ const schema = yup.object().shape({
 
 const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
   const isConnected = useIsConnected();
+  const [matchIndex, setMatchIndex] = useState(null);
+  const [matchedEmojis, setMatchedEmojis] = useState<
+    GlobalEmojisQuery['globalEmojis']
+  >([]);
+  const { data: emojis } = useGlobalEmojisQuery();
   const bodyFieldRef = useRef<HTMLTextAreaElement | null>(null);
   const { control, handleSubmit, reset, getValues, setValue } =
     useForm<ChatInputs>({
       resolver: yupResolver(schema),
     });
+
   const { data, loading } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
+
   const [sendNewMessage] = useCreateMessageMutation({
     onCompleted: () => reset({ body: '' }),
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
@@ -44,11 +59,53 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
     });
   };
 
-  const handleKeyDown = (event) => {
-    if (event.which === 13) {
+  const debouncedSetEmojis = useDebouncedCallback((word: string) => {
+    setMatchedEmojis(
+      emojis?.globalEmojis.filter((emoji) =>
+        emoji.name.toLowerCase().includes(word.toLowerCase())
+      )
+    );
+  }, 1000);
+
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Tab') {
+      const word = getValues('body').split(' ').pop();
+      if (word.length > 1) {
+        debouncedSetEmojis(word);
+      } else {
+        setMatchedEmojis([]);
+        setMatchIndex(null);
+      }
+    }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
       event.preventDefault();
       handleSubmit(onSubmit)();
     }
+    if (event.key === 'Tab') {
+      debouncedSetEmojis.flush();
+      event.preventDefault();
+      if (matchedEmojis.length > 0) {
+        const words = getValues('body').trim().split(' ');
+        if (matchIndex >= matchedEmojis.length - 1 || matchIndex === null) {
+          setMatchIndex(0);
+          words[words.length - 1] = `${matchedEmojis[0].name} `;
+        } else {
+          setMatchIndex((index) => index + 1);
+          words[words.length - 1] = `${matchedEmojis[matchIndex + 1].name} `;
+        }
+        setValue('body', words.join(' '));
+      }
+    }
+  };
+
+  const handleQuickEmojiSelect = (name: string) => {
+    const words = getValues('body').trim().split(' ');
+    words[words.length - 1] = `${name} `;
+    setValue('body', words.join(' '));
+    handleSetInputFocus();
   };
 
   const handleSetInputFocus = () => {
@@ -69,6 +126,13 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
         alignItems="flex-end"
       >
         <Box flex="1 0 auto">
+          {!!matchedEmojis.length && (
+            <ChatInputQuickBar
+              handleClick={handleQuickEmojiSelect}
+              matchIndex={matchIndex}
+              emojis={matchedEmojis}
+            />
+          )}
           <Controller
             name="body"
             control={control}
@@ -88,6 +152,7 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
                   />
                 }
                 {...field}
+                onKeyUp={handleKeyUp}
                 onKeyDown={handleKeyDown}
                 inputRef={(e) => {
                   field.ref(e);

@@ -33,6 +33,7 @@
     "react-syntax-highlighter": "^15.4.3",
     "remark-gfm": "^1.0.0",
     "subscriptions-transport-ws": "^0.9.19",
+    "use-debounce": "^7.0.0",
     "yup": "^0.32.9"
   },
   "devDependencies": {

@@ -9,8 +9,8 @@ export type EmojisPickerPropsType = {
 };
 
 export type EmojisPickerEmojiPropsType = {
-  handleHover: (index: number) => void;
-  handleClick: (name: string) => void;
+  handleHover?: (index: number) => void;
+  handleClick?: (name: string) => void;
   emoji: GlobalEmojisQuery['globalEmojis'][0];
   index: number;
   hoveredEmoji: number;
