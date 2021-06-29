@@ -1,4 +1,3 @@
-import { FetchMoreOptions } from '@apollo/client';
 import { NotificationsQuery } from '../generated/graphql';
 
 export type NotificationsDropdownPropsType = {

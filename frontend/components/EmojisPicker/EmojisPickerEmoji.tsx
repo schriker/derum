@@ -17,7 +17,7 @@ const EmojisPickerEmoji = ({
     <Box
       key={emoji.id}
       onMouseOver={handleHover ? () => handleHover(index) : null}
-      onClick={handleClick ? () => handleClick(emoji.name) : null}
+      onClick={handleClick ? () => handleClick(emoji.name, index) : null}
       className={`${classes.emoji} ${
         hoveredEmoji === index ? classes.active : ''
       }`}

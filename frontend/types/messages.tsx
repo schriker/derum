@@ -14,3 +14,9 @@ export type ChatMessagesItemProps = {
 export type MessageActionProps = {
   messageId: number;
 };
+
+export type ChatMessageNode = {
+  type: 'emoji' | 'text';
+  value: string;
+  component: React.ReactNode;
+};

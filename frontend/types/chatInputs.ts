@@ -7,5 +7,5 @@ export type ChatInputs = {
 export type ChatInputQuickBarPropsType = {
   emojis: GlobalEmojisQuery['globalEmojis'];
   matchIndex: number;
-  handleClick: (name) => void;
+  handleClick: (name: string, index: number) => void;
 };

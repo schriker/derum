@@ -1,6 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Box } from '@material-ui/core';
 import React, { useRef } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useDebouncedCallback } from 'use-debounce';
@@ -11,6 +12,7 @@ import {
   useGlobalEmojisQuery,
   useMeQuery,
 } from '../../generated/graphql';
+import findStringStartEndIndex from '../../helpers/stringStartEndIndex';
 import useIsConnected from '../../hooks/useIsConnected';
 import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
 import { ChatInputs } from '../../types/chatInputs';
@@ -26,7 +28,8 @@ const schema = yup.object().shape({
 
 const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
   const isConnected = useIsConnected();
-  const [matchIndex, setMatchIndex] = useState(null);
+  const [caretPositoon, setCaretPosition] = useState(0);
+  const [matchIndex, setMatchIndex] = useState<null | number>(null);
   const [matchedEmojis, setMatchedEmojis] = useState<
     GlobalEmojisQuery['globalEmojis']
   >([]);
@@ -41,12 +44,15 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
     fetchPolicy: 'cache-only',
   });
 
+  const connecting = !isConnected && !loading;
+
   const [sendNewMessage] = useCreateMessageMutation({
-    onCompleted: () => reset({ body: '' }),
+    onCompleted: () => {
+      reset({ body: '' });
+      stateCleanUp();
+    },
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
   });
-
-  const connecting = !isConnected && !loading;
 
   const onSubmit: SubmitHandler<ChatInputs> = (inputData) => {
     if (!data) return openModalVar(true);
@@ -59,22 +65,48 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
     });
   };
 
+  const stateCleanUp = () => {
+    debouncedSetEmojis.flush();
+    setMatchedEmojis([]);
+    setMatchIndex(null);
+  };
+
   const debouncedSetEmojis = useDebouncedCallback((word: string) => {
-    setMatchedEmojis(
-      emojis?.globalEmojis.filter((emoji) =>
-        emoji.name.toLowerCase().includes(word.toLowerCase())
-      )
-    );
+    if (getValues('body').length) {
+      setMatchedEmojis(
+        emojis?.globalEmojis.filter((emoji) =>
+          emoji.name.toLowerCase().includes(word.toLowerCase())
+        )
+      );
+    }
   }, 1000);
+
+  const putEmoji = (emoji: string, atEnd = false) => {
+    let text = getValues('body');
+    const { begin, end } = findStringStartEndIndex(
+      text,
+      bodyFieldRef.current.selectionStart
+    );
+    const startPosition = atEnd ? end : begin;
+    text =
+      text.substring(0, startPosition) +
+      `${emoji} ` +
+      text.substring(end, text.length);
+    setCaretPosition(startPosition + emoji.length + 1);
+    setValue('body', text);
+  };
 
   const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key !== 'Tab') {
-      const word = getValues('body').split(' ').pop();
+      stateCleanUp();
+      const text = getValues('body');
+      const { begin, end } = findStringStartEndIndex(
+        text,
+        bodyFieldRef.current.selectionStart
+      );
+      const word = text.substring(begin, end);
       if (word.length > 1) {
-        debouncedSetEmojis(word);
-      } else {
-        setMatchedEmojis([]);
-        setMatchIndex(null);
+        debouncedSetEmojis(word.trim());
       }
     }
   };
@@ -85,26 +117,27 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
       handleSubmit(onSubmit)();
     }
     if (event.key === 'Tab') {
-      debouncedSetEmojis.flush();
       event.preventDefault();
+      debouncedSetEmojis.flush();
       if (matchedEmojis.length > 0) {
-        const words = getValues('body').trim().split(' ');
         if (matchIndex >= matchedEmojis.length - 1 || matchIndex === null) {
           setMatchIndex(0);
-          words[words.length - 1] = `${matchedEmojis[0].name} `;
+          putEmoji(matchedEmojis[0].name);
         } else {
           setMatchIndex((index) => index + 1);
-          words[words.length - 1] = `${matchedEmojis[matchIndex + 1].name} `;
+          putEmoji(matchedEmojis[matchIndex + 1].name);
         }
-        setValue('body', words.join(' '));
       }
     }
   };
 
-  const handleQuickEmojiSelect = (name: string) => {
-    const words = getValues('body').trim().split(' ');
-    words[words.length - 1] = `${name} `;
-    setValue('body', words.join(' '));
+  useEffect(() => {
+    bodyFieldRef.current.setSelectionRange(caretPositoon, caretPositoon);
+  }, [caretPositoon]);
+
+  const handleQuickEmojiSelect = (name: string, index: number) => {
+    putEmoji(name);
+    setMatchIndex(index);
     handleSetInputFocus();
   };
 
@@ -113,7 +146,7 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
   };
 
   const handleEmojiSelect = (name: string) => {
-    setValue('body', getValues('body') + ` ${name} `);
+    putEmoji(name, true);
   };
 
   return (
@@ -126,7 +159,7 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
         alignItems="flex-end"
       >
         <Box flex="1 0 auto">
-          {!!matchedEmojis.length && (
+          {!!matchedEmojis?.length && (
             <ChatInputQuickBar
               handleClick={handleQuickEmojiSelect}
               matchIndex={matchIndex}

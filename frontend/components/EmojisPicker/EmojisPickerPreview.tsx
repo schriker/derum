@@ -12,8 +12,8 @@ const EmojisPickerPreview = ({
   return (
     <Box className={classes.preview}>
       <img
-        width={28}
-        height={28}
+        width={24}
+        height={24}
         alt={emoji.name}
         src={`http://derum-public.s3.eu-central-1.amazonaws.com/emojis/${emoji.file}/2x`}
       />

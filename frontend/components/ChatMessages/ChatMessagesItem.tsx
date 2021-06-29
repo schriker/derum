@@ -5,6 +5,7 @@ import { useMeQuery } from '../../generated/graphql';
 import useIsConnected from '../../hooks/useIsConnected';
 import { ChatMessagesItemProps } from '../../types/messages';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
+import ChatMessageBody from '../ChatMessageBody/ChatMessageBody';
 import ChatMessageActions from './ChatMessageActions';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
@@ -82,9 +83,7 @@ const ChatMessagesItem = ({
             {dayjs(message.createdAt).format('HH:mm')}
           </Typography>
         </Box>
-        <Box>
-          <Typography variant="body2">{message.body}</Typography>
-        </Box>
+        <ChatMessageBody body={message.body} />
       </Box>
     </Box>
   );
