@@ -5,7 +5,14 @@ export type ChatInputs = {
 };
 
 export type ChatInputQuickBarPropsType = {
-  emojis: GlobalEmojisQuery['globalEmojis'];
+  keyWords: GlobalEmojisQuery['globalEmojis'] | string[];
   matchIndex: number;
+  handleClick: (name: string, index: number) => void;
+};
+
+export type ChatInputQuickBarUserPropsType = {
+  value: string;
+  index: number;
+  active: number;
   handleClick: (name: string, index: number) => void;
 };

@@ -11,6 +11,7 @@ import {
   useCreateMessageMutation,
   useGlobalEmojisQuery,
   useMeQuery,
+  useOnlineUsersQuery,
 } from '../../generated/graphql';
 import findStringStartEndIndex from '../../helpers/stringStartEndIndex';
 import useIsConnected from '../../hooks/useIsConnected';
@@ -28,13 +29,18 @@ const schema = yup.object().shape({
 
 const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
   const isConnected = useIsConnected();
-  const [caretPositoon, setCaretPosition] = useState(0);
-  const [matchIndex, setMatchIndex] = useState<null | number>(null);
-  const [matchedEmojis, setMatchedEmojis] = useState<
-    GlobalEmojisQuery['globalEmojis']
-  >([]);
   const { data: emojis } = useGlobalEmojisQuery();
+  const { data: onlineUsers } = useOnlineUsersQuery({
+    variables: {
+      roomId,
+    },
+  });
+  const [caretPositoon, setCaretPosition] = useState(0);
+  const [matchedKeyWords, setMatchedKeyWords] = useState<
+    GlobalEmojisQuery['globalEmojis'] | string[]
+  >([]);
   const bodyFieldRef = useRef<HTMLTextAreaElement | null>(null);
+  const [matchIndex, setMatchIndex] = useState<null | number>(null);
   const { control, handleSubmit, reset, getValues, setValue } =
     useForm<ChatInputs>({
       resolver: yupResolver(schema),
@@ -67,13 +73,24 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
 
   const stateCleanUp = () => {
     debouncedSetEmojis.flush();
-    setMatchedEmojis([]);
+    debouncedSetUsers.flush();
+    setMatchedKeyWords([]);
     setMatchIndex(null);
   };
 
+  const debouncedSetUsers = useDebouncedCallback((word: string) => {
+    if (getValues('body').length) {
+      console.log(onlineUsers);
+      const matchedUsers = onlineUsers?.onlineUsers.map((user) => {
+        if (user.name.startsWith(word.split('@')[1])) return `@${user.name}`;
+      });
+      setMatchedKeyWords(matchedUsers.filter((item) => item !== undefined));
+    }
+  }, 1000);
+
   const debouncedSetEmojis = useDebouncedCallback((word: string) => {
     if (getValues('body').length) {
-      setMatchedEmojis(
+      setMatchedKeyWords(
         emojis?.globalEmojis.filter((emoji) =>
           emoji.name.toLowerCase().includes(word.toLowerCase())
         )
@@ -105,8 +122,14 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
         bodyFieldRef.current.selectionStart
       );
       const word = text.substring(begin, end);
-      if (word.length > 1) {
-        debouncedSetEmojis(word.trim());
+      if (word.length > 2) {
+        if (word.match(/^@\w*/)) {
+          if (word.length > 3) {
+            debouncedSetUsers(word.trim());
+          }
+        } else {
+          debouncedSetEmojis(word.trim());
+        }
       }
     }
   };
@@ -119,13 +142,24 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
     if (event.key === 'Tab') {
       event.preventDefault();
       debouncedSetEmojis.flush();
-      if (matchedEmojis.length > 0) {
-        if (matchIndex >= matchedEmojis.length - 1 || matchIndex === null) {
+      debouncedSetUsers.flush();
+      if (matchedKeyWords.length > 0) {
+        if (matchIndex >= matchedKeyWords.length - 1 || matchIndex === null) {
           setMatchIndex(0);
-          putEmoji(matchedEmojis[0].name);
+          putEmoji(
+            typeof matchedKeyWords[0] === 'string'
+              ? matchedKeyWords[0]
+              : matchedKeyWords[0].name
+          );
         } else {
           setMatchIndex((index) => index + 1);
-          putEmoji(matchedEmojis[matchIndex + 1].name);
+          putEmoji(
+            typeof matchedKeyWords[matchIndex + 1] === 'string'
+              ? matchedKeyWords[matchIndex + 1]
+              : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-expect-error
+                matchedKeyWords[matchIndex + 1].name
+          );
         }
       }
     }
@@ -158,12 +192,12 @@ const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
         flex="1 0 auto"
         alignItems="flex-end"
       >
-        <Box flex="1 0 auto">
-          {!!matchedEmojis?.length && (
+        <Box flex="1 1 auto">
+          {!!matchedKeyWords?.length && (
             <ChatInputQuickBar
               handleClick={handleQuickEmojiSelect}
               matchIndex={matchIndex}
-              emojis={matchedEmojis}
+              keyWords={matchedKeyWords}
             />
           )}
           <Controller
