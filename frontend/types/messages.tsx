@@ -20,3 +20,11 @@ export type ChatMessageNode = {
   value: string;
   component: React.ReactNode;
 };
+
+export type ChatMessageUserStylesPropsType = {
+  isCurrentUser: boolean;
+};
+
+export type ChatMessageUserPropsType = {
+  value: string;
+};

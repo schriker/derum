@@ -5,6 +5,7 @@ import React from 'react';
 import { ChatMessageNode } from '../types/messages';
 import { Typography } from '@material-ui/core';
 import DarkTooltip from '../components/Tooltip/Tooltip';
+import ChatMessageUser from '../components/ChatMessageUser/ChatMessageUser';
 
 const createMessageNodes = (
   body: string,
@@ -38,6 +39,15 @@ const createMessageNodes = (
               </DarkTooltip>
             </span>
           ),
+        },
+      ];
+    } else if (currentvalue.match(/^@\w*/)) {
+      return [
+        ...accumulator,
+        {
+          type: 'user',
+          value: currentvalue,
+          component: <ChatMessageUser key={uuidv4()} value={currentvalue} />,
         },
       ];
     } else if (!accumulator.length) {

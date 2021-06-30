@@ -9,6 +9,9 @@ import {
 } from '../generated/graphql';
 import { wsLink } from '../lib/apolloClient';
 import { globalErrorVar } from '../lib/apolloVars';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+import PopSound from '../public/pop.mp3';
 
 const useChatSubscriptions = (roomId: number) => {
   const { data, subscribeToMore, refetch } = useInitialMessagesQuery({
@@ -24,7 +27,7 @@ const useChatSubscriptions = (roomId: number) => {
 
   useEffect(() => {
     refetch();
-  }, [roomId]);
+  }, [roomId, refetch]);
 
   useEffect(() => {
     // Reestablish ws connection with new user credentials hacky as hell :(
@@ -37,6 +40,7 @@ const useChatSubscriptions = (roomId: number) => {
   }, [user?.me.id, user?.me.color, roomId]);
 
   useEffect(() => {
+    const pop = new Audio(PopSound);
     subscribeToMore<MessageAddedSubscription>({
       document: MessageAddedDocument,
       variables: {
@@ -45,6 +49,15 @@ const useChatSubscriptions = (roomId: number) => {
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
         const newMessage = subscriptionData.data.messageAdded;
+        const mentions =
+          subscriptionData.data.messageAdded.body.match(/\B@\w*/);
+        if (
+          mentions?.includes(
+            `@${subscriptionData.data.messageAdded.author.displayName}`
+          )
+        ) {
+          pop.play();
+        }
         const prevMessages = [...prev.initialMessages];
         const slicedPrevMessages =
           prevMessages.length > 100
@@ -84,7 +97,7 @@ const useChatSubscriptions = (roomId: number) => {
         });
       },
     });
-  }, [user?.me.id, user?.me.color, roomId]);
+  }, [user?.me.id, user?.me.color, roomId, subscribeToMore, user]);
 
   return {
     data,
