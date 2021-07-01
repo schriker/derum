@@ -225,6 +225,16 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
+  async checkIfIgnored(user: User, userToCheck: User): Promise<boolean> {
+    const ignored = await this.usersRepository
+      .createQueryBuilder('user')
+      .where('user.id = :id', { id: user.id })
+      .leftJoinAndSelect('user.ignore', 'ignore')
+      .where('ignore.id = :id', { id: userToCheck.id })
+      .getMany();
+    return !!ignored.length;
+  }
+
   async updateSettings(data: NewSettingsData, session: User): Promise<User> {
     if (!Object.keys(data).length) return session;
     const user = await this.getByIdBasic(session.id);

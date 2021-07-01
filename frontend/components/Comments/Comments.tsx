@@ -37,12 +37,10 @@ const Comments = (): JSX.Element => {
     };
     if (router.events) {
       router.events.on('routeChangeComplete', refetchComments);
-      router.events.on('hashChangeComplete', refetchComments);
     }
     return () => {
       if (router.events) {
         router.events.off('routeChangeComplete', refetchComments);
-        router.events.off('hashChangeComplete', refetchComments);
       }
     };
   }, [router.events, refetch, entryId]);

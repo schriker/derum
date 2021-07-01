@@ -22,6 +22,7 @@ const CommentsItemHeader = ({
   const classes = useCommentsItemStyles({
     userColor:
       !userdata || userdata?.me.showColorNames ? data.author.color : '#fff',
+    isHighlighted: false,
   });
 
   const handleUserSelect = (id: number) => {

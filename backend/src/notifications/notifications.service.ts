@@ -7,6 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { ObjectTypeEnum } from './types/object-type.enum';
 import { Comment } from 'src/comments/entities/comment.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class NotificationsService {
@@ -15,6 +16,7 @@ export class NotificationsService {
     private notificationRepository: Repository<Notification>,
     @Inject('PUB_SUB')
     private pubSub: RedisPubSub,
+    private usersService: UsersService,
   ) {}
 
   countNew(user: User): Promise<number> {
@@ -79,19 +81,14 @@ export class NotificationsService {
     user: User,
     comment: Comment,
   ): Promise<void> {
-    if (entry.author.id === user.id) return;
-    const notification = new Notification();
-    notification.user = entry.author;
-    notification.url = `p/${entry.room.name}/wpis/${entry.id}/${entry.slug}?comment=${comment.id}`;
-    notification.objectType = ObjectTypeEnum.COMMENT;
-    notification.objectId = comment.id;
-    notification.triggeredBy = user;
-    notification.parentId = entry.id;
-    const result = await this.notificationRepository.save(notification);
-
-    this.pubSub.publish('notification', {
-      notification: result,
-    });
+    this.pushNotificationForEntry(
+      entry.author,
+      user,
+      ObjectTypeEnum.COMMENT,
+      entry,
+      entry.id,
+      comment.id,
+    );
   }
 
   async createForReply(
@@ -100,14 +97,34 @@ export class NotificationsService {
     user: User,
     reply: Comment,
   ): Promise<void> {
-    if (comment.author.id === user.id) return;
+    this.pushNotificationForEntry(
+      comment.author,
+      user,
+      ObjectTypeEnum.REPLY,
+      entry,
+      comment.id,
+      reply.id,
+    );
+  }
+
+  async pushNotificationForEntry(
+    user: User,
+    triggeredBy: User,
+    type: ObjectTypeEnum,
+    entry: Entry,
+    parentId: number,
+    commentId: number,
+  ) {
+    if (user.id === triggeredBy.id) return;
+    const isIgnored = await this.usersService.checkIfIgnored(user, triggeredBy);
+    if (isIgnored) return;
     const notification = new Notification();
-    notification.user = comment.author;
-    notification.url = `p/${entry.room.name}/wpis/${entry.id}/${entry.slug}?comment=${reply.id}`;
-    notification.objectType = ObjectTypeEnum.REPLY;
-    notification.objectId = reply.id;
-    notification.triggeredBy = user;
-    notification.parentId = comment.id;
+    notification.user = user;
+    notification.url = `p/${entry.room.name}/wpis/${entry.id}/${entry.slug}?comment=${commentId}`;
+    notification.objectType = type;
+    notification.objectId = commentId;
+    notification.triggeredBy = triggeredBy;
+    notification.parentId = parentId;
     const result = await this.notificationRepository.save(notification);
 
     this.pubSub.publish('notification', {

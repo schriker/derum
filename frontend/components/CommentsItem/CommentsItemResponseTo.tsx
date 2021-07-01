@@ -15,6 +15,7 @@ const CommentsItemResponseTo = ({
   const apolloClient = useApolloClient();
   const classes = useCommentsItemStyles({
     userColor: data.author.color,
+    isHighlighted: false,
   });
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [parentComment, setParentComment] = useState<MapedComments>(null);
