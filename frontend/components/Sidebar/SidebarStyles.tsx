@@ -17,6 +17,10 @@ const useSidebarStyles = makeStyles<Theme, SidebarStyles>((theme: Theme) => ({
     borderRadius: 0,
     justifyContent: 'flex-start',
   },
+  name: {
+    wordBreak: 'break-word',
+    textAlign: 'initial',
+  },
   userNumber: {
     marginLeft: 10,
     color: theme.palette.grey[500],

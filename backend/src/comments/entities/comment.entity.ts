@@ -1,4 +1,4 @@
-import { Directive, Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
@@ -15,7 +15,6 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Directive('@cacheControl(maxAge: 30, scope: PRIVATE)')
 @Entity('comment')
 @ObjectType()
 export class Comment {

@@ -6,16 +6,19 @@ import CommentsItemHeader from './CommentsItemHeader';
 import useCommentsItemStyles from './CommentsItemStyles';
 import { CommentItemPropsType } from '../../types/comment';
 import CommentNewForm from '../CommentNewForm/CommentNewForm';
+import { useRouter } from 'next/router';
 
 const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
+  const router = useRouter();
   const classes = useCommentsItemStyles({
     userColor: props.data.author.color,
     level: props.level,
+    isHighlighted: props.data.id === parseInt(router.query.comment as string),
   });
 
   return (
     <>
-      <Box className={classes.wrapper}>
+      <Box id={`comment-${props.data.id}`} className={classes.wrapper}>
         <CommentsItemVote
           voteScore={props.data.voteScore}
           data={props.data}

@@ -2,7 +2,6 @@ import { makeStyles, Theme } from '@material-ui/core';
 
 const useNotificiationsStyles = makeStyles((theme: Theme) => ({
   wrapper: {
-    width: 320,
     borderBottom: `1px solid ${theme.palette.divider}`,
     '&:hover': {
       backgroundColor: theme.palette.divider,
@@ -16,6 +15,9 @@ const useNotificiationsStyles = makeStyles((theme: Theme) => ({
   },
   photo: {
     minWidth: 40,
+  },
+  secondaryAction: {
+    paddingRight: theme.spacing(5),
   },
   status: {
     cursor: 'pointer',

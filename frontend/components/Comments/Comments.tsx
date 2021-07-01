@@ -1,6 +1,7 @@
 import { Box } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { useCommentsQuery, useMeQuery } from '../../generated/graphql';
 import createCommentTree from '../../helpers/createCommentsTree';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
@@ -21,13 +22,30 @@ const Comments = (): JSX.Element => {
   const [userId, setUserId] = useState(null);
   const [parentId, setParentId] = useState(null);
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
-  const { data, loading } = useCommentsQuery({
-    fetchPolicy: 'network-only',
+  const { data, loading, refetch } = useCommentsQuery({
     nextFetchPolicy: 'cache-only',
     variables: {
       entryId,
     },
   });
+
+  useEffect(() => {
+    const refetchComments = () => {
+      refetch({
+        entryId,
+      });
+    };
+    if (router.events) {
+      router.events.on('routeChangeComplete', refetchComments);
+      router.events.on('hashChangeComplete', refetchComments);
+    }
+    return () => {
+      if (router.events) {
+        router.events.off('routeChangeComplete', refetchComments);
+        router.events.off('hashChangeComplete', refetchComments);
+      }
+    };
+  }, [router.events, refetch, entryId]);
 
   return (
     <Box id="comments" className={classes.wrapper}>

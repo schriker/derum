@@ -26,13 +26,15 @@ const NotificationsDropdown = ({
           <NotificationsItem key={item.id} data={item} />
         ))
       ) : (
-        <Box width={320} textAlign="center" py={2}>
+        <Box textAlign="center" py={2}>
           <Typography variant="body1" color="textSecondary">
             Brak powiadomień.
           </Typography>
         </Box>
       )}
-      {!!data.notifications.length && <NotificationsLoadMore fetchMore={fetchMore} />}
+      {!!data.notifications.length && (
+        <NotificationsLoadMore fetchMore={fetchMore} />
+      )}
     </Dropdown>
   ) : null;
 };

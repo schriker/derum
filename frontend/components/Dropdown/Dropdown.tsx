@@ -2,7 +2,9 @@ import { Menu, MenuProps, withStyles } from '@material-ui/core';
 import React from 'react';
 
 const Dropdown = withStyles({
-  paper: {},
+  paper: {
+    maxWidth: 320,
+  },
 })((props: MenuProps) => (
   <Menu
     elevation={8}

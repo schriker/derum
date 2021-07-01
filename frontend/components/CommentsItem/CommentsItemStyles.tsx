@@ -16,6 +16,8 @@ const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
       '&:hover $replyButton': {
         opacity: 1,
       },
+      borderTop: (props) =>
+        props.isHighlighted ? `2px solid ${theme.palette.common.white}` : null,
     },
     content: {
       width: '100%',

@@ -12,10 +12,12 @@ import CloseIcon from '../Icons/CloseIcon';
 import NewRoomButton from '../NewRoom/NewRoomButton';
 import SidebarDrawerSearch from './SidebarDrawerSearch';
 import SidebarDrawerSection from './SidebarDrawerSection';
+import useSidebarDrawerStyles from './SidebarDrawerStyles';
 import SidebarSkeleton from './SidebarSkeleton';
 
 const SidebarDrawer = (): JSX.Element => {
   const isOpen = useReactiveVar(openDrawerVar);
+  const classes = useSidebarDrawerStyles();
   const { data: userData, loading: userLoading } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
@@ -28,7 +30,14 @@ const SidebarDrawer = (): JSX.Element => {
     });
 
   return (
-    <Drawer anchor="left" open={isOpen} onClose={() => openDrawerVar(false)}>
+    <Drawer
+      classes={{
+        paper: classes.paper,
+      }}
+      anchor="left"
+      open={isOpen}
+      onClose={() => openDrawerVar(false)}
+    >
       <Box pt={1} pb={2} display="flex" flexDirection="column">
         <Box display="flex" justifyContent="flex-end" mr={1}>
           <ButtonIcon

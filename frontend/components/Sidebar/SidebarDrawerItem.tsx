@@ -25,7 +25,9 @@ const SidebarDrawerItem = ({
           src={photo}
           className={classes.photo}
         />
-        <Typography variant="body1">{name}</Typography>
+        <Typography className={classes.name} variant="body1">
+          {name}
+        </Typography>
         <Typography className={classes.userNumber} variant="subtitle2">
           {numbro(usersNumber).format({ average: true })}
         </Typography>

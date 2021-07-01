@@ -10,17 +10,17 @@ import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 import React from 'react';
 import {
-  NotificationFragmentFragment,
   ObjectTypeEnum,
   useReadNotificationMutation,
 } from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
+import { NotificationsItemPropsType } from '../../types/notifications';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import useNotificiationsStyles from './NotificationsStyle';
 
 const NotificationsItem = React.forwardRef<
   HTMLDivElement,
-  { data: NotificationFragmentFragment }
+  NotificationsItemPropsType
 >(({ data }, ref) => {
   const classes = useNotificiationsStyles();
   const router = useRouter();
@@ -39,11 +39,13 @@ const NotificationsItem = React.forwardRef<
 
   const handleClick = () => {
     router.push(`/${data.url}`);
-    readNotification({
-      variables: {
-        id: data.id,
-      },
-    });
+    if (!data.readed) {
+      readNotification({
+        variables: {
+          id: data.id,
+        },
+      });
+    }
   };
 
   const handleMarkReded = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -59,6 +61,7 @@ const NotificationsItem = React.forwardRef<
     <ListItem
       ref={ref}
       button
+      classes={{ secondaryAction: classes.secondaryAction }}
       className={classes.wrapper}
       onClick={handleClick}
     >
@@ -102,4 +105,13 @@ const NotificationsItem = React.forwardRef<
 
 NotificationsItem.displayName = 'NotificationsItem';
 
-export default React.memo(NotificationsItem, () => true);
+const areEqual = (
+  prevProps: NotificationsItemPropsType,
+  nextProps: NotificationsItemPropsType
+) => {
+  if (prevProps.data.readed !== nextProps.data.readed) return false;
+
+  return true;
+};
+
+export default React.memo(NotificationsItem, areEqual);

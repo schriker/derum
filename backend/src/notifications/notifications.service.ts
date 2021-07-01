@@ -82,7 +82,7 @@ export class NotificationsService {
     if (entry.author.id === user.id) return;
     const notification = new Notification();
     notification.user = entry.author;
-    notification.url = `p/${entry.room.name}/wpis/${entry.id}/${entry.slug}`;
+    notification.url = `p/${entry.room.name}/wpis/${entry.id}/${entry.slug}?comment=${comment.id}`;
     notification.objectType = ObjectTypeEnum.COMMENT;
     notification.objectId = comment.id;
     notification.triggeredBy = user;
@@ -103,7 +103,7 @@ export class NotificationsService {
     if (comment.author.id === user.id) return;
     const notification = new Notification();
     notification.user = comment.author;
-    notification.url = `p/${entry.room.name}/wpis/${entry.id}/${entry.slug}`;
+    notification.url = `p/${entry.room.name}/wpis/${entry.id}/${entry.slug}?comment=${reply.id}`;
     notification.objectType = ObjectTypeEnum.REPLY;
     notification.objectId = reply.id;
     notification.triggeredBy = user;

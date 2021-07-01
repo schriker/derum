@@ -1,26 +1,34 @@
 .scrollbar,
 .MuiDrawer-paper,
-.MuiAutocomplete-paper {
+.MuiAutocomplete-paper,
+.MuiMenu-paper,
+.MuiAutocomplete-listbox {
   scrollbar-width: thin;
   scrollbar-color: #333436 #1d1d1d;
 }
 
 .scrollbar::-webkit-scrollbar,
 .MuiDrawer-paper::-webkit-scrollbar,
-.MuiAutocomplete-paper::-webkit-scrollbar {
+.MuiAutocomplete-paper::-webkit-scrollbar,
+.MuiMenu-paper::-webkit-scrollbar,
+.MuiAutocomplete-listbox::-webkit-scrollbar {
   width: 8px;
 }
 
 .scrollbar::-webkit-scrollbar-track,
 .MuiDrawer-paper::-webkit-scrollbar-track,
-.MuiAutocomplete-paper::-webkit-scrollbar-track {
+.MuiAutocomplete-paper::-webkit-scrollbar-track,
+.MuiMenu-paper::-webkit-scrollbar-track,
+.MuiAutocomplete-listbox::-webkit-scrollbar-track {
   background: #1d1d1d;
   border-radius: 6px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb,
 .MuiDrawer-paper::-webkit-scrollbar-thumb,
-.MuiAutocomplete-paper::-webkit-scrollbar-thumb {
+.MuiAutocomplete-paper::-webkit-scrollbar-thumb,
+.MuiMenu-paper::-webkit-scrollbar-thumb,
+.MuiAutocomplete-listbox::-webkit-scrollbar-thumb {
   background-color: #333436;
   border-radius: 6px;
   border: 3px solid #333436;

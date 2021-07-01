@@ -7,6 +7,7 @@ export type ChatMessageItemStyles = {
 export type CommentsItemStyles = {
   level?: number;
   userColor: string;
+  isHighlighted: boolean;
 };
 
 export type RoomAvatarSidebarStyles = { isActive: boolean };
