@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { ButtonSocialLogin } from '../Buttons/ButtonSocialLogin';
 import Modal from '../Modal/Modal';
-import GoogleIcon from '../Icons/GoogleIcon';
 import TwitterIcon from '../Icons/TwitterIcon';
 import FacebookLogin from '../FacebookLogin/FacebookLogin';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
 import { ApolloError, useReactiveVar } from '@apollo/client';
+import GoogleLogin from '../GoogleLogin/GoogleLogin';
 
 const LoginModal = (): JSX.Element => {
   const openModal = useReactiveVar(openModalVar);
@@ -47,11 +47,13 @@ const LoginModal = (): JSX.Element => {
         onSuccess={handleClose}
         onError={handleError}
       />
-      <ButtonSocialLogin startIcon={<GoogleIcon />} provider="google">
-        Zaloguj przez Google
-      </ButtonSocialLogin>
+      <GoogleLogin
+        onLoading={handleLoading}
+        onSuccess={handleClose}
+        onError={handleError}
+      />
       <ButtonSocialLogin startIcon={<TwitterIcon />} provider="twitter">
-        Zaloguj przez Twitter
+        Zaloguj przez Twitter (Wkrótce)
       </ButtonSocialLogin>
     </Modal>
   );

@@ -17,6 +17,7 @@ export default class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
             rel="stylesheet"
           />
+          <meta name="google-signin-client_id" content={process.env.NEXT_PUBLIC_GOOGLE_APP_ID}></meta>
         </Head>
         <body>
           <Main />

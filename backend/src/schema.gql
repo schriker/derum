@@ -186,6 +186,7 @@ enum EntrySort {
 
 type Mutation {
   loginUserWithFacebook(access_token: String!): Boolean!
+  loginUserWithGoogle(access_token: String!): Boolean!
   logout: Boolean!
   changeUserDisplayName(name: String!): User!
   ignoreUser(id: Int!): Boolean!

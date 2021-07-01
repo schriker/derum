@@ -50,6 +50,13 @@ const components: Partial<NormalComponents & SpecialComponents> = {
       </Typography>
     );
   },
+  a({ children, ...props }) {
+    return (
+      <a {...props} target="_blank">
+        {children}
+      </a>
+    );
+  },
   img(props) {
     return (
       <span style={{ display: 'block', textAlign: 'center' }}>

@@ -1,8 +1,10 @@
+import { useReactiveVar } from '@apollo/client';
 import { Box, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import useIsConnected from '../../hooks/useIsConnected';
+import { selectedUserVar } from '../../lib/apolloVars';
 import { ChatMessagesItemProps } from '../../types/messages';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import ChatMessageBody from '../ChatMessageBody/ChatMessageBody';
@@ -12,18 +14,19 @@ import useChatMessageItemStyles from './ChatMessageItemStyles';
 const ChatMessagesItem = ({
   message,
   setUserId,
-  userId,
   handleOpen,
+  authors,
 }: ChatMessagesItemProps): JSX.Element => {
   const { data: userData } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
   const [showActions, setShowActions] = useState(false);
+  const selectedUser = useReactiveVar(selectedUserVar);
   const classes = useChatMessageItemStyles({
     userColor:
       !userData || userData?.me.showColorNames ? message.author.color : '#fff',
-    selectedUser: userId,
-    isSelected: message.author.id === userId,
+    selectedUser: !!selectedUser,
+    isSelected: message.author.displayName === selectedUser,
   });
 
   const isConnected = useIsConnected();
@@ -35,9 +38,9 @@ const ChatMessagesItem = ({
   };
 
   const handleHighLightMessages = () => {
-    if (userId) return setUserId(null);
+    if (selectedUser) return selectedUserVar(null);
 
-    setUserId(message.author.id);
+    selectedUserVar(message.author.displayName);
   };
 
   return (
@@ -83,7 +86,7 @@ const ChatMessagesItem = ({
             {dayjs(message.createdAt).format('HH:mm')}
           </Typography>
         </Box>
-        <ChatMessageBody body={message.body} />
+        <ChatMessageBody authors={authors} body={message.body} />
       </Box>
     </Box>
   );

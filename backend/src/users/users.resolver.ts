@@ -12,6 +12,7 @@ import {
 import { Action } from 'src/casl/action.enum';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { FacebookAuthGuard } from 'src/common/guards/facebook-auth.guard';
+import { GoogleAuthGuard } from 'src/common/guards/google-auth.guard';
 import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { NewUserColor } from './dto/new-color';
@@ -48,6 +49,15 @@ export class UsersResolver {
   @Mutation(() => Boolean)
   @UseGuards(FacebookAuthGuard)
   loginUserWithFacebook(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Args() UserData: ProviderUserInput,
+  ): boolean {
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GoogleAuthGuard)
+  loginUserWithGoogle(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Args() UserData: ProviderUserInput,
   ): boolean {

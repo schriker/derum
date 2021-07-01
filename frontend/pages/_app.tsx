@@ -9,10 +9,13 @@ import '../css/scrollBar.css';
 import NextNprogress from 'nextjs-progressbar';
 import Script from 'next/script';
 import { FacebookSDK } from '../types/facebook';
+import { GoogleAuth, GoogleSDK } from '../types/google';
 
 declare global {
   interface Window {
     FB: FacebookSDK;
+    gapi: GoogleSDK;
+    googleAuth: GoogleAuth;
   }
 }
 
@@ -40,6 +43,18 @@ function MyApp({ Component, pageProps }: AppProps): JSX.Element {
               version: 'v11.0',
             })
           }
+        />
+        <Script
+          src="https://apis.google.com/js/api:client.js"
+          strategy="lazyOnload"
+          onLoad={() => {
+            window.gapi.load('auth2', () => {
+              window.googleAuth = window.gapi.auth2.init({
+                client_id: process.env.NEXT_PUBLIC_GOOGLE_APP_ID,
+                cookiepolicy: 'single_host_origin',
+              });
+            });
+          }}
         />
         <CssBaseline />
         <NextNprogress

@@ -1,5 +1,5 @@
 export type ChatMessageItemStyles = {
-  selectedUser?: number;
+  selectedUser?: boolean;
   isSelected?: boolean;
   userColor: string;
 };

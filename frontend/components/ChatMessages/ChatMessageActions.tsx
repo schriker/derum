@@ -22,7 +22,8 @@ const ChatMessageActions = ({ messageId }: MessageActionProps): JSX.Element => {
       globalErrorVar({ isOpen: true, message: 'Błąd usuwania wiadomości.' }),
   });
 
-  const onDeleteMessage = () => {
+  const onDeleteMessage = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     deleteMessage({
       variables: {
         id: messageId,
@@ -38,7 +39,11 @@ const ChatMessageActions = ({ messageId }: MessageActionProps): JSX.Element => {
   return data ? (
     <Box className={classes.actions}>
       {isRoomAdmin && (
-        <ButtonIcon color="secondary" size="small" onClick={onDeleteMessage}>
+        <ButtonIcon
+          color="secondary"
+          size="small"
+          onClick={(e) => onDeleteMessage(e)}
+        >
           <CloseIcon style={{ fontSize: 16 }} />
         </ButtonIcon>
       )}

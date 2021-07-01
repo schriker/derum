@@ -9,6 +9,7 @@ export type ChatMessagesItemProps = {
   userId: number | null;
   setUserId: (id: number) => void;
   handleOpen: () => void;
+  authors: string[];
 };
 
 export type MessageActionProps = {
@@ -27,4 +28,9 @@ export type ChatMessageUserStylesPropsType = {
 
 export type ChatMessageUserPropsType = {
   value: string;
+};
+
+export type ChatMessageBodyPrpsType = {
+  body: string;
+  authors: string[];
 };

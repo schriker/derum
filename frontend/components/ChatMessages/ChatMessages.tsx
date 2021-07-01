@@ -1,7 +1,12 @@
 import { Box } from '@material-ui/core';
 import React, { useState } from 'react';
-import { InitialMessagesQuery, useMeQuery } from '../../generated/graphql';
+import {
+  InitialMessagesQuery,
+  useMeQuery,
+  useOnlineUsersQuery,
+} from '../../generated/graphql';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
+import useRoomData from '../../hooks/useRoomData';
 import UserModal from '../UserModal/UserModal';
 import ChatMessagesItem from './ChatMessagesItem';
 
@@ -11,9 +16,27 @@ const ChatMessages = ({
   messages: InitialMessagesQuery['initialMessages'];
 }): JSX.Element => {
   const { data } = useMeQuery();
+  const { roomData } = useRoomData();
   const [userId, setUserId] = useState(null);
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
   const ignoresId = data?.me.ignore.map((user) => user.id);
+  const { data: onlineUsers } = useOnlineUsersQuery({
+    variables: {
+      roomId: roomData.room.id,
+    },
+  });
+  let authors = [
+    ...new Set(messages.map((message) => message.author.displayName)),
+  ];
+
+  if (onlineUsers) {
+    authors = [
+      ...new Set([
+        ...authors,
+        ...onlineUsers.onlineUsers.map((user) => user.name),
+      ]),
+    ];
+  }
 
   return (
     <Box
@@ -28,6 +51,7 @@ const ChatMessages = ({
       {messages.map((message) =>
         ignoresId?.includes(message.author.id) ? null : (
           <ChatMessagesItem
+            authors={authors}
             userId={userId}
             setUserId={setUserId}
             handleOpen={handleOpen}

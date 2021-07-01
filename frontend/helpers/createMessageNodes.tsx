@@ -6,42 +6,55 @@ import { ChatMessageNode } from '../types/messages';
 import { Typography } from '@material-ui/core';
 import DarkTooltip from '../components/Tooltip/Tooltip';
 import ChatMessageUser from '../components/ChatMessageUser/ChatMessageUser';
+import Linkify from 'linkifyjs/react';
+import { Options } from 'linkifyjs';
+
+const LINKIFY_OPTIONS: Options = {
+  target: {
+    url: '_blank',
+  },
+};
 
 const createMessageNodes = (
   body: string,
+  authors: string[],
   emojis: GlobalEmojisQuery
 ): ChatMessageNode[] => {
   const splitBody = body.split(' ');
   const nodes = splitBody.reduce((accumulator, currentvalue) => {
-    const [isEmoji] = emojis?.globalEmojis.filter(
+    const isEmoji = emojis?.globalEmojis.filter(
       (emoji) => emoji.name === currentvalue
     );
-    if (isEmoji) {
+
+    if (isEmoji && isEmoji?.length) {
       return [
         ...accumulator,
         {
           type: 'emoji',
-          value: isEmoji.name,
+          value: isEmoji[0].name,
           component: (
             <span key={uuidv4()}>
               <DarkTooltip
                 placement="top"
-                title={isEmoji.name}
+                title={isEmoji[0].name}
                 enterDelay={500}
                 PopperProps={{ disablePortal: true }}
               >
                 <img
                   width={24}
                   height={24}
-                  alt={` ${isEmoji.name} `}
-                  src={`http://derum-public.s3.eu-central-1.amazonaws.com/emojis/${isEmoji.file}/2x`}
+                  alt={` ${isEmoji[0].name} `}
+                  src={`http://derum-public.s3.eu-central-1.amazonaws.com/emojis/${isEmoji[0].file}/2x`}
                 />
               </DarkTooltip>
             </span>
           ),
         },
       ];
-    } else if (currentvalue.match(/^@\w*/)) {
+    } else if (
+      currentvalue.match(/^@\w*/) &&
+      authors.includes(currentvalue.split('@')[1])
+    ) {
       return [
         ...accumulator,
         {
@@ -58,7 +71,7 @@ const createMessageNodes = (
           value: currentvalue,
           component: (
             <Typography key={uuidv4()} variant="body2" component="span">
-              {currentvalue}
+              <Linkify options={LINKIFY_OPTIONS}>{currentvalue}</Linkify>
             </Typography>
           ),
         },
@@ -72,7 +85,7 @@ const createMessageNodes = (
 
         accumulator[accumulator.length - 1].component = (
           <Typography key={uuidv4()} variant="body2" component="span">
-            {mergedValue}
+            <Linkify options={LINKIFY_OPTIONS}>{mergedValue}</Linkify>
           </Typography>
         );
         return accumulator;
@@ -84,7 +97,7 @@ const createMessageNodes = (
             value: currentvalue,
             component: (
               <Typography key={uuidv4()} variant="body2" component="span">
-                {currentvalue}
+                <Linkify options={LINKIFY_OPTIONS}>{currentvalue}</Linkify>
               </Typography>
             ),
           },

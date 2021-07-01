@@ -50,7 +50,7 @@ const useChatSubscriptions = (roomId: number) => {
         if (!subscriptionData.data) return prev;
         const newMessage = subscriptionData.data.messageAdded;
         const mentions =
-          subscriptionData.data.messageAdded.body.match(/\B@\w*/);
+          subscriptionData.data.messageAdded.body.match(/\B@\w*/g);
         if (
           mentions?.includes(
             `@${subscriptionData.data.messageAdded.author.displayName}`
