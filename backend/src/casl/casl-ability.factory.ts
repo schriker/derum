@@ -56,53 +56,55 @@ export class CaslAbilityFactory {
       can(Action.Update, Room);
     }
 
-    can<FlatNotification>(Action.Update, Notification, {
-      'user.id': user.id,
-    });
+    if (!user.isAdmin && !user.isModerator) {
+      can<FlatNotification>(Action.Update, Notification, {
+        'user.id': user.id,
+      });
 
-    can<FlatRoom>(Action.Update, Room, {
-      'author.id': user.id,
-    });
+      can<FlatRoom>(Action.Update, Room, {
+        'author.id': user.id,
+      });
 
-    can<FlatMessage>(Action.Delete, Message, {
-      'room.author.id': user.id,
-    });
+      can<FlatMessage>(Action.Delete, Message, {
+        'room.author.id': user.id,
+      });
 
-    cannot<FlatMessage>(Action.Delete, Message, {
-      'author.isAdmin': true,
-    });
+      cannot<FlatMessage>(Action.Delete, Message, {
+        'author.isAdmin': true,
+      });
 
-    cannot<FlatMessage>(Action.Delete, Message, {
-      'author.isModerator': true,
-    });
+      cannot<FlatMessage>(Action.Delete, Message, {
+        'author.isModerator': true,
+      });
 
-    can<FlatEntry>(Action.Delete, Entry, {
-      'room.author.id': user.id,
-    });
+      can<FlatEntry>(Action.Delete, Entry, {
+        'room.author.id': user.id,
+      });
 
-    cannot<FlatEntry>(Action.Delete, Entry, {
-      'author.isAdmin': true,
-    });
+      cannot<FlatEntry>(Action.Delete, Entry, {
+        'author.isAdmin': true,
+      });
 
-    cannot<FlatEntry>(Action.Delete, Entry, {
-      'author.isModerator': true,
-    });
+      cannot<FlatEntry>(Action.Delete, Entry, {
+        'author.isModerator': true,
+      });
 
-    can<FlatComment>(Action.Delete, Comment, {
-      'author.id': user.id,
-    });
+      can<FlatComment>(Action.Delete, Comment, {
+        'author.id': user.id,
+      });
 
-    can<FlatComment>(Action.Delete, Comment, {
-      'entry.room.author.id': user.id,
-    });
+      can<FlatComment>(Action.Delete, Comment, {
+        'entry.room.author.id': user.id,
+      });
 
-    cannot<FlatComment>(Action.Delete, Comment, {
-      'author.isAdmin': true,
-    });
+      cannot<FlatComment>(Action.Delete, Comment, {
+        'author.isAdmin': true,
+      });
 
-    cannot<FlatComment>(Action.Delete, Comment, {
-      'author.isModerator': true,
-    });
+      cannot<FlatComment>(Action.Delete, Comment, {
+        'author.isModerator': true,
+      });
+    }
 
     return build({
       detectSubjectType: (item) =>

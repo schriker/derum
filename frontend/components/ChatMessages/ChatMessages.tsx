@@ -5,10 +5,14 @@ import {
   useMeQuery,
   useOnlineUsersQuery,
 } from '../../generated/graphql';
+import useIsScrolledToBottom from '../../hooks/useIsScrolledToBottom';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import useRoomData from '../../hooks/useRoomData';
+import { ButtonDefault } from '../Buttons/ButtonDefault';
+import ArrowDropdown from '../Icons/ArrowDropdownIcon';
 import UserModal from '../UserModal/UserModal';
 import ChatMessagesItem from './ChatMessagesItem';
+import useChatMessagesStyles from './ChatMessagesStyles';
 
 const ChatMessages = ({
   messages,
@@ -17,7 +21,9 @@ const ChatMessages = ({
 }): JSX.Element => {
   const { data } = useMeQuery();
   const { roomData } = useRoomData();
+  const classes = useChatMessagesStyles();
   const [userId, setUserId] = useState(null);
+  const { wrapperRef, isBottom, scollToBottom } = useIsScrolledToBottom();
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
   const ignoresId = data?.me.ignore.map((user) => user.id);
   const { data: onlineUsers } = useOnlineUsersQuery({
@@ -39,33 +45,32 @@ const ChatMessages = ({
   }
 
   return (
-    <Box
-      className="scrollbar"
-      flex="1 1 auto"
-      overflow="auto"
-      flexDirection="column-reverse"
-      display="flex"
-      pr="5px"
-      height="100%"
-    >
-      {messages.map((message) =>
-        ignoresId?.includes(message.author.id) ? null : (
-          <ChatMessagesItem
-            authors={authors}
-            userId={userId}
-            setUserId={setUserId}
-            handleOpen={handleOpen}
-            message={message}
-            key={message.id}
+    <Box className={classes.wrapper}>
+      <Box {...{ ref: wrapperRef }} className={`scrollbar ${classes.chat}`}>
+        {messages.map((message) =>
+          ignoresId?.includes(message.author.id) ? null : (
+            <ChatMessagesItem
+              authors={authors}
+              userId={userId}
+              setUserId={setUserId}
+              handleOpen={handleOpen}
+              message={message}
+              key={message.id}
+            />
+          )
+        )}
+        {userId && (
+          <UserModal
+            openModal={openModal}
+            handleClose={handleClose}
+            id={userId}
           />
-        )
-      )}
-      {userId && (
-        <UserModal
-          openModal={openModal}
-          handleClose={handleClose}
-          id={userId}
-        />
+        )}
+      </Box>
+      {!isBottom && (
+        <ButtonDefault className={classes.bottomButton} onClick={scollToBottom}>
+          Wróć do najnowszych
+        </ButtonDefault>
       )}
     </Box>
   );

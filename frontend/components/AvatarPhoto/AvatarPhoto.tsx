@@ -26,4 +26,9 @@ const AvatarPhoto = ({
   );
 };
 
-export default React.memo(AvatarPhoto, () => true);
+const areEqual = (prevProps: AvatarProps, nextProps: AvatarProps) => {
+  if (prevProps.src !== nextProps.src) return false;
+  return true
+}
+
+export default React.memo(AvatarPhoto, areEqual);

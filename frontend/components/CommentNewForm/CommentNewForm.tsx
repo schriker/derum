@@ -112,7 +112,7 @@ const CommentNewForm = ({
             Dodaj komentarz
           </ButtonPrimary>
         </Box>
-        <Markdown>{watch('body')}</Markdown>
+        <Markdown isComment>{watch('body')}</Markdown>
       </form>
     </Box>
   );

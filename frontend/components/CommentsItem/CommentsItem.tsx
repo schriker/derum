@@ -38,7 +38,7 @@ const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
           <CommentsItemHeader {...props} />
           <Box className={classes.body}>
             {props.data.body ? (
-              <Markdown>{props.data.body}</Markdown>
+              <Markdown isComment>{props.data.body}</Markdown>
             ) : (
               <Typography
                 className={classes.deleted}

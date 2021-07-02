@@ -3,17 +3,22 @@ import gfm from 'remark-gfm';
 import components from './MarkdownComponents';
 import useMarkdownStyles from './MarkdownStyles';
 
-const Markdown = (props: ReactMarkdownOptions): JSX.Element => {
-  const classes = useMarkdownStyles();
+const Markdown = ({
+  isComment = false,
+  ...rest
+}: ReactMarkdownOptions & { isComment?: boolean }): JSX.Element => {
+  const classes = useMarkdownStyles({
+    isComment,
+  });
 
   return (
     <ReactMarkdown
       className={classes.wrapper}
       components={components}
       remarkPlugins={[gfm]}
-      {...props}
+      {...rest}
     >
-      {props.children}
+      {rest.children}
     </ReactMarkdown>
   );
 };
