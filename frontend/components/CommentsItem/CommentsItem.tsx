@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Box, Typography } from '@material-ui/core';
 import Markdown from '../Markdown/Markdown';
 import CommentsItemVote from './CommentsItemVote';
@@ -10,14 +10,23 @@ import { useRouter } from 'next/router';
 
 const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
   const router = useRouter();
+  const highlightedRef = useRef<HTMLDivElement>();
+  const isHighlighted =
+    props.data.id === parseInt(router.query.comment as string);
   const classes = useCommentsItemStyles({
     userColor: props.data.author.color,
     level: props.level,
-    isHighlighted: props.data.id === parseInt(router.query.comment as string),
+    isHighlighted: isHighlighted,
   });
 
+  useEffect(() => {
+    if (highlightedRef.current && isHighlighted) {
+      highlightedRef.current.scrollIntoView();
+    }
+  }, [highlightedRef, isHighlighted]);
+
   return (
-    <>
+    <div ref={highlightedRef}>
       <Box id={`comment-${props.data.id}`} className={classes.wrapper}>
         <CommentsItemVote
           voteScore={props.data.voteScore}
@@ -58,7 +67,7 @@ const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
             level={props.level + 1}
           />
         ))}
-    </>
+    </div>
   );
 };
 

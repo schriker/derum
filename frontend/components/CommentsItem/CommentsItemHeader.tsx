@@ -2,6 +2,7 @@ import { Box, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
+import useRoomData from '../../hooks/useRoomData';
 import { CommentItemPropsType } from '../../types/comment';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import { ButtonDefault } from '../Buttons/ButtonDefault';
@@ -19,6 +20,7 @@ const CommentsItemHeader = ({
   const { data: userdata } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
+  const { roomData } = useRoomData();
   const classes = useCommentsItemStyles({
     userColor:
       !userdata || userdata?.me.showColorNames ? data.author.color : '#fff',
@@ -29,6 +31,12 @@ const CommentsItemHeader = ({
     setUserId(id);
     handleOpen();
   };
+
+  const canDeleteComment =
+    userdata?.me.isAdmin ||
+    userdata?.me.isModerator ||
+    roomData?.room.author.id === userdata?.me.id ||
+    userdata?.me.id === data.author.id;
 
   return (
     <Box className={classes.headerWrapper}>
@@ -75,9 +83,7 @@ const CommentsItemHeader = ({
             {data.id === parentId ? 'Anuluj' : 'Odpowiedz'}
           </ButtonDefault>
         )}
-        {userdata?.me.isAdmin || userdata?.me.isModerator ? (
-          <CommentsItemDelete comment={data} />
-        ) : null}
+        {canDeleteComment && <CommentsItemDelete comment={data} />}
       </Box>
     </Box>
   );

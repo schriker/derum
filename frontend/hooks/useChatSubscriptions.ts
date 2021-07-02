@@ -64,13 +64,11 @@ const useChatSubscriptions = (roomId: number) => {
       },
       updateQuery: (prev, { subscriptionData }) => {
         if (!subscriptionData.data) return prev;
-        if (user) {
-          if (subscriptionData.data.messageDeleted.author.id === user.me.id) {
-            globalErrorVar({
-              isOpen: true,
-              message: 'Twoja wiadomość została usunięta.',
-            });
-          }
+        if (subscriptionData.data.messageDeleted.author.id === user?.me.id) {
+          globalErrorVar({
+            isOpen: true,
+            message: 'Twoja wiadomość została usunięta.',
+          });
         }
         const {
           data: {
@@ -85,7 +83,7 @@ const useChatSubscriptions = (roomId: number) => {
         });
       },
     });
-  }, [user?.me.id, user?.me.color, roomId, subscribeToMore, user]);
+  }, [user?.me.id, user?.me.color, roomId, subscribeToMore]);
 
   return {
     data,

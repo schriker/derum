@@ -16,7 +16,7 @@ export type CommentItemPropsType = {
 
 export type NewCommentPropsType = {
   entryId: number;
-  setParentId?: (id: number) => void;
+  setParentId: (id: number) => void;
   parentId?: number;
 };
 

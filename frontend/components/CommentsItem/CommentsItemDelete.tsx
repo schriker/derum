@@ -13,7 +13,8 @@ const CommentsItemDelete = ({
   comment: CommentFragmentFragment;
 }): JSX.Element => {
   const [deleteComment] = useDeleteCommentMutation({
-    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
+    onError: () =>
+      globalErrorVar({ isOpen: true, message: 'Błąd usuwania wiadomości.' }),
     update: (cache) => {
       cache.modify({
         id: cache.identify(comment),

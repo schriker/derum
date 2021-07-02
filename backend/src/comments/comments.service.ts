@@ -27,6 +27,19 @@ export class CommentsService {
     return comment;
   }
 
+  async getByIdWithRoomAuthor(id: number): Promise<Comment> {
+    const comment = await this.commentsRespository
+      .createQueryBuilder('comment')
+      .where('comment.id = :id', { id })
+      .leftJoinAndSelect('comment.author', 'commentAuthor')
+      .leftJoinAndSelect('comment.entry', 'commentEntry')
+      .leftJoinAndSelect('commentEntry.room', 'entryRoom')
+      .leftJoinAndSelect('entryRoom.author', 'roomAuthor')
+      .getOne();
+    if (!comment) throw new NotFoundException();
+    return comment;
+  }
+
   async create(commentData: NewCommentData, user: User): Promise<Comment> {
     const { body, entryId, parentId } = commentData;
     const entry = await this.entriesQueryService.getById(entryId);

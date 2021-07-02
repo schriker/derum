@@ -23,7 +23,6 @@ const Comments = (): JSX.Element => {
   const [parentId, setParentId] = useState(null);
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
   const { data, loading, refetch } = useCommentsQuery({
-    nextFetchPolicy: 'cache-only',
     variables: {
       entryId,
     },
@@ -47,7 +46,9 @@ const Comments = (): JSX.Element => {
 
   return (
     <Box id="comments" className={classes.wrapper}>
-      {userData && !parentId && <CommentNewForm entryId={entryId} />}
+      {userData && (
+        <CommentNewForm setParentId={setParentId} entryId={entryId} />
+      )}
       {loading && <EntryBodyLoading />}
       {!!data?.comments.length &&
         createCommentTree(data).map((comment) => (

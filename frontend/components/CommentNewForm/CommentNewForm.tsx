@@ -25,6 +25,7 @@ const schema = yup.object().shape({
 const CommentNewForm = ({
   entryId,
   parentId,
+  setParentId,
 }: NewCommentPropsType): JSX.Element => {
   const classes = useRoomNewLinkStyles();
   const bodyFieldRef = useRef<HTMLTextAreaElement | null>(null);
@@ -49,6 +50,7 @@ const CommentNewForm = ({
       reset({
         body: '',
       });
+      setParentId(null);
     },
     update: (cache, { data }) => {
       cache.modify({

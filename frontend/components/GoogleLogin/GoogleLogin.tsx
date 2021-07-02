@@ -50,6 +50,7 @@ const GoogleLogin = ({
           },
         });
       } catch (e) {
+        console.log(e);
         onLoading(false);
       }
     }

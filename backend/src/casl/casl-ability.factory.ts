@@ -14,6 +14,7 @@ import { Comment } from 'src/comments/entities/comment.entity';
 import { User } from 'src/users/entities/user.entity';
 import { Action } from './action.enum';
 import {
+  FlatComment,
   FlatEntry,
   FlatMessage,
   FlatNotification,
@@ -40,9 +41,9 @@ export type AppAbility = Ability<[Action, Subjects]>;
 @Injectable()
 export class CaslAbilityFactory {
   createForUser(user: User) {
-    const { can, build } = new AbilityBuilder<Ability<[Action, Subjects]>>(
-      Ability as AbilityClass<AppAbility>,
-    );
+    const { can, cannot, build } = new AbilityBuilder<
+      Ability<[Action, Subjects]>
+    >(Ability as AbilityClass<AppAbility>);
 
     if (user.isAdmin) {
       can(Action.Manage, 'all');
@@ -67,8 +68,40 @@ export class CaslAbilityFactory {
       'room.author.id': user.id,
     });
 
+    cannot<FlatMessage>(Action.Delete, Message, {
+      'author.isAdmin': true,
+    });
+
+    cannot<FlatMessage>(Action.Delete, Message, {
+      'author.isModerator': true,
+    });
+
     can<FlatEntry>(Action.Delete, Entry, {
       'room.author.id': user.id,
+    });
+
+    cannot<FlatEntry>(Action.Delete, Entry, {
+      'author.isAdmin': true,
+    });
+
+    cannot<FlatEntry>(Action.Delete, Entry, {
+      'author.isModerator': true,
+    });
+
+    can<FlatComment>(Action.Delete, Comment, {
+      'author.id': user.id,
+    });
+
+    can<FlatComment>(Action.Delete, Comment, {
+      'entry.room.author.id': user.id,
+    });
+
+    cannot<FlatComment>(Action.Delete, Comment, {
+      'author.isAdmin': true,
+    });
+
+    cannot<FlatComment>(Action.Delete, Comment, {
+      'author.isModerator': true,
     });
 
     return build({
