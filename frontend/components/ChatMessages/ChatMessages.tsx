@@ -18,7 +18,7 @@ const ChatMessages = ({
   messages,
 }: {
   messages: InitialMessagesQuery['initialMessages'];
-}): JSX.Element => {
+}) => {
   const { data } = useMeQuery();
   const { roomData } = useRoomData();
   const classes = useChatMessagesStyles();

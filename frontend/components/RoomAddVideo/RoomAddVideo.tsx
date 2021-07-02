@@ -4,7 +4,7 @@ import { openModalVar } from '../../lib/apolloVars';
 import { ButtonRoomContent } from '../Buttons/ButtonRoomContent';
 import VideoIcon from '../Icons/VideoIcon';
 
-const RoomAddVideo = (): JSX.Element => {
+const RoomAddVideo = () => {
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',
   });

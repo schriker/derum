@@ -15,7 +15,7 @@ import SidebarDrawerSection from './SidebarDrawerSection';
 import useSidebarDrawerStyles from './SidebarDrawerStyles';
 import SidebarSkeleton from './SidebarSkeleton';
 
-const SidebarDrawer = (): JSX.Element => {
+const SidebarDrawer = () => {
   const isOpen = useReactiveVar(openDrawerVar);
   const classes = useSidebarDrawerStyles();
   const { data: userData, loading: userLoading } = useMeQuery({

@@ -18,7 +18,7 @@ const RoomSearchInput = ({
   error,
   onSelect,
   placeholder,
-}: RoomSearchProps): JSX.Element => {
+}: RoomSearchProps) => {
   const classes = useRoomSearchInputStyles();
   const { roomData } = useRoomData();
   const autoCompleteClasses = useRoomSearchAutocompleteStyles();

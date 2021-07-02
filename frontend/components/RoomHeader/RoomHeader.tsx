@@ -7,7 +7,7 @@ import numbro from 'numbro';
 import UserIcon from '../Icons/UserIcon';
 import RoomHeaderPhoto from './RoomHeaderPhoto';
 
-const RoomHeader = (): JSX.Element => {
+const RoomHeader = () => {
   const { roomData } = useRoomData();
   const classes = useHeaderStyles();
   return (

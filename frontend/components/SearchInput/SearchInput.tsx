@@ -20,7 +20,7 @@ const SearchInput = ({
   onChange,
   placeholder,
   style,
-}: SearchInputProps): JSX.Element => {
+}: SearchInputProps) => {
   const classes = useStyles();
 
   return (

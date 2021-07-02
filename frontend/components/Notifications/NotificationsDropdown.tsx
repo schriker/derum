@@ -11,7 +11,7 @@ const NotificationsDropdown = ({
   handleClose,
   data,
   fetchMore,
-}: NotificationsDropdownPropsType): JSX.Element => {
+}: NotificationsDropdownPropsType) => {
   return data ? (
     <Dropdown
       id="notifications"

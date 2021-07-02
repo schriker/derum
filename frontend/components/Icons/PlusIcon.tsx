@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from '@material-ui/core';
 import React from 'react';
 
-const PlusIcon = (props: SvgIconProps): JSX.Element => {
+const PlusIcon = (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
       <svg

@@ -8,7 +8,7 @@ const UserButton = ({
   onClick,
 }: {
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}): JSX.Element => {
+}) => {
   const { data } = useMeQuery();
 
   return data ? (

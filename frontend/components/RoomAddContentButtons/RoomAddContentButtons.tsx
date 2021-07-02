@@ -5,7 +5,7 @@ import useRoomAddContentButtonsStyles from './RoomAddContentButtonsStyles';
 import RoomAddLink from '../RoomAddLink/RoomAddLink';
 import RoomAddVideo from '../RoomAddVideo/RoomAddVideo';
 
-const RoomAddContentButtons = (): JSX.Element => {
+const RoomAddContentButtons = () => {
   const classes = useRoomAddContentButtonsStyles();
 
   return (

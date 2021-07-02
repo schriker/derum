@@ -15,7 +15,7 @@ const RoomHeaderPhoto = ({
   roomData,
 }: {
   roomData: RoomQuery;
-}): JSX.Element => {
+}) => {
   const classes = useHeaderStyles();
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',

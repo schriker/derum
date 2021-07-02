@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from '@material-ui/core';
 import React from 'react';
 
-const LogoutIcon = (props: SvgIconProps): JSX.Element => {
+const LogoutIcon = (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
       <svg

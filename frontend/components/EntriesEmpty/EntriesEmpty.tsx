@@ -2,7 +2,7 @@ import { Box, Typography } from '@material-ui/core';
 import React from 'react';
 import ErrorIcon from '../Icons/ErrorIcon';
 
-const EntriesEmpty = (): JSX.Element => {
+const EntriesEmpty = () => {
   return (
     <Box
       display="flex"

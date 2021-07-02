@@ -8,7 +8,7 @@ import { CommentItemPropsType } from '../../types/comment';
 import CommentNewForm from '../CommentNewForm/CommentNewForm';
 import { useRouter } from 'next/router';
 
-const CommentsItem = (props: CommentItemPropsType): JSX.Element => {
+const CommentsItem = (props: CommentItemPropsType) => {
   const router = useRouter();
   const highlightedRef = useRef<HTMLDivElement>();
   const isHighlighted =

@@ -8,7 +8,7 @@ const ChatInputQuickBarUser = ({
   index,
   active,
   handleClick,
-}: ChatInputQuickBarUserPropsType): JSX.Element => {
+}: ChatInputQuickBarUserPropsType) => {
   const classes = useChatInputQuickBarStyles();
 
   return (

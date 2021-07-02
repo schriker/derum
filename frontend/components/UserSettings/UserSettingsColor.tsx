@@ -7,7 +7,7 @@ import {
 } from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
 
-const UserSettingsColor = (): JSX.Element => {
+const UserSettingsColor = () => {
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',
   });

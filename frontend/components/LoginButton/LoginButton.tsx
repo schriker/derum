@@ -3,7 +3,7 @@ import { openModalVar } from '../../lib/apolloVars';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import UserIcon from '../Icons/UserIcon';
 
-const LoginButton = (): JSX.Element => {
+const LoginButton = () => {
   return (
     <>
       <ButtonPrimary

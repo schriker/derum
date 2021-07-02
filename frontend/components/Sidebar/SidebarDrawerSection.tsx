@@ -9,7 +9,7 @@ import useSidebarStyles from './SidebarStyles';
 const SidebarDrawerSection = ({
   title,
   sectionData,
-}: SidebarDrawerSectionProps): JSX.Element => {
+}: SidebarDrawerSectionProps) => {
   const classes = useSidebarStyles({ isActive: false });
   const router = useRouter();
 

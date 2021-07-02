@@ -1,7 +1,7 @@
 import { Box, CircularProgress } from '@material-ui/core';
 import React from 'react';
 
-const LoadingSpinner = (): JSX.Element => {
+const LoadingSpinner = () => {
   return (
     <Box
       top="0"

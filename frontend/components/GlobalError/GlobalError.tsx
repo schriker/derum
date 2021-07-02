@@ -4,7 +4,7 @@ import { Alert } from '@material-ui/lab';
 import React from 'react';
 import { globalErrorVar } from '../../lib/apolloVars';
 
-const GlobalError = (): JSX.Element => {
+const GlobalError = () => {
   const globalError = useReactiveVar(globalErrorVar);
 
   return (

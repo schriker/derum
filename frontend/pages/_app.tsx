@@ -19,7 +19,7 @@ declare global {
   }
 }
 
-function MyApp({ Component, pageProps }: AppProps): JSX.Element {
+function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps);
 
   useEffect(() => {

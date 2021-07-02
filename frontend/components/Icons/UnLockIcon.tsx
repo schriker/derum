@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from '@material-ui/core';
 import React from 'react';
 
-const UnLockIcon = (props: SvgIconProps): JSX.Element => {
+const UnLockIcon = (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
       <svg

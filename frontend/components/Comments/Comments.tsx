@@ -12,7 +12,7 @@ import UserModal from '../UserModal/UserModal';
 import CommentsEmpty from './CommentsEmpty';
 import useCommentsStyles from './CommentsStyles';
 
-const Comments = (): JSX.Element => {
+const Comments = () => {
   const router = useRouter();
   const entryId = parseInt(router.query.id[0]);
   const { data: userData } = useMeQuery({

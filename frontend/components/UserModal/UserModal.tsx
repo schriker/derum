@@ -14,7 +14,7 @@ const UserModal = ({
   id,
   openModal,
   handleClose,
-}: UserModalProps): JSX.Element => {
+}: UserModalProps) => {
   const { roomData } = useRoomData();
   const classes = useUserModalStyles();
   const { data } = useUserQuery({

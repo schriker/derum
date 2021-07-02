@@ -16,7 +16,7 @@ const CommentsItemHeader = ({
   handleOpen,
   setParentId,
   parentId,
-}: CommentItemPropsType): JSX.Element => {
+}: CommentItemPropsType) => {
   const { data: userdata } = useMeQuery({
     fetchPolicy: 'cache-only',
   });

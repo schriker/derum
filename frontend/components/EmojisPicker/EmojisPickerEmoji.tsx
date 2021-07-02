@@ -10,7 +10,7 @@ const EmojisPickerEmoji = ({
   handleHover,
   index,
   hoveredEmoji,
-}: EmojisPickerEmojiPropsType): JSX.Element => {
+}: EmojisPickerEmojiPropsType) => {
   const classes = useEmojisPickerStyles();
 
   return (

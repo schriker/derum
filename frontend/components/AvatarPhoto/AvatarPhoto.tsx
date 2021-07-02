@@ -9,7 +9,7 @@ const AvatarPhoto = ({
   onClick,
   className,
   color,
-}: AvatarProps): JSX.Element => {
+}: AvatarProps) => {
   return (
     <Avatar
       onClick={onClick}

@@ -26,7 +26,7 @@ const RoomNewArticleForm = ({
   closeModal,
 }: {
   closeModal: () => void;
-}): JSX.Element => {
+}) => {
   const classes = useNewRoomLinkStyles();
   const router = useRouter();
   const [oldSession, setOldSession] = useState<NewArticleInputs>(null);

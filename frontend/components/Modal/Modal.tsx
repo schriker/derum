@@ -11,7 +11,7 @@ const Modal = ({
   exited,
   open,
   ...rest
-}: ModalProps & DialogProps): JSX.Element => {
+}: ModalProps & DialogProps) => {
   return (
     <Dialog
       onExited={exited}

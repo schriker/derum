@@ -21,7 +21,7 @@ import useRoomData from '../../../../hooks/useRoomData';
 import { addApolloState, initializeApollo } from '../../../../lib/apolloClient';
 import Custom404 from '../../../404';
 
-export default function Entry(): JSX.Element {
+export default function Entry() {
   const router = useRouter();
   const { roomData } = useRoomData();
   const { data } = useEntryQuery({

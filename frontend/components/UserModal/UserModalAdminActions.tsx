@@ -9,7 +9,7 @@ const UserModalAdminActions = ({
   userData,
 }: {
   userData: UserQuery;
-}): JSX.Element => {
+}) => {
   return (
     <Box ml={1}>
       <MoreActionsMenu>

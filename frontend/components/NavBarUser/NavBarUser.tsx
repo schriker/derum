@@ -5,7 +5,7 @@ import OnlineUsers from '../OnlineUsers/OnlineUsers';
 import UserDropdown from '../UserDropdown/UserDropdown';
 import UserSettings from '../UserSettings/UserSettings';
 
-const NavBarUser = (): JSX.Element => {
+const NavBarUser = () => {
   return (
     <Box
       display="flex"

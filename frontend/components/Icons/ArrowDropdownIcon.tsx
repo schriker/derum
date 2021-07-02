@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from '@material-ui/core';
 import React from 'react';
 
-const ArrowDropdown = (props: SvgIconProps): JSX.Element => {
+const ArrowDropdown = (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
       <svg

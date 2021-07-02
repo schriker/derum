@@ -6,7 +6,7 @@ import useMarkdownStyles from './MarkdownStyles';
 const Markdown = ({
   isComment = false,
   ...rest
-}: ReactMarkdownOptions & { isComment?: boolean }): JSX.Element => {
+}: ReactMarkdownOptions & { isComment?: boolean }) => {
   const classes = useMarkdownStyles({
     isComment,
   });

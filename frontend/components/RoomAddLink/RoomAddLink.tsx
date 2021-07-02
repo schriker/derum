@@ -7,7 +7,7 @@ import Modal from '../Modal/Modal';
 import RoomNewLinkForm from '../RoomNewLinkForm/RoomNewLinkForm';
 import RoomNewLinkMetadataForm from '../RoomNewLinkForm/RoomNewLinkMetadataForm';
 
-const RoomAddLink = (): JSX.Element => {
+const RoomAddLink = () => {
   const [linkMetadata, setLinkMetadata] =
     useState<MetadataQuery['metadata'] | null>(null);
   const { handleButtonClick, handleClose, openModal } =

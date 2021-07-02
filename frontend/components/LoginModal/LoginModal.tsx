@@ -8,7 +8,7 @@ import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
 import { ApolloError, useReactiveVar } from '@apollo/client';
 import GoogleLogin from '../GoogleLogin/GoogleLogin';
 
-const LoginModal = (): JSX.Element => {
+const LoginModal = () => {
   const openModal = useReactiveVar(openModalVar);
   const [loading, setLoading] = useState(false);
 

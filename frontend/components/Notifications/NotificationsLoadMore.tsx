@@ -6,7 +6,7 @@ const NotificationsLoadMore = ({
   fetchMore,
 }: {
   fetchMore: () => void;
-}): JSX.Element => {
+}) => {
   return (
     <Box display="flex" justifyContent="center" mb={1} mt={2}>
       <ButtonSecondary onClick={fetchMore}>Zobacz więcej</ButtonSecondary>

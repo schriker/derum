@@ -12,7 +12,7 @@ const UserSettingsSwitch = ({
   value,
   settingKey,
   onChange,
-}: SettingsSwitchPropsType): JSX.Element => {
+}: SettingsSwitchPropsType) => {
   const [checked, setChecked] = React.useState(value);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

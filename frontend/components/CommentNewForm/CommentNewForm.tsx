@@ -26,7 +26,7 @@ const CommentNewForm = ({
   entryId,
   parentId,
   setParentId,
-}: NewCommentPropsType): JSX.Element => {
+}: NewCommentPropsType) => {
   const classes = useRoomNewLinkStyles();
   const bodyFieldRef = useRef<HTMLTextAreaElement | null>(null);
   const {

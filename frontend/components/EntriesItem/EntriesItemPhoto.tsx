@@ -9,7 +9,7 @@ const EntriesItemPhoto = ({
   image,
   title,
   fullView,
-}: EntiresItemTitleProps): JSX.Element => {
+}: EntiresItemTitleProps) => {
   const classes = useEntriesItemStyle();
 
   return (

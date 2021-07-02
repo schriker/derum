@@ -9,7 +9,7 @@ import Modal from '../Modal/Modal';
 import DarkTooltip from '../Tooltip/Tooltip';
 import OnlineUsersList from './OnlineUsersList';
 
-const OnlineUsers = (): JSX.Element => {
+const OnlineUsers = () => {
   const { roomData } = useRoomData();
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
 

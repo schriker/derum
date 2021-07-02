@@ -13,7 +13,7 @@ const CommentsItemVote = ({
   voteScore,
   userVote,
   data,
-}: CommentsItemVoteProps): JSX.Element => {
+}: CommentsItemVoteProps) => {
   const { data: userData } = useMeQuery();
   const [vote] = useVoteCommentMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),

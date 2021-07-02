@@ -19,7 +19,7 @@ const EntriesItem = ({
   fullView = false,
   handleUserClick,
   preview,
-}: EntriesItemProps): JSX.Element => {
+}: EntriesItemProps) => {
   const { data: userData } = useMeQuery({
     fetchPolicy: 'cache-only',
   });

@@ -22,7 +22,7 @@ const schema = yup.object().shape({
     ),
 });
 
-const RoomNewLinkForm = ({ setLinkMetadata }: NewLinkProps): JSX.Element => {
+const RoomNewLinkForm = ({ setLinkMetadata }: NewLinkProps) => {
   const classes = useRoomNewLinkStyles();
   const {
     control,

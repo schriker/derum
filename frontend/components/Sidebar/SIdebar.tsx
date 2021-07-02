@@ -8,7 +8,7 @@ import RoomAvatar from '../RoomAvatarSidebar/RoomAvatarSidebar';
 import DarkTooltip from '../Tooltip/Tooltip';
 import SidebarHomeLink from './SidebarHomeLink';
 
-const Sidebar = (): JSX.Element => {
+const Sidebar = () => {
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',
   });

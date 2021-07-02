@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-const NavBar = (): JSX.Element => {
+const NavBar = () => {
   const classes = useStyles();
 
   return (

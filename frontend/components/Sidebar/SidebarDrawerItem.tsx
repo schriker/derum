@@ -12,7 +12,7 @@ const SidebarDrawerItem = ({
   usersNumber,
   handleClick,
   photo,
-}: SidebarDrawerItemProps): JSX.Element => {
+}: SidebarDrawerItemProps) => {
   const router = useRouter();
   const classes = useSidebarStyles({ isActive: router.query.room === name });
 

@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from '@material-ui/core';
 import React from 'react';
 
-const SettingsIcon = (props: SvgIconProps): JSX.Element => {
+const SettingsIcon = (props: SvgIconProps) => {
   return (
     <SvgIcon {...props}>
       <svg

@@ -30,7 +30,7 @@ const RoomAvatar = ({
 }: {
   name: string;
   photo: string;
-}): JSX.Element => {
+}) => {
   const router = useRouter();
   const classes = useStyles({ isActive: router.query.room === name });
 

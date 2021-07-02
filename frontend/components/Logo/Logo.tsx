@@ -4,7 +4,7 @@ import Image from 'next/image';
 import logo from '../../public/logo.svg';
 import { Box } from '@material-ui/core';
 
-const Logo = (): JSX.Element => {
+const Logo = () => {
   return (
     <Box ml={1} mt="4px">
       <Link href="/">

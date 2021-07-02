@@ -12,7 +12,7 @@ const GoogleLogin = ({
   onSuccess,
   onError,
   onLoading,
-}: SocialLoginProps): JSX.Element => {
+}: SocialLoginProps) => {
   const hadleError = (error: ApolloError) => {
     onLoading(false);
     onError(true, error);

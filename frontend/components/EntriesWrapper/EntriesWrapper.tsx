@@ -17,7 +17,7 @@ const EntriesWrapper = ({
   children,
 }: {
   children: React.ReactNode;
-}): JSX.Element => {
+}) => {
   const classes = useStyles();
 
   return (

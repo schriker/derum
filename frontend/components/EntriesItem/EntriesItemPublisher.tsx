@@ -6,7 +6,7 @@ import useEntriesItemStyle from './EntriesItemStyles';
 const EntiresItemPublisher = ({
   publisher,
   url,
-}: EntriesPublisherProps): JSX.Element => {
+}: EntriesPublisherProps) => {
   const classes = useEntriesItemStyle();
 
   return (

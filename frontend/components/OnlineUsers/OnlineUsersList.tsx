@@ -8,7 +8,7 @@ import UserModal from '../UserModal/UserModal';
 import OnlineUsersSection from './OnlineUsersSection';
 import useOnlineUsersStyles from './OnlineUsersStyle';
 
-const OnlineUsersList = ({ users }: OnlineUsersListProps): JSX.Element => {
+const OnlineUsersList = ({ users }: OnlineUsersListProps) => {
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
   const [userId, setUserId] = useState(null);
   const classes = useOnlineUsersStyles();

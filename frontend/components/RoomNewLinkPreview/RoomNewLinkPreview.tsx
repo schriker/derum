@@ -10,7 +10,7 @@ import React from 'react';
 import { NewLinkPreviewProps } from '../../types/newLink';
 import useRoomNewLinkPreviewStyles from './RoomNewLinkPreviewStyles';
 
-const RoomNewLinkPreview = ({ metadata }: NewLinkPreviewProps): JSX.Element => {
+const RoomNewLinkPreview = ({ metadata }: NewLinkPreviewProps) => {
   const classes = useRoomNewLinkPreviewStyles();
 
   return (

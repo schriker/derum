@@ -13,7 +13,7 @@ const EmojisPicker = ({
   anchorEl,
   onSelect,
   setInpuFocus,
-}: EmojisPickerPropsType): JSX.Element => {
+}: EmojisPickerPropsType) => {
   const classes = useEmojisPickerStyles();
   const [searchValue, setSearchValue] = useState('');
   const [hoveredEmoji, setHoveredEmoji] = useState(0);

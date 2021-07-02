@@ -9,7 +9,7 @@ const EntriesItemComments = ({
   data,
 }: {
   data: EntryFragmentFragment;
-}): JSX.Element => {
+}) => {
   const classes = useEntriesItemStyle();
 
   return (

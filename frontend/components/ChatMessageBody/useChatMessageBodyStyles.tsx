@@ -10,6 +10,10 @@ const useChatMessageBodyStyles = makeStyles((theme: Theme) => ({
     },
     '& a': {
       color: theme.palette.primary['A700'],
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'underline',
+      },
     },
   },
 }));

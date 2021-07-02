@@ -9,7 +9,7 @@ const FormInput = ({
   label,
   inputRender,
   error,
-}: FormInputTypeProps): JSX.Element => {
+}: FormInputTypeProps) => {
   return (
     <Controller
       name={name}

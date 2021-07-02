@@ -6,7 +6,7 @@ import useEmojisPickerStyles from './EmojisStyles';
 
 const EmojisPickerPreview = ({
   emoji,
-}: EojisPicerPreviewPropsType): JSX.Element => {
+}: EojisPicerPreviewPropsType) => {
   const classes = useEmojisPickerStyles();
 
   return (

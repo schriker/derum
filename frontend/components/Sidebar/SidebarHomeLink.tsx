@@ -1,13 +1,20 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import HomeIcon from '../Icons/HomeIcon';
 import DarkTooltip from '../Tooltip/Tooltip';
 
-const SidebarHomeLink = (): JSX.Element => {
+const SidebarHomeLink = () => {
+  const router = useRouter();
+
   return (
-    <Link href="/" passHref>
-      <DarkTooltip title="Główna" enterDelay={500} placement="right">
+    <Link href={router.query.room ? `/p/${router.query.room}` : '/'} passHref>
+      <DarkTooltip
+        title={router.query.room ? router.query.room : 'Główna'}
+        enterDelay={500}
+        placement="right"
+      >
         <ButtonIcon color="secondary">
           <HomeIcon style={{ fontSize: 16 }} />
         </ButtonIcon>

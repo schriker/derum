@@ -4,7 +4,7 @@ import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import NewRoomForm from './NewRoomForm';
 import useNewRoomStyles from './NewRoomStyles';
 
-const NewRoomButton = (): JSX.Element => {
+const NewRoomButton = () => {
   const classes = useNewRoomStyles();
   const { handleButtonClick, handleClose, openModal } =
     useButtonWithAuthAndModal();

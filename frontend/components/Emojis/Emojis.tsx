@@ -5,7 +5,7 @@ import { ButtonIcon } from '../Buttons/ButtonIcon';
 import EmojisPicker from '../EmojisPicker/EmojisPicker';
 import EmoticonsIcon from '../Icons/EmoticonsIcon';
 
-const Emojis = ({ onSelect, setInpuFocus }: EmojisPropsType): JSX.Element => {
+const Emojis = ({ onSelect, setInpuFocus }: EmojisPropsType) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(
     null
   );

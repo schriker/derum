@@ -33,7 +33,7 @@ const schema = yup.object().shape({
     .max(255, 'Zbyt długi opis.'),
 });
 
-const NewRoomForm = ({ openModal, handleClose }: NewRoomProps): JSX.Element => {
+const NewRoomForm = ({ openModal, handleClose }: NewRoomProps) => {
   const router = useRouter();
   const classes = useNewRoomStyles();
   const { data: me } = useMeQuery({

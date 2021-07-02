@@ -44,7 +44,7 @@ const RoomNewLinkMetadataForm = ({
   metadata,
   setLinkMetadata,
   closeModal,
-}: NewLinkMetadataProps): JSX.Element => {
+}: NewLinkMetadataProps) => {
   const classes = useNewRoomLinkStyles();
   const router = useRouter();
   const [exists, setExsists] = useState<

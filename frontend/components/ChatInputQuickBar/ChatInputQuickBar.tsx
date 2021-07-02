@@ -10,7 +10,7 @@ const ChatInputQuickBar = ({
   keyWords,
   matchIndex,
   handleClick,
-}: ChatInputQuickBarPropsType): JSX.Element => {
+}: ChatInputQuickBarPropsType) => {
   const classes = useChatInputQuickBarStyles();
 
   return (

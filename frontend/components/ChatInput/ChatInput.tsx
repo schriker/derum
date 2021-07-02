@@ -18,7 +18,7 @@ const schema = yup.object().shape({
   body: yup.string().trim().required(),
 });
 
-const ChatInput = ({ roomId }: { roomId: number }): JSX.Element => {
+const ChatInput = ({ roomId }: { roomId: number }) => {
   const isConnected = useIsConnected();
   const bodyFieldRef = useRef<HTMLTextAreaElement | null>(null);
   const { control, handleSubmit, reset, getValues, setValue } =

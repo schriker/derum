@@ -4,6 +4,8 @@ const useChatMessagesStyles = makeStyles(() => ({
   wrapper: {
     position: 'relative',
     overflow: 'hidden',
+    flex: '1 1 auto',
+    height: '100%',
   },
   chat: {
     flex: '1 1 auto',

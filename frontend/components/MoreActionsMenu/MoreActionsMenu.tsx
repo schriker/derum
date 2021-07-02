@@ -7,7 +7,7 @@ const MoreActionsMenu = ({
   children,
 }: {
   children: React.ReactNode;
-}): JSX.Element => {
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

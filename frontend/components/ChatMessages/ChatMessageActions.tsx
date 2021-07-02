@@ -8,7 +8,7 @@ import { ButtonIcon } from '../Buttons/ButtonIcon';
 import CloseIcon from '../Icons/CloseIcon';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
-const ChatMessageActions = ({ messageId }: MessageActionProps): JSX.Element => {
+const ChatMessageActions = ({ messageId }: MessageActionProps) => {
   const { roomData } = useRoomData();
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',

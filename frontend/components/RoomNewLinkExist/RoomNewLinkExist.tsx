@@ -11,7 +11,7 @@ const RoomNewLinkExist = ({
 }: {
   closeModal: () => void;
   data: CheckLinkExsitsQuery['checkLinkExsits'];
-}): JSX.Element => {
+}) => {
   const router = useRouter();
 
   const handleClick = () => {

@@ -9,7 +9,7 @@ import useChatMessageBodyStyles from './useChatMessageBodyStyles';
 const ChatMessageBody = ({
   body,
   authors,
-}: ChatMessageBodyPrpsType): JSX.Element => {
+}: ChatMessageBodyPrpsType) => {
   const classes = useChatMessageBodyStyles();
   const { data: emojis } = useGlobalEmojisQuery();
 

@@ -14,7 +14,7 @@ import DarkTooltip from '../Tooltip/Tooltip';
 import UserSettingsColor from './UserSettingsColor';
 import UserSettingsSwitch from './UserSettingsSwitch';
 
-const UserSettings = (): JSX.Element => {
+const UserSettings = () => {
   const { openModal, handleClose, handleOpen } = useOpenCloseModal();
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',

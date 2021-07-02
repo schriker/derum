@@ -5,7 +5,7 @@ import ArticleIcon from '../Icons/ArticleIcon';
 import Modal from '../Modal/Modal';
 import RoomNewArticleForm from '../RoomNewArticleForm/RoomNewArticleForm';
 
-const RoomAddArticle = (): JSX.Element => {
+const RoomAddArticle = () => {
   const { handleButtonClick, handleClose, openModal } =
     useButtonWithAuthAndModal();
 

@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 import { Link } from '@material-ui/core';
 import { EntiresItemRoomProps } from '../../types/entries';
 
-const EntriesItemRoom = ({ link, name }: EntiresItemRoomProps): JSX.Element => {
+const EntriesItemRoom = ({ link, name }: EntiresItemRoomProps) => {
   return (
     <NextLink href={link} passHref>
       <Link variant="subtitle2" style={{ marginRight: 10 }} color="textSecondary">

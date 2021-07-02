@@ -16,7 +16,7 @@ const ChatMessagesItem = ({
   setUserId,
   handleOpen,
   authors,
-}: ChatMessagesItemProps): JSX.Element => {
+}: ChatMessagesItemProps) => {
   const { data: userData } = useMeQuery({
     fetchPolicy: 'cache-only',
   });

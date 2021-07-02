@@ -24,7 +24,7 @@ const StyledBadge = withStyles(() =>
   })
 )(Badge);
 
-const Notifications = (): JSX.Element => {
+const Notifications = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const { data: userData } = useMeQuery({

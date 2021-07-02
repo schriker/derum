@@ -11,7 +11,7 @@ const CommentsItemResponseTo = ({
   data,
 }: {
   data: MapedComments;
-}): JSX.Element => {
+}) => {
   const apolloClient = useApolloClient();
   const classes = useCommentsItemStyles({
     userColor: data.author.color,

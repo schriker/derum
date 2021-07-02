@@ -13,7 +13,7 @@ const Vote = ({
   userVote,
   voteScore,
   comments,
-}: VotePropsType): JSX.Element => {
+}: VotePropsType) => {
   const classes = useVoteStyle({
     justifyContent: comments ? 'start' : 'center',
   });
