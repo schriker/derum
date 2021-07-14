@@ -4,16 +4,14 @@ import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import useRoomData from '../../hooks/useRoomData';
 import { CommentItemPropsType } from '../../types/comment';
-import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import { ButtonDefault } from '../Buttons/ButtonDefault';
+import UsernameWithModal from '../UsernameWithModal/UsernameWithModal';
 import CommentsItemDelete from './CommentsItemDelete';
 import CommentsItemResponseTo from './CommentsItemResponseTo';
 import useCommentsItemStyles from './CommentsItemStyles';
 
 const CommentsItemHeader = ({
   data,
-  setUserId,
-  handleOpen,
   setParentId,
   parentId,
 }: CommentItemPropsType) => {
@@ -27,11 +25,6 @@ const CommentsItemHeader = ({
     isHighlighted: false,
   });
 
-  const handleUserSelect = (id: number) => {
-    setUserId(id);
-    handleOpen();
-  };
-
   const canDeleteComment =
     userdata?.me.isAdmin ||
     userdata?.me.isModerator ||
@@ -42,27 +35,7 @@ const CommentsItemHeader = ({
     <Box className={classes.headerWrapper}>
       <Box display="flex">
         <Box className={classes.header}>
-          {!userdata || userdata?.me.showAvatars ? (
-            <AvatarPhoto
-              styles={{
-                width: 25,
-                height: 25,
-              }}
-              color={data.author.color}
-              onClick={() => handleUserSelect(data.author.id)}
-              className={classes.photo}
-              src={data.author.photo}
-              name={data.author.displayName}
-            />
-          ) : null}
-          <Typography
-            variant="subtitle1"
-            component="span"
-            className={classes.author}
-            onClick={() => handleUserSelect(data.author.id)}
-          >
-            {data.author.displayName}
-          </Typography>
+          <UsernameWithModal photo data={data.author} />
           <Typography
             color="textSecondary"
             variant="subtitle2"

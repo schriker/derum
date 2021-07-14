@@ -7,8 +7,6 @@ export interface MapedComments extends CommentFragmentFragment {
 export type CommentItemPropsType = {
   level: number;
   data: MapedComments;
-  setUserId: (id: number) => void;
-  handleOpen: () => void;
   setParentId: (id: number) => void;
   parentId: number | null;
   entryId: number;

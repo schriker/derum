@@ -6,10 +6,21 @@ import RoomHeaderJoinButton from './RoomHeaderJoinButton';
 import numbro from 'numbro';
 import UserIcon from '../Icons/UserIcon';
 import RoomHeaderPhoto from './RoomHeaderPhoto';
+import { useMeQuery } from '../../generated/graphql';
+import UsernameWithModal from '../UsernameWithModal/UsernameWithModal';
 
 const RoomHeader = () => {
   const { roomData } = useRoomData();
-  const classes = useHeaderStyles();
+  const { data: userData } = useMeQuery({
+    fetchPolicy: 'cache-only',
+  });
+  const classes = useHeaderStyles({
+    userColor:
+      !userData || userData?.me.showColorNames
+        ? roomData.room.author.color
+        : '#fff',
+  });
+
   return (
     <Box className={classes.wrapper}>
       <RoomHeaderPhoto roomData={roomData} />
@@ -21,6 +32,7 @@ const RoomHeader = () => {
           </Typography>
           <UserIcon className={classes.userIcon} />
         </Box>
+        <UsernameWithModal data={roomData.room.author} />
         <Typography variant="body2" color="textSecondary">
           {roomData.room.description}
         </Typography>

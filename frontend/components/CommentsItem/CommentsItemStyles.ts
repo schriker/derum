@@ -6,7 +6,7 @@ const MAX_NEST_LEVEL = 1;
 const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
   (theme: Theme) => ({
     wrapper: {
-      paddingLeft: (props) =>
+      marginLeft: (props) =>
         props.level > MAX_NEST_LEVEL
           ? MAX_NEST_LEVEL * 44
           : props.level > 0
@@ -16,8 +16,10 @@ const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
       '&:hover $replyButton': {
         opacity: 1,
       },
-      borderTop: (props) =>
-        props.isHighlighted ? `2px solid ${theme.palette.common.white}` : null,
+      borderLeft: (props) =>
+        props.isHighlighted
+          ? `3px solid ${theme.palette.primary['A700']}`
+          : null,
     },
     content: {
       width: '100%',
@@ -48,23 +50,6 @@ const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
     header: {
       display: 'flex',
       alignItems: 'center',
-      '& span': {
-        marginLeft: 8,
-      },
-    },
-    photo: {
-      cursor: 'pointer',
-      transition: theme.transitions.create('opacity'),
-      '&:hover': {
-        opacity: 0.75,
-      },
-    },
-    author: {
-      color: (props) => props.userColor,
-      cursor: 'pointer',
-      '&:hover': {
-        textDecoration: 'underline',
-      },
     },
     popover: {
       padding: '10px 20px',

@@ -64,6 +64,20 @@ function createApolloClient() {
                 return incoming;
               },
             },
+            notifications: {
+              keyArgs: false,
+              merge(existing = [], incoming, { args, readField }) {
+                const filtered = incoming.filter(
+                  (item) =>
+                    !existing.some(
+                      (current) =>
+                        readField('id', current) === readField('id', item)
+                    )
+                );
+                if (args.offsetId > 0) return [...existing, ...filtered];
+                return [...filtered, ...existing];
+              },
+            },
             entries: {
               keyArgs: false,
               merge(existing, incoming, { args, readField }) {

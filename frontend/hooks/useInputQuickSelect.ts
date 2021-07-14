@@ -93,11 +93,9 @@ const useInputQuickSelect = ({
         bodyFieldRef.current.selectionStart
       );
       const word = text.substring(begin, end);
-      if (word.length > 2) {
+      if (word.length > 1) {
         if (word.match(/^@\w*/)) {
-          if (word.length > 3) {
-            debouncedSetUsers(word.trim());
-          }
+          debouncedSetUsers(word.trim());
         } else {
           debouncedSetEmojis(word.trim());
         }

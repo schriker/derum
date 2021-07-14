@@ -8,6 +8,7 @@ import { selectedUserVar } from '../../lib/apolloVars';
 import { ChatMessagesItemProps } from '../../types/messages';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import ChatMessageBody from '../ChatMessageBody/ChatMessageBody';
+import UsernameWithModal from '../UsernameWithModal/UsernameWithModal';
 import ChatMessageActions from './ChatMessageActions';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
@@ -70,14 +71,7 @@ const ChatMessagesItem = ({
       ) : null}
       <Box>
         <Box display="flex" alignItems="center">
-          <Typography
-            variant="subtitle1"
-            component="span"
-            className={classes.userName}
-            onClick={(e) => handlerUserSelect(message.author.id, e)}
-          >
-            {message.author.displayName}
-          </Typography>
+          <UsernameWithModal data={message.author} />
           <Typography
             color="textSecondary"
             variant="subtitle2"

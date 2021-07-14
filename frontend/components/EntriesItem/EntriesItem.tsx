@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import NextLink from 'next/link';
 import React from 'react';
 import { EntriesItemProps } from '../../types/entries';
-import EntriesItemAuthor from './EntriesItemAuthor';
 import EntiresItemPublisher from './EntriesItemPublisher';
 import EntriesItemRoom from './EntriesItemRoom';
 import useEntriesItemStyle from './EntriesItemStyles';
@@ -12,17 +11,13 @@ import EntriesItemPhoto from './EntriesItemPhoto';
 import EntriesItemActions from '../EntryItemActions/EntriesItemActions';
 import CommentIcon from '../Icons/CommentIcon';
 import EntriesItemComments from './EntriesItemComments';
-import { useMeQuery } from '../../generated/graphql';
+import UsernameWithModal from '../UsernameWithModal/UsernameWithModal';
 
 const EntriesItem = ({
   data,
   fullView = false,
-  handleUserClick,
   preview,
 }: EntriesItemProps) => {
-  const { data: userData } = useMeQuery({
-    fetchPolicy: 'cache-only',
-  });
   const classes = useEntriesItemStyle();
   const roomLink = `/p/${data.room.name}`;
   const link =
@@ -56,16 +51,7 @@ const EntriesItem = ({
           </Link>
         </NextLink>
         <Box className={classes.info}>
-          <EntriesItemAuthor
-            id={data.author.id}
-            name={data.author.displayName}
-            color={
-              !userData || userData.me.showColorNames
-                ? data.author.color
-                : '#fff'
-            }
-            handleUserClick={handleUserClick}
-          />
+          <UsernameWithModal data={data.author} />
           <Typography variant="subtitle2" color="textSecondary">
             {dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
           </Typography>

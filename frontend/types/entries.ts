@@ -4,7 +4,6 @@ export type EntriesItemProps = {
   data: EntryFragmentFragment;
   preview: boolean;
   fullView?: boolean;
-  handleUserClick: (id: number) => void;
 };
 
 export type EntiresItemTitleProps = {

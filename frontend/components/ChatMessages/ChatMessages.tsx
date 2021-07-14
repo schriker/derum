@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, Slide } from '@material-ui/core';
 import React, { useState } from 'react';
 import {
   InitialMessagesQuery,
@@ -8,8 +8,8 @@ import {
 import useIsScrolledToBottom from '../../hooks/useIsScrolledToBottom';
 import useOpenCloseModal from '../../hooks/useOpenCloseModal';
 import useRoomData from '../../hooks/useRoomData';
-import { ButtonDefault } from '../Buttons/ButtonDefault';
-import ArrowDropdown from '../Icons/ArrowDropdownIcon';
+import { ButtonIcon } from '../Buttons/ButtonIcon';
+import ArrowDownIcon from '../Icons/ArrowDownIcon';
 import UserModal from '../UserModal/UserModal';
 import ChatMessagesItem from './ChatMessagesItem';
 import useChatMessagesStyles from './ChatMessagesStyles';
@@ -67,11 +67,15 @@ const ChatMessages = ({
           />
         )}
       </Box>
-      {!isBottom && (
-        <ButtonDefault className={classes.bottomButton} onClick={scollToBottom}>
-          Wróć do najnowszych
-        </ButtonDefault>
-      )}
+      <Slide direction="up" in={!isBottom} mountOnEnter unmountOnExit>
+        <ButtonIcon
+          color="primary"
+          className={classes.bottomButton}
+          onClick={scollToBottom}
+        >
+          <ArrowDownIcon style={{ fontSize: 16 }} />
+        </ButtonIcon>
+      </Slide>
     </Box>
   );
 };

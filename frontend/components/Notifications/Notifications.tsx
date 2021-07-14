@@ -47,15 +47,6 @@ const Notifications = () => {
       variables: {
         offsetId: data.notifications[data.notifications.length - 1].id,
       },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prev;
-        return Object.assign({}, prev, {
-          notifications: [
-            ...prev.notifications,
-            ...fetchMoreResult.notifications,
-          ],
-        });
-      },
     });
   };
 
