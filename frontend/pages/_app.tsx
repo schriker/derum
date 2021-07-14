@@ -10,6 +10,12 @@ import NextNprogress from 'nextjs-progressbar';
 import Script from 'next/script';
 import { FacebookSDK } from '../types/facebook';
 import { GoogleAuth, GoogleSDK } from '../types/google';
+import dayjs from 'dayjs';
+import 'dayjs/locale/pl';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.locale('pl');
+dayjs.extend(relativeTime);
 
 declare global {
   interface Window {

@@ -84,8 +84,14 @@ const NotificationsItem = React.forwardRef<
         >
           {data.triggeredBy.displayName}
         </Typography>
-        <Typography color="textSecondary" variant="subtitle2" component="span">
-          {dayjs(data.createdAt).format(' DD.MM - HH:mm')}
+        <Typography
+          title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
+          color="textSecondary"
+          variant="subtitle2"
+          component="span"
+        >
+          {' '}
+          {dayjs().to(dayjs(data.createdAt))}
         </Typography>
         <Typography variant="subtitle2" component="span">
           {data.objectType === ObjectTypeEnum.COMMENT &&

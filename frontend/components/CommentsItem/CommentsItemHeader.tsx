@@ -40,8 +40,9 @@ const CommentsItemHeader = ({
             color="textSecondary"
             variant="subtitle2"
             component="span"
+            title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
           >
-            {dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm:ss')}
+            {dayjs().to(dayjs(data.createdAt))}
           </Typography>
         </Box>
         {data.parentId && <CommentsItemResponseTo data={data} />}

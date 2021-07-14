@@ -13,11 +13,7 @@ import CommentIcon from '../Icons/CommentIcon';
 import EntriesItemComments from './EntriesItemComments';
 import UsernameWithModal from '../UsernameWithModal/UsernameWithModal';
 
-const EntriesItem = ({
-  data,
-  fullView = false,
-  preview,
-}: EntriesItemProps) => {
+const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
   const classes = useEntriesItemStyle();
   const roomLink = `/p/${data.room.name}`;
   const link =
@@ -52,8 +48,12 @@ const EntriesItem = ({
         </NextLink>
         <Box className={classes.info}>
           <UsernameWithModal data={data.author} />
-          <Typography variant="subtitle2" color="textSecondary">
-            {dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
+          <Typography
+            variant="subtitle2"
+            color="textSecondary"
+            title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
+          >
+            {dayjs().to(dayjs(data.createdAt))}
           </Typography>
           {data.publisher && (
             <EntiresItemPublisher publisher={data.publisher} url={data.url} />
