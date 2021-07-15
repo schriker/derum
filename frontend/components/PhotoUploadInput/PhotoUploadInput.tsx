@@ -20,7 +20,9 @@ const PhotoUploadInput = React.forwardRef<
   const { clear, error, inputProps } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFileName(e.target.files[0].name);
+    if (e.target.files.length) {
+      setFileName(e.target.files[0].name);
+    }
     inputProps.onChange(e);
   };
 
@@ -46,17 +48,17 @@ const PhotoUploadInput = React.forwardRef<
         >
           {fileName}
         </Typography>
-        {fileName && (
-          <ButtonIcon
-            color="secondary"
-            size="small"
-            aria-label="close"
-            onClick={handleReset}
-          >
-            <CloseIcon style={{ fontSize: 22 }} />
-          </ButtonIcon>
-        )}
       </label>
+      {fileName && (
+        <ButtonIcon
+          color="secondary"
+          size="small"
+          aria-label="close"
+          onClick={handleReset}
+        >
+          <CloseIcon style={{ fontSize: 22 }} />
+        </ButtonIcon>
+      )}
       {error && (
         <Typography variant="subtitle1" color="error">
           Maksymalny rozmiar pliku to 5MB

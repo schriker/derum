@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { ButtonSocialLogin } from '../Buttons/ButtonSocialLogin';
+// import { ButtonSocialLogin } from '../Buttons/ButtonSocialLogin';
 import Modal from '../Modal/Modal';
-import TwitterIcon from '../Icons/TwitterIcon';
+// import TwitterIcon from '../Icons/TwitterIcon';
 import FacebookLogin from '../FacebookLogin/FacebookLogin';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
 import { globalErrorVar, openModalVar } from '../../lib/apolloVars';
@@ -52,9 +52,9 @@ const LoginModal = () => {
         onSuccess={handleClose}
         onError={handleError}
       />
-      <ButtonSocialLogin startIcon={<TwitterIcon />} provider="twitter">
-        Zaloguj przez Twitter (Wkrótce)
-      </ButtonSocialLogin>
+      {/* <ButtonSocialLogin startIcon={<TwitterIcon />} provider="twitter">
+        Zaloguj przez Twitter
+      </ButtonSocialLogin> */}
     </Modal>
   );
 };

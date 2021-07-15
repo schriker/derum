@@ -8,7 +8,6 @@ import { selectedUserVar } from '../../lib/apolloVars';
 import { ChatMessagesItemProps } from '../../types/messages';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import ChatMessageBody from '../ChatMessageBody/ChatMessageBody';
-import UsernameWithModal from '../UsernameWithModal/UsernameWithModal';
 import ChatMessageActions from './ChatMessageActions';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
@@ -40,7 +39,6 @@ const ChatMessagesItem = ({
 
   const handleHighLightMessages = () => {
     if (selectedUser) return selectedUserVar(null);
-
     selectedUserVar(message.author.displayName);
   };
 
@@ -71,7 +69,14 @@ const ChatMessagesItem = ({
       ) : null}
       <Box>
         <Box display="flex" alignItems="center">
-          <UsernameWithModal data={message.author} />
+          <Typography
+            variant="subtitle1"
+            component="span"
+            className={classes.userName}
+            onClick={(e) => handlerUserSelect(message.author.id, e)}
+          >
+            {message.author.displayName}
+          </Typography>
           <Typography
             color="textSecondary"
             variant="subtitle2"

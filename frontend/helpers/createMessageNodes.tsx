@@ -13,6 +13,13 @@ const LINKIFY_OPTIONS: Options = {
   target: {
     url: '_blank',
   },
+  attributes: {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    onClick: (event: React.MouseEvent) => {
+      event.stopPropagation();
+    },
+  },
 };
 
 const createMessageNodes = (

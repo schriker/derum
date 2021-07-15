@@ -115,9 +115,12 @@ const areEqual = (
   prevProps: NotificationsItemPropsType,
   nextProps: NotificationsItemPropsType
 ) => {
-  if (prevProps.data.readed !== nextProps.data.readed) return false;
+  if (prevProps.data.triggeredBy.color !== nextProps.data.triggeredBy.color)
+    return true;
+  if (prevProps.data.triggeredBy.photo !== nextProps.data.triggeredBy.photo)
+    return true;
 
-  return true;
+  return false;
 };
 
 export default React.memo(NotificationsItem, areEqual);

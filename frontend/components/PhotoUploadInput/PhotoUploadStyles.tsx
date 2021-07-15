@@ -2,6 +2,8 @@ import { makeStyles } from '@material-ui/core';
 
 const usePhotoUploadStyles = makeStyles(() => ({
   root: {
+    display: 'flex',
+    alignItems: 'center',
     margin: '10px 0',
   },
   input: {
