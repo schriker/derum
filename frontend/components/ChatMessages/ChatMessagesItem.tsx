@@ -50,7 +50,7 @@ const ChatMessagesItem = ({
       onClick={handleHighLightMessages}
     >
       {showActions && isConnected && (
-        <ChatMessageActions messageId={message.id} />
+        <ChatMessageActions message={message} />
       )}
       {userData?.me.showAvatars || !userData ? (
         <Box mr={1}>

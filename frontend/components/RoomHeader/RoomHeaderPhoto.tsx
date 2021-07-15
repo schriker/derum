@@ -1,25 +1,19 @@
 import { Box, CircularProgress } from '@material-ui/core';
 import React from 'react';
+import { Action } from '../../casl/action.enum';
 import {
   PhotoFragmentFragmentDoc,
   RoomQuery,
-  useMeQuery,
   useUploadRoomPhotoMutation,
 } from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import useHeaderStyles from './RoomHeaderStyles';
+import { Can } from '../../casl/Can';
 
-const RoomHeaderPhoto = ({
-  roomData,
-}: {
-  roomData: RoomQuery;
-}) => {
+const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
   const classes = useHeaderStyles();
-  const { data } = useMeQuery({
-    fetchPolicy: 'cache-only',
-  });
   const [uploadRoomPhoto, { loading }] = useUploadRoomPhotoMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
     update: (cache, result) => {
@@ -38,11 +32,6 @@ const RoomHeaderPhoto = ({
       });
     },
   });
-
-  const isRoomAdmin =
-    data?.me.isAdmin ||
-    data?.me.isModerator ||
-    data?.me.id === roomData?.room.author.id;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -66,24 +55,33 @@ const RoomHeaderPhoto = ({
     />
   );
 
-  return isRoomAdmin ? (
-    <Box className={classes.photoWrapper}>
-      <input
-        accept="image/*"
-        className={classes.input}
-        id="room-photo-file"
-        type="file"
-        onChange={handleChange}
-      />
-      <ButtonIcon className={classes.uploadButton}>
-        <label htmlFor="room-photo-file" className={classes.uploadButton}>
-          {Photo}
-        </label>
-      </ButtonIcon>
-      {loading && <CircularProgress size={60} className={classes.progress} />}
-    </Box>
-  ) : (
-    Photo
+  return (
+    <>
+      <Can I={Action.Update} this={roomData.room}>
+        {() => (
+          <Box className={classes.photoWrapper}>
+            <input
+              accept="image/*"
+              className={classes.input}
+              id="room-photo-file"
+              type="file"
+              onChange={handleChange}
+            />
+            <ButtonIcon className={classes.uploadButton}>
+              <label htmlFor="room-photo-file" className={classes.uploadButton}>
+                {Photo}
+              </label>
+            </ButtonIcon>
+            {loading && (
+              <CircularProgress size={60} className={classes.progress} />
+            )}
+          </Box>
+        )}
+      </Can>
+      <Can not I={Action.Update} this={roomData.room}>
+        {() => Photo}
+      </Can>
+    </>
   );
 };
 

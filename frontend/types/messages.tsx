@@ -13,7 +13,11 @@ export type ChatMessagesItemProps = {
 };
 
 export type MessageActionProps = {
-  messageId: number;
+  message: {
+    __typename?: 'Message';
+  } & Pick<Message, 'id' | 'body' | 'createdAt'> & {
+      author: { __typename?: 'User' } & AuthorFragmentFragment;
+    };
 };
 
 export type ChatMessageNode = {

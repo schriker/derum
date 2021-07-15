@@ -1,5 +1,7 @@
 import { Box } from '@material-ui/core';
 import React from 'react';
+import { Action } from '../../casl/action.enum';
+import { Can } from '../../casl/Can';
 import { useDeleteMessageMutation, useMeQuery } from '../../generated/graphql';
 import useRoomData from '../../hooks/useRoomData';
 import { globalErrorVar } from '../../lib/apolloVars';
@@ -8,7 +10,7 @@ import { ButtonIcon } from '../Buttons/ButtonIcon';
 import CloseIcon from '../Icons/CloseIcon';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
 
-const ChatMessageActions = ({ messageId }: MessageActionProps) => {
+const ChatMessageActions = ({ message }: MessageActionProps) => {
   const { roomData } = useRoomData();
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',
@@ -26,27 +28,24 @@ const ChatMessageActions = ({ messageId }: MessageActionProps) => {
     e.stopPropagation();
     deleteMessage({
       variables: {
-        id: messageId,
+        id: message.id,
       },
     });
   };
 
-  const isRoomAdmin =
-    data?.me.isAdmin ||
-    data?.me.isModerator ||
-    data?.me.id === roomData?.room.author.id;
-
   return data ? (
     <Box className={classes.actions}>
-      {isRoomAdmin && (
-        <ButtonIcon
-          color="secondary"
-          size="small"
-          onClick={(e) => onDeleteMessage(e)}
-        >
-          <CloseIcon style={{ fontSize: 16 }} />
-        </ButtonIcon>
-      )}
+      <Can I={Action.Delete} this={{ ...message, room: roomData.room }}>
+        {() => (
+          <ButtonIcon
+            color="secondary"
+            size="small"
+            onClick={(e) => onDeleteMessage(e)}
+          >
+            <CloseIcon style={{ fontSize: 16 }} />
+          </ButtonIcon>
+        )}
+      </Can>
     </Box>
   ) : null;
 };

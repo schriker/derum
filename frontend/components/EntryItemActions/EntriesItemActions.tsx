@@ -1,4 +1,6 @@
 import React from 'react';
+import { Action } from '../../casl/action.enum';
+import { Can } from '../../casl/Can';
 import {
   EntryFragmentFragment,
   EntryType,
@@ -20,22 +22,21 @@ const EntriesItemActions = ({
     fetchPolicy: 'cache-only',
   });
 
-  const isRoomAdmin =
-    data?.me.isAdmin ||
-    data?.me.isModerator ||
-    data?.me.id === roomData?.room.author.id;
-
-  return data && isRoomAdmin ? (
-    <MoreActionsMenu>
-      <EntriesItemActionsDelete id={entryData.id} />
-      {data?.me.isAdmin && entryData.type === EntryType.LINK && (
-        <EntriesItemActionsBlacklist id={entryData.id} />
+  return (
+    <Can I={Action.Delete} this={{ ...entryData, room: roomData.room }}>
+      {() => (
+        <MoreActionsMenu>
+          <EntriesItemActionsDelete id={entryData.id} />
+          {data?.me.isAdmin && entryData.type === EntryType.LINK && (
+            <EntriesItemActionsBlacklist id={entryData.id} />
+          )}
+          {data?.me.isAdmin && entryData.type === EntryType.LINK && (
+            <EntriesItemActionsBlacklistAndRemove id={entryData.id} />
+          )}
+        </MoreActionsMenu>
       )}
-      {data?.me.isAdmin && entryData.type === EntryType.LINK && (
-        <EntriesItemActionsBlacklistAndRemove id={entryData.id} />
-      )}
-    </MoreActionsMenu>
-  ) : null;
+    </Can>
+  );
 };
 
 export default EntriesItemActions;

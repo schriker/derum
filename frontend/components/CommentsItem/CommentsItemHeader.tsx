@@ -9,6 +9,8 @@ import UsernameWithModal from '../UsernameWithModal/UsernameWithModal';
 import CommentsItemDelete from './CommentsItemDelete';
 import CommentsItemResponseTo from './CommentsItemResponseTo';
 import useCommentsItemStyles from './CommentsItemStyles';
+import { Action } from '../../casl/action.enum';
+import { Can } from '../../casl/Can';
 
 const CommentsItemHeader = ({
   data,
@@ -24,12 +26,6 @@ const CommentsItemHeader = ({
       !userdata || userdata?.me.showColorNames ? data.author.color : '#fff',
     isHighlighted: false,
   });
-
-  const canDeleteComment =
-    userdata?.me.isAdmin ||
-    userdata?.me.isModerator ||
-    roomData?.room.author.id === userdata?.me.id ||
-    userdata?.me.id === data.author.id;
 
   return (
     <Box className={classes.headerWrapper}>
@@ -57,7 +53,9 @@ const CommentsItemHeader = ({
             {data.id === parentId ? 'Anuluj' : 'Odpowiedz'}
           </ButtonDefault>
         )}
-        {canDeleteComment && <CommentsItemDelete comment={data} />}
+        <Can I={Action.Delete} this={{ ...data, room: roomData.room }}>
+          {() => <CommentsItemDelete comment={data} />}
+        </Can>
       </Box>
     </Box>
   );
