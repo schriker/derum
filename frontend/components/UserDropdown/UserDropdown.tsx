@@ -9,7 +9,7 @@ import DropdownItem from '../Dropdown/DropdownItem';
 import BugIcon from '../Icons/BugIcon';
 import HelpIcon from '../Icons/HelpIcon';
 import LogoutIcon from '../Icons/LogoutIcon';
-// import MessageIcon from '../Icons/MessageIcon';
+import MessageIcon from '../Icons/MessageIcon';
 import UserIcon from '../Icons/UserIcon';
 import UserButton from '../UserButton/UserButton';
 
@@ -44,15 +44,16 @@ const UserDropdown = () => {
       icon: <UserIcon className={classes.icon} />,
       onClick: () => router.push(`/u/${data.me.id}`),
     },
-    // {
-    //   text: 'Wiadomości',
-    //   icon: <MessageIcon className={classes.icon} />,
-    //   onClick: () => console.log('Click'),
-    // },
+    {
+      text: 'Wiadomości',
+      icon: <MessageIcon className={classes.icon} />,
+      onClick: () => console.log('Click'),
+    },
     {
       text: 'Zgłoś błąd',
       icon: <BugIcon className={classes.icon} />,
-      onClick: () => console.log('Click'),
+      onClick: () =>
+        window.location.replace('https://github.com/schriker/derum/issues'),
     },
     {
       text: 'Pomoc',

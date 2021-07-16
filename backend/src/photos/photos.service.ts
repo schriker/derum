@@ -76,8 +76,8 @@ export class PhotosService {
       });
       stream.on('end', async () => {
         const resizedPhoto = await this.resizePhoto(
-          100,
-          100,
+          200,
+          200,
           Buffer.concat(imgData),
         );
         const { name, url } = await this.awsService.upload(

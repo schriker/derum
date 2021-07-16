@@ -15,7 +15,7 @@ const RoomAddVideo = () => {
 
   return (
     <ButtonRoomContent onClick={handleClick} startIcon={<VideoIcon />}>
-      Dodaj video
+      Dodaj strim
     </ButtonRoomContent>
   );
 };
