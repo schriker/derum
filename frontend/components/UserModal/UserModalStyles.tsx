@@ -11,6 +11,7 @@ const useUserModalStyles = makeStyles((theme: Theme) => ({
     height: 55,
     marginBottom: 10,
     fontSize: 26,
+    cursor: 'pointer',
   },
   online: {
     width: 8,

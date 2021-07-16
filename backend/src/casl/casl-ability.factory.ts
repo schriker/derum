@@ -18,10 +18,12 @@ import {
   FlatEntry,
   FlatMessage,
   FlatNotification,
+  FlatPhoto,
   FlatRoom,
 } from './flatTypes';
 import { Notification } from 'src/notifications/entities/notification.entity';
 import { Emoji } from 'src/emojis/entities/emoji.entity';
+import { Photo } from 'src/photos/entities/photo.entity';
 
 type Subjects =
   | InferSubjects<
@@ -33,6 +35,7 @@ type Subjects =
       | typeof Room
       | typeof Notification
       | typeof Emoji
+      | typeof Photo
     >
   | 'all';
 
@@ -54,6 +57,7 @@ export class CaslAbilityFactory {
       can(Action.Delete, Entry);
       can(Action.Delete, Comment);
       can(Action.Update, Room);
+      can(Action.Delete, Photo);
     }
 
     if (!user.isAdmin && !user.isModerator) {
@@ -103,6 +107,10 @@ export class CaslAbilityFactory {
 
       cannot<FlatComment>(Action.Delete, Comment, {
         'author.isModerator': true,
+      });
+
+      can<FlatPhoto>(Action.Delete, Photo, {
+        'user.id': user.id,
       });
     }
 

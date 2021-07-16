@@ -19,6 +19,12 @@ export class PhotosService {
     private awsService: AwsService,
   ) {}
 
+  findOneById(id: number): Promise<Photo> {
+    return this.photosRepository.findOne(id, {
+      relations: ['user'],
+    });
+  }
+
   savePhotoFromLinkToFile(url: string, fileName: string): Promise<void> {
     return new Promise(async (resolve, reject) => {
       exec(
@@ -59,11 +65,7 @@ export class PhotosService {
       .toBuffer();
   }
 
-  async saveRoomPhoto(
-    attachment: FileUpload,
-    roomId: number,
-    user: User,
-  ): Promise<Photo> {
+  async saveRoomPhoto(attachment: FileUpload, user: User): Promise<Photo> {
     const { mimetype, createReadStream } = attachment;
     this.checkMimetype(mimetype);
     return new Promise((resolve) => {
@@ -85,6 +87,7 @@ export class PhotosService {
         const photo = new Photo();
         photo.name = name;
         photo.url = url;
+        photo.key = `room/${name}`;
         photo.user = user;
 
         resolve(this.photosRepository.save(photo));
@@ -111,6 +114,7 @@ export class PhotosService {
       const photo = new Photo();
       photo.name = name;
       photo.url = awsUrl;
+      photo.key = `thumbs/${name}`;
       photo.user = user;
       return this.photosRepository.save(photo);
     } catch (e) {
@@ -141,10 +145,17 @@ export class PhotosService {
         const photo = new Photo();
         photo.name = name;
         photo.url = url;
+        photo.key = `article/${name}`;
         photo.user = user;
 
         resolve(this.photosRepository.save(photo));
       });
     });
+  }
+
+  async deletePhoto(photo: Photo): Promise<boolean> {
+    this.awsService.delete(photo.key);
+    await this.photosRepository.delete(photo.id);
+    return true;
   }
 }

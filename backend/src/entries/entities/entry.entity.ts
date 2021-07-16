@@ -84,7 +84,7 @@ export class Entry {
   link: Link;
 
   @Field(() => Photo, { nullable: true })
-  @OneToOne(() => Photo, { nullable: true })
+  @OneToOne(() => Photo, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn()
   photo: Photo;
 

@@ -10,7 +10,7 @@ export class NewArticleData {
   title: string;
 
   @Field()
-  @Length(30, 350)
+  @Length(10, 350)
   @Transform(({ value }) => value.trim())
   description: string;
 

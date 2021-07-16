@@ -38,7 +38,7 @@ export class UsersResolver {
 
   @Query(() => User)
   user(@Args('id', { type: () => Int }) id: number) {
-    return this.usersService.getById(id);
+    return this.usersService.getByIdBasic(id);
   }
 
   @Query(() => [OnlineUser])

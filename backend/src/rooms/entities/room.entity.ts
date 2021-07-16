@@ -61,7 +61,7 @@ export class Room {
   usersNumber: number;
 
   @Field(() => Photo, { nullable: true })
-  @OneToOne(() => Photo, { nullable: true })
+  @OneToOne(() => Photo, { nullable: true, onDelete: 'SET NULL' })
   @JoinColumn()
   photo: Photo;
 }

@@ -120,7 +120,7 @@ export class NotificationsService {
     if (isIgnored) return;
     const notification = new Notification();
     notification.user = user;
-    notification.url = `p/${entry.room.name}/wpis/${entry.id}/${entry.slug}?comment=${commentId}`;
+    notification.url = `p/${entry.room.name}/w/${entry.id}/${entry.slug}?comment=${commentId}`;
     notification.objectType = type;
     notification.objectId = commentId;
     notification.triggeredBy = triggeredBy;

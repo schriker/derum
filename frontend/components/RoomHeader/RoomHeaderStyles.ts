@@ -35,10 +35,29 @@ const useHeaderStyles = makeStyles<Theme>((theme: Theme) => ({
   },
   uploadButton: {
     padding: 0,
+    position: 'relative',
     cursor: 'pointer',
+    '&:hover $deleteLabel': {
+      opacity: 1,
+    },
   },
   photoWrapper: {
     position: 'relative',
+  },
+  deleteLabel: {
+    height: 50,
+    width: 50,
+    opacity: 0,
+    zIndex: 999,
+    top: 0,
+    left: 0,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.palette.error.main,
+    borderRadius: '50%',
+    position: 'absolute',
+    transition: theme.transitions.create(['opacity'], { duration: 100 }),
   },
   progress: {
     top: -5,

@@ -52,7 +52,7 @@ const RoomNewArticleForm = ({
       localforage.removeItem(STORAGE_KEY_NAME);
       closeModal();
       router.push(
-        `/p/${data.createArticle.room.name}/wpis/${data.createArticle.id}/${data.createArticle.slug}`
+        `/p/${data.createArticle.room.name}/w/${data.createArticle.id}/${data.createArticle.slug}`
       );
     },
   });

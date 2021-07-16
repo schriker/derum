@@ -3,10 +3,7 @@ import React from 'react';
 import { EntriesPublisherProps } from '../../types/entries';
 import useEntriesItemStyle from './EntriesItemStyles';
 
-const EntiresItemPublisher = ({
-  publisher,
-  url,
-}: EntriesPublisherProps) => {
+const EntiresItemPublisher = ({ publisher, url }: EntriesPublisherProps) => {
   const classes = useEntriesItemStyle();
 
   return (
@@ -14,7 +11,7 @@ const EntiresItemPublisher = ({
       className={classes.publisher}
       size="small"
       label={
-        <Link target="_blank" color="secondary" rel="noopener" href={url}>
+        <Link target="_blank" color="secondary" rel="noreferrer" href={url}>
           {publisher}
         </Link>
       }

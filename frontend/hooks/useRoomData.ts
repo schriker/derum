@@ -12,7 +12,6 @@ const useRoomData = () => {
         : indexRoomVars.name,
     },
   });
-
   return {
     roomData,
   };

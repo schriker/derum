@@ -36,7 +36,7 @@ export class MetaScraperService {
     });
   }
 
-  getUrlData(comand: string, encoding: string, url): Promise<any> {
+  getUrlData(comand: string, url): Promise<any> {
     return new Promise(async (resolve, reject) => {
       exec(comand, { maxBuffer: 5 * 1024 * 1024 }, async (error, stdout) => {
         if (error) reject(error);
@@ -52,22 +52,15 @@ export class MetaScraperService {
       );
       let result = await this.getUrlData(
         `curl '${newLink.url}' -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" | iconv -f ${encoding} -t UTF-8`,
-        encoding,
         newLink.url,
       );
 
-      if (
-        !result.author &&
-        !result.description &&
-        !result.image &&
-        !result.title
-      ) {
+      if (!result.author && !result.description && !result.image) {
         encoding = await this.getEncoding(
           `curl -I '${newLink.url}' | grep -Fi content-type:`,
         );
         result = await this.getUrlData(
           `curl '${newLink.url}' | iconv -f ${encoding} -t UTF-8`,
-          encoding,
           newLink.url,
         );
       }

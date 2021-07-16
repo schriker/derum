@@ -36,7 +36,7 @@ const schema = yup.object().shape({
     .string()
     .trim()
     .required('Opis jest wymagany.')
-    .min(30, 'Opis min. 30 znaków.')
+    .min(10, 'Opis min. 10 znaków.')
     .max(350, 'Zbyt długi opis.'),
 });
 
@@ -91,7 +91,7 @@ const RoomNewLinkMetadataForm = ({
     onCompleted: (data) => {
       closeModal();
       router.push(
-        `/p/${data.createLink.room.name}/wpis/${data.createLink.id}/${data.createLink.slug}`
+        `/p/${data.createLink.room.name}/w/${data.createLink.id}/${data.createLink.slug}`
       );
     },
   });

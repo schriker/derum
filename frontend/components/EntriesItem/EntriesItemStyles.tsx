@@ -2,6 +2,8 @@ import { makeStyles, Theme } from '@material-ui/core';
 
 const useEntriesItemStyle = makeStyles((theme: Theme) => ({
   content: {
+    paddingLeft: theme.spacing(3),
+    padding: theme.spacing(3),
     '&:last-child': {
       paddingBottom: theme.spacing(2),
     },
@@ -26,7 +28,7 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
     marginRight: 10,
   },
   description: {
-    color: theme.palette.grey[400],
+    color: theme.palette.grey[500],
   },
   publisher: {
     fontSize: 14,

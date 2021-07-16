@@ -16,7 +16,7 @@ const RoomNewLinkExist = ({
 
   const handleClick = () => {
     closeModal();
-    router.push(`/p/${data[0].room.name}/wpis/${data[0].id}/${data[0].slug}`);
+    router.push(`/p/${data[0].room.name}/w/${data[0].id}/${data[0].slug}`);
   };
 
   return (

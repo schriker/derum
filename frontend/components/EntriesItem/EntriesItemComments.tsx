@@ -14,7 +14,7 @@ const EntriesItemComments = ({
 
   return (
     <NextLink
-      href={`/p/${data.room.name}/wpis/${data.id}/${data.slug}#comments`}
+      href={`/p/${data.room.name}/w/${data.id}/${data.slug}#comments`}
       passHref
     >
       <Link

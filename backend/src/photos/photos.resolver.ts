@@ -33,12 +33,25 @@ export class PhotosResolver {
     const room = await this.roomsService.findOneById(roomId);
     const ability = this.caslAbilityFactory.createForUser(user);
     if (!ability.can(Action.Update, room)) throw new ForbiddenException();
-    const photo = await this.photosService.saveRoomPhoto(
-      attachment,
-      roomId,
-      session,
-    );
+    if (room.photo) {
+      await this.photosService.deletePhoto(room.photo);
+    }
+    const photo = await this.photosService.saveRoomPhoto(attachment, session);
     this.roomsService.updatePhoto(photo, roomId);
     return photo;
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GQLSessionGuard)
+  async deletePhoto(
+    @CurrentUser() session: User,
+    @Args('photoId', { type: () => Int }) photoId: number,
+  ) {
+    const user = await this.usersService.getByIdBasic(session.id);
+    const photo = await this.photosService.findOneById(photoId);
+    const ability = this.caslAbilityFactory.createForUser(user);
+    if (!ability.can(Action.Delete, photo)) throw new ForbiddenException();
+    this.photosService.deletePhoto(photo);
+    return true;
   }
 }

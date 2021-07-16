@@ -204,6 +204,7 @@ type Mutation {
   createArticle(photo: Upload, newArticleData: NewArticleData!): Entry!
   deleteEntry(id: Int!): Boolean!
   uploadRoomPhoto(attachment: Upload!, roomId: Int!): Photo!
+  deletePhoto(photoId: Int!): Boolean!
   vote(value: VoteValueEnum!, entryId: Int!): VoteResult!
   voteComment(value: VoteValueEnum!, commentId: Int!): VoteResult!
   createComment(commentData: NewCommentData!): Comment!

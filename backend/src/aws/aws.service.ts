@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -48,5 +52,14 @@ export class AwsService {
         'AWS_PUBLIC_BUCKET_REGION',
       )}.amazonaws.com/${folder}/${name}`,
     };
+  }
+
+  delete(key: string) {
+    this.s3.send(
+      new DeleteObjectCommand({
+        Bucket: this.configService.get<string>('AWS_PUBLIC_BUCKET_NAME'),
+        Key: key,
+      }),
+    );
   }
 }

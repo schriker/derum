@@ -29,6 +29,9 @@ export class Photo {
   @Column()
   name: string;
 
+  @Column()
+  key: string;
+
   @Field()
   @Column()
   url: string;

@@ -120,6 +120,7 @@ export type Mutation = {
   createArticle: Entry;
   deleteEntry: Scalars['Boolean'];
   uploadRoomPhoto: Photo;
+  deletePhoto: Scalars['Boolean'];
   vote: VoteResult;
   voteComment: VoteResult;
   createComment: Comment;
@@ -221,6 +222,11 @@ export type MutationDeleteEntryArgs = {
 export type MutationUploadRoomPhotoArgs = {
   attachment: Scalars['Upload'];
   roomId: Scalars['Int'];
+};
+
+
+export type MutationDeletePhotoArgs = {
+  photoId: Scalars['Int'];
 };
 
 
@@ -691,6 +697,16 @@ export type DeleteMessageMutationVariables = Exact<{
 export type DeleteMessageMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteMessage'>
+);
+
+export type DeletePhotoMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeletePhotoMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deletePhoto'>
 );
 
 export type DeleteUserContentMutationVariables = Exact<{
@@ -1584,6 +1600,37 @@ export function useDeleteMessageMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteMessageMutationHookResult = ReturnType<typeof useDeleteMessageMutation>;
 export type DeleteMessageMutationResult = Apollo.MutationResult<DeleteMessageMutation>;
 export type DeleteMessageMutationOptions = Apollo.BaseMutationOptions<DeleteMessageMutation, DeleteMessageMutationVariables>;
+export const DeletePhotoDocument = gql`
+    mutation DeletePhoto($id: Int!) {
+  deletePhoto(photoId: $id)
+}
+    `;
+export type DeletePhotoMutationFn = Apollo.MutationFunction<DeletePhotoMutation, DeletePhotoMutationVariables>;
+
+/**
+ * __useDeletePhotoMutation__
+ *
+ * To run a mutation, you first call `useDeletePhotoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePhotoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePhotoMutation, { data, loading, error }] = useDeletePhotoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeletePhotoMutation(baseOptions?: Apollo.MutationHookOptions<DeletePhotoMutation, DeletePhotoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePhotoMutation, DeletePhotoMutationVariables>(DeletePhotoDocument, options);
+      }
+export type DeletePhotoMutationHookResult = ReturnType<typeof useDeletePhotoMutation>;
+export type DeletePhotoMutationResult = Apollo.MutationResult<DeletePhotoMutation>;
+export type DeletePhotoMutationOptions = Apollo.BaseMutationOptions<DeletePhotoMutation, DeletePhotoMutationVariables>;
 export const DeleteUserContentDocument = gql`
     mutation DeleteUserContent($id: Int!) {
   deleteUserContent(id: $id)

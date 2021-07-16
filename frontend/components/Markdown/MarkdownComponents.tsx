@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
@@ -52,7 +53,7 @@ const components: Partial<NormalComponents & SpecialComponents> = {
   },
   a({ children, ...props }) {
     return (
-      <a {...props} target="_blank">
+      <a {...props} target="_blank" rel="noreferrer">
         {children}
       </a>
     );
@@ -60,7 +61,9 @@ const components: Partial<NormalComponents & SpecialComponents> = {
   img(props) {
     return (
       <span style={{ display: 'block', textAlign: 'center' }}>
-        <img {...props} alt="" />
+        <a href={props.src as string} rel="noreferrer" target="_blank">
+          <img {...props} />
+        </a>
       </span>
     );
   },

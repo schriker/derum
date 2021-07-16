@@ -1,9 +1,10 @@
-import { Box, CircularProgress } from '@material-ui/core';
+import { Box, CircularProgress, Typography } from '@material-ui/core';
 import React from 'react';
 import { Action } from '../../casl/action.enum';
 import {
   PhotoFragmentFragmentDoc,
   RoomQuery,
+  useDeletePhotoMutation,
   useUploadRoomPhotoMutation,
 } from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
@@ -11,9 +12,23 @@ import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import { ButtonIcon } from '../Buttons/ButtonIcon';
 import useHeaderStyles from './RoomHeaderStyles';
 import { Can } from '../../casl/Can';
+import CloseIcon from '../Icons/CloseIcon';
 
 const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
   const classes = useHeaderStyles();
+  const [deletePhoto] = useDeletePhotoMutation({
+    onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
+    update: (cache) => {
+      cache.modify({
+        id: cache.identify(roomData.room),
+        fields: {
+          photo() {
+            return null;
+          },
+        },
+      });
+    },
+  });
   const [uploadRoomPhoto, { loading }] = useUploadRoomPhotoMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
     update: (cache, result) => {
@@ -32,6 +47,14 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
       });
     },
   });
+
+  const handleDelete = () => {
+    deletePhoto({
+      variables: {
+        id: roomData.room.photo.id,
+      },
+    });
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -60,20 +83,44 @@ const RoomHeaderPhoto = ({ roomData }: { roomData: RoomQuery }) => {
       <Can I={Action.Update} this={roomData.room}>
         {() => (
           <Box className={classes.photoWrapper}>
-            <input
-              accept="image/*"
-              className={classes.input}
-              id="room-photo-file"
-              type="file"
-              onChange={handleChange}
-            />
-            <ButtonIcon className={classes.uploadButton}>
-              <label htmlFor="room-photo-file" className={classes.uploadButton}>
-                {Photo}
-              </label>
-            </ButtonIcon>
-            {loading && (
-              <CircularProgress size={60} className={classes.progress} />
+            {!roomData.room.photo ? (
+              <>
+                <input
+                  accept="image/*"
+                  className={classes.input}
+                  id="room-photo-file"
+                  type="file"
+                  onChange={handleChange}
+                />
+                <ButtonIcon className={classes.uploadButton}>
+                  <label
+                    htmlFor="room-photo-file"
+                    className={classes.uploadButton}
+                  >
+                    {Photo}
+                  </label>
+                </ButtonIcon>
+                {loading && (
+                  <CircularProgress size={60} className={classes.progress} />
+                )}
+              </>
+            ) : (
+              <ButtonIcon
+                className={classes.uploadButton}
+                onClick={handleDelete}
+              >
+                <Box>
+                  <Typography
+                    className={classes.deleteLabel}
+                    variant="body1"
+                    color="textPrimary"
+                    component="span"
+                  >
+                    <CloseIcon />
+                  </Typography>
+                  {Photo}
+                </Box>
+              </ButtonIcon>
             )}
           </Box>
         )}

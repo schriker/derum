@@ -18,7 +18,7 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
   const roomLink = `/p/${data.room.name}`;
   const link =
     preview || !data.url
-      ? `/p/${data.room.name}/wpis/${data.id}/${data.slug}`
+      ? `/p/${data.room.name}/w/${data.id}/${data.slug}`
       : data.url;
   return (
     <Card className={classes.wrapper} elevation={0}>

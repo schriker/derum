@@ -1,7 +1,8 @@
+import React from 'react';
+import dayjs from 'dayjs';
+import NextLink from 'next/link';
 import { Box, Typography } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
-import dayjs from 'dayjs';
-import React from 'react';
 import { useOnlineUsersQuery, useUserQuery } from '../../generated/graphql';
 import useRoomData from '../../hooks/useRoomData';
 import { UserModalProps } from '../../types/userModal';
@@ -10,11 +11,7 @@ import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
 import useUserModalStyles from './UserModalStyles';
 import UserModalActions from './UsertMoalActions';
 
-const UserModal = ({
-  id,
-  openModal,
-  handleClose,
-}: UserModalProps) => {
+const UserModal = ({ id, openModal, handleClose }: UserModalProps) => {
   const { roomData } = useRoomData();
   const classes = useUserModalStyles();
   const { data } = useUserQuery({
@@ -38,13 +35,15 @@ const UserModal = ({
     <Modal open={openModal} close={handleClose}>
       {data ? (
         <Box className={classes.wrapper}>
-          <AvatarPhoto
-            className={classes.avatar}
-            src={data.user.photo}
-            name={data.user.displayName}
-            styles={{ border: `3px solid ${data.user.color}` }}
-            color={data.user.color}
-          />
+          <NextLink href={`/u/${id}`}>
+            <AvatarPhoto
+              className={classes.avatar}
+              src={data.user.photo}
+              name={data.user.displayName}
+              styles={{ border: `3px solid ${data.user.color}` }}
+              color={data.user.color}
+            />
+          </NextLink>
           <Box className={classes.name}>
             {isOnline && <Box className={classes.online}></Box>}
             <Typography variant="subtitle1">{data.user.displayName}</Typography>

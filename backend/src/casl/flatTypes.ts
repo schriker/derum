@@ -3,6 +3,7 @@ import { Message } from 'src/messages/entities/message.entity';
 import { Room } from 'src/rooms/entities/room.entity';
 import { Notification } from 'src/notifications/entities/notification.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
+import { Photo } from 'src/photos/entities/photo.entity';
 
 export type FlatMessage = Message & {
   'author.isAdmin': Message['author']['isAdmin'];
@@ -25,6 +26,10 @@ export type FlatComment = Comment & {
 
 export type FlatRoom = Room & {
   'author.id': Room['author']['id'];
+};
+
+export type FlatPhoto = Photo & {
+  'user.id': Photo['user']['id'];
 };
 
 export type FlatNotification = Notification & {
