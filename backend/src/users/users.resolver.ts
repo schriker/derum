@@ -18,6 +18,7 @@ import { CurrentUser } from './decorators/currentUser.decorator';
 import { NewUserColor } from './dto/new-color';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { NewSettingsData } from './dto/new-settings';
+import { NewUserData } from './dto/new-user.input';
 import { OnlineUser } from './dto/online-user';
 import { ProviderUserInput } from './dto/provider-user.input';
 import { User } from './entities/user.entity';
@@ -44,6 +45,11 @@ export class UsersResolver {
   @Query(() => [OnlineUser])
   onlineUsers(@Args('roomId', { type: () => Int }) roomId: number) {
     return this.usersService.getOnlineUsers(roomId);
+  }
+
+  @Mutation(() => Boolean)
+  createNewUser(@Args('newUserData') newUserData: NewUserData) {
+    return true;
   }
 
   @Mutation(() => Boolean)

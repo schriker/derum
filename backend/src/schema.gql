@@ -185,6 +185,7 @@ enum EntrySort {
 }
 
 type Mutation {
+  createNewUser(newUserData: NewUserData!): Boolean!
   loginUserWithFacebook(access_token: String!): Boolean!
   loginUserWithGoogle(access_token: String!): Boolean!
   logout: Boolean!
@@ -214,6 +215,12 @@ type Mutation {
   blacklistPublisher(entryId: Int!): Boolean!
   blacklistPublisherAndRemoveEntires(entryId: Int!): Boolean!
   createEmoji(newEmojiData: NewEmojiData!): Boolean!
+}
+
+input NewUserData {
+  email: String!
+  password: String!
+  passwordConfirmation: String!
 }
 
 input NewSettingsData {
