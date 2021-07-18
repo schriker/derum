@@ -9,7 +9,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UsersService } from 'src/users/services/users.service';
 
 @Injectable()
-export class GoogleAuthGuard extends AuthGuard('google-token') {
+export class LocalAuthGuard extends AuthGuard('local') {
   constructor(private usersService: UsersService) {
     super();
   }

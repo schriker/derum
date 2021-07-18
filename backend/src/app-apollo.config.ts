@@ -3,7 +3,7 @@ const responseCachePlugin = require('apollo-server-plugin-response-cache');
 import Redis from 'ioredis';
 import { ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
-import { UsersService } from './users/users.service';
+import { UsersService } from './users/services/users.service';
 import * as cookie from 'cookie';
 import { redisClient } from './main';
 import * as depthLimit from 'graphql-depth-limit';

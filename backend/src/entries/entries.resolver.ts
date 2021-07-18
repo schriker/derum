@@ -5,7 +5,7 @@ import { Action } from 'src/casl/action.enum';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/services/users.service';
 import { NewArticleData } from './dto/new-article.input';
 import { NewLinkData } from './dto/new-link.input';
 import { QueryEntriesInput } from './dto/query.input';

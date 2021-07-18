@@ -14,7 +14,9 @@ import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { FacebookAuthGuard } from 'src/common/guards/facebook-auth.guard';
 import { GoogleAuthGuard } from 'src/common/guards/google-auth.guard';
 import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
+import { LocalAuthGuard } from 'src/common/guards/local-auth.guard';
 import { CurrentUser } from './decorators/currentUser.decorator';
+import { EmailLoginData } from './dto/email-login.input';
 import { NewUserColor } from './dto/new-color';
 import { NewDisplayNameData } from './dto/new-display-name';
 import { NewSettingsData } from './dto/new-settings';
@@ -22,12 +24,14 @@ import { NewUserData } from './dto/new-user.input';
 import { OnlineUser } from './dto/online-user';
 import { ProviderUserInput } from './dto/provider-user.input';
 import { User } from './entities/user.entity';
-import { UsersService } from './users.service';
+import { UsersEmailLoginService } from './services/users-email-login.service';
+import { UsersService } from './services/users.service';
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(
     private usersService: UsersService,
+    private usersEmailLoginService: UsersEmailLoginService,
     private caslAbilityFactory: CaslAbilityFactory,
   ) {}
 
@@ -38,18 +42,27 @@ export class UsersResolver {
   }
 
   @Query(() => User)
-  user(@Args('id', { type: () => Int }) id: number) {
+  user(@Args('id', { type: () => Int }) id: number): Promise<User> {
     return this.usersService.getByIdBasic(id);
   }
 
   @Query(() => [OnlineUser])
-  onlineUsers(@Args('roomId', { type: () => Int }) roomId: number) {
+  onlineUsers(
+    @Args('roomId', { type: () => Int }) roomId: number,
+  ): OnlineUser[] {
     return this.usersService.getOnlineUsers(roomId);
   }
 
   @Mutation(() => Boolean)
-  createNewUser(@Args('newUserData') newUserData: NewUserData) {
-    return true;
+  createNewUser(
+    @Args('newUserData') newUserData: NewUserData,
+  ): Promise<boolean> {
+    return this.usersEmailLoginService.createNewUser(newUserData);
+  }
+
+  @Mutation(() => Boolean)
+  verifyUserEmail(@Args('token') token: string): Promise<boolean> {
+    return this.usersEmailLoginService.verifyEmail(token);
   }
 
   @Mutation(() => Boolean)
@@ -66,6 +79,15 @@ export class UsersResolver {
   loginUserWithGoogle(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Args() UserData: ProviderUserInput,
+  ): boolean {
+    return true;
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(LocalAuthGuard)
+  loginUserWithEmail(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Args() UserData: EmailLoginData,
   ): boolean {
     return true;
   }

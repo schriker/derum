@@ -7,7 +7,7 @@ import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
 import { PhotosService } from './photos.service';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/services/users.service';
 import { RoomsService } from 'src/rooms/rooms.service';
 import { Action } from 'src/casl/action.enum';
 

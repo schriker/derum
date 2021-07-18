@@ -7,7 +7,7 @@ import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { ObjectTypeEnum } from './types/object-type.enum';
 import { Comment } from 'src/comments/entities/comment.entity';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/services/users.service';
 
 @Injectable()
 export class NotificationsService {

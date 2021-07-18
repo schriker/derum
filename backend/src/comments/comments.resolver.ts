@@ -15,7 +15,7 @@ import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { GQLThrottlerGuard } from 'src/common/guards/gql-throttle.guard';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/services/users.service';
 import { CommentsService } from './comments.service';
 import { NewCommentData } from './dto/new-comment.input';
 import { Comment } from './entities/comment.entity';
