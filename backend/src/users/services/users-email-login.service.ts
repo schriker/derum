@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as argon2 from 'argon2';
 import * as jwt from 'jsonwebtoken';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
+import { EmailsService } from 'src/emails/emails.service';
 import { Repository } from 'typeorm';
 import { EmailLoginData } from '../dto/email-login.input';
 import { NewUserData } from '../dto/new-user.input';
@@ -20,6 +21,7 @@ import { UsersService } from './users.service';
 export class UsersEmailLoginService {
   constructor(
     private configService: ConfigService,
+    private emailsService: EmailsService,
     private usersService: UsersService,
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -52,7 +54,7 @@ export class UsersEmailLoginService {
       user.authProvider = 'email';
       user.emailVerificationToken = emailVerificationToken;
       await this.usersRepository.save(user);
-      // Send verification email
+      this.emailsService.sendVerification(user);
       return true;
     } catch (e) {
       throw new InternalServerErrorException(e);
@@ -67,8 +69,8 @@ export class UsersEmailLoginService {
       throw new BadRequestException(ERROR_MESSAGES.INVALID_PROVIDER);
     if (!user) throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
     if (!user.verified) {
+      this.emailsService.sendVerification(user);
       throw new BadRequestException(ERROR_MESSAGES.USER_NOT_VERIFIED);
-      // Resend verification email
     }
 
     if (!(await argon2.verify(user.password, data.password))) {
@@ -118,7 +120,7 @@ export class UsersEmailLoginService {
       );
       user.passwordResetToken = passwordResetToken;
       await this.usersRepository.save(user);
-      // Send email
+      this.emailsService.sendPasswordReset(user);
     }
 
     return true;

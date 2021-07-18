@@ -20,6 +20,7 @@ import { UsersModule } from './users/users.module';
 import { VotesModule } from './votes/votes.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { EmojisModule } from './emojis/emojis.module';
+import { EmailsModule } from './emails/emails.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { EmojisModule } from './emojis/emojis.module';
     }),
     NotificationsModule,
     EmojisModule,
+    EmailsModule,
   ],
   providers: [DateScalar],
 })

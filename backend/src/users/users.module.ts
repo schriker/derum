@@ -10,6 +10,7 @@ import { Entry } from 'src/entries/entities/entry.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { UsersEmailLoginService } from './services/users-email-login.service';
+import { EmailsModule } from 'src/emails/emails.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UsersEmailLoginService } from './services/users-email-login.service';
       Message,
     ]),
     CaslModule,
+    EmailsModule,
   ],
   exports: [UsersService, UsersEmailLoginService],
   providers: [UsersService, UsersEmailLoginService, UsersResolver],
