@@ -156,7 +156,7 @@ export class UsersService {
     const user = new User();
     user.email = email;
     user.authId = authId;
-    user.photo = photo;
+    user.photo = photo.length ? photo : null;
     user.verified = true;
     user.authProvider = authProvider;
     user.displayName = !displayNameTaken

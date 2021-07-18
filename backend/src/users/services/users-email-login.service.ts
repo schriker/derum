@@ -12,6 +12,7 @@ import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { Repository } from 'typeorm';
 import { EmailLoginData } from '../dto/email-login.input';
 import { NewUserData } from '../dto/new-user.input';
+import { ResetPasswordData } from '../dto/reset-password.input';
 import { User } from '../entities/user.entity';
 import { UsersService } from './users.service';
 
@@ -51,6 +52,7 @@ export class UsersEmailLoginService {
       user.authProvider = 'email';
       user.emailVerificationToken = emailVerificationToken;
       await this.usersRepository.save(user);
+      // Send verification email
       return true;
     } catch (e) {
       throw new InternalServerErrorException(e);
@@ -64,8 +66,10 @@ export class UsersEmailLoginService {
     if (!user.password)
       throw new BadRequestException(ERROR_MESSAGES.INVALID_PROVIDER);
     if (!user) throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
-    if (!user.verified)
+    if (!user.verified) {
       throw new BadRequestException(ERROR_MESSAGES.USER_NOT_VERIFIED);
+      // Resend verification email
+    }
 
     if (!(await argon2.verify(user.password, data.password))) {
       throw new BadRequestException(ERROR_MESSAGES.INVALID_PASSWORD);
@@ -93,6 +97,50 @@ export class UsersEmailLoginService {
             );
           user.verified = true;
           user.emailVerificationToken = null;
+          await this.usersRepository.save(user);
+          return resolve(true);
+        },
+      );
+    });
+  }
+
+  async createResetPasswordToken(email: string): Promise<boolean> {
+    const user = await this.usersRepository.findOne({
+      email,
+    });
+    if (user) {
+      const passwordResetToken = jwt.sign(
+        { email: email },
+        this.configService.get<string>('JWT_SECRET'),
+        {
+          expiresIn: '24h',
+        },
+      );
+      user.passwordResetToken = passwordResetToken;
+      await this.usersRepository.save(user);
+      // Send email
+    }
+
+    return true;
+  }
+
+  async resetPassword(data: ResetPasswordData): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      jwt.verify(
+        data.token,
+        this.configService.get<string>('JWT_SECRET'),
+        async (e) => {
+          if (e)
+            return reject(
+              new BadRequestException(ERROR_MESSAGES.INVALID_TOKEN),
+            );
+          const user = await this.usersRepository.findOne({
+            passwordResetToken: data.token,
+          });
+          if (!user) return reject(new NotFoundException());
+          const hashedPassword = await argon2.hash(data.password);
+          user.passwordResetToken = null;
+          user.password = hashedPassword;
           await this.usersRepository.save(user);
           return resolve(true);
         },

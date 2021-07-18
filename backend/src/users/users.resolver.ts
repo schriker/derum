@@ -9,11 +9,13 @@ import {
   Parent,
   Int,
 } from '@nestjs/graphql';
+import { Throttle } from '@nestjs/throttler';
 import { Action } from 'src/casl/action.enum';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { FacebookAuthGuard } from 'src/common/guards/facebook-auth.guard';
 import { GoogleAuthGuard } from 'src/common/guards/google-auth.guard';
 import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
+import { GQLThrottlerGuard } from 'src/common/guards/gql-throttle.guard';
 import { LocalAuthGuard } from 'src/common/guards/local-auth.guard';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { EmailLoginData } from './dto/email-login.input';
@@ -23,6 +25,7 @@ import { NewSettingsData } from './dto/new-settings';
 import { NewUserData } from './dto/new-user.input';
 import { OnlineUser } from './dto/online-user';
 import { ProviderUserInput } from './dto/provider-user.input';
+import { ResetPasswordData } from './dto/reset-password.input';
 import { User } from './entities/user.entity';
 import { UsersEmailLoginService } from './services/users-email-login.service';
 import { UsersService } from './services/users.service';
@@ -53,6 +56,8 @@ export class UsersResolver {
     return this.usersService.getOnlineUsers(roomId);
   }
 
+  @UseGuards(GQLThrottlerGuard)
+  @Throttle(1, 5)
   @Mutation(() => Boolean)
   createNewUser(
     @Args('newUserData') newUserData: NewUserData,
@@ -63,6 +68,20 @@ export class UsersResolver {
   @Mutation(() => Boolean)
   verifyUserEmail(@Args('token') token: string): Promise<boolean> {
     return this.usersEmailLoginService.verifyEmail(token);
+  }
+
+  @UseGuards(GQLThrottlerGuard)
+  @Throttle(1, 60 * 15)
+  @Mutation(() => Boolean)
+  createResetPasswordToken(@Args('email') email: string): Promise<boolean> {
+    return this.usersEmailLoginService.createResetPasswordToken(email);
+  }
+
+  @Mutation(() => Boolean)
+  resetUserPassword(
+    @Args('resetPasswordData') data: ResetPasswordData,
+  ): Promise<boolean> {
+    return this.usersEmailLoginService.resetPassword(data);
   }
 
   @Mutation(() => Boolean)
@@ -84,7 +103,8 @@ export class UsersResolver {
   }
 
   @Mutation(() => Boolean)
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard, GQLThrottlerGuard)
+  @Throttle(1, 5)
   loginUserWithEmail(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Args() UserData: EmailLoginData,
