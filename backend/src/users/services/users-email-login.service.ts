@@ -69,6 +69,15 @@ export class UsersEmailLoginService {
       throw new BadRequestException(ERROR_MESSAGES.INVALID_PROVIDER);
     if (!user) throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
     if (!user.verified) {
+      const emailVerificationToken = jwt.sign(
+        { email: data.email },
+        this.configService.get<string>('JWT_SECRET'),
+        {
+          expiresIn: '72h',
+        },
+      );
+      user.emailVerificationToken = emailVerificationToken;
+      await this.usersRepository.save(user);
       this.emailsService.sendVerification(user);
       throw new BadRequestException(ERROR_MESSAGES.USER_NOT_VERIFIED);
     }
@@ -119,8 +128,8 @@ export class UsersEmailLoginService {
         },
       );
       user.passwordResetToken = passwordResetToken;
-      await this.usersRepository.save(user);
       this.emailsService.sendPasswordReset(user);
+      await this.usersRepository.save(user);
     }
 
     return true;

@@ -27,7 +27,7 @@ export class EmailsService {
     });
     this.email = new Email({
       message: {
-        from: 'no-reply@derum.pl',
+        from: 'derum@derum.pl',
       },
       send: true,
       preview: false,

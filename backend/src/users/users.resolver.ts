@@ -57,7 +57,7 @@ export class UsersResolver {
   }
 
   @UseGuards(GQLThrottlerGuard)
-  @Throttle(1, 5)
+  @Throttle(200, 60 * 60 * 24)
   @Mutation(() => Boolean)
   createNewUser(
     @Args('newUserData') newUserData: NewUserData,
@@ -104,7 +104,7 @@ export class UsersResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(LocalAuthGuard, GQLThrottlerGuard)
-  @Throttle(1, 5)
+  @Throttle(200, 60 * 60 * 24)
   loginUserWithEmail(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Args() UserData: EmailLoginData,
