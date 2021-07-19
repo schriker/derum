@@ -8,7 +8,7 @@ const Header = ({ title, ogImage, ogDescription }: HeadProps) => {
   return (
     <>
       <Head>
-        <title>{title}</title>
+        <title>{title} - Derum.pl</title>
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
         <meta
