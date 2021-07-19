@@ -11,7 +11,7 @@ import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import { CustomInput } from '../CustomInput/CustomInput';
 import FormInput from '../FormInput/FormInput';
 import LoadingSpinner from '../LoadingSpinner/LoadingSpinner';
-import useNewPasswordFormStyles from './NewPassWordFormStyles';
+import useNewPasswordFormStyles from './NewPasswordFormStyles';
 
 const schema = yup.object().shape({
   password: yup
