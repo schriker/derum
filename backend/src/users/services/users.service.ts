@@ -6,13 +6,13 @@ import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { ILike, Repository } from 'typeorm';
-import { NewUserColor } from './dto/new-color';
-import { NewDisplayNameData } from './dto/new-display-name';
-import { NewSettingsData } from './dto/new-settings';
-import { OnlineUser } from './dto/online-user';
-import { ProviderUser } from './dto/provider-user.interface';
-import { UserSession } from './entities/user-session.entity';
-import { User } from './entities/user.entity';
+import { NewUserColor } from '../dto/new-color';
+import { NewDisplayNameData } from '../dto/new-display-name';
+import { NewSettingsData } from '../dto/new-settings';
+import { OnlineUser } from '../dto/online-user';
+import { ProviderUser } from '../dto/provider-user.interface';
+import { UserSession } from '../entities/user-session.entity';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -156,7 +156,8 @@ export class UsersService {
     const user = new User();
     user.email = email;
     user.authId = authId;
-    user.photo = photo;
+    user.photo = photo.length ? photo : null;
+    user.verified = true;
     user.authProvider = authProvider;
     user.displayName = !displayNameTaken
       ? `${displayName.replace(' ', '_')}`

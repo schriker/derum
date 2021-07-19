@@ -14,7 +14,7 @@ import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { Notification } from 'src/notifications/entities/notification.entity';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/services/users.service';
 import { NotificationsService } from './notifications.service';
 
 @Resolver(() => Notification)

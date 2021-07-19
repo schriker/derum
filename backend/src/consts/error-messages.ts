@@ -1,5 +1,12 @@
 export const ERROR_MESSAGES = {
   EMAIL_REQUIRED: 'Email jest wymaganay.',
+  EMAIL_TAKEN: 'Email jest już zarejestrowany.',
+  EMAIL_ALREADY_VERIFIED: 'Email został już zweryfikowany.',
+  USER_NOT_FOUND: 'Podany użytkownik nie istnieje.',
+  USER_NOT_VERIFIED: 'Email nie został zweryfikowany. Sprawdź swoją pocztę.',
+  INVALID_PASSWORD: 'Błędne hasło.',
+  INVALID_TOKEN: 'Błędny token.',
+  INVALID_PROVIDER: 'Błędna metoda logowania.',
   ROOM_EXISTS: 'Nazwa jest już zajęta',
   DISPLAY_NAME_TAKEN: 'Ta nazwa jest już zajęta.',
   LINK_FETCH_ERROR: 'Błąd pobierania linku',

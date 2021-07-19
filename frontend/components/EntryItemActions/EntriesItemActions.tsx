@@ -23,7 +23,7 @@ const EntriesItemActions = ({
   });
 
   return (
-    <Can I={Action.Delete} this={{ ...entryData, room: roomData.room }}>
+    <Can I={Action.Delete} this={{ ...entryData, room: roomData?.room }}>
       {() => (
         <MoreActionsMenu>
           <EntriesItemActionsDelete id={entryData.id} />

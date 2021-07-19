@@ -19,6 +19,7 @@ const LINKIFY_OPTIONS: Options = {
     onClick: (event: React.MouseEvent) => {
       event.stopPropagation();
     },
+    rel: 'noreferrer',
   },
 };
 

@@ -46,6 +46,19 @@ export class User {
   @Index({ unique: true })
   email: string;
 
+  @Column({ nullable: true })
+  password: string;
+
+  @Column({ nullable: true })
+  emailVerificationToken: string;
+
+  @Column({ nullable: true })
+  passwordResetToken: string;
+
+  @Field(() => Boolean)
+  @Column({ default: false })
+  verified: boolean;
+
   @Field({ nullable: true })
   @Column({ nullable: true })
   photo: string;

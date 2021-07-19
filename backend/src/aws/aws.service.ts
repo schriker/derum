@@ -13,14 +13,10 @@ export class AwsService {
 
   constructor(private configService: ConfigService) {
     this.s3 = new S3Client({
-      region: this.configService.get<string>('AWS_PUBLIC_BUCKET_REGION'),
+      region: this.configService.get<string>('AWS_REGION'),
       credentials: {
-        accessKeyId: this.configService.get<string>(
-          'AWS_PUBLIC_BUCKET_ACCESS_KEY',
-        ),
-        secretAccessKey: this.configService.get<string>(
-          'AWS_PUBLIC_BUCKET_SECRET_KEY',
-        ),
+        accessKeyId: this.configService.get<string>('AWS_ACCESS_KEY'),
+        secretAccessKey: this.configService.get<string>('AWS_SECRET_KEY'),
       },
     });
   }
@@ -49,7 +45,7 @@ export class AwsService {
       url: `https://${this.configService.get(
         'AWS_PUBLIC_BUCKET_NAME',
       )}.s3.${this.configService.get(
-        'AWS_PUBLIC_BUCKET_REGION',
+        'AWS_REGION',
       )}.amazonaws.com/${folder}/${name}`,
     };
   }

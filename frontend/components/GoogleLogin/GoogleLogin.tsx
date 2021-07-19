@@ -8,18 +8,14 @@ import GoogleIcon from '../Icons/GoogleIcon';
 import { SocialLoginProps } from '../../types/socialLogin';
 import { ButtonSocialLogin } from '../Buttons/ButtonSocialLogin';
 
-const GoogleLogin = ({
-  onSuccess,
-  onError,
-  onLoading,
-}: SocialLoginProps) => {
-  const hadleError = (error: ApolloError) => {
+const GoogleLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
+  const handleError = (error: ApolloError) => {
     onLoading(false);
     onError(true, error);
   };
 
   const [fetchUser] = useMeLazyQuery({
-    onError: hadleError,
+    onError: handleError,
     onCompleted: (data) => {
       if (data.me) onSuccess();
     },
@@ -34,7 +30,7 @@ const GoogleLogin = ({
         cache.reset();
       }
     },
-    onError: hadleError,
+    onError: handleError,
   });
 
   const handleGoogleLogin = async () => {
@@ -50,7 +46,6 @@ const GoogleLogin = ({
           },
         });
       } catch (e) {
-        console.log(e);
         onLoading(false);
       }
     }

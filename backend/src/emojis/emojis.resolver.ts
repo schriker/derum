@@ -5,7 +5,7 @@ import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { CurrentUser } from 'src/users/decorators/currentUser.decorator';
 import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/services/users.service';
 import { NewEmojiData } from './dto/new-emoji';
 import { EmojisService } from './emojis.service';
 import { Emoji } from './entities/emoji.entity';

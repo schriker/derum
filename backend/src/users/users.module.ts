@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
+import { UsersService } from './services/users.service';
 import { UsersResolver } from './users.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -9,6 +9,8 @@ import { Comment } from 'src/comments/entities/comment.entity';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { Message } from 'src/messages/entities/message.entity';
+import { UsersEmailLoginService } from './services/users-email-login.service';
+import { EmailsModule } from 'src/emails/emails.module';
 
 @Module({
   imports: [
@@ -21,8 +23,9 @@ import { Message } from 'src/messages/entities/message.entity';
       Message,
     ]),
     CaslModule,
+    EmailsModule,
   ],
-  exports: [UsersService],
-  providers: [UsersService, UsersResolver],
+  exports: [UsersService, UsersEmailLoginService],
+  providers: [UsersService, UsersEmailLoginService, UsersResolver],
 })
 export class UsersModule {}

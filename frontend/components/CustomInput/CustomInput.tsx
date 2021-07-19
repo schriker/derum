@@ -13,7 +13,9 @@ export const CustomInput = withStyles((theme: Theme) => ({
       dark: theme.palette.background.paper,
       light: theme.palette.divider,
     }),
-    transition: theme.transitions.create(['border-color', 'background-color'], { duration: 200 }),
+    transition: theme.transitions.create(['border-color', 'background-color'], {
+      duration: 200,
+    }),
     'label + &': {
       marginTop: theme.spacing(3),
     },

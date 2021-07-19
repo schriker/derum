@@ -56,6 +56,7 @@ type User {
   updatedAt: Date!
   displayName: String!
   email: String!
+  verified: Boolean!
   photo: String
   isAdmin: Boolean!
   isModerator: Boolean!
@@ -185,8 +186,13 @@ enum EntrySort {
 }
 
 type Mutation {
+  createNewUser(newUserData: NewUserData!): Boolean!
+  verifyUserEmail(token: String!): Boolean!
+  createResetPasswordToken(email: String!): Boolean!
+  resetUserPassword(resetPasswordData: ResetPasswordData!): Boolean!
   loginUserWithFacebook(access_token: String!): Boolean!
   loginUserWithGoogle(access_token: String!): Boolean!
+  loginUserWithEmail(email: String!, password: String!): Boolean!
   logout: Boolean!
   changeUserDisplayName(name: String!): User!
   ignoreUser(id: Int!): Boolean!
@@ -214,6 +220,19 @@ type Mutation {
   blacklistPublisher(entryId: Int!): Boolean!
   blacklistPublisherAndRemoveEntires(entryId: Int!): Boolean!
   createEmoji(newEmojiData: NewEmojiData!): Boolean!
+}
+
+input NewUserData {
+  email: String!
+  name: String!
+  password: String!
+  passwordConfirmation: String!
+}
+
+input ResetPasswordData {
+  token: String!
+  password: String!
+  passwordConfirmation: String!
 }
 
 input NewSettingsData {

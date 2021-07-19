@@ -10,7 +10,7 @@ import {
   ThrottlerStorage,
 } from '@nestjs/throttler';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/services/users.service';
 
 @Injectable()
 export class GQLWSThrottlerGuard extends ThrottlerGuard {
