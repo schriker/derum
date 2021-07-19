@@ -65,9 +65,9 @@ export class UsersEmailLoginService {
     const user = await this.usersRepository.findOne({
       email: data.email,
     });
+    if (!user) throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
     if (!user.password)
       throw new BadRequestException(ERROR_MESSAGES.INVALID_PROVIDER);
-    if (!user) throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
     if (!user.verified) {
       const emailVerificationToken = jwt.sign(
         { email: data.email },

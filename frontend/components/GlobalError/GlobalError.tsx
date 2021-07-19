@@ -12,14 +12,22 @@ const GlobalError = () => {
       open={globalError.isOpen}
       autoHideDuration={6000}
       onClose={() =>
-        globalErrorVar({ isOpen: false, message: globalError.message })
+        globalErrorVar({
+          isOpen: false,
+          message: globalError.message,
+          type: globalError.type,
+        })
       }
     >
       <Alert
         onClose={() =>
-          globalErrorVar({ isOpen: false, message: globalError.message })
+          globalErrorVar({
+            isOpen: false,
+            message: globalError.message,
+            type: globalError.type,
+          })
         }
-        severity="error"
+        severity={globalError.type ? globalError.type : 'error'}
         variant="filled"
       >
         {globalError.message}

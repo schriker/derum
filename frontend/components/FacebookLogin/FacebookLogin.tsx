@@ -8,18 +8,14 @@ import { SocialLoginProps } from '../../types/socialLogin';
 import { ButtonSocialLogin } from '../Buttons/ButtonSocialLogin';
 import FacebookIcon from '../Icons/FacebookIcon';
 
-const FacebookLogin = ({
-  onSuccess,
-  onError,
-  onLoading,
-}: SocialLoginProps) => {
-  const hadleError = (error: ApolloError) => {
+const FacebookLogin = ({ onSuccess, onError, onLoading }: SocialLoginProps) => {
+  const handleError = (error: ApolloError) => {
     onLoading(false);
     onError(true, error);
   };
 
   const [fetchUser] = useMeLazyQuery({
-    onError: hadleError,
+    onError: handleError,
     onCompleted: (data) => {
       if (data.me) onSuccess();
     },
@@ -34,7 +30,7 @@ const FacebookLogin = ({
         cache.reset();
       }
     },
-    onError: hadleError,
+    onError: handleError,
   });
 
   const handleFacebookLogin = () => {

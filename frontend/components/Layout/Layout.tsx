@@ -4,11 +4,12 @@ import { useMeQuery } from '../../generated/graphql';
 import { LayoutProps } from '../../types/layout';
 import GlobalError from '../GlobalError/GlobalError';
 import Header from '../Header/Header';
-import LoginModal from '../LoginModal/LoginModal';
+const LoginModal = dynamic(() => import('../LoginModal/LoginModal'));
 import NavBar from '../NavBar/NavBar';
 import Sidebar from '../Sidebar/SIdebar';
 import SidebarDrawer from '../Sidebar/SidebarDrawer';
 import defineAbilityFor from '../../casl/ability';
+import dynamic from 'next/dynamic';
 
 const Layout = ({ children, ...rest }: LayoutProps) => {
   const { data: userdata } = useMeQuery({
