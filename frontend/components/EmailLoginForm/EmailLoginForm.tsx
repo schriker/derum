@@ -118,8 +118,8 @@ const EmailLoginForm = ({
             <Typography>
               <Link
                 component="button"
-                color="textPrimary"
-                variant="body2"
+                color="primary"
+                variant="body1"
                 type="button"
                 onClick={() => {
                   setTabIndex(1);
@@ -131,8 +131,8 @@ const EmailLoginForm = ({
             <Typography>
               <Link
                 component="button"
-                color="textPrimary"
-                variant="body2"
+                color="primary"
+                variant="body1"
                 type="button"
                 onClick={() => {
                   setTabIndex(2);

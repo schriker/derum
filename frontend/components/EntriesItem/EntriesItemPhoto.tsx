@@ -16,6 +16,7 @@ const EntriesItemPhoto = ({
     <NextLink href={link} passHref>
       <CardActionArea
         target={fullView ? '_blank' : '_self'}
+        rel="noreferrer"
         component="a"
         className={classes.action}
       >

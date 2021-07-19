@@ -9,6 +9,11 @@ export type ResetPasswordInputs = {
   email: string;
 };
 
+export type SetNewPasswordInputs = {
+  password: string;
+  passwordConfirmation: string;
+};
+
 export type EmailRegisterInputs = {
   email: string;
   password: string;

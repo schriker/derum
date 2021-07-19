@@ -40,6 +40,7 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
         <NextLink href={link} passHref>
           <Link
             target={fullView ? '_blank' : '_self'}
+            rel="noreferrer"
             variant="h5"
             color="textPrimary"
           >

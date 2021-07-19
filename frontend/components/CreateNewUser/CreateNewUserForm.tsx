@@ -1,6 +1,6 @@
 import { ApolloError } from '@apollo/client';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Box } from '@material-ui/core';
+import { Box, Link, Typography } from '@material-ui/core';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -11,6 +11,7 @@ import { ButtonDefault } from '../Buttons/ButtonDefault';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import { CustomInput } from '../CustomInput/CustomInput';
 import FormInput from '../FormInput/FormInput';
+import NextLink from 'next/link';
 
 const schema = yup.object().shape({
   email: yup
@@ -154,6 +155,21 @@ const CreateNewUserForm = ({
             />
           )}
         />
+        <Typography>
+          Zakładając konto akceptujesz{' '}
+          <NextLink href="/" passHref>
+            <Link target="_blank" rel="noreferrer" color="primary">
+              regulamin
+            </Link>
+          </NextLink>{' '}
+          oraz{' '}
+          <NextLink href="/" passHref>
+            <Link target="_blank" rel="noreferrer" color="primary">
+              warunki prywatności
+            </Link>
+          </NextLink>
+          .
+        </Typography>
         <Box
           pt={2}
           pb={1}

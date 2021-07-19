@@ -7,7 +7,7 @@ import { useVerifyUserEmailMutation } from '../../generated/graphql';
 import { addApolloState, initializeApollo } from '../../lib/apolloClient';
 import { globalErrorVar } from '../../lib/apolloVars';
 
-export default function User() {
+export default function VerifyEmail() {
   const router = useRouter();
   const [verify] = useVerifyUserEmailMutation({
     onCompleted: ({ verifyUserEmail }) => {
