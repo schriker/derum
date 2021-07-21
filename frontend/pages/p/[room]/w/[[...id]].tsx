@@ -30,7 +30,7 @@ export default function Entry() {
     },
   });
 
-  return roomData ? (
+  return roomData && data ? (
     <Layout
       title={data.entry.title}
       ogImage={data.entry.photo?.url}

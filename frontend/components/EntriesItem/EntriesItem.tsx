@@ -22,12 +22,14 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
       : data.url;
   return (
     <Card className={classes.wrapper} elevation={0}>
-      <EntriesItemVote
-        data={data}
-        userVote={data.userVote}
-        voteScore={data.voteScore}
-        id={data.id}
-      />
+      {!data.deleted && (
+        <EntriesItemVote
+          data={data}
+          userVote={data.userVote}
+          voteScore={data.voteScore}
+          id={data.id}
+        />
+      )}
       {data.photo && (
         <EntriesItemPhoto
           fullView={fullView}
@@ -37,38 +39,52 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
         />
       )}
       <CardContent className={classes.content}>
-        <NextLink href={link} passHref>
-          <Link
-            target={fullView ? '_blank' : '_self'}
-            rel="noreferrer"
-            variant="h5"
-            color="textPrimary"
-          >
-            {data.title}
-          </Link>
-        </NextLink>
-        <Box className={classes.info}>
-          <UsernameWithModal data={data.author} />
-          <Typography
-            variant="subtitle2"
-            color="textSecondary"
-            title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
-          >
-            {dayjs().to(dayjs(data.createdAt))}
-          </Typography>
-          {data.publisher && (
-            <EntiresItemPublisher publisher={data.publisher} url={data.url} />
-          )}
-          <EntriesItemActions entryData={data} />
-        </Box>
-        <Typography variant="body2" className={classes.description}>
-          {data.description}
-        </Typography>
-        <Box className={classes.info}>
-          <CommentIcon className={classes.commentIcon} />
-          <EntriesItemComments data={data} />
-          <EntriesItemRoom link={roomLink} name={data.room.name} />
-        </Box>
+        {data.deleted ? (
+          <Box className={classes.deleted}>
+            <Typography variant="body2" color="textSecondary">
+              Wpis został usunięty.
+            </Typography>
+            <EntriesItemActions entryData={data} />
+          </Box>
+        ) : (
+          <>
+            <NextLink href={link} passHref>
+              <Link
+                target={fullView ? '_blank' : '_self'}
+                rel="noreferrer"
+                variant="h5"
+                color="textPrimary"
+              >
+                {data.title}
+              </Link>
+            </NextLink>
+            <Box className={classes.info}>
+              <UsernameWithModal data={data.author} />
+              <Typography
+                variant="subtitle2"
+                color="textSecondary"
+                title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
+              >
+                {dayjs().to(dayjs(data.createdAt))}
+              </Typography>
+              {data.publisher && (
+                <EntiresItemPublisher
+                  publisher={data.publisher}
+                  url={data.url}
+                />
+              )}
+              <EntriesItemActions entryData={data} />
+            </Box>
+            <Typography variant="body2" className={classes.description}>
+              {data.description}
+            </Typography>
+            <Box className={classes.info}>
+              <CommentIcon className={classes.commentIcon} />
+              <EntriesItemComments data={data} />
+              <EntriesItemRoom link={roomLink} name={data.room.name} />
+            </Box>
+          </>
+        )}
       </CardContent>
     </Card>
   );
@@ -76,6 +92,7 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
 
 const areEqual = (prevProps: EntriesItemProps, nextProps: EntriesItemProps) => {
   if (
+    prevProps.data.deleted !== nextProps.data.deleted ||
     prevProps.data.userVote !== nextProps.data.userVote ||
     prevProps.data.voteScore !== nextProps.data.voteScore
   )

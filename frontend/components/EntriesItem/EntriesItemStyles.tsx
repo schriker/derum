@@ -4,9 +4,6 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
   content: {
     paddingLeft: theme.spacing(3),
     padding: theme.spacing(3),
-    '&:last-child': {
-      paddingBottom: theme.spacing(2),
-    },
   },
   wrapper: {
     display: 'flex',
@@ -28,6 +25,7 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
     marginRight: 10,
   },
   description: {
+    marginTop: theme.spacing(1),
     color: theme.palette.grey[500],
   },
   publisher: {
@@ -35,12 +33,19 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
     marginRight: 10,
     marginLeft: 10,
   },
+  deleted: {
+    display: 'flex',
+    alignItems: 'center',
+    fontStyle: 'italic',
+    '& p': {
+      marginRight: 10,
+    },
+  },
   info: {
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
     marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
     '& p': {
       marginRight: 10,
     },

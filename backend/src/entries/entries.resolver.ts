@@ -1,5 +1,13 @@
 import { ForbiddenException, UseGuards } from '@nestjs/common';
-import { Args, Mutation, Resolver, Query, Int } from '@nestjs/graphql';
+import {
+  Args,
+  Mutation,
+  Resolver,
+  Query,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { Action } from 'src/casl/action.enum';
 import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
@@ -71,6 +79,24 @@ export class EntriesResolver {
     const ability = this.caslAbilityFactory.createForUser(user);
     if (!ability.can(Action.Delete, entry)) throw new ForbiddenException();
     return this.entriesService.markDeleted(id);
+  }
+
+  @ResolveField()
+  body(@Parent() entry: Entry) {
+    if (entry.deleted) return null;
+    return entry.body;
+  }
+
+  @ResolveField()
+  url(@Parent() entry: Entry) {
+    if (entry.deleted) return null;
+    return entry.url;
+  }
+
+  @ResolveField()
+  photo(@Parent() entry: Entry) {
+    if (entry.deleted) return null;
+    return entry.photo;
   }
 
   @Query(() => [Entry])
