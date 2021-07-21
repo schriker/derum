@@ -68,6 +68,7 @@ type User {
   joinedRooms: [Room!]!
   ignore: [User!]!
   notifications: [Notification!]!
+  points: Int!
 }
 
 type Link {

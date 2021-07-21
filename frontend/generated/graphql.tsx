@@ -51,7 +51,7 @@ export type Entry = {
   slug: Scalars['String'];
   title: Scalars['String'];
   publisher?: Maybe<Scalars['String']>;
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   body?: Maybe<Scalars['String']>;
   author: User;
   room: Room;
@@ -534,6 +534,7 @@ export type User = {
   joinedRooms: Array<Room>;
   ignore: Array<User>;
   notifications: Array<Notification>;
+  points: Scalars['Int'];
 };
 
 export type VoteResult = {
@@ -1171,6 +1172,7 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user: (
     { __typename?: 'User' }
+    & Pick<User, 'points'>
     & AuthorFragmentFragment
   ) }
 );
@@ -2895,6 +2897,7 @@ export const UserDocument = gql`
     query User($id: Int!) {
   user(id: $id) {
     ...AuthorFragment
+    points
   }
 }
     ${AuthorFragmentFragmentDoc}`;

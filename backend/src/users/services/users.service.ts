@@ -246,4 +246,20 @@ export class UsersService {
 
     return this.usersRepository.save(user);
   }
+
+  async countUserPoints(id: number): Promise<number> {
+    const result = await this.usersRepository
+      .createQueryBuilder()
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COALESCE(SUM(value), 0)')
+          .from(Vote, 'vote')
+          .where('vote.pointForId = :id', {
+            id,
+          });
+      }, 'points')
+      .getRawOne();
+
+    return result.points;
+  }
 }

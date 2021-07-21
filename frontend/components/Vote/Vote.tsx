@@ -13,6 +13,7 @@ const Vote = ({
   userVote,
   voteScore,
   comments,
+  disabled,
 }: VotePropsType) => {
   const classes = useVoteStyle({
     justifyContent: comments ? 'start' : 'center',
@@ -21,6 +22,7 @@ const Vote = ({
   return (
     <CardContent className={classes.vote}>
       <ButtonIcon
+        disabled={disabled}
         onClick={() =>
           handleClick(
             userVote === VoteValueEnum.UP
@@ -37,6 +39,7 @@ const Vote = ({
         {numbro(voteScore ? voteScore : 0).format({ average: true })}
       </Typography>
       <ButtonIcon
+        disabled={disabled}
         onClick={() =>
           handleClick(
             userVote === VoteValueEnum.DOWN

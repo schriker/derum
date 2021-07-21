@@ -49,6 +49,7 @@ const CommentsItemVote = ({
 
   return (
     <Vote
+      disabled={data.author.id === userData.me.id}
       comments
       voteScore={voteScore}
       userVote={userVote}

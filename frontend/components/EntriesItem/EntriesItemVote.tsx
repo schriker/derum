@@ -48,7 +48,12 @@ const EntriesItemVote = ({
   };
 
   return (
-    <Vote voteScore={voteScore} userVote={userVote} handleClick={handleClick} />
+    <Vote
+      disabled={data.author.id === userData.me.id}
+      voteScore={voteScore}
+      userVote={userVote}
+      handleClick={handleClick}
+    />
   );
 };
 

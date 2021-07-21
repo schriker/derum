@@ -130,6 +130,10 @@ export class User {
   @OneToMany(() => Vote, (vote) => vote.user)
   votes: Vote[];
 
+  @Field(() => Int)
+  @OneToMany(() => Vote, (vote) => vote.pointFor)
+  points: Vote[];
+
   @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
 

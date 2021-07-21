@@ -208,6 +208,11 @@ export class UsersResolver {
   }
 
   @ResolveField()
+  points(@Parent() user: User): Promise<number> {
+    return this.usersService.countUserPoints(user.id);
+  }
+
+  @ResolveField()
   ignore(
     @CurrentUser() currentUser: User,
     @Parent() user: User,

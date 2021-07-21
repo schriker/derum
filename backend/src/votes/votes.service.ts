@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentsService } from 'src/comments/comments.service';
+import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { EntriesQueryService } from 'src/entries/services/entries-query.service';
 import { User } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -24,6 +25,9 @@ export class VotesService {
   ): Promise<VoteResult> {
     const entry = await this.entiriesQueryService.getById(entryId);
 
+    if (entry.author.id === user.id)
+      throw new BadRequestException(ERROR_MESSAGES.CANNOT_SELF_VOTE);
+
     if (entry.deleted)
       return {
         userValue: VoteValueEnum.NONE,
@@ -44,6 +48,7 @@ export class VotesService {
       vote.entry = entry;
       vote.user = user;
       vote.value = value;
+      vote.pointFor = entry.author;
       await this.votesRepository.save(vote);
     }
 
@@ -65,6 +70,9 @@ export class VotesService {
   ): Promise<VoteResult> {
     const comment = await this.commentsService.getById(commentId);
 
+    if (comment.author.id === user.id)
+      throw new BadRequestException(ERROR_MESSAGES.CANNOT_SELF_VOTE);
+
     if (comment.deleted)
       return {
         userValue: VoteValueEnum.NONE,
@@ -85,6 +93,7 @@ export class VotesService {
       vote.comment = comment;
       vote.user = user;
       vote.value = value;
+      vote.pointFor = comment.author;
       await this.votesRepository.save(vote);
     }
 
