@@ -72,7 +72,7 @@ export class Entry {
   body: string;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.entires)
+  @ManyToOne(() => User, (user) => user.entries)
   author: User;
 
   @Index()

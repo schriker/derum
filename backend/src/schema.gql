@@ -58,6 +58,7 @@ type User {
   email: String!
   verified: Boolean!
   photo: String
+  entriesNumber: Int!
   isAdmin: Boolean!
   isModerator: Boolean!
   isBanned: Boolean!
@@ -69,6 +70,7 @@ type User {
   ignore: [User!]!
   notifications: [Notification!]!
   points: Int!
+  commentsNumber: Int!
 }
 
 type Link {

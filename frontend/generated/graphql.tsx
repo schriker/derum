@@ -524,6 +524,7 @@ export type User = {
   email: Scalars['String'];
   verified: Scalars['Boolean'];
   photo?: Maybe<Scalars['String']>;
+  entiresNumber: Scalars['Int'];
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
   isBanned: Scalars['Boolean'];
@@ -535,6 +536,7 @@ export type User = {
   ignore: Array<User>;
   notifications: Array<Notification>;
   points: Scalars['Int'];
+  commentsNumber: Scalars['Int'];
 };
 
 export type VoteResult = {
@@ -1172,7 +1174,20 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user: (
     { __typename?: 'User' }
-    & Pick<User, 'points'>
+    & AuthorFragmentFragment
+  ) }
+);
+
+export type UserProfileQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserProfileQuery = (
+  { __typename?: 'Query' }
+  & { user: (
+    { __typename?: 'User' }
+    & Pick<User, 'points' | 'commentsNumber' | 'entiresNumber'>
     & AuthorFragmentFragment
   ) }
 );
@@ -2897,7 +2912,6 @@ export const UserDocument = gql`
     query User($id: Int!) {
   user(id: $id) {
     ...AuthorFragment
-    points
   }
 }
     ${AuthorFragmentFragmentDoc}`;
@@ -2929,6 +2943,44 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const UserProfileDocument = gql`
+    query UserProfile($id: Int!) {
+  user(id: $id) {
+    ...AuthorFragment
+    points
+    commentsNumber
+    entiresNumber
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+
+/**
+ * __useUserProfileQuery__
+ *
+ * To run a query within a React component, call `useUserProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserProfileQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserProfileQuery(baseOptions: Apollo.QueryHookOptions<UserProfileQuery, UserProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserProfileQuery, UserProfileQueryVariables>(UserProfileDocument, options);
+      }
+export function useUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserProfileQuery, UserProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserProfileQuery, UserProfileQueryVariables>(UserProfileDocument, options);
+        }
+export type UserProfileQueryHookResult = ReturnType<typeof useUserProfileQuery>;
+export type UserProfileLazyQueryHookResult = ReturnType<typeof useUserProfileLazyQuery>;
+export type UserProfileQueryResult = Apollo.QueryResult<UserProfileQuery, UserProfileQueryVariables>;
 export const MessageAddedDocument = gql`
     subscription MessageAdded($roomId: Int!) {
   messageAdded(roomId: $roomId) {

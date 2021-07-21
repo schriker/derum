@@ -247,19 +247,39 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async countUserPoints(id: number): Promise<number> {
-    const result = await this.usersRepository
+  async countUserPoints(user: User): Promise<number> {
+    const { points } = await this.usersRepository
       .createQueryBuilder()
       .addSelect((subQuery) => {
         return subQuery
           .select('COALESCE(SUM(value), 0)')
           .from(Vote, 'vote')
           .where('vote.pointForId = :id', {
-            id,
+            id: user.id,
           });
       }, 'points')
       .getRawOne();
 
-    return result.points;
+    return points;
+  }
+
+  async countUserEntries(user: User): Promise<number> {
+    const number = await this.entriesRepository.count({
+      where: {
+        author: user,
+        deleted: false,
+      },
+    });
+    return number;
+  }
+
+  async countUserComments(user: User): Promise<number> {
+    const number = await this.commentsRepository.count({
+      where: {
+        author: user,
+        deleted: false,
+      },
+    });
+    return number;
   }
 }

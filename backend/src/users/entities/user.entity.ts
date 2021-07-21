@@ -79,7 +79,10 @@ export class User {
   links: Link[];
 
   @OneToMany(() => Entry, (entry) => entry.author)
-  entires: Entry[];
+  entries: Entry[];
+
+  @Field(() => Int)
+  entriesNumber: number;
 
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
@@ -136,6 +139,9 @@ export class User {
 
   @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
+
+  @Field(() => Int)
+  commentsNumber: number;
 
   @OneToMany(() => UserSession, (session) => session.user)
   sessions: UserSession[];

@@ -209,7 +209,17 @@ export class UsersResolver {
 
   @ResolveField()
   points(@Parent() user: User): Promise<number> {
-    return this.usersService.countUserPoints(user.id);
+    return this.usersService.countUserPoints(user);
+  }
+
+  @ResolveField()
+  entriesNumber(@Parent() user: User): Promise<number> {
+    return this.usersService.countUserEntries(user);
+  }
+
+  @ResolveField()
+  commentsNumber(@Parent() user: User): Promise<number> {
+    return this.usersService.countUserComments(user);
   }
 
   @ResolveField()
