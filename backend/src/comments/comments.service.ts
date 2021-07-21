@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntriesQueryService } from 'src/entries/services/entries-query.service';
 import { NotificationsService } from 'src/notifications/notifications.service';
@@ -43,6 +47,7 @@ export class CommentsService {
   async create(commentData: NewCommentData, user: User): Promise<Comment> {
     const { body, entryId, parentId } = commentData;
     const entry = await this.entriesQueryService.getById(entryId);
+    if (entry.deleted) throw new ForbiddenException();
     const comment = new Comment();
     comment.author = user;
     comment.body = body;

@@ -8,7 +8,7 @@ const SingleEntry = ({ data }: { data: EntryQuery }) => {
     <>
       <EntriesItem fullView data={data.entry} preview={false} />
       {data.entry.body && <EntryBody body={data.entry.body} />}
-      <Comments />
+      <Comments entryIsDeleted={data.entry.deleted} />
     </>
   );
 };

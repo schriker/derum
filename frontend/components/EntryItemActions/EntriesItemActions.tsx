@@ -26,7 +26,7 @@ const EntriesItemActions = ({
     <Can I={Action.Delete} this={{ ...entryData, room: roomData?.room }}>
       {() => (
         <MoreActionsMenu>
-          <EntriesItemActionsDelete id={entryData.id} />
+          <EntriesItemActionsDelete data={entryData} />
           {data?.me.isAdmin && entryData.type === EntryType.LINK && (
             <EntriesItemActionsBlacklist id={entryData.id} />
           )}

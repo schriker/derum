@@ -63,7 +63,7 @@ export class Entry {
   @Column({ nullable: true })
   publisher: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column()
   description: string;
 

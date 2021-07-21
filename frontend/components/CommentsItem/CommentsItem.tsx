@@ -49,7 +49,7 @@ const CommentsItem = (props: CommentItemPropsType) => {
               </Typography>
             )}
           </Box>
-          {props.parentId === props.data.id && (
+          {props.parentId === props.data.id && !props.entryIsDeleted && (
             <CommentNewForm
               setParentId={props.setParentId}
               entryId={props.entryId}

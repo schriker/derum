@@ -10,6 +10,7 @@ export type CommentItemPropsType = {
   setParentId: (id: number) => void;
   parentId: number | null;
   entryId: number;
+  entryIsDeleted: boolean;
 };
 
 export type NewCommentPropsType = {

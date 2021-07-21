@@ -10,7 +10,7 @@ import EntryBodyLoading from '../EntryBodyLoading/EntryBodyLoading';
 import CommentsEmpty from './CommentsEmpty';
 import useCommentsStyles from './CommentsStyles';
 
-const Comments = () => {
+const Comments = ({ entryIsDeleted }: { entryIsDeleted: boolean }) => {
   const router = useRouter();
   const entryId = parseInt(router.query.id[0]);
   const { data: userData } = useMeQuery({
@@ -42,7 +42,7 @@ const Comments = () => {
 
   return (
     <Box id="comments" className={classes.wrapper}>
-      {userData && (
+      {userData && !entryIsDeleted && (
         <CommentNewForm setParentId={setParentId} entryId={entryId} />
       )}
       {loading && <EntryBodyLoading />}
@@ -52,6 +52,7 @@ const Comments = () => {
             level={0}
             entryId={entryId}
             parentId={parentId}
+            entryIsDeleted={entryIsDeleted}
             setParentId={setParentId}
             key={comment.id}
             data={comment}

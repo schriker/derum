@@ -16,6 +16,7 @@ const CommentsItemHeader = ({
   data,
   setParentId,
   parentId,
+  entryIsDeleted,
 }: CommentItemPropsType) => {
   const { data: userdata } = useMeQuery({
     fetchPolicy: 'cache-only',
@@ -44,7 +45,7 @@ const CommentsItemHeader = ({
         {data.parentId && <CommentsItemResponseTo data={data} />}
       </Box>
       <Box>
-        {userdata && (
+        {userdata && !entryIsDeleted && (
           <ButtonDefault
             onClick={() => setParentId(data.id === parentId ? null : data.id)}
             className={classes.replyButton}

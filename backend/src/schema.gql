@@ -90,7 +90,7 @@ type Entry {
   slug: String!
   title: String!
   publisher: String
-  description: String!
+  description: String
   body: String
   author: User!
   room: Room!
