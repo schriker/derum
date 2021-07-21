@@ -88,7 +88,7 @@ const ResetPasswordForm = ({
           pb={1}
           display="flex"
           alignItems="center"
-          justifyContent="space-between"
+          justifyContent="flex-end"
         >
           <ButtonDefault
             onClick={() => {
@@ -98,7 +98,9 @@ const ResetPasswordForm = ({
           >
             Logowanie
           </ButtonDefault>
-          <ButtonPrimary type="submit">Zresetuj</ButtonPrimary>
+          <ButtonPrimary style={{ marginLeft: 8 }} type="submit">
+            Zresetuj
+          </ButtonPrimary>
         </Box>
       </form>
     </Box>

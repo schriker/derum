@@ -57,7 +57,7 @@ export class UsersResolver {
   }
 
   @UseGuards(GQLThrottlerGuard)
-  @Throttle(200, 60 * 60 * 24)
+  @Throttle(100, 60 * 60 * 24)
   @Mutation(() => Boolean)
   createNewUser(
     @Args('newUserData') newUserData: NewUserData,

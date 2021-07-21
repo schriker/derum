@@ -35,7 +35,7 @@ const useMarkdownStyles = makeStyles<Theme, { isComment: boolean }>(
         backgroundColor: theme.palette.divider,
       },
       '& a': {
-        color: theme.palette.primary['A700'],
+        color: theme.palette.primary.main,
         textDecoration: 'none',
         '&:hover': {
           textDecoration: 'underline',

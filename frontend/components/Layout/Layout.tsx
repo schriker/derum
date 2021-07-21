@@ -2,7 +2,6 @@ import { Box } from '@material-ui/core';
 import { AbilityContext } from '../../casl/Can';
 import { useMeQuery } from '../../generated/graphql';
 import { LayoutProps } from '../../types/layout';
-import GlobalError from '../GlobalError/GlobalError';
 import Header from '../Header/Header';
 const LoginModal = dynamic(() => import('../LoginModal/LoginModal'));
 import NavBar from '../NavBar/NavBar';
@@ -27,7 +26,6 @@ const Layout = ({ children, ...rest }: LayoutProps) => {
       </Box>
       <SidebarDrawer />
       <LoginModal />
-      <GlobalError />
     </AbilityContext.Provider>
   );
 };

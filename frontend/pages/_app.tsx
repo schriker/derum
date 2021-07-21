@@ -13,6 +13,7 @@ import { GoogleAuth, GoogleSDK } from '../types/google';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pl';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import GlobalError from '../components/GlobalError/GlobalError';
 
 dayjs.locale('pl');
 dayjs.extend(relativeTime);
@@ -71,6 +72,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           options={{ showSpinner: false }}
         />
         <Component {...pageProps} />
+        <GlobalError />
       </ThemeProvider>
     </ApolloProvider>
   );

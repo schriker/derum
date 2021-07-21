@@ -41,11 +41,13 @@ export class EmailsService {
       .send({
         template: 'verification',
         message: {
-          to: 'janekmachine@gmail.com',
+          to: user.email,
         },
         locals: {
           name: user.displayName,
-          link: `https://derum.pl/verify-email/${user.emailVerificationToken}`,
+          link: `${this.configService.get<string>('ORIGIN')}/verify-email/${
+            user.emailVerificationToken
+          }`,
         },
       })
       .catch(console.error);
@@ -56,11 +58,13 @@ export class EmailsService {
       .send({
         template: 'reset-password',
         message: {
-          to: 'janekmachine@gmail.com',
+          to: user.email,
         },
         locals: {
           name: user.displayName,
-          link: `https://derum.pl/reset-password/${user.passwordResetToken}`,
+          link: `${this.configService.get<string>('ORIGIN')}/reset-password/${
+            user.passwordResetToken
+          }`,
         },
       })
       .catch(console.error);

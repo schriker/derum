@@ -19,7 +19,11 @@ const Markdown = dynamic(() => import('../Markdown/Markdown'));
 import useRoomNewLinkStyles from '../RoomNewLinkForm/RoomNewLinkFormStyles';
 
 const schema = yup.object().shape({
-  body: yup.string().trim().required('Treść jest wymagana.'),
+  body: yup
+    .string()
+    .trim()
+    .required('Treść jest wymagana.')
+    .min(2, 'Treść zbyt krótka.'),
 });
 
 const CommentNewForm = ({

@@ -148,7 +148,10 @@ export class UsersEmailLoginService {
           const user = await this.usersRepository.findOne({
             passwordResetToken: data.token,
           });
-          if (!user) return reject(new NotFoundException());
+          if (!user)
+            return reject(
+              new BadRequestException(ERROR_MESSAGES.INVALID_TOKEN),
+            );
           const hashedPassword = await argon2.hash(data.password);
           user.passwordResetToken = null;
           user.password = hashedPassword;

@@ -74,7 +74,7 @@ const CreateNewUserForm = ({
         globalErrorVar({
           isOpen: true,
           type: 'success',
-          message: 'Konto zostało utworzone. Potwierdzić adres email.',
+          message: 'Konto zostało utworzone. Potwierdź adres email.',
         });
       }
     },
@@ -171,11 +171,11 @@ const CreateNewUserForm = ({
           .
         </Typography>
         <Box
-          pt={2}
+          pt={3}
           pb={1}
           display="flex"
           alignItems="center"
-          justifyContent="space-between"
+          justifyContent="flex-end"
         >
           <ButtonDefault
             onClick={() => {
@@ -185,7 +185,9 @@ const CreateNewUserForm = ({
           >
             Logowanie
           </ButtonDefault>
-          <ButtonPrimary type="submit">Zarejestruj</ButtonPrimary>
+          <ButtonPrimary style={{ marginLeft: 8 }} type="submit">
+            Zarejestruj
+          </ButtonPrimary>
         </Box>
       </form>
     </Box>

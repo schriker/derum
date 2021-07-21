@@ -81,6 +81,7 @@ const ChatMessagesItem = ({
             color="textSecondary"
             variant="subtitle2"
             component="span"
+            title={dayjs(message.createdAt).format('DD.MM.YYYY - HH:mm')}
           >
             {dayjs(message.createdAt).format('HH:mm')}
           </Typography>
