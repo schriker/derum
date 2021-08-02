@@ -524,7 +524,8 @@ export type User = {
   email: Scalars['String'];
   verified: Scalars['Boolean'];
   photo?: Maybe<Scalars['String']>;
-  entiresNumber: Scalars['Int'];
+  messagesNumber: Scalars['Int'];
+  entriesNumber: Scalars['Int'];
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
   isBanned: Scalars['Boolean'];
@@ -1187,7 +1188,7 @@ export type UserProfileQuery = (
   { __typename?: 'Query' }
   & { user: (
     { __typename?: 'User' }
-    & Pick<User, 'points' | 'commentsNumber' | 'entiresNumber'>
+    & Pick<User, 'points' | 'entriesNumber' | 'commentsNumber' | 'messagesNumber'>
     & AuthorFragmentFragment
   ) }
 );
@@ -2948,8 +2949,9 @@ export const UserProfileDocument = gql`
   user(id: $id) {
     ...AuthorFragment
     points
+    entriesNumber
     commentsNumber
-    entiresNumber
+    messagesNumber
   }
 }
     ${AuthorFragmentFragmentDoc}`;

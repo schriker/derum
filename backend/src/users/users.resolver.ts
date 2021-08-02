@@ -223,6 +223,11 @@ export class UsersResolver {
   }
 
   @ResolveField()
+  messagesNumber(@Parent() user: User): Promise<number> {
+    return this.usersService.countUserMessages(user);
+  }
+
+  @ResolveField()
   ignore(
     @CurrentUser() currentUser: User,
     @Parent() user: User,

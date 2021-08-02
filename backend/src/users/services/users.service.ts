@@ -282,4 +282,13 @@ export class UsersService {
     });
     return number;
   }
+
+  async countUserMessages(user: User): Promise<number> {
+    const number = await this.messagesRepository.count({
+      where: {
+        author: user,
+      },
+    });
+    return number;
+  }
 }

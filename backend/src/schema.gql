@@ -58,6 +58,7 @@ type User {
   email: String!
   verified: Boolean!
   photo: String
+  messagesNumber: Int!
   entriesNumber: Int!
   isAdmin: Boolean!
   isModerator: Boolean!

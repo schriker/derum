@@ -19,6 +19,9 @@ export const CustomInput = withStyles((theme: Theme) => ({
     'label + &': {
       marginTop: theme.spacing(3),
     },
+    '&:hover': {
+      borderColor: theme.palette.grey[700],
+    },
   },
   multiline: {
     padding: '9px 15px',
@@ -27,6 +30,9 @@ export const CustomInput = withStyles((theme: Theme) => ({
   focused: {
     borderColor: theme.palette.primary['A700'],
     backgroundColor: theme.palette.background.default,
+    '&:hover': {
+      borderColor: theme.palette.primary['A700'],
+    },
   },
   disabled: {
     color: theme.palette.secondary.dark,

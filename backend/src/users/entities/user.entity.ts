@@ -72,6 +72,9 @@ export class User {
   @OneToMany(() => Message, (message) => message.author)
   messages: Message[];
 
+  @Field(() => Int)
+  messagesNumber: number;
+
   @OneToMany(() => Room, (room) => room.author)
   createdRooms: Room[];
 

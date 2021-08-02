@@ -49,7 +49,7 @@ const EntriesItemVote = ({
 
   return (
     <Vote
-      disabled={data.author.id === userData.me.id}
+      disabled={data.author.id === userData?.me.id}
       voteScore={voteScore}
       userVote={userVote}
       handleClick={handleClick}
