@@ -26,7 +26,6 @@ export default function User() {
       id: parseInt(router.query.id as string),
     },
   });
-
   return data ? (
     <Layout title="as" ogDescription="asd">
       <EntriesWrapper>

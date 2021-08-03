@@ -6,13 +6,15 @@ export const CustomInput = withStyles((theme: Theme) => ({
   root: {
     width: '100%',
     border: '2px solid',
-    padding: '3px 15px',
     borderColor: 'transparent',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: styledBy('bg', {
       dark: theme.palette.background.paper,
       light: theme.palette.divider,
     }),
+    '& input': {
+      padding: '10px 15px',
+    },
     transition: theme.transitions.create(['border-color', 'background-color'], {
       duration: 200,
     }),
@@ -21,6 +23,18 @@ export const CustomInput = withStyles((theme: Theme) => ({
     },
     '&:hover': {
       borderColor: theme.palette.grey[700],
+    },
+  },
+  adornedStart: {
+    paddingLeft: 15,
+    '& input': {
+      padding: '10px 15px 10px 0',
+    },
+  },
+  adornedEnd: {
+    paddingRight: 15,
+    '& input': {
+      padding: '10px 0 10px 15px',
     },
   },
   multiline: {

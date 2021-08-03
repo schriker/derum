@@ -71,8 +71,8 @@ export class Entry {
   @Column({ nullable: true })
   body: string;
 
-  @Field(() => User)
-  @ManyToOne(() => User, (user) => user.entries)
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, (user) => user.entries, { onDelete: 'SET NULL' })
   author: User;
 
   @Index()

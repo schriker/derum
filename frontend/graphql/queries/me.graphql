@@ -12,5 +12,8 @@ query Me {
     joinedRooms {
       ...RoomFragment
     }
+    createdRooms {
+      ...RoomFragment
+    }
   }
 }

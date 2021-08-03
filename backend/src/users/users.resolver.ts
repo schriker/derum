@@ -17,6 +17,7 @@ import { GoogleAuthGuard } from 'src/common/guards/google-auth.guard';
 import { GQLSessionGuard } from 'src/common/guards/gql-session-auth.guard';
 import { GQLThrottlerGuard } from 'src/common/guards/gql-throttle.guard';
 import { LocalAuthGuard } from 'src/common/guards/local-auth.guard';
+import { Room } from 'src/rooms/entities/room.entity';
 import { CurrentUser } from './decorators/currentUser.decorator';
 import { EmailLoginData } from './dto/email-login.input';
 import { NewUserColor } from './dto/new-color';
@@ -225,6 +226,11 @@ export class UsersResolver {
   @ResolveField()
   messagesNumber(@Parent() user: User): Promise<number> {
     return this.usersService.countUserMessages(user);
+  }
+
+  @ResolveField()
+  createdRooms(@Parent() user: User): Promise<Room[]> {
+    return this.usersService.createdRooms(user);
   }
 
   @ResolveField()

@@ -5,5 +5,11 @@ query UserProfile($id: Int!) {
     entriesNumber
     commentsNumber
     messagesNumber
+    photo {
+      ...PhotoFragment
+    }
+    createdRooms {
+      ...RoomFragment
+    }
   }
 }

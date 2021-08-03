@@ -53,7 +53,7 @@ export type Entry = {
   publisher?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   body?: Maybe<Scalars['String']>;
-  author: User;
+  author?: Maybe<User>;
   room: Room;
   photo?: Maybe<Photo>;
   type: EntryType;
@@ -375,7 +375,7 @@ export type OnlineUser = {
   userId: Scalars['Int'];
   roomId: Scalars['Int'];
   name: Scalars['String'];
-  photo?: Maybe<Scalars['String']>;
+  photo?: Maybe<Photo>;
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
   isBanned: Scalars['Boolean'];
@@ -492,7 +492,7 @@ export type Room = {
   updatedAt: Scalars['Date'];
   name: Scalars['String'];
   description: Scalars['String'];
-  author: User;
+  author?: Maybe<User>;
   usersNumber: Scalars['Int'];
   photo?: Maybe<Photo>;
 };
@@ -523,8 +523,9 @@ export type User = {
   displayName: Scalars['String'];
   email: Scalars['String'];
   verified: Scalars['Boolean'];
-  photo?: Maybe<Scalars['String']>;
+  photo?: Maybe<Photo>;
   messagesNumber: Scalars['Int'];
+  createdRooms?: Maybe<Array<Room>>;
   entriesNumber: Scalars['Int'];
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
@@ -554,7 +555,7 @@ export enum VoteValueEnum {
 
 export type AuthorFragmentFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName' | 'isBanned' | 'color'>
+  & Pick<User, 'id' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName' | 'isBanned' | 'color'>
 );
 
 export type CommentFragmentFragment = (
@@ -562,6 +563,10 @@ export type CommentFragmentFragment = (
   & Pick<Comment, 'id' | 'createdAt' | 'body' | 'parentId' | 'voteScore' | 'userVote'>
   & { author: (
     { __typename?: 'User' }
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )> }
     & AuthorFragmentFragment
   ) }
 );
@@ -569,10 +574,10 @@ export type CommentFragmentFragment = (
 export type EntryFragmentFragment = (
   { __typename?: 'Entry' }
   & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'voteScore' | 'userVote' | 'deleted' | 'commentsNumber' | 'type'>
-  & { author: (
+  & { author?: Maybe<(
     { __typename?: 'User' }
     & AuthorFragmentFragment
-  ), photo?: Maybe<(
+  )>, photo?: Maybe<(
     { __typename?: 'Photo' }
     & PhotoFragmentFragment
   )>, room: (
@@ -601,10 +606,10 @@ export type RoomFragmentFragment = (
   & { photo?: Maybe<(
     { __typename?: 'Photo' }
     & PhotoFragmentFragment
-  )>, author: (
+  )>, author?: Maybe<(
     { __typename?: 'User' }
     & AuthorFragmentFragment
-  ) }
+  )> }
 );
 
 export type BanUserMutationVariables = Exact<{
@@ -1060,7 +1065,10 @@ export type MeQuery = (
     )>, joinedRooms: Array<(
       { __typename?: 'Room' }
       & RoomFragmentFragment
-    )> }
+    )>, createdRooms?: Maybe<Array<(
+      { __typename?: 'Room' }
+      & RoomFragmentFragment
+    )>> }
     & AuthorFragmentFragment
   ) }
 );
@@ -1119,7 +1127,11 @@ export type OnlineUsersQuery = (
   { __typename?: 'Query' }
   & { onlineUsers: Array<(
     { __typename?: 'OnlineUser' }
-    & Pick<OnlineUser, 'userId' | 'name' | 'photo' | 'isAdmin' | 'isModerator' | 'color'>
+    & Pick<OnlineUser, 'userId' | 'name' | 'isAdmin' | 'isModerator' | 'color'>
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )> }
   )> }
 );
 
@@ -1175,6 +1187,10 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user: (
     { __typename?: 'User' }
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )> }
     & AuthorFragmentFragment
   ) }
 );
@@ -1189,6 +1205,13 @@ export type UserProfileQuery = (
   & { user: (
     { __typename?: 'User' }
     & Pick<User, 'points' | 'entriesNumber' | 'commentsNumber' | 'messagesNumber'>
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )>, createdRooms?: Maybe<Array<(
+      { __typename?: 'Room' }
+      & RoomFragmentFragment
+    )>> }
     & AuthorFragmentFragment
   ) }
 );
@@ -1241,13 +1264,19 @@ export type NotificationSubscription = (
 export const AuthorFragmentFragmentDoc = gql`
     fragment AuthorFragment on User {
   id
-  photo
   isAdmin
   createdAt
   isModerator
   displayName
   isBanned
   color
+}
+    `;
+export const PhotoFragmentFragmentDoc = gql`
+    fragment PhotoFragment on Photo {
+  id
+  name
+  url
 }
     `;
 export const CommentFragmentFragmentDoc = gql`
@@ -1260,16 +1289,13 @@ export const CommentFragmentFragmentDoc = gql`
   userVote
   author {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
-export const PhotoFragmentFragmentDoc = gql`
-    fragment PhotoFragment on Photo {
-  id
-  name
-  url
-}
-    `;
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
 export const EntryFragmentFragmentDoc = gql`
     fragment EntryFragment on Entry {
   id
@@ -2584,6 +2610,9 @@ export const MeDocument = gql`
     joinedRooms {
       ...RoomFragment
     }
+    createdRooms {
+      ...RoomFragment
+    }
   }
 }
     ${AuthorFragmentFragmentDoc}
@@ -2762,13 +2791,15 @@ export const OnlineUsersDocument = gql`
   onlineUsers(roomId: $roomId) {
     userId
     name
-    photo
+    photo {
+      ...PhotoFragment
+    }
     isAdmin
     isModerator
     color
   }
 }
-    `;
+    ${PhotoFragmentFragmentDoc}`;
 
 /**
  * __useOnlineUsersQuery__
@@ -2913,9 +2944,13 @@ export const UserDocument = gql`
     query User($id: Int!) {
   user(id: $id) {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
 
 /**
  * __useUserQuery__
@@ -2952,9 +2987,17 @@ export const UserProfileDocument = gql`
     entriesNumber
     commentsNumber
     messagesNumber
+    photo {
+      ...PhotoFragment
+    }
+    createdRooms {
+      ...RoomFragment
+    }
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}
+${RoomFragmentFragmentDoc}`;
 
 /**
  * __useUserProfileQuery__

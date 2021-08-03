@@ -59,7 +59,7 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
               </Link>
             </NextLink>
             <Box className={classes.info}>
-              <UsernameWithModal data={data.author} />
+              {data.author && <UsernameWithModal data={data.author} />}
               <Typography
                 variant="subtitle2"
                 color="textSecondary"

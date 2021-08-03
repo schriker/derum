@@ -1,4 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Photo } from 'src/photos/entities/photo.entity';
 
 @ObjectType()
 export class OnlineUser {
@@ -12,7 +13,7 @@ export class OnlineUser {
   name: string;
 
   @Field({ nullable: true })
-  photo: string;
+  photo: Photo;
 
   @Field()
   isAdmin: boolean;

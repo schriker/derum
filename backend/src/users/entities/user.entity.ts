@@ -12,9 +12,11 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -59,9 +61,10 @@ export class User {
   @Column({ default: false })
   verified: boolean;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  photo: string;
+  @Field(() => Photo, { nullable: true })
+  @OneToOne(() => Photo, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn()
+  photo: Photo;
 
   @Column()
   authProvider: string;
@@ -75,6 +78,7 @@ export class User {
   @Field(() => Int)
   messagesNumber: number;
 
+  @Field(() => [Room], { nullable: true })
   @OneToMany(() => Room, (room) => room.author)
   createdRooms: Room[];
 

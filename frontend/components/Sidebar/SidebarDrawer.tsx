@@ -54,9 +54,9 @@ const SidebarDrawer = () => {
         <Box mt={1} display="flex" flexDirection="column">
           {userLoading ? (
             <SidebarSkeleton />
-          ) : userData ? (
+          ) : userData?.me.createdRooms.length ? (
             <SidebarDrawerSection
-              sectionData={userData.me.joinedRooms}
+              sectionData={userData.me.createdRooms}
               title="Moje"
             />
           ) : null}

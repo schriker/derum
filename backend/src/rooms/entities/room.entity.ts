@@ -43,8 +43,8 @@ export class Room {
   @Column()
   description: string;
 
-  @Field(() => User)
-  @ManyToOne(() => User, (user) => user.createdRooms)
+  @Field(() => User, { nullable: true })
+  @ManyToOne(() => User, (user) => user.createdRooms, { onDelete: 'SET NULL' })
   author: User;
 
   @OneToMany(() => Message, (message) => message.room)
@@ -53,7 +53,7 @@ export class Room {
   @OneToMany(() => Entry, (entry) => entry.room)
   entires: Entry[];
 
-  @ManyToMany(() => User, (user) => user.joinedRooms)
+  @ManyToMany(() => User, (user) => user.joinedRooms, { onDelete: 'CASCADE' })
   @JoinTable()
   users: User[];
 

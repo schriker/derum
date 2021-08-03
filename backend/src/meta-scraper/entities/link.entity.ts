@@ -52,7 +52,7 @@ export class Link {
   @Column({ nullable: true })
   photo: string;
 
-  @ManyToOne(() => User, (user) => user.links)
+  @ManyToOne(() => User, (user) => user.links, { onDelete: 'SET NULL' })
   user: User;
 
   @OneToMany(() => Entry, (entry) => entry.link, { nullable: true })

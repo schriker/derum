@@ -33,11 +33,11 @@ export class Vote {
   updatedAt: Date;
 
   @Index()
-  @ManyToOne(() => User, (user) => user.votes)
+  @ManyToOne(() => User, (user) => user.votes, { onDelete: 'CASCADE' })
   user: User;
 
   @Index()
-  @ManyToOne(() => User, (user) => user.points)
+  @ManyToOne(() => User, (user) => user.points, { onDelete: 'CASCADE' })
   pointFor: User;
 
   @Index()

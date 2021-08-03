@@ -4,6 +4,7 @@ import { Comment } from 'src/comments/entities/comment.entity';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
+import { Room } from 'src/rooms/entities/room.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { ILike, Repository } from 'typeorm';
 import { NewUserColor } from '../dto/new-color';
@@ -29,6 +30,8 @@ export class UsersService {
     private messagesRepository: Repository<Message>,
     @InjectRepository(Comment)
     private commentsRepository: Repository<Comment>,
+    @InjectRepository(Room)
+    private roomsRepository: Repository<Room>,
     @InjectRepository(UserSession)
     private userSessionsRepository: Repository<UserSession>,
   ) {}
@@ -38,7 +41,7 @@ export class UsersService {
       roomId: roomId,
       userId: user.id,
       name: user.displayName,
-      photo: user.photo ? user.photo : '',
+      photo: user.photo ? user.photo : null,
       isAdmin: user.isAdmin,
       isModerator: user.isModerator,
       isBanned: user.isBanned,
@@ -149,14 +152,13 @@ export class UsersService {
   }
 
   async createWithAuthProvider(userData: ProviderUser): Promise<User> {
-    const { authId, authProvider, photo, email, displayName } = userData;
+    const { authId, authProvider, email, displayName } = userData;
     const displayNameTaken = await this.checkIfDisplayNameIsTaken(
       userData.displayName,
     );
     const user = new User();
     user.email = email;
     user.authId = authId;
-    user.photo = photo.length ? photo : null;
     user.verified = true;
     user.authProvider = authProvider;
     user.displayName = !displayNameTaken
@@ -290,5 +292,24 @@ export class UsersService {
       },
     });
     return number;
+  }
+
+  async createdRooms(user: User): Promise<Room[]> {
+    const rooms = await this.roomsRepository
+      .createQueryBuilder('room')
+      .where('room.authorId = :author', {
+        author: user.id,
+      })
+      .orderBy('LOWER (room.name)', 'ASC')
+      .leftJoinAndSelect('room.author', 'author')
+      .leftJoinAndSelect('room.photo', 'photo')
+      .leftJoin('room.users', 'users')
+      .groupBy('room.id')
+      .addGroupBy('photo.id')
+      .addGroupBy('author.id')
+      .loadRelationCountAndMap('room.usersNumber', 'room.users')
+      .getMany();
+
+    return rooms;
   }
 }
