@@ -13,14 +13,12 @@ import SearchIcon from '../Icons/SearchIcon';
 import SidebarDrawerItem from '../Sidebar/SidebarDrawerItem';
 import useRoomSearchAutocompleteStyles from './RoomSearchAutocompleteStyles';
 import useRoomSearchInputStyles from './RoomSearchInputStyles';
+import { useDebouncedCallback } from 'use-debounce';
 
-const RoomSearchInput = ({
-  error,
-  onSelect,
-  placeholder,
-}: RoomSearchProps) => {
+const RoomSearchInput = ({ error, onSelect, placeholder }: RoomSearchProps) => {
   const classes = useRoomSearchInputStyles();
   const { roomData } = useRoomData();
+  const [isLoading, setIsLoading] = useState(false);
   const autoCompleteClasses = useRoomSearchAutocompleteStyles();
   const [options, setOptions] = useState<{ id: number; name: string }[]>([]);
   const { loading: popularRoomsLoading } = usePopularRoomsQuery({
@@ -43,15 +41,21 @@ const RoomSearchInput = ({
     }
   }, [roomData, onSelect, placeholder]);
 
-  const isLoading = searchLoading || popularRoomsLoading;
+  useEffect(() => {
+    setIsLoading(searchLoading || popularRoomsLoading);
+  }, [searchLoading, popularRoomsLoading]);
+
+  const debouncedRoomSearch = useDebouncedCallback((word: string) => {
+    searchRoom({
+      variables: {
+        name: word,
+      },
+    });
+  }, 1000);
 
   const handleChange = (_, value) => {
-    if (value.length > 2)
-      return searchRoom({
-        variables: {
-          name: value,
-        },
-      });
+    setIsLoading(true);
+    debouncedRoomSearch(value);
   };
 
   const handleSelect = (_, value) => {

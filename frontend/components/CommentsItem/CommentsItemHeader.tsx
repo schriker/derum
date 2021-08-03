@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, Typography, Link } from '@material-ui/core';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
@@ -11,6 +11,8 @@ import CommentsItemResponseTo from './CommentsItemResponseTo';
 import useCommentsItemStyles from './CommentsItemStyles';
 import { Action } from '../../casl/action.enum';
 import { Can } from '../../casl/Can';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 
 const CommentsItemHeader = ({
   data,
@@ -18,6 +20,7 @@ const CommentsItemHeader = ({
   parentId,
   entryIsDeleted,
 }: CommentItemPropsType) => {
+  const router = useRouter();
   const { data: userdata } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
@@ -33,14 +36,18 @@ const CommentsItemHeader = ({
       <Box display="flex">
         <Box className={classes.header}>
           <UsernameWithModal photo data={data.author} />
-          <Typography
-            color="textSecondary"
-            variant="subtitle2"
-            component="span"
-            title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
+          <NextLink
+            href={`/p/${router.query.room}/w/${router.query.id[0]}/${router.query.id[1]}?comment=${data.id}`}
+            passHref
           >
-            {dayjs().to(dayjs(data.createdAt))}
-          </Typography>
+            <Link
+              variant="subtitle2"
+              color="textSecondary"
+              title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
+            >
+              {dayjs().to(dayjs(data.createdAt))}
+            </Link>
+          </NextLink>
         </Box>
         {data.parentId && <CommentsItemResponseTo data={data} />}
       </Box>

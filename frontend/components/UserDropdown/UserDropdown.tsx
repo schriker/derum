@@ -44,22 +44,22 @@ const UserDropdown = () => {
       icon: <UserIcon className={classes.icon} />,
       onClick: () => router.push(`/u/${data.me.id}`),
     },
-    {
-      text: 'Wiadomości',
-      icon: <MessageIcon className={classes.icon} />,
-      onClick: () => console.log('Click'),
-    },
+    // {
+    //   text: 'Wiadomości',
+    //   icon: <MessageIcon className={classes.icon} />,
+    //   onClick: () => console.log('Click'),
+    // },
     {
       text: 'Zgłoś błąd',
       icon: <BugIcon className={classes.icon} />,
       onClick: () =>
         window.location.replace('https://github.com/schriker/derum/issues'),
     },
-    {
-      text: 'Pomoc',
-      icon: <HelpIcon className={classes.icon} />,
-      onClick: () => console.log('Click'),
-    },
+    // {
+    //   text: 'Pomoc',
+    //   icon: <HelpIcon className={classes.icon} />,
+    //   onClick: () => console.log('Click'),
+    // },
     {
       text: 'Wyloguj',
       icon: <LogoutIcon className={classes.icon} />,
