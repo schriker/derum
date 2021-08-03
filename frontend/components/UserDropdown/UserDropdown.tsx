@@ -7,10 +7,9 @@ import Dropdown from '../Dropdown/Dropdown';
 import DropdownIcon from '../Dropdown/DropdownIcon';
 import DropdownItem from '../Dropdown/DropdownItem';
 import BugIcon from '../Icons/BugIcon';
-import HelpIcon from '../Icons/HelpIcon';
+// import HelpIcon from '../Icons/HelpIcon';
 import LogoutIcon from '../Icons/LogoutIcon';
-import MessageIcon from '../Icons/MessageIcon';
-import SettingsIcon from '../Icons/SettingsIcon';
+// import MessageIcon from '../Icons/MessageIcon';
 import UserIcon from '../Icons/UserIcon';
 import UserButton from '../UserButton/UserButton';
 

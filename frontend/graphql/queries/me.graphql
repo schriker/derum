@@ -1,6 +1,9 @@
 query Me {
   me {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
     email
     showAvatars
     showColorNames

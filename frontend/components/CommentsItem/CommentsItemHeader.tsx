@@ -1,4 +1,4 @@
-import { Box, Typography, Link } from '@material-ui/core';
+import { Box, Link } from '@material-ui/core';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';

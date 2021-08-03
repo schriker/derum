@@ -21,13 +21,13 @@ const UserButton = ({
       >
         <AvatarPhoto
           styles={{
-            border: '2px solid #214dff',
+            border: `3px solid ${data.me.color}`,
             width: 40,
             height: 40,
           }}
           color={data.me.color}
           name={data.me.displayName}
-          src={data.me.photo}
+          src={data.me.photo?.url}
         />
         <Typography style={{ marginLeft: 10 }} variant="body1">
           {data.me.displayName}

@@ -125,6 +125,7 @@ export type Mutation = {
   createArticle: Entry;
   deleteEntry: Scalars['Boolean'];
   uploadRoomPhoto: Photo;
+  uploadUserPhoto: Photo;
   deletePhoto: Scalars['Boolean'];
   vote: VoteResult;
   voteComment: VoteResult;
@@ -253,6 +254,11 @@ export type MutationDeleteEntryArgs = {
 export type MutationUploadRoomPhotoArgs = {
   attachment: Scalars['Upload'];
   roomId: Scalars['Int'];
+};
+
+
+export type MutationUploadUserPhotoArgs = {
+  attachment: Scalars['Upload'];
 };
 
 
@@ -591,6 +597,10 @@ export type NotificationFragmentFragment = (
   & Pick<Notification, 'id' | 'url' | 'createdAt' | 'objectType' | 'objectId' | 'parentId' | 'readed'>
   & { triggeredBy: (
     { __typename?: 'User' }
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )> }
     & AuthorFragmentFragment
   ) }
 );
@@ -944,6 +954,19 @@ export type UploadRoomPhotoMutation = (
   ) }
 );
 
+export type UploadUserPhotoMutationVariables = Exact<{
+  attachment: Scalars['Upload'];
+}>;
+
+
+export type UploadUserPhotoMutation = (
+  { __typename?: 'Mutation' }
+  & { uploadUserPhoto: (
+    { __typename?: 'Photo' }
+    & PhotoFragmentFragment
+  ) }
+);
+
 export type VerifyUserEmailMutationVariables = Exact<{
   token: Scalars['String'];
 }>;
@@ -1059,6 +1082,10 @@ export type InitialMessagesQuery = (
     & Pick<Message, 'id' | 'body' | 'createdAt'>
     & { author: (
       { __typename?: 'User' }
+      & { photo?: Maybe<(
+        { __typename?: 'Photo' }
+        & PhotoFragmentFragment
+      )> }
       & AuthorFragmentFragment
     ) }
   )> }
@@ -1072,7 +1099,10 @@ export type MeQuery = (
   & { me: (
     { __typename?: 'User' }
     & Pick<User, 'email' | 'showAvatars' | 'showColorNames' | 'showNotifications'>
-    & { ignore: Array<(
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )>, ignore: Array<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'displayName'>
     )>, joinedRooms: Array<(
@@ -1348,9 +1378,13 @@ export const NotificationFragmentFragmentDoc = gql`
   readed
   triggeredBy {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
 export const RoomFragmentFragmentDoc = gql`
     fragment RoomFragment on Room {
   id
@@ -2322,6 +2356,39 @@ export function useUploadRoomPhotoMutation(baseOptions?: Apollo.MutationHookOpti
 export type UploadRoomPhotoMutationHookResult = ReturnType<typeof useUploadRoomPhotoMutation>;
 export type UploadRoomPhotoMutationResult = Apollo.MutationResult<UploadRoomPhotoMutation>;
 export type UploadRoomPhotoMutationOptions = Apollo.BaseMutationOptions<UploadRoomPhotoMutation, UploadRoomPhotoMutationVariables>;
+export const UploadUserPhotoDocument = gql`
+    mutation UploadUserPhoto($attachment: Upload!) {
+  uploadUserPhoto(attachment: $attachment) {
+    ...PhotoFragment
+  }
+}
+    ${PhotoFragmentFragmentDoc}`;
+export type UploadUserPhotoMutationFn = Apollo.MutationFunction<UploadUserPhotoMutation, UploadUserPhotoMutationVariables>;
+
+/**
+ * __useUploadUserPhotoMutation__
+ *
+ * To run a mutation, you first call `useUploadUserPhotoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadUserPhotoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadUserPhotoMutation, { data, loading, error }] = useUploadUserPhotoMutation({
+ *   variables: {
+ *      attachment: // value for 'attachment'
+ *   },
+ * });
+ */
+export function useUploadUserPhotoMutation(baseOptions?: Apollo.MutationHookOptions<UploadUserPhotoMutation, UploadUserPhotoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadUserPhotoMutation, UploadUserPhotoMutationVariables>(UploadUserPhotoDocument, options);
+      }
+export type UploadUserPhotoMutationHookResult = ReturnType<typeof useUploadUserPhotoMutation>;
+export type UploadUserPhotoMutationResult = Apollo.MutationResult<UploadUserPhotoMutation>;
+export type UploadUserPhotoMutationOptions = Apollo.BaseMutationOptions<UploadUserPhotoMutation, UploadUserPhotoMutationVariables>;
 export const VerifyUserEmailDocument = gql`
     mutation VerifyUserEmail($token: String!) {
   verifyUserEmail(token: $token)
@@ -2609,10 +2676,14 @@ export const InitialMessagesDocument = gql`
     createdAt
     author {
       ...AuthorFragment
+      photo {
+        ...PhotoFragment
+      }
     }
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
 
 /**
  * __useInitialMessagesQuery__
@@ -2645,6 +2716,9 @@ export const MeDocument = gql`
     query Me {
   me {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
     email
     showAvatars
     showColorNames
@@ -2662,6 +2736,7 @@ export const MeDocument = gql`
   }
 }
     ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}
 ${RoomFragmentFragmentDoc}`;
 
 /**

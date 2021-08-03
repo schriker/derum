@@ -102,8 +102,10 @@ export class CommentsService {
           });
       }, 'comment_userVote')
       .leftJoinAndSelect('comment.author', 'author')
+      .leftJoinAndSelect('author.photo', 'photo')
       .groupBy('comment.id')
       .addGroupBy('author.id')
+      .addGroupBy('photo.id')
       .getMany();
   }
 }

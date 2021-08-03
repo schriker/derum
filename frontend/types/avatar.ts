@@ -15,4 +15,5 @@ export type AvatarUploadInputProps = {
   name: string;
   loading: boolean;
   photo: PhotoFragmentFragment;
+  color?: string;
 };

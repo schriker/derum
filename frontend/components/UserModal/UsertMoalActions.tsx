@@ -10,9 +10,6 @@ import {
 import { globalErrorVar } from '../../lib/apolloVars';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import { ButtonSecondary } from '../Buttons/ButtonSecondary';
-import LockIcon from '../Icons/LockIcon';
-import MessageIcon from '../Icons/MessageIcon';
-import UnLockIcon from '../Icons/UnLockIcon';
 import UserModalAdminActions from './UserModalAdminActions';
 import useUserModalStyles from './UserModalStyles';
 
@@ -77,12 +74,8 @@ const UserModalActions = ({ id }: { id: number }) => {
 
   return me ? (
     <Box className={classes.buttons}>
-      <ButtonPrimary endIcon={<MessageIcon />}>Wiadomość</ButtonPrimary>
-      <ButtonSecondary
-        disabled={isLoading}
-        onClick={handleIgnore}
-        endIcon={isIgnored ? <UnLockIcon /> : <LockIcon />}
-      >
+      <ButtonPrimary>Wiadomość</ButtonPrimary>
+      <ButtonSecondary disabled={isLoading} onClick={handleIgnore}>
         {isIgnored ? 'Odblokuj' : 'Zablokuj'}
       </ButtonSecondary>
       {me.me.isAdmin && <UserModalAdminActions userData={data} />}

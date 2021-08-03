@@ -12,6 +12,7 @@ const AvatarUploadInput = ({
   handleChange,
   handleDelete,
   loading,
+  color = '#FF026A',
 }: AvatarUploadInputProps) => {
   const classes = useAvatarUploadStyles();
 
@@ -20,7 +21,7 @@ const AvatarUploadInput = ({
       className={classes.photo}
       name={name}
       src={photo?.url}
-      color="#FF026A"
+      color={color}
     />
   );
 

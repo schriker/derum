@@ -1,10 +1,8 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Box } from '@material-ui/core';
 import React from 'react';
-import { useEffect } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { useMeQuery } from '../../generated/graphql';
+import { Box } from '@material-ui/core';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { UserProfileUpdateInputs } from '../../types/userSettings';
 import { ButtonPrimary } from '../Buttons/ButtonPrimary';
 import { CustomInput } from '../CustomInput/CustomInput';

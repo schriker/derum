@@ -4,6 +4,7 @@ import { Comment } from 'src/comments/entities/comment.entity';
 import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
+import { Photo } from 'src/photos/entities/photo.entity';
 import { Room } from 'src/rooms/entities/room.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { ILike, Repository } from 'typeorm';
@@ -95,6 +96,7 @@ export class UsersService {
     const user = await this.usersRepository
       .createQueryBuilder('user')
       .where('user.id = :id', { id })
+      .leftJoinAndSelect('user.photo', 'photo')
       .leftJoinAndSelect('user.ignore', 'ignore')
       .leftJoinAndSelect('user.joinedRooms', 'joinedRooms')
       .leftJoinAndSelect('joinedRooms.photo', 'roomPhoto')
@@ -105,7 +107,7 @@ export class UsersService {
   }
 
   async getByIdBasic(id: number): Promise<User> {
-    return this.usersRepository.findOne(id);
+    return this.usersRepository.findOne(id, { relations: ['photo'] });
   }
 
   async ignore(user: User, id: number): Promise<boolean> {
@@ -189,7 +191,10 @@ export class UsersService {
 
   async loginWithAuthProvider(userData: ProviderUser): Promise<User> {
     const userExists = await this.usersRepository.findOne({
-      email: userData.email,
+      where: {
+        email: userData.email,
+      },
+      relations: ['photo'],
     });
 
     if (userExists) {
@@ -311,5 +316,16 @@ export class UsersService {
       .getMany();
 
     return rooms;
+  }
+
+  async updatePhoto(photo: Photo, session: User): Promise<void> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: session.id,
+      },
+      relations: ['photo'],
+    });
+    user.photo = photo;
+    await this.usersRepository.save(user);
   }
 }

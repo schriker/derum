@@ -34,7 +34,7 @@ const useChatSubscriptions = (roomId: number) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     wsLink?.subscriptionClient.connect();
-  }, [user?.me.id, user?.me.color, user.me.displayName, roomId]);
+  }, [user?.me.id, user?.me.color, user?.me.displayName, roomId]);
 
   useEffect(() => {
     subscribeToMore<MessageAddedSubscription>({
@@ -86,7 +86,7 @@ const useChatSubscriptions = (roomId: number) => {
   }, [
     user?.me.id,
     user?.me.color,
-    user.me.displayName,
+    user?.me.displayName,
     roomId,
     subscribeToMore,
   ]);

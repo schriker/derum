@@ -49,9 +49,7 @@ const ChatMessagesItem = ({
       onMouseLeave={() => setShowActions(false)}
       onClick={handleHighLightMessages}
     >
-      {showActions && isConnected && (
-        <ChatMessageActions message={message} />
-      )}
+      {showActions && isConnected && <ChatMessageActions message={message} />}
       {userData?.me.showAvatars || !userData ? (
         <Box mr={1}>
           <AvatarPhoto
@@ -62,7 +60,7 @@ const ChatMessagesItem = ({
             color={message.author.color}
             className={classes.avatar}
             onClick={(e) => handlerUserSelect(message.author.id, e)}
-            src={message.author.photo}
+            src={message.author.photo?.url}
             name={message.author.displayName}
           />
         </Box>

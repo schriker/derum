@@ -43,7 +43,8 @@ export class CommentsResolver {
     @Args('commentData') commentData: NewCommentData,
     @CurrentUser() session: User,
   ): Promise<Comment> {
-    return this.commentsService.create(commentData, session);
+    const user = await this.usersService.getByIdBasic(session.id);
+    return this.commentsService.create(commentData, user);
   }
 
   @ResolveField()

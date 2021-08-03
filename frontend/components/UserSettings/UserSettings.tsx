@@ -12,7 +12,7 @@ import SettingsIcon from '../Icons/SettingsIcon';
 import Modal from '../Modal/Modal';
 import DarkTooltip from '../Tooltip/Tooltip';
 import UserSettingsNameForm from '../UserSettingsForm/UserSettingsNameForm';
-import UserSettingsPasswordForm from '../UserSettingsForm/UserSettingsPasswordForm';
+// import UserSettingsPasswordForm from '../UserSettingsForm/UserSettingsPasswordForm';
 import UserSettingsColor from './UserSettingsColor';
 import UserSettingsSwitch from './UserSettingsSwitch';
 
@@ -75,10 +75,10 @@ const UserSettings = () => {
           Zmiana nazwy
         </Typography>
         <UserSettingsNameForm />
-        <Typography style={{ margin: '20px 0 10px' }} variant="h5">
+        {/* <Typography style={{ margin: '20px 0 10px' }} variant="h5">
           Zmiana hasła
         </Typography>
-        <UserSettingsPasswordForm />
+        <UserSettingsPasswordForm /> */}
       </Modal>
     </Box>
   );

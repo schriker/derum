@@ -5,6 +5,9 @@ const useUserModalStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    '& > div:last-child': {
+      marginTop: 15,
+    },
   },
   avatar: {
     width: 55,
@@ -29,7 +32,6 @@ const useUserModalStyles = makeStyles((theme: Theme) => ({
   buttons: {
     display: 'flex',
     alignItems: 'center',
-    marginTop: 20,
     '& > :first-child': {
       marginRight: 10,
     },

@@ -72,7 +72,7 @@ const NotificationsItem = React.forwardRef<
             height: 25,
           }}
           color={data.triggeredBy.color}
-          src={data.triggeredBy.photo}
+          src={data.triggeredBy.photo?.url}
           name={data.triggeredBy.displayName}
         />
       </ListItemAvatar>

@@ -1,8 +1,8 @@
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import React from 'react';
 import EntriesWrapper from '../../components/EntriesWrapper/EntriesWrapper';
 import Layout from '../../components/Layout/Layout';
+import UserHeader from '../../components/UserHeader/UserHeader';
 import { indexRoomVars } from '../../consts';
 import {
   MeDocument,
@@ -14,23 +14,20 @@ import {
   UserProfileDocument,
   UserProfileQuery,
   UserProfileQueryVariables,
-  useUserProfileQuery,
 } from '../../generated/graphql';
+import useRoomData from '../../hooks/useRoomData';
+import useUserProfileData from '../../hooks/useUserData';
 import { addApolloState, initializeApollo } from '../../lib/apolloClient';
 import Custom404 from '../404';
 
 export default function User() {
-  const router = useRouter();
-  const { data } = useUserProfileQuery({
-    variables: {
-      id: parseInt(router.query.id as string),
-    },
-  });
+  useRoomData();
+  const { data } = useUserProfileData();
+
   return data ? (
-    <Layout title="as" ogDescription="asd">
+    <Layout title={data.user.displayName} ogDescription="">
       <EntriesWrapper>
-        {data.user.displayName}
-        {data.user.messagesNumber}
+        <UserHeader />
       </EntriesWrapper>
     </Layout>
   ) : (

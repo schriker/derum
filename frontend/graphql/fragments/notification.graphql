@@ -8,5 +8,8 @@ fragment NotificationFragment on Notification {
   readed
   triggeredBy {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
   }
 }

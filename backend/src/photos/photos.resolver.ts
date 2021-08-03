@@ -1,4 +1,4 @@
-import { Args, Int, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Resolver } from '@nestjs/graphql';
 import { Photo } from './entities/photo.entity';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { ForbiddenException, UseGuards } from '@nestjs/common';
@@ -41,17 +41,45 @@ export class PhotosResolver {
     return photo;
   }
 
+  @Mutation(() => Photo)
+  @UseGuards(GQLSessionGuard)
+  async uploadUserPhoto(
+    @CurrentUser() session: User,
+    @Args('attachment', { type: () => GraphQLUpload })
+    attachment: FileUpload,
+    @Context() ctx,
+  ): Promise<Photo> {
+    const user = await this.usersService.getByIdBasic(session.id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+    if (!ability.can(Action.Update, user)) throw new ForbiddenException();
+    if (user.photo) {
+      await this.photosService.deletePhoto(user.photo);
+    }
+    const photo = await this.photosService.saveUserPhoto(attachment, session);
+    this.usersService.updatePhoto(photo, user);
+    this.usersService.updateSession(ctx, {
+      ...user,
+      photo,
+    });
+    return photo;
+  }
+
   @Mutation(() => Boolean)
   @UseGuards(GQLSessionGuard)
   async deletePhoto(
     @CurrentUser() session: User,
     @Args('photoId', { type: () => Int }) photoId: number,
+    @Context() ctx,
   ) {
     const user = await this.usersService.getByIdBasic(session.id);
     const photo = await this.photosService.findOneById(photoId);
     const ability = this.caslAbilityFactory.createForUser(user);
     if (!ability.can(Action.Delete, photo)) throw new ForbiddenException();
     this.photosService.deletePhoto(photo);
+    this.usersService.updateSession(ctx, {
+      ...user,
+      photo: null,
+    });
     return true;
   }
 }

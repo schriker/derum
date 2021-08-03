@@ -33,8 +33,10 @@ export type Subjects =
   | MessageAbilityType
   | EntryAbilityType
   | RoomFragmentFragment
+  | AuthorFragmentFragment
   | 'Comment'
   | 'Message'
   | 'Entry'
   | 'Room'
+  | 'User'
   | 'all';

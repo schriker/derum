@@ -63,7 +63,10 @@ export class UsersEmailLoginService {
 
   async loginWithEmail(data: EmailLoginData): Promise<User> {
     const user = await this.usersRepository.findOne({
-      email: data.email,
+      where: {
+        email: data.email,
+      },
+      relations: ['photo'],
     });
     if (!user) throw new NotFoundException(ERROR_MESSAGES.USER_NOT_FOUND);
     if (!user.password)

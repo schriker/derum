@@ -95,6 +95,36 @@ export class PhotosService {
     });
   }
 
+  async saveUserPhoto(attachment: FileUpload, user: User): Promise<Photo> {
+    const { mimetype, createReadStream } = attachment;
+    this.checkMimetype(mimetype);
+    return new Promise((resolve) => {
+      const stream = createReadStream();
+      const imgData: Buffer[] = [];
+      stream.on('data', (chunk: Buffer) => {
+        imgData.push(chunk);
+      });
+      stream.on('end', async () => {
+        const resizedPhoto = await this.resizePhoto(
+          200,
+          200,
+          Buffer.concat(imgData),
+        );
+        const { name, url } = await this.awsService.upload(
+          resizedPhoto,
+          'user',
+        );
+        const photo = new Photo();
+        photo.name = name;
+        photo.url = url;
+        photo.key = `user/${name}`;
+        photo.user = user;
+
+        resolve(this.photosRepository.save(photo));
+      });
+    });
+  }
+
   async savePhotoFromLink(url: string, user: User): Promise<Photo> {
     const tmpName = uuidv4();
     const tmpFile = join(process.cwd(), tmpName);

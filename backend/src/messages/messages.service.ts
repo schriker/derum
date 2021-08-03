@@ -41,6 +41,7 @@ export class MessagesService {
       .createQueryBuilder('message')
       .where('message.roomId = :roomId', { roomId })
       .leftJoinAndSelect('message.author', 'author')
+      .leftJoinAndSelect('author.photo', 'photo')
       .orderBy('message.createdAt', 'DESC')
       .limit(70)
       .getMany();
