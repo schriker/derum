@@ -10,6 +10,7 @@ import BugIcon from '../Icons/BugIcon';
 import HelpIcon from '../Icons/HelpIcon';
 import LogoutIcon from '../Icons/LogoutIcon';
 import MessageIcon from '../Icons/MessageIcon';
+import SettingsIcon from '../Icons/SettingsIcon';
 import UserIcon from '../Icons/UserIcon';
 import UserButton from '../UserButton/UserButton';
 

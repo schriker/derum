@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import { SettingsSwitchPropsType } from '../../types/settings';
 import Switch from '../Switch/Switch';
+import useUserSettingsStyles from './UserSettingStyles';
 
 const UserSettingsSwitch = ({
   text,
@@ -13,6 +14,7 @@ const UserSettingsSwitch = ({
   settingKey,
   onChange,
 }: SettingsSwitchPropsType) => {
+  const classes = useUserSettingsStyles();
   const [checked, setChecked] = React.useState(value);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,9 +23,9 @@ const UserSettingsSwitch = ({
   };
 
   return (
-    <ListItem>
+    <ListItem classes={classes}>
       <ListItemText primary={text} />
-      <ListItemSecondaryAction>
+      <ListItemSecondaryAction classes={{ root: classes.secondaryAction }}>
         <Switch checked={checked} onChange={handleChange} />
       </ListItemSecondaryAction>
     </ListItem>

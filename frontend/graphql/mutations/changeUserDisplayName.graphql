@@ -1,0 +1,5 @@
+mutation ChangeUserDisplayName($name: String!) {
+  changeUserDisplayName(name: $name) {
+    ...AuthorFragment
+  }
+}

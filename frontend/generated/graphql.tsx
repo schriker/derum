@@ -655,6 +655,19 @@ export type ChangeUserColorMutation = (
   ) }
 );
 
+export type ChangeUserDisplayNameMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type ChangeUserDisplayNameMutation = (
+  { __typename?: 'Mutation' }
+  & { changeUserDisplayName: (
+    { __typename?: 'User' }
+    & AuthorFragmentFragment
+  ) }
+);
+
 export type CreateArticleMutationVariables = Exact<{
   newArticleData: NewArticleData;
   photo?: Maybe<Scalars['Upload']>;
@@ -1479,6 +1492,39 @@ export function useChangeUserColorMutation(baseOptions?: Apollo.MutationHookOpti
 export type ChangeUserColorMutationHookResult = ReturnType<typeof useChangeUserColorMutation>;
 export type ChangeUserColorMutationResult = Apollo.MutationResult<ChangeUserColorMutation>;
 export type ChangeUserColorMutationOptions = Apollo.BaseMutationOptions<ChangeUserColorMutation, ChangeUserColorMutationVariables>;
+export const ChangeUserDisplayNameDocument = gql`
+    mutation ChangeUserDisplayName($name: String!) {
+  changeUserDisplayName(name: $name) {
+    ...AuthorFragment
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+export type ChangeUserDisplayNameMutationFn = Apollo.MutationFunction<ChangeUserDisplayNameMutation, ChangeUserDisplayNameMutationVariables>;
+
+/**
+ * __useChangeUserDisplayNameMutation__
+ *
+ * To run a mutation, you first call `useChangeUserDisplayNameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeUserDisplayNameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeUserDisplayNameMutation, { data, loading, error }] = useChangeUserDisplayNameMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useChangeUserDisplayNameMutation(baseOptions?: Apollo.MutationHookOptions<ChangeUserDisplayNameMutation, ChangeUserDisplayNameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeUserDisplayNameMutation, ChangeUserDisplayNameMutationVariables>(ChangeUserDisplayNameDocument, options);
+      }
+export type ChangeUserDisplayNameMutationHookResult = ReturnType<typeof useChangeUserDisplayNameMutation>;
+export type ChangeUserDisplayNameMutationResult = Apollo.MutationResult<ChangeUserDisplayNameMutation>;
+export type ChangeUserDisplayNameMutationOptions = Apollo.BaseMutationOptions<ChangeUserDisplayNameMutation, ChangeUserDisplayNameMutationVariables>;
 export const CreateArticleDocument = gql`
     mutation CreateArticle($newArticleData: NewArticleData!, $photo: Upload) {
   createArticle(newArticleData: $newArticleData, photo: $photo) {

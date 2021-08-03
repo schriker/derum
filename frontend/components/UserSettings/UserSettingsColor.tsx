@@ -6,11 +6,13 @@ import {
   useMeQuery,
 } from '../../generated/graphql';
 import { globalErrorVar } from '../../lib/apolloVars';
+import useUserSettingsStyles from './UserSettingStyles';
 
 const UserSettingsColor = () => {
   const { data } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
+  const classes = useUserSettingsStyles();
   const [changeUserColor] = useChangeUserColorMutation({
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
   });
@@ -25,10 +27,10 @@ const UserSettingsColor = () => {
 
   return (
     <>
-      <ListItem>
+      <ListItem classes={classes}>
         <ListItemText primary="Twój kolor" />
       </ListItem>
-      <Box pl={2}>
+      <Box>
         {USER_COLORS.map((color, index) => (
           <IconButton
             key={index}
