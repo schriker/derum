@@ -77,7 +77,7 @@ export class Entry {
 
   @Index()
   @Field(() => Room)
-  @ManyToOne(() => Room, (room) => room.entires)
+  @ManyToOne(() => Room, (room) => room.entires, { onDelete: 'CASCADE' })
   room: Room;
 
   @ManyToOne(() => Link, (link) => link.entires, { nullable: true })

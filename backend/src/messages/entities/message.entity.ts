@@ -29,7 +29,8 @@ export class Message {
   @ManyToOne(() => User, (user) => user.messages, { onDelete: 'CASCADE' })
   author: User;
 
-  @ManyToOne(() => Room, (room) => room.messages)
+  @Field(() => Room)
+  @ManyToOne(() => Room, (room) => room.messages, { onDelete: 'CASCADE' })
   room: Room;
 
   @Field()

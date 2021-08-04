@@ -29,6 +29,7 @@ type Message {
   createdAt: Date!
   updatedAt: Date!
   author: User!
+  room: Room!
   body: String!
 }
 
@@ -126,6 +127,7 @@ type Comment {
   createdAt: Date!
   updatedAt: Date!
   author: User!
+  entry: Entry!
   body: String
   parentId: Int
   voteScore: Int
@@ -161,6 +163,9 @@ type VoteResult {
 type Query {
   me: User!
   user(id: Int!): User!
+  userEntries(userId: Int!, offsetId: Int!): [Entry!]!
+  userComments(userId: Int!, offsetId: Int!): [Comment!]!
+  userMessages(userId: Int!, offsetId: Int!): [Message!]!
   onlineUsers(roomId: Int!): [OnlineUser!]!
   room(name: String!): Room!
   newRooms: [Room!]!

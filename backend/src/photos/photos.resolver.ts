@@ -10,12 +10,14 @@ import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { UsersService } from 'src/users/services/users.service';
 import { RoomsService } from 'src/rooms/rooms.service';
 import { Action } from 'src/casl/action.enum';
+import { UsersProfileService } from 'src/users/services/users-profile.service';
 
 @Resolver(() => Photo)
 export class PhotosResolver {
   constructor(
     private photosService: PhotosService,
     private usersService: UsersService,
+    private usersProfileService: UsersProfileService,
     private roomsService: RoomsService,
     private caslAbilityFactory: CaslAbilityFactory,
   ) {}
@@ -36,7 +38,13 @@ export class PhotosResolver {
     if (room.photo) {
       await this.photosService.deletePhoto(room.photo);
     }
-    const photo = await this.photosService.saveRoomPhoto(attachment, session);
+    const photo = await this.photosService.savePhoto(
+      attachment,
+      session,
+      'room',
+      200,
+      200,
+    );
     this.roomsService.updatePhoto(photo, roomId);
     return photo;
   }
@@ -55,8 +63,14 @@ export class PhotosResolver {
     if (user.photo) {
       await this.photosService.deletePhoto(user.photo);
     }
-    const photo = await this.photosService.saveUserPhoto(attachment, session);
-    this.usersService.updatePhoto(photo, user);
+    const photo = await this.photosService.savePhoto(
+      attachment,
+      session,
+      'user',
+      200,
+      200,
+    );
+    this.usersProfileService.updatePhoto(photo, user);
     this.usersService.updateSession(ctx, {
       ...user,
       photo,
