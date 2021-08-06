@@ -82,7 +82,7 @@ const apolloConfig = {
       client: new Redis(configService.get('REDIS_PORT')),
     }),
     uploads: false,
-    validationRules: [depthLimit(3)],
+    validationRules: [depthLimit(4)],
     installSubscriptionHandlers: true,
     autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
   }),

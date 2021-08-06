@@ -117,4 +117,7 @@ export class Entry {
   @Field(() => Boolean)
   @Column({ type: Boolean, default: false })
   deleted: boolean;
+
+  @Column('tsvector', { select: false, default: '' })
+  document: any;
 }
