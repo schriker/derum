@@ -24,6 +24,7 @@ export type Comment = {
   createdAt: Scalars['Date'];
   updatedAt: Scalars['Date'];
   author: User;
+  entry: Entry;
   body?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['Int']>;
   voteScore?: Maybe<Scalars['Int']>;
@@ -51,9 +52,9 @@ export type Entry = {
   slug: Scalars['String'];
   title: Scalars['String'];
   publisher?: Maybe<Scalars['String']>;
-  description: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
   body?: Maybe<Scalars['String']>;
-  author: User;
+  author?: Maybe<User>;
   room: Room;
   photo?: Maybe<Photo>;
   type: EntryType;
@@ -96,6 +97,7 @@ export type Message = {
   createdAt: Scalars['Date'];
   updatedAt: Scalars['Date'];
   author: User;
+  room: Room;
   body: Scalars['String'];
 };
 
@@ -125,6 +127,7 @@ export type Mutation = {
   createArticle: Entry;
   deleteEntry: Scalars['Boolean'];
   uploadRoomPhoto: Photo;
+  uploadUserPhoto: Photo;
   deletePhoto: Scalars['Boolean'];
   vote: VoteResult;
   voteComment: VoteResult;
@@ -256,6 +259,11 @@ export type MutationUploadRoomPhotoArgs = {
 };
 
 
+export type MutationUploadUserPhotoArgs = {
+  attachment: Scalars['Upload'];
+};
+
+
 export type MutationDeletePhotoArgs = {
   photoId: Scalars['Int'];
 };
@@ -375,7 +383,7 @@ export type OnlineUser = {
   userId: Scalars['Int'];
   roomId: Scalars['Int'];
   name: Scalars['String'];
-  photo?: Maybe<Scalars['String']>;
+  photo?: Maybe<Photo>;
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
   isBanned: Scalars['Boolean'];
@@ -395,6 +403,9 @@ export type Query = {
   __typename?: 'Query';
   me: User;
   user: User;
+  userEntries: Array<Entry>;
+  userComments: Array<Comment>;
+  userMessages: Array<Message>;
   onlineUsers: Array<OnlineUser>;
   room: Room;
   newRooms: Array<Room>;
@@ -406,6 +417,7 @@ export type Query = {
   checkLinkExsits: Array<Entry>;
   metadata: Link;
   comments: Array<Comment>;
+  comment: Comment;
   newNotificationsNumber: Scalars['Int'];
   notifications: Array<Notification>;
   globalEmojis: Array<Emoji>;
@@ -414,6 +426,24 @@ export type Query = {
 
 export type QueryUserArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryUserEntriesArgs = {
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
+};
+
+
+export type QueryUserCommentsArgs = {
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
+};
+
+
+export type QueryUserMessagesArgs = {
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
 };
 
 
@@ -468,6 +498,11 @@ export type QueryCommentsArgs = {
 };
 
 
+export type QueryCommentArgs = {
+  commentId: Scalars['Int'];
+};
+
+
 export type QueryNotificationsArgs = {
   offsetId: Scalars['Int'];
 };
@@ -492,7 +527,7 @@ export type Room = {
   updatedAt: Scalars['Date'];
   name: Scalars['String'];
   description: Scalars['String'];
-  author: User;
+  author?: Maybe<User>;
   usersNumber: Scalars['Int'];
   photo?: Maybe<Photo>;
 };
@@ -523,7 +558,10 @@ export type User = {
   displayName: Scalars['String'];
   email: Scalars['String'];
   verified: Scalars['Boolean'];
-  photo?: Maybe<Scalars['String']>;
+  photo?: Maybe<Photo>;
+  messagesNumber: Scalars['Int'];
+  createdRooms?: Maybe<Array<Room>>;
+  entriesNumber: Scalars['Int'];
   isAdmin: Scalars['Boolean'];
   isModerator: Scalars['Boolean'];
   isBanned: Scalars['Boolean'];
@@ -534,6 +572,8 @@ export type User = {
   joinedRooms: Array<Room>;
   ignore: Array<User>;
   notifications: Array<Notification>;
+  points: Scalars['Int'];
+  commentsNumber: Scalars['Int'];
 };
 
 export type VoteResult = {
@@ -550,7 +590,7 @@ export enum VoteValueEnum {
 
 export type AuthorFragmentFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'photo' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName' | 'isBanned' | 'color'>
+  & Pick<User, 'id' | 'isAdmin' | 'createdAt' | 'isModerator' | 'displayName' | 'isBanned' | 'color'>
 );
 
 export type CommentFragmentFragment = (
@@ -558,6 +598,10 @@ export type CommentFragmentFragment = (
   & Pick<Comment, 'id' | 'createdAt' | 'body' | 'parentId' | 'voteScore' | 'userVote'>
   & { author: (
     { __typename?: 'User' }
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )> }
     & AuthorFragmentFragment
   ) }
 );
@@ -565,10 +609,10 @@ export type CommentFragmentFragment = (
 export type EntryFragmentFragment = (
   { __typename?: 'Entry' }
   & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'voteScore' | 'userVote' | 'deleted' | 'commentsNumber' | 'type'>
-  & { author: (
+  & { author?: Maybe<(
     { __typename?: 'User' }
     & AuthorFragmentFragment
-  ), photo?: Maybe<(
+  )>, photo?: Maybe<(
     { __typename?: 'Photo' }
     & PhotoFragmentFragment
   )>, room: (
@@ -582,6 +626,10 @@ export type NotificationFragmentFragment = (
   & Pick<Notification, 'id' | 'url' | 'createdAt' | 'objectType' | 'objectId' | 'parentId' | 'readed'>
   & { triggeredBy: (
     { __typename?: 'User' }
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )> }
     & AuthorFragmentFragment
   ) }
 );
@@ -597,10 +645,10 @@ export type RoomFragmentFragment = (
   & { photo?: Maybe<(
     { __typename?: 'Photo' }
     & PhotoFragmentFragment
-  )>, author: (
+  )>, author?: Maybe<(
     { __typename?: 'User' }
     & AuthorFragmentFragment
-  ) }
+  )> }
 );
 
 export type BanUserMutationVariables = Exact<{
@@ -641,6 +689,19 @@ export type ChangeUserColorMutationVariables = Exact<{
 export type ChangeUserColorMutation = (
   { __typename?: 'Mutation' }
   & { changeUserColor: (
+    { __typename?: 'User' }
+    & AuthorFragmentFragment
+  ) }
+);
+
+export type ChangeUserDisplayNameMutationVariables = Exact<{
+  name: Scalars['String'];
+}>;
+
+
+export type ChangeUserDisplayNameMutation = (
+  { __typename?: 'Mutation' }
+  & { changeUserDisplayName: (
     { __typename?: 'User' }
     & AuthorFragmentFragment
   ) }
@@ -922,6 +983,19 @@ export type UploadRoomPhotoMutation = (
   ) }
 );
 
+export type UploadUserPhotoMutationVariables = Exact<{
+  attachment: Scalars['Upload'];
+}>;
+
+
+export type UploadUserPhotoMutation = (
+  { __typename?: 'Mutation' }
+  & { uploadUserPhoto: (
+    { __typename?: 'Photo' }
+    & PhotoFragmentFragment
+  ) }
+);
+
 export type VerifyUserEmailMutationVariables = Exact<{
   token: Scalars['String'];
 }>;
@@ -972,6 +1046,19 @@ export type CheckLinkExsitsQuery = (
     { __typename?: 'Entry' }
     & EntryFragmentFragment
   )> }
+);
+
+export type CommentQueryVariables = Exact<{
+  commentId: Scalars['Int'];
+}>;
+
+
+export type CommentQuery = (
+  { __typename?: 'Query' }
+  & { comment: (
+    { __typename?: 'Comment' }
+    & CommentFragmentFragment
+  ) }
 );
 
 export type CommentsQueryVariables = Exact<{
@@ -1037,6 +1124,10 @@ export type InitialMessagesQuery = (
     & Pick<Message, 'id' | 'body' | 'createdAt'>
     & { author: (
       { __typename?: 'User' }
+      & { photo?: Maybe<(
+        { __typename?: 'Photo' }
+        & PhotoFragmentFragment
+      )> }
       & AuthorFragmentFragment
     ) }
   )> }
@@ -1050,13 +1141,19 @@ export type MeQuery = (
   & { me: (
     { __typename?: 'User' }
     & Pick<User, 'email' | 'showAvatars' | 'showColorNames' | 'showNotifications'>
-    & { ignore: Array<(
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )>, ignore: Array<(
       { __typename?: 'User' }
       & Pick<User, 'id' | 'displayName'>
     )>, joinedRooms: Array<(
       { __typename?: 'Room' }
       & RoomFragmentFragment
-    )> }
+    )>, createdRooms?: Maybe<Array<(
+      { __typename?: 'Room' }
+      & RoomFragmentFragment
+    )>> }
     & AuthorFragmentFragment
   ) }
 );
@@ -1115,7 +1212,11 @@ export type OnlineUsersQuery = (
   { __typename?: 'Query' }
   & { onlineUsers: Array<(
     { __typename?: 'OnlineUser' }
-    & Pick<OnlineUser, 'userId' | 'name' | 'photo' | 'isAdmin' | 'isModerator' | 'color'>
+    & Pick<OnlineUser, 'userId' | 'name' | 'isAdmin' | 'isModerator' | 'color'>
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )> }
   )> }
 );
 
@@ -1171,6 +1272,92 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user: (
     { __typename?: 'User' }
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )> }
+    & AuthorFragmentFragment
+  ) }
+);
+
+export type UserCommentsQueryVariables = Exact<{
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
+}>;
+
+
+export type UserCommentsQuery = (
+  { __typename?: 'Query' }
+  & { userComments: Array<(
+    { __typename?: 'Comment' }
+    & { entry: (
+      { __typename?: 'Entry' }
+      & Pick<Entry, 'id' | 'slug' | 'deleted'>
+      & { room: (
+        { __typename?: 'Room' }
+        & Pick<Room, 'id' | 'name'>
+      ) }
+    ) }
+    & CommentFragmentFragment
+  )> }
+);
+
+export type UserEntriesQueryVariables = Exact<{
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
+}>;
+
+
+export type UserEntriesQuery = (
+  { __typename?: 'Query' }
+  & { userEntries: Array<(
+    { __typename?: 'Entry' }
+    & EntryFragmentFragment
+  )> }
+);
+
+export type UserMessagesQueryVariables = Exact<{
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
+}>;
+
+
+export type UserMessagesQuery = (
+  { __typename?: 'Query' }
+  & { userMessages: Array<(
+    { __typename?: 'Message' }
+    & Pick<Message, 'id' | 'body' | 'createdAt'>
+    & { room: (
+      { __typename?: 'Room' }
+      & Pick<Room, 'id' | 'name'>
+    ), author: (
+      { __typename?: 'User' }
+      & { photo?: Maybe<(
+        { __typename?: 'Photo' }
+        & PhotoFragmentFragment
+      )> }
+      & AuthorFragmentFragment
+    ) }
+  )> }
+);
+
+export type UserProfileQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type UserProfileQuery = (
+  { __typename?: 'Query' }
+  & { user: (
+    { __typename?: 'User' }
+    & Pick<User, 'points' | 'entriesNumber' | 'commentsNumber' | 'messagesNumber'>
+    & { photo?: Maybe<(
+      { __typename?: 'Photo' }
+      & PhotoFragmentFragment
+    )>, createdRooms?: Maybe<Array<(
+      { __typename?: 'Room' }
+      & RoomFragmentFragment
+    )>> }
     & AuthorFragmentFragment
   ) }
 );
@@ -1223,13 +1410,19 @@ export type NotificationSubscription = (
 export const AuthorFragmentFragmentDoc = gql`
     fragment AuthorFragment on User {
   id
-  photo
   isAdmin
   createdAt
   isModerator
   displayName
   isBanned
   color
+}
+    `;
+export const PhotoFragmentFragmentDoc = gql`
+    fragment PhotoFragment on Photo {
+  id
+  name
+  url
 }
     `;
 export const CommentFragmentFragmentDoc = gql`
@@ -1242,16 +1435,13 @@ export const CommentFragmentFragmentDoc = gql`
   userVote
   author {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
-export const PhotoFragmentFragmentDoc = gql`
-    fragment PhotoFragment on Photo {
-  id
-  name
-  url
-}
-    `;
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
 export const EntryFragmentFragmentDoc = gql`
     fragment EntryFragment on Entry {
   id
@@ -1291,9 +1481,13 @@ export const NotificationFragmentFragmentDoc = gql`
   readed
   triggeredBy {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
 export const RoomFragmentFragmentDoc = gql`
     fragment RoomFragment on Room {
   id
@@ -1435,6 +1629,39 @@ export function useChangeUserColorMutation(baseOptions?: Apollo.MutationHookOpti
 export type ChangeUserColorMutationHookResult = ReturnType<typeof useChangeUserColorMutation>;
 export type ChangeUserColorMutationResult = Apollo.MutationResult<ChangeUserColorMutation>;
 export type ChangeUserColorMutationOptions = Apollo.BaseMutationOptions<ChangeUserColorMutation, ChangeUserColorMutationVariables>;
+export const ChangeUserDisplayNameDocument = gql`
+    mutation ChangeUserDisplayName($name: String!) {
+  changeUserDisplayName(name: $name) {
+    ...AuthorFragment
+  }
+}
+    ${AuthorFragmentFragmentDoc}`;
+export type ChangeUserDisplayNameMutationFn = Apollo.MutationFunction<ChangeUserDisplayNameMutation, ChangeUserDisplayNameMutationVariables>;
+
+/**
+ * __useChangeUserDisplayNameMutation__
+ *
+ * To run a mutation, you first call `useChangeUserDisplayNameMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeUserDisplayNameMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeUserDisplayNameMutation, { data, loading, error }] = useChangeUserDisplayNameMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useChangeUserDisplayNameMutation(baseOptions?: Apollo.MutationHookOptions<ChangeUserDisplayNameMutation, ChangeUserDisplayNameMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeUserDisplayNameMutation, ChangeUserDisplayNameMutationVariables>(ChangeUserDisplayNameDocument, options);
+      }
+export type ChangeUserDisplayNameMutationHookResult = ReturnType<typeof useChangeUserDisplayNameMutation>;
+export type ChangeUserDisplayNameMutationResult = Apollo.MutationResult<ChangeUserDisplayNameMutation>;
+export type ChangeUserDisplayNameMutationOptions = Apollo.BaseMutationOptions<ChangeUserDisplayNameMutation, ChangeUserDisplayNameMutationVariables>;
 export const CreateArticleDocument = gql`
     mutation CreateArticle($newArticleData: NewArticleData!, $photo: Upload) {
   createArticle(newArticleData: $newArticleData, photo: $photo) {
@@ -2232,6 +2459,39 @@ export function useUploadRoomPhotoMutation(baseOptions?: Apollo.MutationHookOpti
 export type UploadRoomPhotoMutationHookResult = ReturnType<typeof useUploadRoomPhotoMutation>;
 export type UploadRoomPhotoMutationResult = Apollo.MutationResult<UploadRoomPhotoMutation>;
 export type UploadRoomPhotoMutationOptions = Apollo.BaseMutationOptions<UploadRoomPhotoMutation, UploadRoomPhotoMutationVariables>;
+export const UploadUserPhotoDocument = gql`
+    mutation UploadUserPhoto($attachment: Upload!) {
+  uploadUserPhoto(attachment: $attachment) {
+    ...PhotoFragment
+  }
+}
+    ${PhotoFragmentFragmentDoc}`;
+export type UploadUserPhotoMutationFn = Apollo.MutationFunction<UploadUserPhotoMutation, UploadUserPhotoMutationVariables>;
+
+/**
+ * __useUploadUserPhotoMutation__
+ *
+ * To run a mutation, you first call `useUploadUserPhotoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadUserPhotoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadUserPhotoMutation, { data, loading, error }] = useUploadUserPhotoMutation({
+ *   variables: {
+ *      attachment: // value for 'attachment'
+ *   },
+ * });
+ */
+export function useUploadUserPhotoMutation(baseOptions?: Apollo.MutationHookOptions<UploadUserPhotoMutation, UploadUserPhotoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadUserPhotoMutation, UploadUserPhotoMutationVariables>(UploadUserPhotoDocument, options);
+      }
+export type UploadUserPhotoMutationHookResult = ReturnType<typeof useUploadUserPhotoMutation>;
+export type UploadUserPhotoMutationResult = Apollo.MutationResult<UploadUserPhotoMutation>;
+export type UploadUserPhotoMutationOptions = Apollo.BaseMutationOptions<UploadUserPhotoMutation, UploadUserPhotoMutationVariables>;
 export const VerifyUserEmailDocument = gql`
     mutation VerifyUserEmail($token: String!) {
   verifyUserEmail(token: $token)
@@ -2369,6 +2629,41 @@ export function useCheckLinkExsitsLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type CheckLinkExsitsQueryHookResult = ReturnType<typeof useCheckLinkExsitsQuery>;
 export type CheckLinkExsitsLazyQueryHookResult = ReturnType<typeof useCheckLinkExsitsLazyQuery>;
 export type CheckLinkExsitsQueryResult = Apollo.QueryResult<CheckLinkExsitsQuery, CheckLinkExsitsQueryVariables>;
+export const CommentDocument = gql`
+    query Comment($commentId: Int!) {
+  comment(commentId: $commentId) {
+    ...CommentFragment
+  }
+}
+    ${CommentFragmentFragmentDoc}`;
+
+/**
+ * __useCommentQuery__
+ *
+ * To run a query within a React component, call `useCommentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCommentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCommentQuery({
+ *   variables: {
+ *      commentId: // value for 'commentId'
+ *   },
+ * });
+ */
+export function useCommentQuery(baseOptions: Apollo.QueryHookOptions<CommentQuery, CommentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CommentQuery, CommentQueryVariables>(CommentDocument, options);
+      }
+export function useCommentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CommentQuery, CommentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CommentQuery, CommentQueryVariables>(CommentDocument, options);
+        }
+export type CommentQueryHookResult = ReturnType<typeof useCommentQuery>;
+export type CommentLazyQueryHookResult = ReturnType<typeof useCommentLazyQuery>;
+export type CommentQueryResult = Apollo.QueryResult<CommentQuery, CommentQueryVariables>;
 export const CommentsDocument = gql`
     query Comments($entryId: Int!) {
   comments(entryId: $entryId) {
@@ -2519,10 +2814,14 @@ export const InitialMessagesDocument = gql`
     createdAt
     author {
       ...AuthorFragment
+      photo {
+        ...PhotoFragment
+      }
     }
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
 
 /**
  * __useInitialMessagesQuery__
@@ -2555,6 +2854,9 @@ export const MeDocument = gql`
     query Me {
   me {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
     email
     showAvatars
     showColorNames
@@ -2566,9 +2868,13 @@ export const MeDocument = gql`
     joinedRooms {
       ...RoomFragment
     }
+    createdRooms {
+      ...RoomFragment
+    }
   }
 }
     ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}
 ${RoomFragmentFragmentDoc}`;
 
 /**
@@ -2744,13 +3050,15 @@ export const OnlineUsersDocument = gql`
   onlineUsers(roomId: $roomId) {
     userId
     name
-    photo
+    photo {
+      ...PhotoFragment
+    }
     isAdmin
     isModerator
     color
   }
 }
-    `;
+    ${PhotoFragmentFragmentDoc}`;
 
 /**
  * __useOnlineUsersQuery__
@@ -2895,9 +3203,13 @@ export const UserDocument = gql`
     query User($id: Int!) {
   user(id: $id) {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
   }
 }
-    ${AuthorFragmentFragmentDoc}`;
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
 
 /**
  * __useUserQuery__
@@ -2926,6 +3238,183 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const UserCommentsDocument = gql`
+    query UserComments($userId: Int!, $offsetId: Int!) {
+  userComments(userId: $userId, offsetId: $offsetId) {
+    ...CommentFragment
+    entry {
+      id
+      slug
+      deleted
+      room {
+        id
+        name
+      }
+    }
+  }
+}
+    ${CommentFragmentFragmentDoc}`;
+
+/**
+ * __useUserCommentsQuery__
+ *
+ * To run a query within a React component, call `useUserCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserCommentsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      offsetId: // value for 'offsetId'
+ *   },
+ * });
+ */
+export function useUserCommentsQuery(baseOptions: Apollo.QueryHookOptions<UserCommentsQuery, UserCommentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserCommentsQuery, UserCommentsQueryVariables>(UserCommentsDocument, options);
+      }
+export function useUserCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserCommentsQuery, UserCommentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserCommentsQuery, UserCommentsQueryVariables>(UserCommentsDocument, options);
+        }
+export type UserCommentsQueryHookResult = ReturnType<typeof useUserCommentsQuery>;
+export type UserCommentsLazyQueryHookResult = ReturnType<typeof useUserCommentsLazyQuery>;
+export type UserCommentsQueryResult = Apollo.QueryResult<UserCommentsQuery, UserCommentsQueryVariables>;
+export const UserEntriesDocument = gql`
+    query UserEntries($userId: Int!, $offsetId: Int!) {
+  userEntries(userId: $userId, offsetId: $offsetId) {
+    ...EntryFragment
+  }
+}
+    ${EntryFragmentFragmentDoc}`;
+
+/**
+ * __useUserEntriesQuery__
+ *
+ * To run a query within a React component, call `useUserEntriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserEntriesQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      offsetId: // value for 'offsetId'
+ *   },
+ * });
+ */
+export function useUserEntriesQuery(baseOptions: Apollo.QueryHookOptions<UserEntriesQuery, UserEntriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserEntriesQuery, UserEntriesQueryVariables>(UserEntriesDocument, options);
+      }
+export function useUserEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserEntriesQuery, UserEntriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserEntriesQuery, UserEntriesQueryVariables>(UserEntriesDocument, options);
+        }
+export type UserEntriesQueryHookResult = ReturnType<typeof useUserEntriesQuery>;
+export type UserEntriesLazyQueryHookResult = ReturnType<typeof useUserEntriesLazyQuery>;
+export type UserEntriesQueryResult = Apollo.QueryResult<UserEntriesQuery, UserEntriesQueryVariables>;
+export const UserMessagesDocument = gql`
+    query UserMessages($userId: Int!, $offsetId: Int!) {
+  userMessages(userId: $userId, offsetId: $offsetId) {
+    id
+    body
+    createdAt
+    room {
+      id
+      name
+    }
+    author {
+      ...AuthorFragment
+      photo {
+        ...PhotoFragment
+      }
+    }
+  }
+}
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
+
+/**
+ * __useUserMessagesQuery__
+ *
+ * To run a query within a React component, call `useUserMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserMessagesQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      offsetId: // value for 'offsetId'
+ *   },
+ * });
+ */
+export function useUserMessagesQuery(baseOptions: Apollo.QueryHookOptions<UserMessagesQuery, UserMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserMessagesQuery, UserMessagesQueryVariables>(UserMessagesDocument, options);
+      }
+export function useUserMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserMessagesQuery, UserMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserMessagesQuery, UserMessagesQueryVariables>(UserMessagesDocument, options);
+        }
+export type UserMessagesQueryHookResult = ReturnType<typeof useUserMessagesQuery>;
+export type UserMessagesLazyQueryHookResult = ReturnType<typeof useUserMessagesLazyQuery>;
+export type UserMessagesQueryResult = Apollo.QueryResult<UserMessagesQuery, UserMessagesQueryVariables>;
+export const UserProfileDocument = gql`
+    query UserProfile($id: Int!) {
+  user(id: $id) {
+    ...AuthorFragment
+    points
+    entriesNumber
+    commentsNumber
+    messagesNumber
+    photo {
+      ...PhotoFragment
+    }
+    createdRooms {
+      ...RoomFragment
+    }
+  }
+}
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}
+${RoomFragmentFragmentDoc}`;
+
+/**
+ * __useUserProfileQuery__
+ *
+ * To run a query within a React component, call `useUserProfileQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserProfileQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserProfileQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserProfileQuery(baseOptions: Apollo.QueryHookOptions<UserProfileQuery, UserProfileQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserProfileQuery, UserProfileQueryVariables>(UserProfileDocument, options);
+      }
+export function useUserProfileLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserProfileQuery, UserProfileQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserProfileQuery, UserProfileQueryVariables>(UserProfileDocument, options);
+        }
+export type UserProfileQueryHookResult = ReturnType<typeof useUserProfileQuery>;
+export type UserProfileLazyQueryHookResult = ReturnType<typeof useUserProfileLazyQuery>;
+export type UserProfileQueryResult = Apollo.QueryResult<UserProfileQuery, UserProfileQueryVariables>;
 export const MessageAddedDocument = gql`
     subscription MessageAdded($roomId: Int!) {
   messageAdded(roomId: $roomId) {

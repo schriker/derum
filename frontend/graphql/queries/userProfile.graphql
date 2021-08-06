@@ -1,0 +1,15 @@
+query UserProfile($id: Int!) {
+  user(id: $id) {
+    ...AuthorFragment
+    points
+    entriesNumber
+    commentsNumber
+    messagesNumber
+    photo {
+      ...PhotoFragment
+    }
+    createdRooms {
+      ...RoomFragment
+    }
+  }
+}

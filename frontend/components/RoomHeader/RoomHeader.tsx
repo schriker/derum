@@ -17,7 +17,7 @@ const RoomHeader = () => {
   const classes = useHeaderStyles({
     userColor:
       !userData || userData?.me.showColorNames
-        ? roomData.room.author.color
+        ? roomData.room.author?.color
         : '#fff',
   });
 
@@ -32,7 +32,9 @@ const RoomHeader = () => {
           </Typography>
           <UserIcon className={classes.userIcon} />
         </Box>
-        <UsernameWithModal data={roomData.room.author} />
+        {roomData.room.author && (
+          <UsernameWithModal data={roomData.room.author} />
+        )}
         <Typography variant="body2" color="textSecondary">
           {roomData.room.description}
         </Typography>

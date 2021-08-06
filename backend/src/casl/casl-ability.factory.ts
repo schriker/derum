@@ -20,6 +20,7 @@ import {
   FlatNotification,
   FlatPhoto,
   FlatRoom,
+  FlatUser,
 } from './flatTypes';
 import { Notification } from 'src/notifications/entities/notification.entity';
 import { Emoji } from 'src/emojis/entities/emoji.entity';
@@ -57,6 +58,7 @@ export class CaslAbilityFactory {
       can(Action.Delete, Entry);
       can(Action.Delete, Comment);
       can(Action.Update, Room);
+      can(Action.Update, User);
       can(Action.Delete, Photo);
     }
 
@@ -67,6 +69,10 @@ export class CaslAbilityFactory {
 
       can<FlatRoom>(Action.Update, Room, {
         'author.id': user.id,
+      });
+
+      can<FlatUser>(Action.Update, User, {
+        id: user.id,
       });
 
       can<FlatMessage>(Action.Delete, Message, {

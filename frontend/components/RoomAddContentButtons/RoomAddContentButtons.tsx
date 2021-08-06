@@ -3,7 +3,7 @@ import React from 'react';
 import RoomAddArticle from '../RoomAddArticle/RoomAddArticle';
 import useRoomAddContentButtonsStyles from './RoomAddContentButtonsStyles';
 import RoomAddLink from '../RoomAddLink/RoomAddLink';
-import RoomAddVideo from '../RoomAddVideo/RoomAddVideo';
+// import RoomAddVideo from '../RoomAddVideo/RoomAddVideo';
 
 const RoomAddContentButtons = () => {
   const classes = useRoomAddContentButtonsStyles();
@@ -13,8 +13,8 @@ const RoomAddContentButtons = () => {
       <RoomAddArticle />
       <Divider orientation="vertical" flexItem />
       <RoomAddLink />
-      <Divider orientation="vertical" flexItem />
-      <RoomAddVideo />
+      {/* <Divider orientation="vertical" flexItem />
+      <RoomAddVideo /> */}
     </Box>
   );
 };

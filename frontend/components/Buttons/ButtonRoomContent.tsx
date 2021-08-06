@@ -1,26 +1,50 @@
-import { Button, createStyles, Theme, withStyles } from '@material-ui/core';
+import {
+  Button,
+  ButtonProps,
+  createStyles,
+  makeStyles,
+  Theme,
+} from '@material-ui/core';
 
-const styles = (theme: Theme) =>
+const useStyles = makeStyles<Theme, { isActive: boolean }>((theme: Theme) =>
   createStyles({
-    root: {
-      flex: '1 1 auto',
+    root: (props) => ({
+      flex: '1 1',
       fontSize: 16,
       fontWeight: 600,
       textTransform: 'initial',
       borderRadius: 0,
       color: theme.palette.text.primary,
-      borderBottom: '2px solid transparent',
+      borderBottom: props.isActive
+        ? `2px solid ${theme.palette.primary['A400']}`
+        : '2px solid transparent',
       padding: '5px 20px',
       '&:hover': {
         borderBottom: `2px solid ${theme.palette.primary['A400']}`,
       },
-    },
+    }),
     startIcon: {
       color: theme.palette.text.secondary,
     },
     disabled: {
       backgroundColor: theme.palette.grey[300],
     },
-  });
+  })
+);
 
-export const ButtonRoomContent = withStyles(styles)(Button);
+const ButtonRoomContent = ({
+  isActive = false,
+  children,
+  ...rest
+}: ButtonProps & { isActive?: boolean }) => {
+  const classes = useStyles({
+    isActive,
+  });
+  return (
+    <Button classes={classes} {...rest}>
+      {children}
+    </Button>
+  );
+};
+
+export default ButtonRoomContent;

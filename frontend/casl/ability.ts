@@ -25,6 +25,10 @@ export default function defineAbilityFor(user: AuthorFragmentFragment) {
       'author.id': user.id,
     });
 
+    can(Action.Update, 'User', {
+      'id': user.id,
+    });
+
     can(Action.Delete, 'Message', {
       'room.author.id': user.id,
     });

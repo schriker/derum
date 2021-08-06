@@ -1,6 +1,7 @@
 import { useReactiveVar } from '@apollo/client';
 import { Box, Typography } from '@material-ui/core';
 import dayjs from 'dayjs';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import useIsConnected from '../../hooks/useIsConnected';
@@ -15,8 +16,10 @@ const ChatMessagesItem = ({
   message,
   setUserId,
   handleOpen,
-  authors,
+  authors = [],
+  isUserProfileView = false,
 }: ChatMessagesItemProps) => {
+  const router = useRouter();
   const { data: userData } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
@@ -37,6 +40,10 @@ const ChatMessagesItem = ({
     handleOpen();
   };
 
+  const handleRedirect = () => {
+    router.push(`/p/${message.room.name}`);
+  };
+
   const handleHighLightMessages = () => {
     if (selectedUser) return selectedUserVar(null);
     selectedUserVar(message.author.displayName);
@@ -47,11 +54,9 @@ const ChatMessagesItem = ({
       className={classes.wrapper}
       onMouseEnter={() => setShowActions((prevState) => !prevState)}
       onMouseLeave={() => setShowActions(false)}
-      onClick={handleHighLightMessages}
+      onClick={isUserProfileView ? handleRedirect : handleHighLightMessages}
     >
-      {showActions && isConnected && (
-        <ChatMessageActions message={message} />
-      )}
+      {showActions && isConnected && <ChatMessageActions message={message} />}
       {userData?.me.showAvatars || !userData ? (
         <Box mr={1}>
           <AvatarPhoto
@@ -62,7 +67,7 @@ const ChatMessagesItem = ({
             color={message.author.color}
             className={classes.avatar}
             onClick={(e) => handlerUserSelect(message.author.id, e)}
-            src={message.author.photo}
+            src={message.author.photo?.url}
             name={message.author.displayName}
           />
         </Box>

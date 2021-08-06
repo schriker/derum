@@ -11,6 +11,8 @@ import { Vote } from 'src/votes/entities/vote.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { UsersEmailLoginService } from './services/users-email-login.service';
 import { EmailsModule } from 'src/emails/emails.module';
+import { Room } from 'src/rooms/entities/room.entity';
+import { UsersProfileService } from './services/users-profile.service';
 
 @Module({
   imports: [
@@ -21,11 +23,17 @@ import { EmailsModule } from 'src/emails/emails.module';
       Entry,
       Vote,
       Message,
+      Room,
     ]),
     CaslModule,
     EmailsModule,
   ],
-  exports: [UsersService, UsersEmailLoginService],
-  providers: [UsersService, UsersEmailLoginService, UsersResolver],
+  exports: [UsersService, UsersEmailLoginService, UsersProfileService],
+  providers: [
+    UsersService,
+    UsersEmailLoginService,
+    UsersResolver,
+    UsersProfileService,
+  ],
 })
 export class UsersModule {}

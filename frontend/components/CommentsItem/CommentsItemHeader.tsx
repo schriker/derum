@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core';
+import { Box, Link } from '@material-ui/core';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
@@ -11,6 +11,8 @@ import CommentsItemResponseTo from './CommentsItemResponseTo';
 import useCommentsItemStyles from './CommentsItemStyles';
 import { Action } from '../../casl/action.enum';
 import { Can } from '../../casl/Can';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 
 const CommentsItemHeader = ({
   data,
@@ -18,6 +20,7 @@ const CommentsItemHeader = ({
   parentId,
   entryIsDeleted,
 }: CommentItemPropsType) => {
+  const router = useRouter();
   const { data: userdata } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
@@ -28,24 +31,31 @@ const CommentsItemHeader = ({
     isHighlighted: false,
   });
 
+  let url = `/p/${router.query.room}/w/${router.query.id[0]}/${router.query.id[1]}?comment=${data.id}`;
+
+  if (!setParentId) {
+    url = `/p/${data.entry.room.name}/w/${data.entry.id}/${data.entry.slug}?comment=${data.id}`;
+  }
+
   return (
     <Box className={classes.headerWrapper}>
       <Box display="flex">
         <Box className={classes.header}>
           <UsernameWithModal photo data={data.author} />
-          <Typography
-            color="textSecondary"
-            variant="subtitle2"
-            component="span"
-            title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
-          >
-            {dayjs().to(dayjs(data.createdAt))}
-          </Typography>
+          <NextLink href={url} passHref>
+            <Link
+              variant="subtitle2"
+              color="textSecondary"
+              title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
+            >
+              {dayjs().to(dayjs(data.createdAt))}
+            </Link>
+          </NextLink>
         </Box>
         {data.parentId && <CommentsItemResponseTo data={data} />}
       </Box>
       <Box>
-        {userdata && !entryIsDeleted && (
+        {userdata && !entryIsDeleted && setParentId && (
           <ButtonDefault
             onClick={() => setParentId(data.id === parentId ? null : data.id)}
             className={classes.replyButton}

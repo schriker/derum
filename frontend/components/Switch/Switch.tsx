@@ -25,7 +25,7 @@ const Switch = withStyles((theme: Theme) =>
     },
     switchBase: {
       padding: 0,
-      color: theme.palette.grey[600],
+      color: theme.palette.secondary[600],
       '&$checked': {
         transform: 'translateX(16px)',
         color: theme.palette.common.white,

@@ -1,0 +1,5 @@
+query Comment($commentId: Int!) {
+  comment(commentId: $commentId) {
+    ...CommentFragment
+  }
+}

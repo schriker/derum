@@ -23,7 +23,7 @@ const useSidebarStyles = makeStyles<Theme, SidebarStyles>((theme: Theme) => ({
   },
   userNumber: {
     marginLeft: 10,
-    color: theme.palette.grey[500],
+    color: theme.palette.secondary[500],
   },
   sectionTitle: {
     margin: '5px 16px',

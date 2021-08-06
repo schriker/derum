@@ -65,36 +65,6 @@ export class PhotosService {
       .toBuffer();
   }
 
-  async saveRoomPhoto(attachment: FileUpload, user: User): Promise<Photo> {
-    const { mimetype, createReadStream } = attachment;
-    this.checkMimetype(mimetype);
-    return new Promise((resolve) => {
-      const stream = createReadStream();
-      const imgData: Buffer[] = [];
-      stream.on('data', (chunk: Buffer) => {
-        imgData.push(chunk);
-      });
-      stream.on('end', async () => {
-        const resizedPhoto = await this.resizePhoto(
-          200,
-          200,
-          Buffer.concat(imgData),
-        );
-        const { name, url } = await this.awsService.upload(
-          resizedPhoto,
-          'room',
-        );
-        const photo = new Photo();
-        photo.name = name;
-        photo.url = url;
-        photo.key = `room/${name}`;
-        photo.user = user;
-
-        resolve(this.photosRepository.save(photo));
-      });
-    });
-  }
-
   async savePhotoFromLink(url: string, user: User): Promise<Photo> {
     const tmpName = uuidv4();
     const tmpFile = join(process.cwd(), tmpName);
@@ -123,7 +93,13 @@ export class PhotosService {
     }
   }
 
-  async saveArticlePhoto(photo: FileUpload, user: User): Promise<Photo> {
+  async savePhoto(
+    photo: FileUpload,
+    user: User,
+    bucketName: string,
+    width: number,
+    height: number,
+  ): Promise<Photo> {
     const { mimetype, createReadStream } = photo;
     this.checkMimetype(mimetype);
     return new Promise((resolve) => {
@@ -134,18 +110,18 @@ export class PhotosService {
       });
       stream.on('end', async () => {
         const resizedPhoto = await this.resizePhoto(
-          500,
-          300,
+          width,
+          height,
           Buffer.concat(imgData),
         );
         const { name, url } = await this.awsService.upload(
           resizedPhoto,
-          'article',
+          bucketName,
         );
         const photo = new Photo();
         photo.name = name;
         photo.url = url;
-        photo.key = `article/${name}`;
+        photo.key = `${bucketName}/${name}`;
         photo.user = user;
 
         resolve(this.photosRepository.save(photo));

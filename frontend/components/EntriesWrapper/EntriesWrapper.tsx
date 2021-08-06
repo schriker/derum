@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingTop: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(1),
-    marginRight: theme.spacing(1),
+    marginRight: 5,
     overflowY: 'auto',
   },
 }));

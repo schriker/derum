@@ -12,9 +12,11 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -59,9 +61,10 @@ export class User {
   @Column({ default: false })
   verified: boolean;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  photo: string;
+  @Field(() => Photo, { nullable: true })
+  @OneToOne(() => Photo, { nullable: true, onDelete: 'SET NULL' })
+  @JoinColumn()
+  photo: Photo;
 
   @Column()
   authProvider: string;
@@ -72,6 +75,10 @@ export class User {
   @OneToMany(() => Message, (message) => message.author)
   messages: Message[];
 
+  @Field(() => Int)
+  messagesNumber: number;
+
+  @Field(() => [Room], { nullable: true })
   @OneToMany(() => Room, (room) => room.author)
   createdRooms: Room[];
 
@@ -79,7 +86,10 @@ export class User {
   links: Link[];
 
   @OneToMany(() => Entry, (entry) => entry.author)
-  entires: Entry[];
+  entries: Entry[];
+
+  @Field(() => Int)
+  entriesNumber: number;
 
   @OneToMany(() => Photo, (photo) => photo.user)
   photos: Photo[];
@@ -130,8 +140,15 @@ export class User {
   @OneToMany(() => Vote, (vote) => vote.user)
   votes: Vote[];
 
+  @Field(() => Int)
+  @OneToMany(() => Vote, (vote) => vote.pointFor)
+  points: Vote[];
+
   @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
+
+  @Field(() => Int)
+  commentsNumber: number;
 
   @OneToMany(() => UserSession, (session) => session.user)
   sessions: UserSession[];

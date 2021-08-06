@@ -30,7 +30,7 @@ const OnlineUsersSection = ({
           >
             <AvatarPhoto
               className={classes.avatar}
-              src={user.photo}
+              src={user.photo?.url}
               name={user.name}
               color={user.color}
             />

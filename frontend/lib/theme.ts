@@ -1,5 +1,22 @@
-import { grey, blue, red } from '@material-ui/core/colors';
+import { grey, red, deepPurple } from '@material-ui/core/colors';
 import { createMuiTheme } from '@material-ui/core/styles';
+
+const secondaryColor = {
+  50: '#fcf9ff',
+  100: '#f7f4ff',
+  200: '#f1edf9',
+  300: '#e3e0eb',
+  400: '#c0bdc8',
+  500: '#a19ea9',
+  600: '#78757f',
+  700: '#64616b',
+  800: '#44424b',
+  900: '#232129',
+  A100: '#82b1ff',
+  A200: '#448aff',
+  A400: '#2979ff',
+  A700: '#26272d',
+};
 
 const theme = createMuiTheme({
   overrides: {
@@ -27,16 +44,16 @@ const theme = createMuiTheme({
   },
   palette: {
     background: {
-      paper: '#1D1D1D',
-      default: '#0B0B0B',
+      paper: '#212126',
+      default: '#121115',
     },
-    primary: blue,
-    secondary: grey,
+    primary: deepPurple,
+    secondary: secondaryColor,
     error: red,
-    divider: '#333436',
+    divider: '#3a383e',
     text: {
       primary: grey[50],
-      secondary: grey[600],
+      secondary: secondaryColor[600],
     },
   },
   typography: {
@@ -86,7 +103,7 @@ const theme = createMuiTheme({
     },
   },
   shape: {
-    borderRadius: 3,
+    borderRadius: 10,
   },
   shadows: [
     'none',

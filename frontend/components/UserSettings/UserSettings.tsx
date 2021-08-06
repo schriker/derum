@@ -1,4 +1,4 @@
-import { Box, List } from '@material-ui/core';
+import { Box, List, Typography } from '@material-ui/core';
 import React from 'react';
 import {
   useMeQuery,
@@ -11,6 +11,8 @@ import { ButtonIcon } from '../Buttons/ButtonIcon';
 import SettingsIcon from '../Icons/SettingsIcon';
 import Modal from '../Modal/Modal';
 import DarkTooltip from '../Tooltip/Tooltip';
+import UserSettingsNameForm from '../UserSettingsForm/UserSettingsNameForm';
+// import UserSettingsPasswordForm from '../UserSettingsForm/UserSettingsPasswordForm';
 import UserSettingsColor from './UserSettingsColor';
 import UserSettingsSwitch from './UserSettingsSwitch';
 
@@ -69,6 +71,14 @@ const UserSettings = () => {
           />
           <UserSettingsColor />
         </List>
+        <Typography style={{ margin: '30px 0 10px' }} variant="h5">
+          Zmiana nazwy
+        </Typography>
+        <UserSettingsNameForm />
+        {/* <Typography style={{ margin: '20px 0 10px' }} variant="h5">
+          Zmiana hasła
+        </Typography>
+        <UserSettingsPasswordForm /> */}
       </Modal>
     </Box>
   );

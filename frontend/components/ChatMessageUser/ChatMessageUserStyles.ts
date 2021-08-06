@@ -13,7 +13,7 @@ const useChatMessageUserStyles = makeStyles<
       : theme.palette.text.primary,
     backgroundColor: props.isCurrentUser
       ? theme.palette.common.white
-      : theme.palette.grey[800],
+      : theme.palette.secondary[800],
     padding: '1px 5px',
     margin: '0 2px',
   }),

@@ -31,11 +31,12 @@ export class Comment {
   updatedAt: Date;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.messages)
+  @ManyToOne(() => User, (user) => user.messages, { onDelete: 'CASCADE' })
   author: User;
 
+  @Field(() => Entry)
   @Index()
-  @ManyToOne(() => Entry, (entry) => entry.comments)
+  @ManyToOne(() => Entry, (entry) => entry.comments, { onDelete: 'CASCADE' })
   entry: Entry;
 
   @Field({ nullable: true })

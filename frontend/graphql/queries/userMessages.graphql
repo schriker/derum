@@ -1,0 +1,17 @@
+query UserMessages($userId: Int!, $offsetId: Int!) {
+  userMessages(userId: $userId, offsetId: $offsetId) {
+    id
+    body
+    createdAt
+    room {
+      id
+      name
+    }
+    author {
+      ...AuthorFragment
+      photo {
+        ...PhotoFragment
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+mutation UploadUserPhoto($attachment: Upload!) {
+  uploadUserPhoto(attachment: $attachment) {
+    ...PhotoFragment
+  }
+}

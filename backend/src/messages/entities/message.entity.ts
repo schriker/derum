@@ -26,10 +26,11 @@ export class Message {
   updatedAt: Date;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.messages)
+  @ManyToOne(() => User, (user) => user.messages, { onDelete: 'CASCADE' })
   author: User;
 
-  @ManyToOne(() => Room, (room) => room.messages)
+  @Field(() => Room)
+  @ManyToOne(() => Room, (room) => room.messages, { onDelete: 'CASCADE' })
   room: Room;
 
   @Field()

@@ -2,7 +2,9 @@ query OnlineUsers($roomId: Int!) {
   onlineUsers(roomId: $roomId) {
     userId
     name
-    photo
+    photo {
+      ...PhotoFragment
+    }
     isAdmin
     isModerator
     color

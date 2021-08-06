@@ -36,6 +36,13 @@ export class CommentsResolver {
     return this.commentsService.getByEntryId(entryId, session);
   }
 
+  @Query(() => Comment)
+  comment(
+    @Args('commentId', { type: () => Int }) commentId: number,
+  ): Promise<Comment> {
+    return this.commentsService.getById(commentId);
+  }
+
   @Mutation(() => Comment)
   @UseGuards(GQLSessionGuard, GQLThrottlerGuard)
   @Throttle(1, 20)
@@ -43,7 +50,8 @@ export class CommentsResolver {
     @Args('commentData') commentData: NewCommentData,
     @CurrentUser() session: User,
   ): Promise<Comment> {
-    return this.commentsService.create(commentData, session);
+    const user = await this.usersService.getByIdBasic(session.id);
+    return this.commentsService.create(commentData, user);
   }
 
   @ResolveField()

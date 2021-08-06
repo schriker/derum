@@ -65,7 +65,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         />
         <CssBaseline />
         <NextNprogress
-          color="#214dff"
+          color="#6201ea"
           startPosition={0.3}
           stopDelayMs={200}
           height={2}

@@ -38,7 +38,7 @@ const UserModal = ({ id, openModal, handleClose }: UserModalProps) => {
           <NextLink href={`/u/${id}`}>
             <AvatarPhoto
               className={classes.avatar}
-              src={data.user.photo}
+              src={data.user.photo?.url}
               name={data.user.displayName}
               styles={{ border: `3px solid ${data.user.color}` }}
               color={data.user.color}

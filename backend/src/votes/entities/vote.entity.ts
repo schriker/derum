@@ -17,6 +17,7 @@ import { Comment } from '../../comments/entities/comment.entity';
 @Entity('vote')
 @ObjectType()
 @Unique('vote_user_entry', ['user', 'entry'])
+@Unique('vote_user_entry', ['user', 'comment'])
 @Directive('@cacheControl(maxAge: 30, scope: PRIVATE)')
 export class Vote {
   @PrimaryGeneratedColumn()
@@ -32,8 +33,12 @@ export class Vote {
   updatedAt: Date;
 
   @Index()
-  @ManyToOne(() => User, (user) => user.votes)
+  @ManyToOne(() => User, (user) => user.votes, { onDelete: 'CASCADE' })
   user: User;
+
+  @Index()
+  @ManyToOne(() => User, (user) => user.points, { onDelete: 'CASCADE' })
+  pointFor: User;
 
   @Index()
   @ManyToOne(() => Entry, (entry) => entry.votes, {

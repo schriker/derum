@@ -36,6 +36,6 @@ export class Photo {
   @Column()
   url: string;
 
-  @ManyToOne(() => User, (user) => user.photos)
+  @ManyToOne(() => User, (user) => user.photos, { onDelete: 'SET NULL' })
   user: User;
 }

@@ -9,7 +9,7 @@ const useVoteStyle = makeStyles<Theme, VoteStyles>((theme: Theme) => ({
     alignItems: 'center',
     flexDirection: 'column',
     justifyContent: (props) => props.justifyContent,
-    backgroundColor: theme.palette.grey[900],
+    backgroundColor: theme.palette.secondary['A700'],
   },
   voteText: {
     fontSize: 14,

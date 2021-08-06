@@ -6,9 +6,6 @@ import { Entry } from 'src/entries/entities/entry.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { Vote } from 'src/votes/entities/vote.entity';
 import { ILike, Repository } from 'typeorm';
-import { NewUserColor } from '../dto/new-color';
-import { NewDisplayNameData } from '../dto/new-display-name';
-import { NewSettingsData } from '../dto/new-settings';
 import { OnlineUser } from '../dto/online-user';
 import { ProviderUser } from '../dto/provider-user.interface';
 import { UserSession } from '../entities/user-session.entity';
@@ -38,7 +35,7 @@ export class UsersService {
       roomId: roomId,
       userId: user.id,
       name: user.displayName,
-      photo: user.photo ? user.photo : '',
+      photo: user.photo ? user.photo : null,
       isAdmin: user.isAdmin,
       isModerator: user.isModerator,
       isBanned: user.isBanned,
@@ -76,15 +73,9 @@ export class UsersService {
     await this.messagesRepository.delete({
       author: user,
     });
-    await this.entriesRepository
-      .createQueryBuilder('entry')
-      .leftJoinAndSelect('entry.author', 'author')
-      .update(Entry)
-      .where('author.id = :id', {
-        id: user.id,
-      })
-      .set({ deleted: true })
-      .execute();
+    await this.entriesRepository.delete({
+      author: user,
+    });
     return true;
   }
 
@@ -92,6 +83,7 @@ export class UsersService {
     const user = await this.usersRepository
       .createQueryBuilder('user')
       .where('user.id = :id', { id })
+      .leftJoinAndSelect('user.photo', 'photo')
       .leftJoinAndSelect('user.ignore', 'ignore')
       .leftJoinAndSelect('user.joinedRooms', 'joinedRooms')
       .leftJoinAndSelect('joinedRooms.photo', 'roomPhoto')
@@ -102,7 +94,7 @@ export class UsersService {
   }
 
   async getByIdBasic(id: number): Promise<User> {
-    return this.usersRepository.findOne(id);
+    return this.usersRepository.findOne(id, { relations: ['photo'] });
   }
 
   async ignore(user: User, id: number): Promise<boolean> {
@@ -149,14 +141,13 @@ export class UsersService {
   }
 
   async createWithAuthProvider(userData: ProviderUser): Promise<User> {
-    const { authId, authProvider, photo, email, displayName } = userData;
+    const { authId, authProvider, email, displayName } = userData;
     const displayNameTaken = await this.checkIfDisplayNameIsTaken(
       userData.displayName,
     );
     const user = new User();
     user.email = email;
     user.authId = authId;
-    user.photo = photo.length ? photo : null;
     user.verified = true;
     user.authProvider = authProvider;
     user.displayName = !displayNameTaken
@@ -172,22 +163,12 @@ export class UsersService {
     return savedUser;
   }
 
-  async changeDisplayName(
-    user: User,
-    { name }: NewDisplayNameData,
-  ): Promise<User> {
-    const displayNameTaken = await this.checkIfDisplayNameIsTaken(name);
-    if (displayNameTaken)
-      throw new BadRequestException(ERROR_MESSAGES.DISPLAY_NAME_TAKEN);
-    return this.usersRepository.save({
-      ...user,
-      displayName: name,
-    });
-  }
-
   async loginWithAuthProvider(userData: ProviderUser): Promise<User> {
     const userExists = await this.usersRepository.findOne({
-      email: userData.email,
+      where: {
+        email: userData.email,
+      },
+      relations: ['photo'],
     });
 
     if (userExists) {
@@ -220,12 +201,6 @@ export class UsersService {
     return this.userSessionsRepository.save(session);
   }
 
-  async changeColor(data: NewUserColor, session: User): Promise<User> {
-    const user = await this.getByIdBasic(session.id);
-    user.color = data.color;
-    return this.usersRepository.save(user);
-  }
-
   async checkIfIgnored(user: User, userToCheck: User): Promise<boolean> {
     const ignored = await this.usersRepository
       .createQueryBuilder('user')
@@ -234,16 +209,5 @@ export class UsersService {
       .where('ignore.id = :id', { id: userToCheck.id })
       .getMany();
     return !!ignored.length;
-  }
-
-  async updateSettings(data: NewSettingsData, session: User): Promise<User> {
-    if (!Object.keys(data).length) return session;
-    const user = await this.getByIdBasic(session.id);
-
-    for (const key in data) {
-      user[key] = data[key];
-    }
-
-    return this.usersRepository.save(user);
   }
 }

@@ -9,9 +9,9 @@ import useEntriesItemStyle from './EntriesItemStyles';
 import EntriesItemVote from './EntriesItemVote';
 import EntriesItemPhoto from './EntriesItemPhoto';
 import EntriesItemActions from '../EntryItemActions/EntriesItemActions';
-import CommentIcon from '../Icons/CommentIcon';
 import EntriesItemComments from './EntriesItemComments';
 import UsernameWithModal from '../UsernameWithModal/UsernameWithModal';
+import CommentsIcon from '../Icons/CommentsIcon';
 
 const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
   const classes = useEntriesItemStyle();
@@ -59,7 +59,7 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
               </Link>
             </NextLink>
             <Box className={classes.info}>
-              <UsernameWithModal data={data.author} />
+              {data.author && <UsernameWithModal data={data.author} />}
               <Typography
                 variant="subtitle2"
                 color="textSecondary"
@@ -79,7 +79,7 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
               {data.description}
             </Typography>
             <Box className={classes.info}>
-              <CommentIcon className={classes.commentIcon} />
+              <CommentsIcon className={classes.commentIcon} />
               <EntriesItemComments data={data} />
               <EntriesItemRoom link={roomLink} name={data.room.name} />
             </Box>

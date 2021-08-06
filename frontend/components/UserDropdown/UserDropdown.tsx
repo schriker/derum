@@ -7,16 +7,16 @@ import Dropdown from '../Dropdown/Dropdown';
 import DropdownIcon from '../Dropdown/DropdownIcon';
 import DropdownItem from '../Dropdown/DropdownItem';
 import BugIcon from '../Icons/BugIcon';
-import HelpIcon from '../Icons/HelpIcon';
+// import HelpIcon from '../Icons/HelpIcon';
 import LogoutIcon from '../Icons/LogoutIcon';
-import MessageIcon from '../Icons/MessageIcon';
+// import MessageIcon from '../Icons/MessageIcon';
 import UserIcon from '../Icons/UserIcon';
 import UserButton from '../UserButton/UserButton';
 
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     fontSize: 16,
-    color: theme.palette.grey[600],
+    color: theme.palette.secondary[600],
   },
 }));
 
@@ -44,22 +44,22 @@ const UserDropdown = () => {
       icon: <UserIcon className={classes.icon} />,
       onClick: () => router.push(`/u/${data.me.id}`),
     },
-    {
-      text: 'Wiadomości',
-      icon: <MessageIcon className={classes.icon} />,
-      onClick: () => console.log('Click'),
-    },
+    // {
+    //   text: 'Wiadomości',
+    //   icon: <MessageIcon className={classes.icon} />,
+    //   onClick: () => console.log('Click'),
+    // },
     {
       text: 'Zgłoś błąd',
       icon: <BugIcon className={classes.icon} />,
       onClick: () =>
         window.location.replace('https://github.com/schriker/derum/issues'),
     },
-    {
-      text: 'Pomoc',
-      icon: <HelpIcon className={classes.icon} />,
-      onClick: () => console.log('Click'),
-    },
+    // {
+    //   text: 'Pomoc',
+    //   icon: <HelpIcon className={classes.icon} />,
+    //   onClick: () => console.log('Click'),
+    // },
     {
       text: 'Wyloguj',
       icon: <LogoutIcon className={classes.icon} />,

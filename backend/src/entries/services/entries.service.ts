@@ -124,7 +124,13 @@ export class EntriesService {
     const room = await this.roomsService.findOneById(roomId);
     const entry = new Entry();
     if (photo) {
-      const savedPhoto = await this.photosService.saveArticlePhoto(photo, user);
+      const savedPhoto = await this.photosService.savePhoto(
+        photo,
+        user,
+        'article',
+        500,
+        300,
+      );
       entry.photo = savedPhoto;
     }
     entry.slug = this.createSlug(title);

@@ -5,6 +5,9 @@ query InitialMessages($roomId: Int!) {
     createdAt
     author {
       ...AuthorFragment
+      photo {
+        ...PhotoFragment
+      }
     }
   }
 }

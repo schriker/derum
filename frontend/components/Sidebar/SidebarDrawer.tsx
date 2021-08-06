@@ -52,14 +52,6 @@ const SidebarDrawer = () => {
         <SidebarDrawerSearch />
         <NewRoomButton />
         <Box mt={1} display="flex" flexDirection="column">
-          {userLoading ? (
-            <SidebarSkeleton />
-          ) : userData ? (
-            <SidebarDrawerSection
-              sectionData={userData.me.joinedRooms}
-              title="Moje"
-            />
-          ) : null}
           {newRoomsLoading ? (
             <SidebarSkeleton />
           ) : newRoomsData ? (
@@ -74,6 +66,14 @@ const SidebarDrawer = () => {
             <SidebarDrawerSection
               sectionData={popularRoomsData.popularRooms}
               title="Popularne"
+            />
+          ) : null}
+          {userLoading ? (
+            <SidebarSkeleton />
+          ) : userData?.me.createdRooms.length ? (
+            <SidebarDrawerSection
+              sectionData={userData.me.createdRooms}
+              title="Moje"
             />
           ) : null}
         </Box>

@@ -17,21 +17,19 @@ const Entries = React.forwardRef<
   const classes = useEntriesStyles();
 
   return (
-    <>
-      <Box className={classes.wrapper}>
-        {!entriesData.entries.length ? (
-          <EntriesEmpty />
-        ) : (
-          entriesData.entries.map((entry) => (
-            <EntriesItem preview key={entry.id} data={entry} />
-          ))
-        )}
-        <div style={{ height: 3 }} ref={ref}></div>
-        {hasMore &&
-          !!entriesData.entries.length &&
-          entriesData.entries.length >= PAGE_LIMIT && <EntiresItemLoading />}
-      </Box>
-    </>
+    <Box className={classes.wrapper}>
+      {!entriesData.entries.length ? (
+        <EntriesEmpty />
+      ) : (
+        entriesData.entries.map((entry) => (
+          <EntriesItem preview key={entry.id} data={entry} />
+        ))
+      )}
+      <div style={{ height: 3 }} ref={ref}></div>
+      {hasMore && entriesData.entries.length >= PAGE_LIMIT && (
+        <EntiresItemLoading />
+      )}
+    </Box>
   );
 });
 

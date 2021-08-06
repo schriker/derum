@@ -10,14 +10,14 @@ const useOnlineUsersStyles = makeStyles((theme: Theme) => ({
   icon: {
     fontSize: 18,
     marginRight: 10,
-    color: theme.palette.grey[500],
+    color: theme.palette.secondary[500],
   },
   inputWrapper: {
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
   },
   search: {
-    backgroundColor: theme.palette.grey[800],
+    backgroundColor: theme.palette.secondary[800],
     marginBottom: theme.spacing(3),
   },
   button: {
@@ -38,7 +38,7 @@ const useOnlineUsersStyles = makeStyles((theme: Theme) => ({
   sectionTitle: {
     paddingLeft: theme.spacing(3),
     paddingRight: theme.spacing(3),
-    color: theme.palette.grey[600],
+    color: theme.palette.secondary[600],
     marginBottom: 10,
   },
 }));

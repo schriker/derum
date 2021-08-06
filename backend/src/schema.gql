@@ -19,7 +19,7 @@ type Room {
   updatedAt: Date!
   name: String!
   description: String!
-  author: User!
+  author: User
   usersNumber: Int!
   photo: Photo
 }
@@ -29,6 +29,7 @@ type Message {
   createdAt: Date!
   updatedAt: Date!
   author: User!
+  room: Room!
   body: String!
 }
 
@@ -57,7 +58,10 @@ type User {
   displayName: String!
   email: String!
   verified: Boolean!
-  photo: String
+  photo: Photo
+  messagesNumber: Int!
+  createdRooms: [Room!]
+  entriesNumber: Int!
   isAdmin: Boolean!
   isModerator: Boolean!
   isBanned: Boolean!
@@ -68,6 +72,8 @@ type User {
   joinedRooms: [Room!]!
   ignore: [User!]!
   notifications: [Notification!]!
+  points: Int!
+  commentsNumber: Int!
 }
 
 type Link {
@@ -92,7 +98,7 @@ type Entry {
   publisher: String
   description: String
   body: String
-  author: User!
+  author: User
   room: Room!
   photo: Photo
   type: EntryType!
@@ -121,6 +127,7 @@ type Comment {
   createdAt: Date!
   updatedAt: Date!
   author: User!
+  entry: Entry!
   body: String
   parentId: Int
   voteScore: Int
@@ -141,7 +148,7 @@ type OnlineUser {
   userId: Int!
   roomId: Int!
   name: String!
-  photo: String
+  photo: Photo
   isAdmin: Boolean!
   isModerator: Boolean!
   isBanned: Boolean!
@@ -156,6 +163,9 @@ type VoteResult {
 type Query {
   me: User!
   user(id: Int!): User!
+  userEntries(userId: Int!, offsetId: Int!): [Entry!]!
+  userComments(userId: Int!, offsetId: Int!): [Comment!]!
+  userMessages(userId: Int!, offsetId: Int!): [Message!]!
   onlineUsers(roomId: Int!): [OnlineUser!]!
   room(name: String!): Room!
   newRooms: [Room!]!
@@ -167,6 +177,7 @@ type Query {
   checkLinkExsits(linkId: Int!, roomId: Int!): [Entry!]!
   metadata(url: String!): Link!
   comments(entryId: Int!): [Comment!]!
+  comment(commentId: Int!): Comment!
   newNotificationsNumber: Int!
   notifications(offsetId: Int!): [Notification!]!
   globalEmojis: [Emoji!]!
@@ -210,6 +221,7 @@ type Mutation {
   createArticle(photo: Upload, newArticleData: NewArticleData!): Entry!
   deleteEntry(id: Int!): Boolean!
   uploadRoomPhoto(attachment: Upload!, roomId: Int!): Photo!
+  uploadUserPhoto(attachment: Upload!): Photo!
   deletePhoto(photoId: Int!): Boolean!
   vote(value: VoteValueEnum!, entryId: Int!): VoteResult!
   voteComment(value: VoteValueEnum!, commentId: Int!): VoteResult!

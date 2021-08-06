@@ -36,7 +36,7 @@ const UsernameWithModal = ({
           color={data.color}
           onClick={handleUserSelect}
           className={classes.photo}
-          src={data.photo}
+          src={data.photo?.url}
           name={data.displayName}
         />
       ) : null}

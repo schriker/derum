@@ -41,6 +41,7 @@ export class NotificationsService {
         offset: offsetId,
       })
       .leftJoinAndSelect('notification.triggeredBy', 'triggeredBy')
+      .leftJoinAndSelect('triggeredBy.photo', 'photo')
       .addOrderBy('notification.createdAt', 'DESC')
       .take(10)
       .getMany();
@@ -115,6 +116,7 @@ export class NotificationsService {
     parentId: number,
     commentId: number,
   ) {
+    if (!user) return;
     if (user.id === triggeredBy.id) return;
     const isIgnored = await this.usersService.checkIfIgnored(user, triggeredBy);
     if (isIgnored) return;

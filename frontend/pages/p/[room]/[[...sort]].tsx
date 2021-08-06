@@ -30,6 +30,7 @@ export default function Room() {
   const router = useRouter();
   const { roomData } = useRoomData();
   const { hasMore, entriesData, ref } = useRoomEntries();
+  
   return roomData ? (
     <Layout
       title={roomData.room.name}

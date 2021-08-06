@@ -13,7 +13,7 @@ const UserModalAdminActionsBan = React.forwardRef<
       globalErrorVar({
         isOpen: true,
         message: `Użytkownik ${
-          userData.user.isBanned ? 'odbanowany' : 'Zbanowany'
+          userData.user.isBanned ? 'odbanowany.' : 'zbanowany.'
         }`,
       }),
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),

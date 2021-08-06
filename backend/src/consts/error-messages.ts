@@ -21,4 +21,5 @@ export const ERROR_MESSAGES = {
   MESSAGE_LIMIT: 'Przekroczyłeś limit zapytań.',
   COMMENTS_LIMIT: 'Przekroczyłeś limit zapytań.',
   EMOJI_EXISTS: 'Emotka z taką nazwą już istnieje.',
+  CANNOT_SELF_VOTE: 'Nie możesz głosować na swoje wpisy.',
 };

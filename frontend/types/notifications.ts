@@ -8,6 +8,7 @@ export type NotificationsDropdownPropsType = {
   handleClose: () => void;
   data: NotificationsQuery;
   fetchMore: () => void;
+  hasMore: boolean;
 };
 
 export type NotificationsItemPropsType = {

@@ -1,6 +1,9 @@
 query Me {
   me {
     ...AuthorFragment
+    photo {
+      ...PhotoFragment
+    }
     email
     showAvatars
     showColorNames
@@ -10,6 +13,9 @@ query Me {
       displayName
     }
     joinedRooms {
+      ...RoomFragment
+    }
+    createdRooms {
       ...RoomFragment
     }
   }
