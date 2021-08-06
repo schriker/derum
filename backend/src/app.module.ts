@@ -21,6 +21,7 @@ import { VotesModule } from './votes/votes.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { EmojisModule } from './emojis/emojis.module';
 import { EmailsModule } from './emails/emails.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { EmailsModule } from './emails/emails.module';
     NotificationsModule,
     EmojisModule,
     EmailsModule,
+    SearchModule,
   ],
   providers: [DateScalar],
 })
