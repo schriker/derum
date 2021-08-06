@@ -12,6 +12,8 @@ const EntriesItemActionsDelete = React.forwardRef<
   { data: EntryFragmentFragment }
 >(({ data }, ref) => {
   const [deleteEntry] = useDeleteEntryMutation({
+    onCompleted: () =>
+      globalErrorVar({ isOpen: true, message: 'Wpis został usunięty.' }),
     update: (cache) => {
       cache.modify({
         id: cache.identify(data),

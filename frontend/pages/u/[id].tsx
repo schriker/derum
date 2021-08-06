@@ -1,8 +1,12 @@
+import { Box } from '@material-ui/core';
 import { GetServerSideProps } from 'next';
-import React from 'react';
+import React, { useState } from 'react';
 import EntriesWrapper from '../../components/EntriesWrapper/EntriesWrapper';
 import Layout from '../../components/Layout/Layout';
+import UserContentButtons from '../../components/UserContentButtons/UserContentButtons';
 import UserHeader from '../../components/UserHeader/UserHeader';
+import UserProfileContent from '../../components/UserProfileContent/UserProfileContent';
+import UserProfileContentCreatedRooms from '../../components/UserProfileCreatedRooms/UserProfileContentCreatedRooms';
 import { indexRoomVars } from '../../consts';
 import {
   MeDocument,
@@ -23,11 +27,21 @@ import Custom404 from '../404';
 export default function User() {
   useRoomData();
   const { data } = useUserProfileData();
+  const [tabIndex, setTabIndex] = useState(0);
 
   return data ? (
     <Layout title={data.user.displayName} ogDescription="">
       <EntriesWrapper>
         <UserHeader />
+        <UserContentButtons
+          setIndex={setTabIndex}
+          tabIndex={tabIndex}
+          data={data}
+        />
+        <Box display="flex" mt={2} pb={2} alignItems="flex-start">
+          <UserProfileContent tabIndex={tabIndex} />
+          <UserProfileContentCreatedRooms data={data} />
+        </Box>
       </EntriesWrapper>
     </Layout>
   ) : (

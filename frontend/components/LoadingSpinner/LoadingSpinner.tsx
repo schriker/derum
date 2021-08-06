@@ -19,7 +19,7 @@ const LoadingSpinner = () => {
         position="absolute"
         style={{ transform: 'translate(-50%, -50%)' }}
       >
-        <CircularProgress color="secondary" />
+        <CircularProgress color="primary" />
       </Box>
     </Box>
   );

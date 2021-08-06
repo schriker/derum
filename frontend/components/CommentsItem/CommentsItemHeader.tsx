@@ -31,15 +31,18 @@ const CommentsItemHeader = ({
     isHighlighted: false,
   });
 
+  let url = `/p/${router.query.room}/w/${router.query.id[0]}/${router.query.id[1]}?comment=${data.id}`;
+
+  if (!setParentId) {
+    url = `/p/${data.entry.room.name}/w/${data.entry.id}/${data.entry.slug}?comment=${data.id}`;
+  }
+
   return (
     <Box className={classes.headerWrapper}>
       <Box display="flex">
         <Box className={classes.header}>
           <UsernameWithModal photo data={data.author} />
-          <NextLink
-            href={`/p/${router.query.room}/w/${router.query.id[0]}/${router.query.id[1]}?comment=${data.id}`}
-            passHref
-          >
+          <NextLink href={url} passHref>
             <Link
               variant="subtitle2"
               color="textSecondary"
@@ -52,7 +55,7 @@ const CommentsItemHeader = ({
         {data.parentId && <CommentsItemResponseTo data={data} />}
       </Box>
       <Box>
-        {userdata && !entryIsDeleted && (
+        {userdata && !entryIsDeleted && setParentId && (
           <ButtonDefault
             onClick={() => setParentId(data.id === parentId ? null : data.id)}
             className={classes.replyButton}

@@ -24,6 +24,7 @@ export type Comment = {
   createdAt: Scalars['Date'];
   updatedAt: Scalars['Date'];
   author: User;
+  entry: Entry;
   body?: Maybe<Scalars['String']>;
   parentId?: Maybe<Scalars['Int']>;
   voteScore?: Maybe<Scalars['Int']>;
@@ -96,6 +97,7 @@ export type Message = {
   createdAt: Scalars['Date'];
   updatedAt: Scalars['Date'];
   author: User;
+  room: Room;
   body: Scalars['String'];
 };
 
@@ -401,6 +403,9 @@ export type Query = {
   __typename?: 'Query';
   me: User;
   user: User;
+  userEntries: Array<Entry>;
+  userComments: Array<Comment>;
+  userMessages: Array<Message>;
   onlineUsers: Array<OnlineUser>;
   room: Room;
   newRooms: Array<Room>;
@@ -412,6 +417,7 @@ export type Query = {
   checkLinkExsits: Array<Entry>;
   metadata: Link;
   comments: Array<Comment>;
+  comment: Comment;
   newNotificationsNumber: Scalars['Int'];
   notifications: Array<Notification>;
   globalEmojis: Array<Emoji>;
@@ -420,6 +426,24 @@ export type Query = {
 
 export type QueryUserArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryUserEntriesArgs = {
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
+};
+
+
+export type QueryUserCommentsArgs = {
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
+};
+
+
+export type QueryUserMessagesArgs = {
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
 };
 
 
@@ -471,6 +495,11 @@ export type QueryMetadataArgs = {
 
 export type QueryCommentsArgs = {
   entryId: Scalars['Int'];
+};
+
+
+export type QueryCommentArgs = {
+  commentId: Scalars['Int'];
 };
 
 
@@ -1019,6 +1048,19 @@ export type CheckLinkExsitsQuery = (
   )> }
 );
 
+export type CommentQueryVariables = Exact<{
+  commentId: Scalars['Int'];
+}>;
+
+
+export type CommentQuery = (
+  { __typename?: 'Query' }
+  & { comment: (
+    { __typename?: 'Comment' }
+    & CommentFragmentFragment
+  ) }
+);
+
 export type CommentsQueryVariables = Exact<{
   entryId: Scalars['Int'];
 }>;
@@ -1236,6 +1278,67 @@ export type UserQuery = (
     )> }
     & AuthorFragmentFragment
   ) }
+);
+
+export type UserCommentsQueryVariables = Exact<{
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
+}>;
+
+
+export type UserCommentsQuery = (
+  { __typename?: 'Query' }
+  & { userComments: Array<(
+    { __typename?: 'Comment' }
+    & { entry: (
+      { __typename?: 'Entry' }
+      & Pick<Entry, 'id' | 'slug' | 'deleted'>
+      & { room: (
+        { __typename?: 'Room' }
+        & Pick<Room, 'id' | 'name'>
+      ) }
+    ) }
+    & CommentFragmentFragment
+  )> }
+);
+
+export type UserEntriesQueryVariables = Exact<{
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
+}>;
+
+
+export type UserEntriesQuery = (
+  { __typename?: 'Query' }
+  & { userEntries: Array<(
+    { __typename?: 'Entry' }
+    & EntryFragmentFragment
+  )> }
+);
+
+export type UserMessagesQueryVariables = Exact<{
+  userId: Scalars['Int'];
+  offsetId: Scalars['Int'];
+}>;
+
+
+export type UserMessagesQuery = (
+  { __typename?: 'Query' }
+  & { userMessages: Array<(
+    { __typename?: 'Message' }
+    & Pick<Message, 'id' | 'body' | 'createdAt'>
+    & { room: (
+      { __typename?: 'Room' }
+      & Pick<Room, 'id' | 'name'>
+    ), author: (
+      { __typename?: 'User' }
+      & { photo?: Maybe<(
+        { __typename?: 'Photo' }
+        & PhotoFragmentFragment
+      )> }
+      & AuthorFragmentFragment
+    ) }
+  )> }
 );
 
 export type UserProfileQueryVariables = Exact<{
@@ -2526,6 +2629,41 @@ export function useCheckLinkExsitsLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
 export type CheckLinkExsitsQueryHookResult = ReturnType<typeof useCheckLinkExsitsQuery>;
 export type CheckLinkExsitsLazyQueryHookResult = ReturnType<typeof useCheckLinkExsitsLazyQuery>;
 export type CheckLinkExsitsQueryResult = Apollo.QueryResult<CheckLinkExsitsQuery, CheckLinkExsitsQueryVariables>;
+export const CommentDocument = gql`
+    query Comment($commentId: Int!) {
+  comment(commentId: $commentId) {
+    ...CommentFragment
+  }
+}
+    ${CommentFragmentFragmentDoc}`;
+
+/**
+ * __useCommentQuery__
+ *
+ * To run a query within a React component, call `useCommentQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCommentQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCommentQuery({
+ *   variables: {
+ *      commentId: // value for 'commentId'
+ *   },
+ * });
+ */
+export function useCommentQuery(baseOptions: Apollo.QueryHookOptions<CommentQuery, CommentQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CommentQuery, CommentQueryVariables>(CommentDocument, options);
+      }
+export function useCommentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CommentQuery, CommentQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CommentQuery, CommentQueryVariables>(CommentDocument, options);
+        }
+export type CommentQueryHookResult = ReturnType<typeof useCommentQuery>;
+export type CommentLazyQueryHookResult = ReturnType<typeof useCommentLazyQuery>;
+export type CommentQueryResult = Apollo.QueryResult<CommentQuery, CommentQueryVariables>;
 export const CommentsDocument = gql`
     query Comments($entryId: Int!) {
   comments(entryId: $entryId) {
@@ -3100,6 +3238,136 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const UserCommentsDocument = gql`
+    query UserComments($userId: Int!, $offsetId: Int!) {
+  userComments(userId: $userId, offsetId: $offsetId) {
+    ...CommentFragment
+    entry {
+      id
+      slug
+      deleted
+      room {
+        id
+        name
+      }
+    }
+  }
+}
+    ${CommentFragmentFragmentDoc}`;
+
+/**
+ * __useUserCommentsQuery__
+ *
+ * To run a query within a React component, call `useUserCommentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserCommentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserCommentsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      offsetId: // value for 'offsetId'
+ *   },
+ * });
+ */
+export function useUserCommentsQuery(baseOptions: Apollo.QueryHookOptions<UserCommentsQuery, UserCommentsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserCommentsQuery, UserCommentsQueryVariables>(UserCommentsDocument, options);
+      }
+export function useUserCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserCommentsQuery, UserCommentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserCommentsQuery, UserCommentsQueryVariables>(UserCommentsDocument, options);
+        }
+export type UserCommentsQueryHookResult = ReturnType<typeof useUserCommentsQuery>;
+export type UserCommentsLazyQueryHookResult = ReturnType<typeof useUserCommentsLazyQuery>;
+export type UserCommentsQueryResult = Apollo.QueryResult<UserCommentsQuery, UserCommentsQueryVariables>;
+export const UserEntriesDocument = gql`
+    query UserEntries($userId: Int!, $offsetId: Int!) {
+  userEntries(userId: $userId, offsetId: $offsetId) {
+    ...EntryFragment
+  }
+}
+    ${EntryFragmentFragmentDoc}`;
+
+/**
+ * __useUserEntriesQuery__
+ *
+ * To run a query within a React component, call `useUserEntriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserEntriesQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      offsetId: // value for 'offsetId'
+ *   },
+ * });
+ */
+export function useUserEntriesQuery(baseOptions: Apollo.QueryHookOptions<UserEntriesQuery, UserEntriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserEntriesQuery, UserEntriesQueryVariables>(UserEntriesDocument, options);
+      }
+export function useUserEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserEntriesQuery, UserEntriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserEntriesQuery, UserEntriesQueryVariables>(UserEntriesDocument, options);
+        }
+export type UserEntriesQueryHookResult = ReturnType<typeof useUserEntriesQuery>;
+export type UserEntriesLazyQueryHookResult = ReturnType<typeof useUserEntriesLazyQuery>;
+export type UserEntriesQueryResult = Apollo.QueryResult<UserEntriesQuery, UserEntriesQueryVariables>;
+export const UserMessagesDocument = gql`
+    query UserMessages($userId: Int!, $offsetId: Int!) {
+  userMessages(userId: $userId, offsetId: $offsetId) {
+    id
+    body
+    createdAt
+    room {
+      id
+      name
+    }
+    author {
+      ...AuthorFragment
+      photo {
+        ...PhotoFragment
+      }
+    }
+  }
+}
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}`;
+
+/**
+ * __useUserMessagesQuery__
+ *
+ * To run a query within a React component, call `useUserMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserMessagesQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      offsetId: // value for 'offsetId'
+ *   },
+ * });
+ */
+export function useUserMessagesQuery(baseOptions: Apollo.QueryHookOptions<UserMessagesQuery, UserMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserMessagesQuery, UserMessagesQueryVariables>(UserMessagesDocument, options);
+      }
+export function useUserMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserMessagesQuery, UserMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserMessagesQuery, UserMessagesQueryVariables>(UserMessagesDocument, options);
+        }
+export type UserMessagesQueryHookResult = ReturnType<typeof useUserMessagesQuery>;
+export type UserMessagesLazyQueryHookResult = ReturnType<typeof useUserMessagesLazyQuery>;
+export type UserMessagesQueryResult = Apollo.QueryResult<UserMessagesQuery, UserMessagesQueryVariables>;
 export const UserProfileDocument = gql`
     query UserProfile($id: Int!) {
   user(id: $id) {

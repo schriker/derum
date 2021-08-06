@@ -36,7 +36,7 @@ const useCommentsItemStyles = makeStyles<Theme, CommentsItemStyles>(
       paddingRight: 8,
       paddingBottom: 4,
       justifyContent: 'space-between',
-      backgroundColor: theme.palette.grey[900],
+      backgroundColor: theme.palette.secondary['A700'],
     },
     replyButton: {
       marginLeft: 8,

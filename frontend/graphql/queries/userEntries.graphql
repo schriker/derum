@@ -1,0 +1,5 @@
+query UserEntries($userId: Int!, $offsetId: Int!) {
+  userEntries(userId: $userId, offsetId: $offsetId) {
+    ...EntryFragment
+  }
+}

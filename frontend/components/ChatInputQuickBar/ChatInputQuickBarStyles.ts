@@ -15,14 +15,14 @@ const useChatInputQuickBarStyles = makeStyles((theme: Theme) => ({
     borderRadius: theme.shape.borderRadius,
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: theme.palette.grey[800],
+      backgroundColor: theme.palette.secondary[800],
     },
     '& img': {
       margin: '0 auto',
     },
   },
   active: {
-    backgroundColor: theme.palette.grey[800],
+    backgroundColor: theme.palette.secondary[800],
   },
 }));
 

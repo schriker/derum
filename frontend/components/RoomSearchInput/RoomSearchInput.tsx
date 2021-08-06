@@ -51,7 +51,7 @@ const RoomSearchInput = ({ error, onSelect, placeholder }: RoomSearchProps) => {
         name: word,
       },
     });
-  }, 1000);
+  }, 500);
 
   const handleChange = (_, value) => {
     setIsLoading(true);

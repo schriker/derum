@@ -1,7 +1,7 @@
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import { openModalVar } from '../../lib/apolloVars';
-import { ButtonRoomContent } from '../Buttons/ButtonRoomContent';
+import ButtonRoomContent from '../Buttons/ButtonRoomContent';
 import VideoIcon from '../Icons/VideoIcon';
 
 const RoomAddVideo = () => {

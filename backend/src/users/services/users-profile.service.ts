@@ -153,7 +153,7 @@ export class UsersProfileService {
       .leftJoinAndSelect('message.room', 'room')
       .leftJoinAndSelect('author.photo', 'photo')
       .addOrderBy('message.createdAt', 'DESC')
-      .take(70)
+      .take(20)
       .getMany();
   }
 
@@ -164,8 +164,8 @@ export class UsersProfileService {
   ): Promise<Entry[]> {
     const whereQuery =
       offsetId > 0
-        ? 'entry.authorId = :userId AND entry.id < :offset'
-        : 'entry.authorId = :userId';
+        ? 'entry.authorId = :userId AND entry.deleted = false AND entry.id < :offset'
+        : 'entry.authorId = :userId AND entry.deleted = false';
     return this.entriesRepository
       .createQueryBuilder('entry')
       .where(whereQuery, {
@@ -190,11 +190,13 @@ export class UsersProfileService {
       .leftJoin('entry.comments', 'comments')
       .addSelect('COUNT(DISTINCT(comments.id))', 'entry_commentsNumber')
       .leftJoinAndSelect('entry.room', 'room')
+      .leftJoinAndSelect('entry.photo', 'photo')
       .leftJoinAndSelect('room.author', 'roomAuthor')
       .leftJoinAndSelect('entry.author', 'author')
       .groupBy('entry.id')
       .addGroupBy('author.id')
       .addGroupBy('room.id')
+      .addGroupBy('photo.id')
       .addGroupBy('roomAuthor.id')
       .addOrderBy('entry.createdAt', 'DESC')
       .take(20)
@@ -208,19 +210,17 @@ export class UsersProfileService {
   ): Promise<Comment[]> {
     const whereQuery =
       offsetId > 0
-        ? 'comment.authorId = :userId AND comment.id < :offset'
-        : 'comment.authorId = :userId';
+        ? 'comment.authorId = :userId AND comment.deleted = false AND comment.id < :offset'
+        : 'comment.authorId = :userId AND comment.deleted = false';
     return this.commentsRepository
       .createQueryBuilder('comment')
       .where(whereQuery, {
         userId: userId,
         offset: offsetId,
       })
-      .leftJoinAndSelect('comment.entry', 'entry')
       .leftJoin('comment.votes', 'votes')
       .addSelect('COALESCE(SUM(votes.value), 0)', 'score')
-      .orderBy('score', 'DESC', 'NULLS LAST')
-      .addOrderBy('comment.createdAt', 'DESC')
+      .orderBy('comment.createdAt', 'DESC')
       .addSelect((subQuery) => {
         return subQuery
           .select('COALESCE(SUM(value), 0)')
@@ -235,10 +235,13 @@ export class UsersProfileService {
             sessionId: session ? session.id : null,
           });
       }, 'comment_userVote')
+      .leftJoinAndSelect('comment.entry', 'entry')
+      .leftJoinAndSelect('entry.room', 'room')
       .leftJoinAndSelect('comment.author', 'author')
       .leftJoinAndSelect('author.photo', 'photo')
       .groupBy('comment.id')
       .addGroupBy('author.id')
+      .addGroupBy('room.id')
       .addGroupBy('photo.id')
       .addGroupBy('entry.id')
       .addOrderBy('comment.createdAt', 'DESC')

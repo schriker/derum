@@ -2,13 +2,20 @@ import { CommentFragmentFragment, VoteValueEnum } from '../generated/graphql';
 
 export interface MapedComments extends CommentFragmentFragment {
   childrens: MapedComments[];
+  entry?: {
+    id: number;
+    slug: string;
+    room: {
+      name: string;
+    };
+  };
 }
 
 export type CommentItemPropsType = {
   level: number;
   data: MapedComments;
-  setParentId: (id: number) => void;
-  parentId: number | null;
+  setParentId?: (id: number) => void;
+  parentId?: number | null;
   entryId: number;
   entryIsDeleted: boolean;
 };

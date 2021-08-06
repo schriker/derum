@@ -177,6 +177,7 @@ type Query {
   checkLinkExsits(linkId: Int!, roomId: Int!): [Entry!]!
   metadata(url: String!): Link!
   comments(entryId: Int!): [Comment!]!
+  comment(commentId: Int!): Comment!
   newNotificationsNumber: Int!
   notifications(offsetId: Int!): [Notification!]!
   globalEmojis: [Emoji!]!

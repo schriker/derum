@@ -11,6 +11,7 @@ const NotificationsDropdown = ({
   handleClose,
   data,
   fetchMore,
+  hasMore,
 }: NotificationsDropdownPropsType) => {
   return data ? (
     <Dropdown
@@ -32,7 +33,7 @@ const NotificationsDropdown = ({
           </Typography>
         </Box>
       )}
-      {!!data.notifications.length && (
+      {!!data.notifications.length && hasMore && (
         <NotificationsLoadMore fetchMore={fetchMore} />
       )}
     </Dropdown>

@@ -15,7 +15,7 @@ const useEmojisPickerStyles = makeStyles((theme: Theme) => ({
     paddingRight: theme.spacing(2),
     paddingTop: theme.spacing(1),
     paddingBottom: theme.spacing(1),
-    backgroundColor: theme.palette.grey[800],
+    backgroundColor: theme.palette.secondary[800],
     '& img': {
       marginRight: theme.spacing(1),
     },
@@ -27,14 +27,14 @@ const useEmojisPickerStyles = makeStyles((theme: Theme) => ({
     borderRadius: theme.shape.borderRadius,
     cursor: 'pointer',
     '&:hover': {
-      backgroundColor: theme.palette.grey[800],
+      backgroundColor: theme.palette.secondary[800],
     },
     '& img': {
       margin: '0 auto',
     },
   },
   active: {
-    backgroundColor: theme.palette.grey[800],
+    backgroundColor: theme.palette.secondary[800],
   },
   emojis: {
     display: 'flex',

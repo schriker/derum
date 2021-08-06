@@ -1,6 +1,6 @@
 import React from 'react';
 import useButtonWithAuthAndModal from '../../hooks/useButtonWithAuthAndModal';
-import { ButtonRoomContent } from '../Buttons/ButtonRoomContent';
+import ButtonRoomContent from '../Buttons/ButtonRoomContent';
 import ArticleIcon from '../Icons/ArticleIcon';
 import Modal from '../Modal/Modal';
 import RoomNewArticleForm from '../RoomNewArticleForm/RoomNewArticleForm';

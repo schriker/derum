@@ -57,7 +57,7 @@ const useInputQuickSelect = ({
       });
       setMatchedKeyWords(matchedUsers.filter((item) => item !== undefined));
     }
-  }, 1000);
+  }, 300);
 
   const debouncedSetEmojis = useDebouncedCallback((word: string) => {
     if (getValues('body').length) {
@@ -67,7 +67,7 @@ const useInputQuickSelect = ({
         )
       );
     }
-  }, 1000);
+  }, 300);
 
   const putEmoji = (emoji: string, atEnd = false) => {
     let text = getValues('body');

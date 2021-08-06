@@ -22,6 +22,16 @@ const ChatMessageActions = ({ message }: MessageActionProps) => {
   const [deleteMessage] = useDeleteMessageMutation({
     onError: () =>
       globalErrorVar({ isOpen: true, message: 'Błąd usuwania wiadomości.' }),
+    update: (cache) => {
+      cache.modify({
+        id: cache.identify(message),
+        fields: {
+          body() {
+            return null;
+          },
+        },
+      });
+    },
   });
 
   const onDeleteMessage = (e: React.MouseEvent<HTMLButtonElement>) => {

@@ -16,7 +16,7 @@ import UserButton from '../UserButton/UserButton';
 const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     fontSize: 16,
-    color: theme.palette.grey[600],
+    color: theme.palette.secondary[600],
   },
 }));
 

@@ -8,7 +8,7 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
   wrapper: {
     display: 'flex',
     position: 'relative',
-    marginTop: 3,
+    marginBottom: 3,
   },
   action: {
     flex: '0 0 200px',
@@ -18,7 +18,7 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
   },
   commentIcon: {
     fontSize: 14,
-    color: theme.palette.text.secondary,
+    color: theme.palette.secondary[600],
     marginRight: 5,
   },
   commentsNumber: {
@@ -26,12 +26,14 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
   },
   description: {
     marginTop: theme.spacing(1),
-    color: theme.palette.grey[500],
+    color: theme.palette.secondary[500],
   },
   publisher: {
     fontSize: 14,
     marginRight: 10,
-    marginLeft: 10,
+    '& a': {
+      color: theme.palette.secondary[900],
+    },
   },
   deleted: {
     display: 'flex',
@@ -46,7 +48,7 @@ const useEntriesItemStyle = makeStyles((theme: Theme) => ({
     flexWrap: 'wrap',
     alignItems: 'center',
     marginTop: theme.spacing(1),
-    '& p': {
+    '& h6': {
       marginRight: 10,
     },
   },

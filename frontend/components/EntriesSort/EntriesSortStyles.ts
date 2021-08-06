@@ -5,6 +5,7 @@ const useEntriesSortStyles = makeStyles((theme: Theme) => ({
     borderRadius: theme.shape.borderRadius,
     marginTop: theme.spacing(2),
     padding: '8px 10px',
+    marginBottom: 3,
     backgroundColor: theme.palette.background.paper,
     '& button': {
       marginRight: 5,

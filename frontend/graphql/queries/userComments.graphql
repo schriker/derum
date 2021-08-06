@@ -1,0 +1,14 @@
+query UserComments($userId: Int!, $offsetId: Int!) {
+  userComments(userId: $userId, offsetId: $offsetId) {
+    ...CommentFragment
+    entry {
+      id
+      slug
+      deleted
+      room {
+        id
+        name
+      }
+    }
+  }
+}

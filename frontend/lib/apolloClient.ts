@@ -78,6 +78,48 @@ function createApolloClient() {
                 return [...filtered, ...existing];
               },
             },
+            userEntries: {
+              keyArgs: false,
+              merge(existing, incoming, { args, readField }) {
+                if (args.offsetId === 0) return incoming;
+                const filtered = incoming.filter(
+                  (item) =>
+                    !existing.some(
+                      (current) =>
+                        readField('id', current) === readField('id', item)
+                    )
+                );
+                return [...existing, ...filtered];
+              },
+            },
+            userComments: {
+              keyArgs: false,
+              merge(existing, incoming, { args, readField }) {
+                if (args.offsetId === 0) return incoming;
+                const filtered = incoming.filter(
+                  (item) =>
+                    !existing.some(
+                      (current) =>
+                        readField('id', current) === readField('id', item)
+                    )
+                );
+                return [...existing, ...filtered];
+              },
+            },
+            userMessages: {
+              keyArgs: false,
+              merge(existing, incoming, { args, readField }) {
+                if (args.offsetId === 0) return incoming;
+                const filtered = incoming.filter(
+                  (item) =>
+                    !existing.some(
+                      (current) =>
+                        readField('id', current) === readField('id', item)
+                    )
+                );
+                return [...existing, ...filtered];
+              },
+            },
             entries: {
               keyArgs: false,
               merge(existing, incoming, { args, readField }) {

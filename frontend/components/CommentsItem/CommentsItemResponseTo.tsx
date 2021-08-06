@@ -3,15 +3,15 @@ import { useApolloClient } from '@apollo/client';
 import { ButtonText } from '../Buttons/ButtonText';
 import { MapedComments } from '../../types/comment';
 import useCommentsItemStyles from './CommentsItemStyles';
-import { CommentFragmentFragmentDoc } from '../../generated/graphql';
+import {
+  CommentFragmentFragmentDoc,
+  useCommentLazyQuery,
+} from '../../generated/graphql';
 import { Popover, Typography } from '@material-ui/core';
 import trimString from '../../helpers/trimString';
+import { useEffect } from 'react';
 
-const CommentsItemResponseTo = ({
-  data,
-}: {
-  data: MapedComments;
-}) => {
+const CommentsItemResponseTo = ({ data }: { data: MapedComments }) => {
   const apolloClient = useApolloClient();
   const classes = useCommentsItemStyles({
     userColor: data.author.color,
@@ -19,6 +19,12 @@ const CommentsItemResponseTo = ({
   });
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [parentComment, setParentComment] = useState<MapedComments>(null);
+  const [queryComment, { data: parentCommentFetched }] = useCommentLazyQuery();
+
+  useEffect(() => {
+    if (parentCommentFetched)
+      setParentComment({ ...parentCommentFetched.comment, childrens: [] });
+  }, [parentCommentFetched]);
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(e.currentTarget);
@@ -27,7 +33,15 @@ const CommentsItemResponseTo = ({
       fragment: CommentFragmentFragmentDoc,
       fragmentName: 'CommentFragment',
     });
-    setParentComment(parentComment);
+    if (!parentComment) {
+      queryComment({
+        variables: {
+          commentId: data.parentId,
+        },
+      });
+    } else {
+      setParentComment(parentComment);
+    }
   };
 
   const handleClose = () => {

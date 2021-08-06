@@ -8,10 +8,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     fontSize: 18,
     marginRight: 10,
-    color: theme.palette.grey[500],
-  },
-  search: {
-    backgroundColor: theme.palette.divider,
+    color: theme.palette.secondary[500],
   },
 }));
 
@@ -26,11 +23,11 @@ const SearchInput = ({
   return (
     <CustomInput
       autoFocus
+      bg="light"
       style={style}
       value={value}
       onChange={onChange}
       startAdornment={<SearchIcon className={classes.icon} />}
-      className={classes.search}
       placeholder={placeholder}
     />
   );

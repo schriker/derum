@@ -22,7 +22,7 @@ export const CustomInput = withStyles((theme: Theme) => ({
       marginTop: theme.spacing(3),
     },
     '&:hover': {
-      borderColor: theme.palette.grey[700],
+      borderColor: theme.palette.secondary[700],
     },
   },
   adornedStart: {
@@ -43,7 +43,10 @@ export const CustomInput = withStyles((theme: Theme) => ({
   },
   focused: {
     borderColor: theme.palette.primary['A700'],
-    backgroundColor: theme.palette.background.default,
+    backgroundColor: styledBy('bg', {
+      dark: theme.palette.background.default,
+      light: theme.palette.background.default,
+    }),
     '&:hover': {
       borderColor: theme.palette.primary['A700'],
     },

@@ -36,6 +36,13 @@ export class CommentsResolver {
     return this.commentsService.getByEntryId(entryId, session);
   }
 
+  @Query(() => Comment)
+  comment(
+    @Args('commentId', { type: () => Int }) commentId: number,
+  ): Promise<Comment> {
+    return this.commentsService.getById(commentId);
+  }
+
   @Mutation(() => Comment)
   @UseGuards(GQLSessionGuard, GQLThrottlerGuard)
   @Throttle(1, 20)

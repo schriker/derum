@@ -37,7 +37,8 @@ const useRoomEntries = () => {
     networkStatus,
     refetch,
   } = useEntriesQuery({
-    onError: () => globalErrorVar({ isOpen: true, message: 'Błąd serwera.' }),
+    onError: () =>
+      globalErrorVar({ isOpen: true, message: 'Nie mogliśmy pobrać wpisów.' }),
     notifyOnNetworkStatusChange: true,
     variables: {
       queryData: {

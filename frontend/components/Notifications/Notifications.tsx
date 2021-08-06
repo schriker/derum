@@ -1,5 +1,5 @@
 import { Badge, Box, createStyles, withStyles } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   NotificationDocument,
   NotificationSubscription,
@@ -26,6 +26,7 @@ const StyledBadge = withStyles(() =>
 
 const Notifications = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [hasMore, setHasMore] = useState(true);
 
   const { data: userData } = useMeQuery({
     fetchPolicy: 'cache-only',
@@ -42,12 +43,15 @@ const Notifications = () => {
     onError: (e) => globalErrorVar({ isOpen: true, message: e.message }),
   });
 
-  const handleFetchMore = () => {
-    fetchMore({
+  const handleFetchMore = async () => {
+    const {
+      data: { notifications },
+    } = await fetchMore({
       variables: {
         offsetId: data.notifications[data.notifications.length - 1].id,
       },
     });
+    if (!notifications.length) setHasMore(false);
   };
 
   useEffect(() => {
@@ -108,6 +112,7 @@ const Notifications = () => {
       <NotificationsDropdown
         fetchMore={handleFetchMore}
         data={data}
+        hasMore={hasMore}
         handleClose={handleClose}
         anchorEl={anchorEl}
       />

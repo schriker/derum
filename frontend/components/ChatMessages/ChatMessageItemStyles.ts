@@ -17,7 +17,7 @@ const useChatMessageItemStyles = makeStyles<Theme, ChatMessageItemStyles>(
       zIndex: 999,
       opacity: 1,
       padding: '2px 4px',
-      backgroundColor: theme.palette.grey[800],
+      backgroundColor: theme.palette.secondary[800],
       borderRadius: theme.shape.borderRadius,
       boxShadow: theme.shadows[1],
     },
@@ -34,7 +34,7 @@ const useChatMessageItemStyles = makeStyles<Theme, ChatMessageItemStyles>(
       borderRadius: theme.shape.borderRadius,
       marginTop: '2px',
       '&:hover': {
-        backgroundColor: theme.palette.grey[900],
+        backgroundColor: theme.palette.secondary['A700'],
         cursor: 'pointer',
       },
     }),

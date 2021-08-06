@@ -26,7 +26,7 @@ const styles = (theme: Theme) =>
       },
     },
     disabled: {
-      backgroundColor: theme.palette.grey[300],
+      backgroundColor: theme.palette.secondary[300],
     },
   });
 
