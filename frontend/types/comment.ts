@@ -16,6 +16,7 @@ export type CommentItemPropsType = {
   data: MapedComments;
   setParentId?: (id: number) => void;
   parentId?: number | null;
+  searchView?: boolean;
   entryId: number;
   entryIsDeleted: boolean;
 };

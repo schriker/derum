@@ -160,6 +160,12 @@ type VoteResult {
   voteScore: Int!
 }
 
+type SearchResult {
+  users: [User!]!
+  comments: [Comment!]!
+  entires: [Entry!]!
+}
+
 type Query {
   me: User!
   user(id: Int!): User!
@@ -181,6 +187,7 @@ type Query {
   newNotificationsNumber: Int!
   notifications(offsetId: Int!): [Notification!]!
   globalEmojis: [Emoji!]!
+  search(query: String!): SearchResult!
 }
 
 input QueryEntriesInput {

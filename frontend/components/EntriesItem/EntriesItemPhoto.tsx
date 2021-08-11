@@ -9,8 +9,11 @@ const EntriesItemPhoto = ({
   image,
   title,
   fullView,
+  searchView,
 }: EntiresItemTitleProps) => {
-  const classes = useEntriesItemStyle();
+  const classes = useEntriesItemStyle({
+    searchView,
+  });
 
   return (
     <NextLink href={link} passHref>

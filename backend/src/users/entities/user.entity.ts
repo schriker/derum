@@ -152,4 +152,7 @@ export class User {
 
   @OneToMany(() => UserSession, (session) => session.user)
   sessions: UserSession[];
+
+  @Column('tsvector', { select: false, default: '' })
+  document: any;
 }

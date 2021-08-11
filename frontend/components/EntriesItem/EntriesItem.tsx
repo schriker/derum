@@ -13,8 +13,15 @@ import EntriesItemComments from './EntriesItemComments';
 import UsernameWithModal from '../UsernameWithModal/UsernameWithModal';
 import CommentsIcon from '../Icons/CommentsIcon';
 
-const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
-  const classes = useEntriesItemStyle();
+const EntriesItem = ({
+  data,
+  fullView = false,
+  preview,
+  searchView = false,
+}: EntriesItemProps) => {
+  const classes = useEntriesItemStyle({
+    searchView,
+  });
   const roomLink = `/p/${data.room.name}`;
   const link =
     preview || !data.url
@@ -22,7 +29,7 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
       : data.url;
   return (
     <Card className={classes.wrapper} elevation={0}>
-      {!data.deleted && (
+      {!data.deleted && !searchView && (
         <EntriesItemVote
           data={data}
           userVote={data.userVote}
@@ -32,10 +39,11 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
       )}
       {data.photo && (
         <EntriesItemPhoto
-          fullView={fullView}
           link={link}
-          image={data.photo.url}
           title={data.title}
+          fullView={fullView}
+          image={data.photo.url}
+          searchView={searchView}
         />
       )}
       <CardContent className={classes.content}>
@@ -53,31 +61,36 @@ const EntriesItem = ({ data, fullView = false, preview }: EntriesItemProps) => {
                 target={fullView ? '_blank' : '_self'}
                 rel="noreferrer"
                 variant="h5"
+                className={classes.title}
                 color="textPrimary"
               >
                 {data.title}
               </Link>
             </NextLink>
-            <Box className={classes.info}>
-              {data.author && <UsernameWithModal data={data.author} />}
-              <Typography
-                variant="subtitle2"
-                color="textSecondary"
-                title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
-              >
-                {dayjs().to(dayjs(data.createdAt))}
+            {!searchView && (
+              <Box className={classes.info}>
+                {data.author && <UsernameWithModal data={data.author} />}
+                <Typography
+                  variant="subtitle2"
+                  color="textSecondary"
+                  title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
+                >
+                  {dayjs().to(dayjs(data.createdAt))}
+                </Typography>
+                {data.publisher && (
+                  <EntiresItemPublisher
+                    publisher={data.publisher}
+                    url={data.url}
+                  />
+                )}
+                <EntriesItemActions entryData={data} />
+              </Box>
+            )}
+            {!searchView && (
+              <Typography variant="body2" className={classes.description}>
+                {data.description}
               </Typography>
-              {data.publisher && (
-                <EntiresItemPublisher
-                  publisher={data.publisher}
-                  url={data.url}
-                />
-              )}
-              <EntriesItemActions entryData={data} />
-            </Box>
-            <Typography variant="body2" className={classes.description}>
-              {data.description}
-            </Typography>
+            )}
             <Box className={classes.info}>
               <CommentsIcon className={classes.commentIcon} />
               <EntriesItemComments data={data} />

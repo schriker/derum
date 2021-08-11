@@ -4,7 +4,9 @@ import { EntriesPublisherProps } from '../../types/entries';
 import useEntriesItemStyle from './EntriesItemStyles';
 
 const EntiresItemPublisher = ({ publisher, url }: EntriesPublisherProps) => {
-  const classes = useEntriesItemStyle();
+  const classes = useEntriesItemStyle({
+    searchView: false,
+  });
 
   return (
     <Chip

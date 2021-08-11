@@ -36,7 +36,7 @@ const RoomAvatar = ({
 
   return (
     <Link href={`/p/${name}`} passHref>
-      <DarkTooltip title={name} enterDelay={500} placement="right">
+      <DarkTooltip title={name} placement="right">
         <ButtonIcon className={classes.button}>
           <AvatarPhoto
             color="#FF026A"

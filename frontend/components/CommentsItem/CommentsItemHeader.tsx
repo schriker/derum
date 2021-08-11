@@ -19,6 +19,7 @@ const CommentsItemHeader = ({
   setParentId,
   parentId,
   entryIsDeleted,
+  searchView,
 }: CommentItemPropsType) => {
   const router = useRouter();
   const { data: userdata } = useMeQuery({
@@ -31,10 +32,12 @@ const CommentsItemHeader = ({
     isHighlighted: false,
   });
 
-  let url = `/p/${router.query.room}/w/${router.query.id[0]}/${router.query.id[1]}?comment=${data.id}`;
+  let url = null;
 
   if (!setParentId) {
     url = `/p/${data.entry.room.name}/w/${data.entry.id}/${data.entry.slug}?comment=${data.id}`;
+  } else {
+    url = `/p/${router.query.room}/w/${router.query.id[0]}/${router.query.id[1]}?comment=${data.id}`;
   }
 
   return (
@@ -64,9 +67,11 @@ const CommentsItemHeader = ({
             {data.id === parentId ? 'Anuluj' : 'Odpowiedz'}
           </ButtonDefault>
         )}
-        <Can I={Action.Delete} this={{ ...data, room: roomData.room }}>
-          {() => <CommentsItemDelete comment={data} />}
-        </Can>
+        {!searchView && (
+          <Can I={Action.Delete} this={{ ...data, room: roomData.room }}>
+            {() => <CommentsItemDelete comment={data} />}
+          </Can>
+        )}
       </Box>
     </Box>
   );
