@@ -1280,6 +1280,10 @@ export type SearchQuery = (
       & EntryFragmentFragment
     )>, comments: Array<(
       { __typename?: 'Comment' }
+      & { entry: (
+        { __typename?: 'Entry' }
+        & EntryFragmentFragment
+      ) }
       & CommentFragmentFragment
     )> }
   ) }
@@ -3210,6 +3214,9 @@ export const SearchDocument = gql`
     }
     comments {
       ...CommentFragment
+      entry {
+        ...EntryFragment
+      }
     }
   }
 }

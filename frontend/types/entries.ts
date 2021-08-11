@@ -4,6 +4,7 @@ export type EntriesItemProps = {
   data: EntryFragmentFragment;
   preview: boolean;
   fullView?: boolean;
+  searchView?: boolean;
 };
 
 export type EntiresItemTitleProps = {
@@ -11,6 +12,7 @@ export type EntiresItemTitleProps = {
   title: string;
   image: string;
   fullView?: boolean;
+  searchView?: boolean;
 };
 
 export type EntriesItemAuthorProps = {

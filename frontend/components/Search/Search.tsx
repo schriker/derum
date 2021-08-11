@@ -1,6 +1,6 @@
 import { Box } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { useSearchLazyQuery } from '../../generated/graphql';
+import { SearchQuery, useSearchLazyQuery } from '../../generated/graphql';
 import SearchInput from '../SearchInput/SearchInput';
 import useSearchStyles from './SearchStyles';
 import { useDebouncedCallback } from 'use-debounce';
@@ -13,6 +13,7 @@ const Search = () => {
   const [query, setQuery] = useState('');
   const ref = useRef<HTMLElement>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchResult, setSearchResult] = useState<SearchQuery>(null);
   const [search, { loading: loadingSearch, data }] = useSearchLazyQuery({
     fetchPolicy: 'no-cache',
   });
@@ -25,6 +26,12 @@ const Search = () => {
       },
     });
   }, 500);
+
+  useEffect(() => {
+    if (data) {
+      setSearchResult(data);
+    }
+  }, [data]);
 
   useEffect(() => {
     setIsLoading(loadingSearch);
@@ -46,7 +53,6 @@ const Search = () => {
       setAnchorEl(ref.current);
     }
   };
-  console.log(data, isLoading || loadingSearch);
 
   return (
     <Box className={classes.wrapper}>
@@ -59,7 +65,7 @@ const Search = () => {
             onFocus={handleFocus}
           />
           <SearchDropdown
-            data={data}
+            data={searchResult}
             anchorEl={anchorEl}
             loading={isLoading || loadingSearch}
           />

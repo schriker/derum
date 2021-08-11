@@ -11,6 +11,9 @@ query Search($query: String!) {
     }
     comments {
       ...CommentFragment
+      entry {
+        ...EntryFragment
+      }
     }
   }
 }

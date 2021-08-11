@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { groupBy } from 'rxjs/internal/operators/groupBy';
 import { Comment } from 'src/comments/entities/comment.entity';
 import { Entry } from 'src/entries/entities/entry.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -24,9 +25,14 @@ export class SearchService {
         query: `${query.trim().split(' ').join(' | ')}:*`,
       })
       .orderBy('ts_rank(entry.document, to_tsquery(:query))', 'DESC')
+      .leftJoin('entry.comments', 'comments')
+      .addSelect('COUNT(DISTINCT(comments.id))', 'entry_commentsNumber')
       .leftJoinAndSelect('entry.room', 'room')
       .leftJoinAndSelect('entry.photo', 'photo')
-      .limit(20)
+      .groupBy('entry.id')
+      .addGroupBy('room.id')
+      .addGroupBy('photo.id')
+      .limit(30)
       .getMany();
   }
 
@@ -44,7 +50,7 @@ export class SearchService {
       .leftJoinAndSelect('comment.author', 'author')
       .leftJoinAndSelect('author.photo', 'photo')
       .leftJoinAndSelect('entry.room', 'room')
-      .limit(20)
+      .limit(30)
       .getMany();
   }
 

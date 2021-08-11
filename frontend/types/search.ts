@@ -22,6 +22,6 @@ export type SearchCommentsListProps = {
   comments: SearchQuery['search']['comments'];
 };
 
-export type SearchEntiresListProps = {
+export type SearchEntriesListProps = {
   entries: SearchQuery['search']['entires'];
 };

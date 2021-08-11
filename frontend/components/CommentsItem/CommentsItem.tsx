@@ -28,12 +28,14 @@ const CommentsItem = (props: CommentItemPropsType) => {
   return (
     <div ref={highlightedRef}>
       <Box id={`comment-${props.data.id}`} className={classes.wrapper}>
-        <CommentsItemVote
-          voteScore={props.data.voteScore}
-          data={props.data}
-          id={props.data.id}
-          userVote={props.data.userVote}
-        />
+        {!props.searchView && (
+          <CommentsItemVote
+            voteScore={props.data.voteScore}
+            data={props.data}
+            id={props.data.id}
+            userVote={props.data.userVote}
+          />
+        )}
         <Box className={classes.content}>
           <CommentsItemHeader {...props} />
           <Box className={classes.body}>

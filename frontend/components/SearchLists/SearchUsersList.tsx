@@ -15,7 +15,7 @@ const SearchUsersList = ({ users }: SearchUsersListProps) => {
   };
 
   return users.length ? (
-    <Box>
+    <Box mb={1}>
       <Typography variant="subtitle1" className={classes.sectionTitle}>
         Użytkownicy
       </Typography>
