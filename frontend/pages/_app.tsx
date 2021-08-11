@@ -5,7 +5,7 @@ import { useApollo } from '../lib/apolloClient';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../lib/theme';
-import '../css/scrollBar.css';
+import '../css/scrollbar.css';
 import NextNprogress from 'nextjs-progressbar';
 import Script from 'next/script';
 import { FacebookSDK } from '../types/facebook';
