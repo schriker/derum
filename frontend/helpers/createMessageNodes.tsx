@@ -45,7 +45,6 @@ const createMessageNodes = (
               <DarkTooltip
                 placement="top"
                 title={isEmoji[0].name}
-                enterDelay={500}
                 PopperProps={{ disablePortal: true }}
               >
                 <img

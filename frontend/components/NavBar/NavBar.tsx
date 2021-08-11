@@ -5,23 +5,22 @@ import { ButtonMenu } from '../Buttons/ButtonMenu';
 import MenuIcon from '../Icons/MenuIcon';
 import Logo from '../Logo/Logo';
 import NavBarLogin from '../NavBarLogin/NavBarLogin';
+import Search from '../Search/Search';
 
 const useStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     height: 60,
+    columnGap: 15,
     display: 'grid',
     alignItems: 'center',
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
-    gridTemplateColumns: 'auto 2fr 1fr',
+    gridTemplateColumns: 'auto 1fr 400px',
     backgroundColor: theme.palette.background.paper,
   },
   menu: {
     display: 'flex',
     alignItems: 'center',
-  },
-  search: {
-    justifySelf: 'center',
   },
 }));
 
@@ -40,7 +39,7 @@ const NavBar = () => {
         </ButtonMenu>
         <Logo />
       </Box>
-      <Box className={classes.search}>Wyszukiwarka</Box>
+      <Search />
       <NavBarLogin />
     </Box>
   );

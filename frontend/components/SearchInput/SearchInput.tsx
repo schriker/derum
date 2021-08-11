@@ -13,22 +13,17 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 const SearchInput = ({
-  value,
-  onChange,
-  placeholder,
   style,
-}: SearchInputProps) => {
+  ...rest
+}: SearchInputProps & React.HTMLProps<HTMLInputElement>) => {
   const classes = useStyles();
 
   return (
     <CustomInput
-      autoFocus
       bg="light"
       style={style}
-      value={value}
-      onChange={onChange}
       startAdornment={<SearchIcon className={classes.icon} />}
-      placeholder={placeholder}
+      {...rest}
     />
   );
 };

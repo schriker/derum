@@ -1,0 +1,16 @@
+query Search($query: String!) {
+  search(query: $query) {
+    users {
+      ...AuthorFragment
+      photo {
+        ...PhotoFragment
+      }
+    }
+    entires {
+      ...EntryFragment
+    }
+    comments {
+      ...CommentFragment
+    }
+  }
+}

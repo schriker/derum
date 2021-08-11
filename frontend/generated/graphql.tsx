@@ -421,6 +421,7 @@ export type Query = {
   newNotificationsNumber: Scalars['Int'];
   notifications: Array<Notification>;
   globalEmojis: Array<Emoji>;
+  search: SearchResult;
 };
 
 
@@ -507,6 +508,11 @@ export type QueryNotificationsArgs = {
   offsetId: Scalars['Int'];
 };
 
+
+export type QuerySearchArgs = {
+  query: Scalars['String'];
+};
+
 export type QueryEntriesInput = {
   roomName: Scalars['String'];
   limit: Scalars['Int'];
@@ -530,6 +536,13 @@ export type Room = {
   author?: Maybe<User>;
   usersNumber: Scalars['Int'];
   photo?: Maybe<Photo>;
+};
+
+export type SearchResult = {
+  __typename?: 'SearchResult';
+  users: Array<User>;
+  comments: Array<Comment>;
+  entires: Array<Entry>;
 };
 
 export type Subscription = {
@@ -1243,6 +1256,32 @@ export type RoomQuery = (
   & { room: (
     { __typename?: 'Room' }
     & RoomFragmentFragment
+  ) }
+);
+
+export type SearchQueryVariables = Exact<{
+  query: Scalars['String'];
+}>;
+
+
+export type SearchQuery = (
+  { __typename?: 'Query' }
+  & { search: (
+    { __typename?: 'SearchResult' }
+    & { users: Array<(
+      { __typename?: 'User' }
+      & { photo?: Maybe<(
+        { __typename?: 'Photo' }
+        & PhotoFragmentFragment
+      )> }
+      & AuthorFragmentFragment
+    )>, entires: Array<(
+      { __typename?: 'Entry' }
+      & EntryFragmentFragment
+    )>, comments: Array<(
+      { __typename?: 'Comment' }
+      & CommentFragmentFragment
+    )> }
   ) }
 );
 
@@ -3157,6 +3196,55 @@ export function useRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<RoomQ
 export type RoomQueryHookResult = ReturnType<typeof useRoomQuery>;
 export type RoomLazyQueryHookResult = ReturnType<typeof useRoomLazyQuery>;
 export type RoomQueryResult = Apollo.QueryResult<RoomQuery, RoomQueryVariables>;
+export const SearchDocument = gql`
+    query Search($query: String!) {
+  search(query: $query) {
+    users {
+      ...AuthorFragment
+      photo {
+        ...PhotoFragment
+      }
+    }
+    entires {
+      ...EntryFragment
+    }
+    comments {
+      ...CommentFragment
+    }
+  }
+}
+    ${AuthorFragmentFragmentDoc}
+${PhotoFragmentFragmentDoc}
+${EntryFragmentFragmentDoc}
+${CommentFragmentFragmentDoc}`;
+
+/**
+ * __useSearchQuery__
+ *
+ * To run a query within a React component, call `useSearchQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchQuery({
+ *   variables: {
+ *      query: // value for 'query'
+ *   },
+ * });
+ */
+export function useSearchQuery(baseOptions: Apollo.QueryHookOptions<SearchQuery, SearchQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SearchQuery, SearchQueryVariables>(SearchDocument, options);
+      }
+export function useSearchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SearchQuery, SearchQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SearchQuery, SearchQueryVariables>(SearchDocument, options);
+        }
+export type SearchQueryHookResult = ReturnType<typeof useSearchQuery>;
+export type SearchLazyQueryHookResult = ReturnType<typeof useSearchLazyQuery>;
+export type SearchQueryResult = Apollo.QueryResult<SearchQuery, SearchQueryVariables>;
 export const SearchRoomDocument = gql`
     query SearchRoom($name: String!) {
   searchRooms(name: $name) {

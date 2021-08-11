@@ -51,33 +51,38 @@ export class SearchService {
   searchUser(name: string): Promise<User[]> {
     return this.usersRepository
       .createQueryBuilder('user')
-      .where(
-        'user.document @@ plainto_tsquery(:name) AND user.isBanned = false',
-        {
-          name: `${name}:*`,
-        },
-      )
-      .orderBy('ts_rank(user.document, plainto_tsquery(:name))', 'DESC')
+      .where('user.document @@ to_tsquery(:name) AND user.isBanned = false', {
+        name: `${name.trim().split(' ').join(' | ')}:*`,
+      })
+      .orderBy('ts_rank(user.document, to_tsquery(:name))', 'DESC')
       .addOrderBy('length(user.displayName)', 'ASC')
       .leftJoinAndSelect('user.photo', 'photo')
-      .limit(50)
+      .limit(10)
       .getMany();
   }
 
   async search(query: string): Promise<SearchResult> {
-    const usersPromise = this.searchUser(query);
-    const entiresPromise = this.searchEntry(query);
-    const commentsPromise = this.searchComment(query);
-    const [users, entries, comments] = await Promise.all([
-      usersPromise,
-      entiresPromise,
-      commentsPromise,
-    ]);
+    if (query.length) {
+      const usersPromise = this.searchUser(query);
+      const entiresPromise = this.searchEntry(query);
+      const commentsPromise = this.searchComment(query);
+      const [users, entries, comments] = await Promise.all([
+        usersPromise,
+        entiresPromise,
+        commentsPromise,
+      ]);
 
-    return {
-      users: users,
-      entires: entries,
-      comments: comments,
-    };
+      return {
+        users: users,
+        entires: entries,
+        comments: comments,
+      };
+    } else {
+      return {
+        users: [],
+        entires: [],
+        comments: [],
+      };
+    }
   }
 }

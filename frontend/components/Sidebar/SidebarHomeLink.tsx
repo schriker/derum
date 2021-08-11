@@ -12,7 +12,6 @@ const SidebarHomeLink = () => {
     <Link href={router.query.room ? `/p/${router.query.room}` : '/'} passHref>
       <DarkTooltip
         title={router.query.room ? router.query.room : 'Główna'}
-        enterDelay={500}
         placement="right"
       >
         <ButtonIcon color="secondary">
