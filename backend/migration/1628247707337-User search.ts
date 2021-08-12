@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class UserSearch1628246351018 implements MigrationInterface {
+export class UserSearch1628247707337 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
     CREATE INDEX document_idx ON "user" USING GIN (document);
