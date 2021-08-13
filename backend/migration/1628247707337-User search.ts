@@ -7,7 +7,7 @@ export class UserSearch1628247707337 implements MigrationInterface {
     UPDATE "user" SET document = to_tsvector("user"."displayName");
     CREATE FUNCTION documents_search_trigger() RETURNS trigger AS $$
     begin
-    new.document := to_tsvector(new.displayName);
+    new.document := to_tsvector(new."displayName");
     return new;
     end
     $$ LANGUAGE plpgsql;
