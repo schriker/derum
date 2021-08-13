@@ -29,6 +29,7 @@ async function bootstrap() {
         disableTouch: true,
         disableTTL: true,
       }),
+      proxy: true,
       cookie: {
         httpOnly: true,
         sameSite: false,
