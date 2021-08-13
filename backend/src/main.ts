@@ -34,6 +34,8 @@ async function bootstrap() {
       cookie: {
         httpOnly: true,
         sameSite: false,
+        domain:
+          process.env.NODE_ENV === 'production' ? '.derum.pl' : 'localhost',
         secure: process.env.NODE_ENV === 'production',
       },
     }),
