@@ -1,9 +1,7 @@
 name: BackendDeployment
-
 on:
   push:
     branches: [ prod ]
-
 jobs:
   build:
     name: Build
@@ -12,8 +10,18 @@ jobs:
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.KEY }}
-          port: ${{ secrets.PORT }}
-          script: whoami
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script_stop: true
+          script: |
+            cd derum/
+            git pull
+            cd backend/
+            npm install
+            rm -rf dist/
+            npm run build
+            npm run typeorm migration:run
+            pm2 restart derum
+
