@@ -51,7 +51,7 @@ const createMessageNodes = (
                   width={24}
                   height={24}
                   alt={` ${isEmoji[0].name} `}
-                  src={`http://derum-public.s3.eu-central-1.amazonaws.com/emojis/${isEmoji[0].file}/2x`}
+                  src={`https://derum-public.s3.eu-central-1.amazonaws.com/emojis/${isEmoji[0].file}/2x`}
                 />
               </DarkTooltip>
             </span>

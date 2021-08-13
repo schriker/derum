@@ -15,7 +15,7 @@ const EmojisPickerPreview = ({
         width={24}
         height={24}
         alt={emoji.name}
-        src={`http://derum-public.s3.eu-central-1.amazonaws.com/emojis/${emoji.file}/2x`}
+        src={`https://derum-public.s3.eu-central-1.amazonaws.com/emojis/${emoji.file}/2x`}
       />
       <Typography variant="subtitle1" component="span">
         {emoji.name}
