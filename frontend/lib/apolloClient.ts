@@ -155,13 +155,13 @@ function createApolloClient() {
 
 export function initializeApollo(
   initialState = null,
-  headers = {}
+  headers: { cookie?: string } = { cookie: '' }
 ): ApolloClient<NormalizedCacheObject> {
   authLink = setContext((_, { headers: apolloHeaders }) => {
     return {
       headers: {
         ...apolloHeaders,
-        ...headers,
+        cookie: headers.cookie,
       },
     };
   });

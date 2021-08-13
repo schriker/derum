@@ -44,13 +44,17 @@ const apolloConfig = {
     subscriptions: {
       keepAlive: 10000,
       onConnect: async (connectionParams, webSocket, context) => {
-        const session = await parseUserSession(context.request.headers.cookie);
-        if (session) {
-          return {
-            session,
-            cId: context.request.headers['sec-websocket-key'],
-            ...context,
-          };
+        if (context.request.headers.cookie) {
+          const session = await parseUserSession(
+            context.request.headers.cookie,
+          );
+          if (session) {
+            return {
+              session,
+              cId: context.request.headers['sec-websocket-key'],
+              ...context,
+            };
+          }
         }
       },
       onDisconnect: async (webSocket, context) => {
