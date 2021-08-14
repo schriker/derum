@@ -1,12 +1,22 @@
 import React, { useEffect, useRef } from 'react';
 import { Box, Typography } from '@material-ui/core';
-import Markdown from '../Markdown/Markdown';
+const Markdown = dynamic(() => import('../Markdown/Markdown'), {
+  loading: function Loading() {
+    return (
+      <Box mt={2}>
+        <Skeleton />
+      </Box>
+    );
+  },
+});
 import CommentsItemVote from './CommentsItemVote';
 import CommentsItemHeader from './CommentsItemHeader';
 import useCommentsItemStyles from './CommentsItemStyles';
 import { CommentItemPropsType } from '../../types/comment';
 import CommentNewForm from '../CommentNewForm/CommentNewForm';
 import { useRouter } from 'next/router';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@material-ui/lab';
 
 const CommentsItem = (props: CommentItemPropsType) => {
   const router = useRouter();

@@ -13,9 +13,13 @@ const EntiresItemPublisher = ({ publisher, url }: EntriesPublisherProps) => {
       className={classes.publisher}
       size="small"
       label={
-        <Link target="_blank" color="secondary" rel="noreferrer" href={url}>
-          {publisher}
-        </Link>
+        url ? (
+          <Link target="_blank" color="secondary" rel="noreferrer" href={url}>
+            {publisher}
+          </Link>
+        ) : (
+          publisher
+        )
       }
     />
   );
