@@ -36,6 +36,7 @@ export class AwsService {
         Key: `${folder}/${name}`,
         Body: file,
         ContentType: ContentType,
+        CacheControl: 'max-age=2592000',
         ACL: 'public-read',
       }),
     );
