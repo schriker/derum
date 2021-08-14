@@ -51,7 +51,9 @@ export class MetaScraperService {
         `curl -I '${newLink.url}' -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" | grep -Fi content-type:`,
       );
       let result = await this.getUrlData(
-        `curl '${newLink.url}' -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" | iconv -f ${encoding} -t UTF-8`,
+        encoding === 'UTF-8'
+          ? `curl '${newLink.url}' -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)"`
+          : `curl '${newLink.url}' -A "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)" | iconv -f ${encoding} -t UTF-8`,
         newLink.url,
       );
 
@@ -60,7 +62,9 @@ export class MetaScraperService {
           `curl -I '${newLink.url}' | grep -Fi content-type:`,
         );
         result = await this.getUrlData(
-          `curl '${newLink.url}' | iconv -f ${encoding} -t UTF-8`,
+          encoding === 'UTF-8'
+            ? `curl '${newLink.url}'`
+            : `curl '${newLink.url}' | iconv -f ${encoding} -t UTF-8`,
           newLink.url,
         );
       }

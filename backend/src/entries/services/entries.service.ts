@@ -138,6 +138,7 @@ export class EntriesService {
     entry.body = body;
     entry.description = description;
     entry.title = title;
+    entry.publisher = 'derum.pl';
     entry.type = EntryType.ARTICLE;
     entry.room = room;
     return this.entryRepository.save(entry);
