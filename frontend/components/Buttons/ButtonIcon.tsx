@@ -22,4 +22,23 @@ export const ButtonIcon = withStyles((theme: Theme) => ({
       }),
     },
   },
+  disabled: {
+    color: styledBy('color', {
+      primary: `${theme.palette.text.primary} !important`,
+      secondary: `${theme.palette.text.primary} !important`,
+      default: `${theme.palette.text.secondary} !important`,
+    }),
+    backgroundColor: styledBy('color', {
+      primary: `${theme.palette.primary['A700']} !important`,
+      secondary: `${theme.palette.secondary['800']} !important`,
+      default: `${theme.palette.text.primary} !important`,
+    }),
+    '&:hover': {
+      backgroundColor: styledBy('color', {
+        primary: `${theme.palette.primary['A400']} !important`,
+        secondary: `${theme.palette.secondary['700']} !important`,
+        default: `${theme.palette.grey.A100} !important`,
+      }),
+    },
+  },
 }))(IconButton);

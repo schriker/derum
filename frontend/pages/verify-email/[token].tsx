@@ -45,9 +45,9 @@ export default function VerifyEmail() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const apolloClient = initializeApollo(null, context.req.headers);
+    const apolloClient = initializeApollo(null);
 
     return addApolloState(apolloClient, {
       props: {},

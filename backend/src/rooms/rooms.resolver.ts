@@ -17,6 +17,11 @@ export class RoomsResolver {
   }
 
   @Query(() => [Room])
+  rooms(): Promise<Room[]> {
+    return this.roomsService.getRoomsNames();
+  }
+
+  @Query(() => [Room])
   newRooms(): Promise<Room[]> {
     return this.roomsService.getNewest();
   }

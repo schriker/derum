@@ -24,9 +24,9 @@ export default function ResetPassword() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const apolloClient = initializeApollo(null, context.req.headers);
+    const apolloClient = initializeApollo(null);
     await apolloClient.query<MeQuery, MeQueryVariables>({
       query: MeDocument,
       errorPolicy: 'ignore',

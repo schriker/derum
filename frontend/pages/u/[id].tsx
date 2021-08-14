@@ -51,7 +51,7 @@ export default function User() {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const apolloClient = initializeApollo(null, context.req.headers);
+    const apolloClient = initializeApollo(null);
     await apolloClient.query<UserProfileQuery, UserProfileQueryVariables>({
       query: UserProfileDocument,
       variables: {

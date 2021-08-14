@@ -18,6 +18,10 @@ export class RoomsService {
     private roomsRepository: Repository<Room>,
   ) {}
 
+  getRoomsNames(): Promise<Room[]> {
+    return this.roomsRepository.find();
+  }
+
   async findOneByName(name: string): Promise<Room> {
     const room = await this.roomsRepository
       .createQueryBuilder('room')

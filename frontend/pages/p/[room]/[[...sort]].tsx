@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Chat from '../../../components/Chat/Chat';
@@ -20,6 +20,8 @@ import {
   RoomDocument,
   RoomQuery,
   RoomQueryVariables,
+  RoomsDocument,
+  RoomsQuery,
 } from '../../../generated/graphql';
 import useRoomData from '../../../hooks/useRoomData';
 import useRoomEntries from '../../../hooks/useRoomEntries';
@@ -30,7 +32,7 @@ export default function Room() {
   const router = useRouter();
   const { roomData } = useRoomData();
   const { hasMore, entriesData, ref } = useRoomEntries();
-  
+
   return roomData ? (
     <Layout
       title={roomData.room.name}
@@ -51,9 +53,9 @@ export default function Room() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   try {
-    const apolloClient = initializeApollo(null, context.req.headers);
+    const apolloClient = initializeApollo(null);
     await apolloClient.query<MeQuery, MeQueryVariables>({
       query: MeDocument,
       errorPolicy: 'ignore',
@@ -84,10 +86,42 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return addApolloState(apolloClient, {
       props: {},
+      revalidate: 30,
     });
   } catch (e) {
     return {
       props: {},
+      revalidate: 30,
     };
   }
+};
+
+export const getStaticPaths = async () => {
+  const apolloClient = initializeApollo(null);
+  const rooms = await apolloClient.query<RoomsQuery, RoomQueryVariables>({
+    query: RoomsDocument,
+  });
+
+  const paths = [];
+  rooms.data.rooms.forEach((room) => {
+    paths.push(
+      {
+        params: {
+          room: room.name,
+          sort: false,
+        },
+      },
+      {
+        params: {
+          room: room.name,
+          sort: ['best'],
+        },
+      }
+    );
+  });
+
+  return {
+    paths,
+    fallback: 'blocking',
+  };
 };

@@ -57,7 +57,7 @@ export class Room {
   @JoinTable()
   users: User[];
 
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   usersNumber: number;
 
   @Field(() => Photo, { nullable: true })

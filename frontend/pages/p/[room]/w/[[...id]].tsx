@@ -49,7 +49,7 @@ export default function Entry() {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const [entryId] = context.params.id as string[];
-    const apolloClient = initializeApollo(null, context.req.headers);
+    const apolloClient = initializeApollo(null);
     await apolloClient.query<MeQuery, MeQueryVariables>({
       query: MeDocument,
       errorPolicy: 'ignore',

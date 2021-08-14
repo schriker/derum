@@ -83,7 +83,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return addApolloState(apolloClient, {
     props: {},
-    revalidate: 20,
+    revalidate: 30,
   });
 };
 
@@ -104,38 +104,3 @@ export const getStaticPaths = async () => {
     fallback: 'blocking',
   };
 };
-
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const apolloClient = initializeApollo(null, context.req.headers);
-//   await apolloClient.query<MeQuery, MeQueryVariables>({
-//     query: MeDocument,
-//     errorPolicy: 'ignore',
-//   });
-
-//   await apolloClient.query<RoomQuery, RoomQueryVariables>({
-//     query: RoomDocument,
-//     variables: {
-//       name: indexRoomVars.name,
-//     },
-//   });
-
-//   const sort = context.params.sort
-//     ? EntrySort[context.params.sort[0].toUpperCase()]
-//     : EntrySort.NEW;
-
-//   await apolloClient.query<EntriesQuery, EntriesQueryVariables>({
-//     query: EntriesDocument,
-//     variables: {
-//       queryData: {
-//         offset: 0,
-//         limit: PAGE_LIMIT,
-//         sort: sort ? sort : EntrySort.NEW,
-//         roomName: indexRoomVars.name,
-//       },
-//     },
-//   });
-
-//   return addApolloState(apolloClient, {
-//     props: {},
-//   });
-// };
