@@ -1,4 +1,4 @@
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Chat from '../components/Chat/Chat';
@@ -51,8 +51,8 @@ export default function Index() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const apolloClient = initializeApollo(null, context.req.headers);
+export const getStaticProps: GetStaticProps = async (context) => {
+  const apolloClient = initializeApollo(null);
   await apolloClient.query<MeQuery, MeQueryVariables>({
     query: MeDocument,
     errorPolicy: 'ignore',
@@ -83,5 +83,59 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return addApolloState(apolloClient, {
     props: {},
+    revalidate: 20,
   });
 };
+
+export const getStaticPaths = async () => {
+  return {
+    paths: [
+      {
+        params: {
+          sort: false,
+        },
+      },
+      {
+        params: {
+          sort: ['best'],
+        },
+      },
+    ],
+    fallback: 'blocking',
+  };
+};
+
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const apolloClient = initializeApollo(null, context.req.headers);
+//   await apolloClient.query<MeQuery, MeQueryVariables>({
+//     query: MeDocument,
+//     errorPolicy: 'ignore',
+//   });
+
+//   await apolloClient.query<RoomQuery, RoomQueryVariables>({
+//     query: RoomDocument,
+//     variables: {
+//       name: indexRoomVars.name,
+//     },
+//   });
+
+//   const sort = context.params.sort
+//     ? EntrySort[context.params.sort[0].toUpperCase()]
+//     : EntrySort.NEW;
+
+//   await apolloClient.query<EntriesQuery, EntriesQueryVariables>({
+//     query: EntriesDocument,
+//     variables: {
+//       queryData: {
+//         offset: 0,
+//         limit: PAGE_LIMIT,
+//         sort: sort ? sort : EntrySort.NEW,
+//         roomName: indexRoomVars.name,
+//       },
+//     },
+//   });
+
+//   return addApolloState(apolloClient, {
+//     props: {},
+//   });
+// };
