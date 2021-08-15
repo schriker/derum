@@ -1,14 +1,19 @@
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 import Chat from '../../../../components/Chat/Chat';
 import EntriesWrapper from '../../../../components/EntriesWrapper/EntriesWrapper';
 import SingleEntry from '../../../../components/Entry/Entry';
 import Layout from '../../../../components/Layout/Layout';
+import { indexRoomVars, PAGE_LIMIT } from '../../../../consts';
 import {
+  EntriesDocument,
+  EntriesQuery,
+  EntriesQueryVariables,
   EntryDocument,
   EntryQuery,
   EntryQueryVariables,
+  EntrySort,
   MeDocument,
   MeQuery,
   MeQueryVariables,
@@ -46,7 +51,7 @@ export default function Entry() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getStaticProps: GetStaticProps = async (context) => {
   try {
     const [entryId] = context.params.id as string[];
     const apolloClient = initializeApollo(null);
@@ -71,10 +76,60 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return addApolloState(apolloClient, {
       props: {},
+      revalidate: 30,
     });
   } catch (e) {
     return {
       props: {},
+      revalidate: 30,
     };
   }
+};
+
+export const getStaticPaths = async () => {
+  const apolloClient = initializeApollo(null);
+
+  const newEntries = await apolloClient.query<
+    EntriesQuery,
+    EntriesQueryVariables
+  >({
+    query: EntriesDocument,
+    variables: {
+      queryData: {
+        offset: 0,
+        limit: PAGE_LIMIT,
+        sort: EntrySort.NEW,
+        roomName: indexRoomVars.name,
+      },
+    },
+  });
+
+  const bestEntires = await apolloClient.query<
+    EntriesQuery,
+    EntriesQueryVariables
+  >({
+    query: EntriesDocument,
+    variables: {
+      queryData: {
+        offset: 0,
+        limit: PAGE_LIMIT,
+        sort: EntrySort.NEW,
+        roomName: indexRoomVars.name,
+      },
+    },
+  });
+
+  const paths = [...newEntries.data.entries, ...bestEntires.data.entries].map(
+    (entry) => ({
+      params: {
+        room: entry.room.name,
+        id: [`${entry.id}`, entry.slug],
+      },
+    })
+  );
+
+  return {
+    paths,
+    fallback: 'blocking',
+  };
 };

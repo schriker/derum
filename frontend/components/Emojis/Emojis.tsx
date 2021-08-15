@@ -29,7 +29,7 @@ const Emojis = ({ onSelect, setInpuFocus }: EmojisPropsType) => {
         handleClose={handleClose}
         anchorEl={anchorEl}
       />
-      <ButtonIcon onClick={handleClick} color="secondary" size="small">
+      <ButtonIcon aria-label="Emojis" onClick={handleClick} color="secondary" size="small">
         <EmoticonsIcon style={{ fontSize: 24 }} />
       </ButtonIcon>
     </InputAdornment>

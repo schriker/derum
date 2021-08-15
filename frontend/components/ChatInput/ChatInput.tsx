@@ -133,7 +133,7 @@ const ChatInput = ({ roomId }: { roomId: number }) => {
           />
         </Box>
         <Box mx={1}>
-          <ButtonIcon color="primary" type="submit">
+          <ButtonIcon aria-label="Submit" color="primary" type="submit">
             <SendIcon style={{ fontSize: 16 }} />
           </ButtonIcon>
         </Box>

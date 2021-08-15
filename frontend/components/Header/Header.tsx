@@ -3,7 +3,11 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { HeadProps } from '../../types/head';
 
-const Header = ({ title, ogImage, ogDescription }: HeadProps) => {
+const Header = ({
+  title,
+  ogImage = 'https://www.derum.pl/og_image.png',
+  ogDescription,
+}: HeadProps) => {
   const router = useRouter();
   return (
     <>
@@ -18,16 +22,13 @@ const Header = ({ title, ogImage, ogDescription }: HeadProps) => {
         <meta property="og:site_name" content="Derum" />
         <meta property="og:image" content={ogImage} />
         <meta property="og:description" content={ogDescription} />
+        <meta name="description" content={ogDescription} />
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=auto"
         ></meta>
         <link rel="preconnect" href="https://fonts.gstatic.com" />
-        {/* <link
-          href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
-          rel="stylesheet"
-        /> */}
-        {/* <link
+        <link
           rel="apple-touch-icon"
           sizes="57x57"
           href="/apple-icon-57x57.png"
@@ -96,7 +97,7 @@ const Header = ({ title, ogImage, ogDescription }: HeadProps) => {
           sizes="16x16"
           href="/favicon-16x16.png"
         />
-        <link rel="manifest" href="/manifest.json"></link> */}
+        <link rel="manifest" href="/manifest.json"></link>
       </Head>
     </>
   );

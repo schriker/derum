@@ -22,6 +22,7 @@ const Vote = ({
   return (
     <CardContent className={classes.vote}>
       <ButtonIcon
+        aria-label="Vote Up"
         disabled={disabled}
         onClick={() =>
           handleClick(
@@ -39,6 +40,7 @@ const Vote = ({
         {numbro(voteScore ? voteScore : 0).format({ average: true })}
       </Typography>
       <ButtonIcon
+        aria-label="Vote Down"
         disabled={disabled}
         onClick={() =>
           handleClick(
