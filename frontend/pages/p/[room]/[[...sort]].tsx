@@ -73,6 +73,12 @@ export const getStaticProps: GetStaticProps = async (context) => {
       ? EntrySort[context.params.sort[0].toUpperCase()]
       : EntrySort.NEW;
 
+    if (sort !== EntrySort.BEST && sort !== EntrySort.NEW) {
+      return {
+        notFound: true,
+      };
+    }
+
     await apolloClient.query<EntriesQuery, EntriesQueryVariables>({
       query: EntriesDocument,
       variables: {
@@ -92,7 +98,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   } catch (e) {
     return {
       props: {},
-      revalidate: 30,
+      notFound: true,
     };
   }
 };

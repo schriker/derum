@@ -1,4 +1,4 @@
-name: BackendDeployment
+name: Deployment
 on:
   push:
     branches: [ prod ]
@@ -24,4 +24,9 @@ jobs:
             npm run build
             npm run typeorm migration:run
             pm2 restart derum
+            cd ..
+            cd frontend/
+            npm install
+            npm run build
+            pm2 restart client
 

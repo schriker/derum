@@ -1,6 +1,6 @@
 <a href="https://derum.pl">
   <p align="center">
-    <img height=80 src="https://raw.githubusercontent.com/schriker/derum/main/github/logo.svg"/>
+    <img height=80 src="https://raw.githubusercontent.com/schriker/derum/main/frontend/public/og_image.png"/>
   </p>
 </a>
 
