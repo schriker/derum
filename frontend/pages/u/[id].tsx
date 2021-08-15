@@ -30,7 +30,11 @@ export default function User() {
   const [tabIndex, setTabIndex] = useState(0);
 
   return data ? (
-    <Layout title={data.user.displayName} ogDescription="">
+    <Layout
+      title={data.user.displayName}
+      ogDescription={data.user.displayName}
+      ogImage={data.user.photo?.url}
+    >
       <EntriesWrapper>
         <UserHeader />
         <UserContentButtons

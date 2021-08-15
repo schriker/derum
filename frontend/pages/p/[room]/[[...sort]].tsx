@@ -36,6 +36,7 @@ export default function Room() {
   return roomData ? (
     <Layout
       title={roomData.room.name}
+      ogImage={roomData.room.photo?.url}
       ogDescription={roomData.room.description}
     >
       <EntriesWrapper>
