@@ -9,7 +9,7 @@ const StaticPageLayout = ({ title, children }: StaticPageLayoutPropsType) => {
   return (
     <Box className={`${classes.wrapper} scrollbar`}>
       <Box width="lg" className={classes.content}>
-        <Typography variant="h5" className={classes.title}>
+        <Typography variant="h5">
           {title}
         </Typography>
         {children}
