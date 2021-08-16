@@ -6,8 +6,8 @@ const useSearchStyles = makeStyles(() => ({
     justifyContent: 'center',
   },
   searchPopperWrapper: {
-    flex: '1 1 500px',
-    maxWidth: '500px',
+    flex: '1 1 100%',
+    maxWidth: '100%',
     position: 'relative',
   },
 }));

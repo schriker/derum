@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
-    gridTemplateColumns: 'auto 1fr 400px',
+    gridTemplateColumns: '1fr minmax(auto, 700px) 1fr',
     backgroundColor: theme.palette.background.paper,
   },
   menu: {

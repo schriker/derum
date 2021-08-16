@@ -21,7 +21,7 @@ const ChatMessagesItem = ({
   handleOpen,
   authors = [],
   isUserProfileView = false,
-  roomAuthorId,
+  roomAuthorId = 0,
 }: ChatMessagesItemProps) => {
   const router = useRouter();
   const { data: userData } = useMeQuery({

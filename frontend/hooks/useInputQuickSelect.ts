@@ -77,8 +77,8 @@ const useInputQuickSelect = ({
     );
     const startPosition = atEnd ? end : begin;
     text =
-      text.substring(0, startPosition) +
-      `${emoji} ` +
+      text.substring(0, startPosition).trim() +
+      ` ${emoji} ` +
       text.substring(end, text.length);
     setCaretPosition(startPosition + emoji.length + 1);
     setValue('body', text);

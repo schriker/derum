@@ -79,6 +79,10 @@ const ChatInput = ({ roomId }: { roomId: number }) => {
   };
 
   const handleSetInputFocus = () => {
+    bodyFieldRef.current.setSelectionRange(
+      getValues('body').length,
+      getValues('body').length
+    );
     bodyFieldRef.current.focus();
   };
 

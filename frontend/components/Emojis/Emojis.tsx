@@ -18,6 +18,11 @@ const Emojis = ({ onSelect, setInpuFocus }: EmojisPropsType) => {
     setAnchorEl(null);
   };
 
+  const handleSelect = (name: string) => {
+    setAnchorEl(null);
+    onSelect(name);
+  };
+
   const isOpen = Boolean(anchorEl);
 
   return (
@@ -25,11 +30,16 @@ const Emojis = ({ onSelect, setInpuFocus }: EmojisPropsType) => {
       <EmojisPicker
         setInpuFocus={setInpuFocus}
         isOpen={isOpen}
-        onSelect={onSelect}
+        onSelect={handleSelect}
         handleClose={handleClose}
         anchorEl={anchorEl}
       />
-      <ButtonIcon aria-label="Emojis" onClick={handleClick} color="secondary" size="small">
+      <ButtonIcon
+        aria-label="Emojis"
+        onClick={handleClick}
+        color="secondary"
+        size="small"
+      >
         <EmoticonsIcon style={{ fontSize: 24 }} />
       </ButtonIcon>
     </InputAdornment>
