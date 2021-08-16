@@ -7,6 +7,9 @@ const useEmailLoginFormStyles = makeStyles((theme: Theme) => ({
   divider: {
     position: 'relative',
   },
+  links: {
+    color: '#9575cd',
+  },
   or: {
     top: '50%',
     left: '50%',
