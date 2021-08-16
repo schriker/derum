@@ -8,6 +8,9 @@ import useIsConnected from '../../hooks/useIsConnected';
 import { selectedUserVar } from '../../lib/apolloVars';
 import { ChatMessagesItemProps } from '../../types/messages';
 import AvatarPhoto from '../AvatarPhoto/AvatarPhoto';
+import AdminBadge from '../Badges/AdminBadge';
+import ModeratorBadge from '../Badges/ModeratorBadge';
+import OwnerBadge from '../Badges/OwnerBadge';
 import ChatMessageBody from '../ChatMessageBody/ChatMessageBody';
 import ChatMessageActions from './ChatMessageActions';
 import useChatMessageItemStyles from './ChatMessageItemStyles';
@@ -18,6 +21,7 @@ const ChatMessagesItem = ({
   handleOpen,
   authors = [],
   isUserProfileView = false,
+  roomAuthorId,
 }: ChatMessagesItemProps) => {
   const router = useRouter();
   const { data: userData } = useMeQuery({
@@ -74,6 +78,9 @@ const ChatMessagesItem = ({
       ) : null}
       <Box>
         <Box display="flex" alignItems="center">
+          {message.author.isAdmin && <AdminBadge />}
+          {message.author.isModerator && <ModeratorBadge />}
+          {message.author.id === roomAuthorId && <OwnerBadge />}
           <Typography
             variant="subtitle1"
             component="span"

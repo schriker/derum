@@ -18,6 +18,7 @@ export type ChatMessagesItemProps = {
       } & Pick<Room, 'id' | 'name'>;
     };
   userId: number | null;
+  roomAuthorId: number;
   setUserId: (id: number) => void;
   handleOpen: () => void;
   authors?: string[];

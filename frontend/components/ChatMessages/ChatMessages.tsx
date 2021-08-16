@@ -50,6 +50,7 @@ const ChatMessages = ({
         {messages.map((message) =>
           ignoresId?.includes(message.author.id) ? null : (
             <ChatMessagesItem
+              roomAuthorId={roomData.room.author?.id}
               authors={authors}
               userId={userId}
               setUserId={setUserId}
