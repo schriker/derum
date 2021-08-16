@@ -34,6 +34,9 @@ const theme = createMuiTheme({
         img: {
           display: 'block',
         },
+        a: {
+          color: '#9575cd',
+        },
       },
     },
     MuiTooltip: {

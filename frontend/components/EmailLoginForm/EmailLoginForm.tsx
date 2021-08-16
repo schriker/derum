@@ -117,8 +117,8 @@ const EmailLoginForm = ({
           <Box>
             <Typography>
               <Link
+                className={classes.links}
                 component="button"
-                color="primary"
                 variant="body1"
                 type="button"
                 onClick={() => {
@@ -130,8 +130,8 @@ const EmailLoginForm = ({
             </Typography>
             <Typography>
               <Link
+                className={classes.links}
                 component="button"
-                color="primary"
                 variant="body1"
                 type="button"
                 onClick={() => {

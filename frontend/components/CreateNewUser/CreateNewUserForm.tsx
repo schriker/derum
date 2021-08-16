@@ -158,13 +158,13 @@ const CreateNewUserForm = ({
         <Typography>
           Zakładając konto akceptujesz{' '}
           <NextLink href="/" passHref>
-            <Link target="_blank" rel="noreferrer" color="primary">
+            <Link target="_blank" rel="noreferrer" color="initial">
               regulamin
             </Link>
           </NextLink>{' '}
           oraz{' '}
           <NextLink href="/" passHref>
-            <Link target="_blank" rel="noreferrer" color="primary">
+            <Link target="_blank" rel="noreferrer" color="initial">
               warunki prywatności
             </Link>
           </NextLink>
