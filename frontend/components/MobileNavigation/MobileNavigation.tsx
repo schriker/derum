@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import {
+  openChatDrawer,
   openOnlineUSersModalVar,
   openSearchModal,
   openSettingsModal,
@@ -24,15 +25,16 @@ const MobileNavigation = () => {
   const onlineModal = useReactiveVar(openOnlineUSersModalVar);
   const settingsModal = useReactiveVar(openSettingsModal);
   const searchModal = useReactiveVar(openSearchModal);
+  const chatDrawer = useReactiveVar(openChatDrawer);
   const [value, setValue] = useState(null);
   const { data } = useMeQuery({
     nextFetchPolicy: 'cache-only',
   });
   useEffect(() => {
-    if (!settingsModal && !onlineModal && !searchModal) {
+    if (!settingsModal && !onlineModal && !searchModal && !chatDrawer) {
       setValue(null);
     }
-  }, [settingsModal, onlineModal, searchModal]);
+  }, [settingsModal, onlineModal, searchModal, chatDrawer]);
 
   const handleChange = (_: React.ChangeEvent, newValue: NavigationActions) => {
     setValue(newValue);
@@ -41,6 +43,8 @@ const MobileNavigation = () => {
         return openOnlineUSersModalVar(true);
       case NavigationActions.SETTINGS:
         return openSettingsModal(true);
+      case NavigationActions.CHAT:
+        return openChatDrawer(true);
       case NavigationActions.SEARCH:
         return openSearchModal(true);
     }
@@ -68,14 +72,14 @@ const MobileNavigation = () => {
           />
         )}
         <BottomNavigationAction
-          label="Szukaj"
-          value={NavigationActions.SEARCH}
-          icon={<SearchIcon />}
-        />
-        <BottomNavigationAction
           label="Czat"
           value={NavigationActions.CHAT}
           icon={<ChatIcon />}
+        />
+        <BottomNavigationAction
+          label="Szukaj"
+          value={NavigationActions.SEARCH}
+          icon={<SearchIcon />}
         />
       </BottomNavigation>
     </Hidden>

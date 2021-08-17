@@ -1,5 +1,6 @@
 import { Box, Hidden } from '@material-ui/core';
 import React from 'react';
+import ChatMobileButton from '../Chat/ChatMobileButton';
 import Notifications from '../Notifications/Notifications';
 import OnlineUsers from '../OnlineUsers/OnlineUsers';
 import SearchMobileButton from '../Search/SearchMobileButton';
@@ -21,8 +22,8 @@ const NavBarUser = () => {
           <OnlineUsers />
           <UserSettings />
           <Hidden mdUp>
+            <ChatMobileButton />
             <SearchMobileButton />
-            <UserSettings />
           </Hidden>
         </Hidden>
       </Box>

@@ -1,6 +1,6 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 
-const useChatMessagesStyles = makeStyles(() => ({
+const useChatMessagesStyles = makeStyles((theme: Theme) => ({
   wrapper: {
     position: 'relative',
     overflow: 'hidden',
