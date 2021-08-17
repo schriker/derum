@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, Hidden } from '@material-ui/core';
 import React from 'react';
 import Notifications from '../Notifications/Notifications';
 import OnlineUsers from '../OnlineUsers/OnlineUsers';
@@ -16,8 +16,14 @@ const NavBarUser = () => {
       <UserDropdown />
       <Box display="flex">
         <Notifications />
-        <OnlineUsers />
-        <UserSettings />
+        <Hidden xsDown>
+          <OnlineUsers />
+          <UserSettings />
+          <Hidden mdUp>
+            <UserSettings />
+            <UserSettings />
+          </Hidden>
+        </Hidden>
       </Box>
     </Box>
   );

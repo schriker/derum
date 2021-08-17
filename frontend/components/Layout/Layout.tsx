@@ -9,6 +9,10 @@ import Sidebar from '../Sidebar/SIdebar';
 import SidebarDrawer from '../Sidebar/SidebarDrawer';
 import defineAbilityFor from '../../casl/ability';
 import dynamic from 'next/dynamic';
+import MobileNavigation from '../MobileNavigation/MobileNavigation';
+import React from 'react';
+import OnlineUsersModal from '../OnlineUsers/OnlineUsersModal';
+import UserSettingsModal from '../UserSettings/UserSettingsModal';
 
 const Layout = ({ children, ...rest }: LayoutProps) => {
   const { data: userdata } = useMeQuery({
@@ -26,6 +30,9 @@ const Layout = ({ children, ...rest }: LayoutProps) => {
       </Box>
       <SidebarDrawer />
       <LoginModal />
+      <OnlineUsersModal />
+      <UserSettingsModal />
+      <MobileNavigation />
     </AbilityContext.Provider>
   );
 };

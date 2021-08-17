@@ -9,7 +9,7 @@ const Logo = () => {
     <Box ml={1} mt="4px">
       <Link href="/">
         <a>
-          <Image width={79} height={30} src={logo} alt="Derum" />
+          <Image layout="fixed" width={79} height={30} src={logo} alt="Derum" />
         </a>
       </Link>
     </Box>
