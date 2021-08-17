@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, Hidden } from '@material-ui/core';
 import { AbilityContext } from '../../casl/Can';
 import { useMeQuery } from '../../generated/graphql';
 import { LayoutProps } from '../../types/layout';
@@ -13,18 +13,21 @@ import MobileNavigation from '../MobileNavigation/MobileNavigation';
 import React from 'react';
 import OnlineUsersModal from '../OnlineUsers/OnlineUsersModal';
 import UserSettingsModal from '../UserSettings/UserSettingsModal';
+import useLayoutStyles from './LayoutStyles';
+import SearchModal from '../Search/SearchModal';
 
 const Layout = ({ children, ...rest }: LayoutProps) => {
   const { data: userdata } = useMeQuery({
     fetchPolicy: 'cache-only',
   });
+  const classes = useLayoutStyles();
   const ability = defineAbilityFor(userdata?.me);
 
   return (
     <AbilityContext.Provider value={ability}>
       <Header {...rest} />
       <NavBar />
-      <Box display="flex" alignItems="stretch" height="calc(100% - 60px)">
+      <Box className={classes.layout}>
         <Sidebar />
         {children}
       </Box>
@@ -32,6 +35,9 @@ const Layout = ({ children, ...rest }: LayoutProps) => {
       <LoginModal />
       <OnlineUsersModal />
       <UserSettingsModal />
+      <Hidden mdUp>
+        <SearchModal />
+      </Hidden>
       <MobileNavigation />
     </AbilityContext.Provider>
   );
