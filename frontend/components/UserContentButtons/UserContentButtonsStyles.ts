@@ -8,6 +8,10 @@ const useUserContentButtonsStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.background.paper,
     borderRadius: theme.shape.borderRadius,
     overflow: 'hidden',
+    [theme.breakpoints.down('xs')]: {
+      height: 'auto',
+      flexDirection: 'column',
+    },
   },
   button: {
     flex: '1 1',

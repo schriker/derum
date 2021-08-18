@@ -1,4 +1,4 @@
-import { Box, makeStyles, Theme } from '@material-ui/core';
+import { Box, Hidden, makeStyles, Theme } from '@material-ui/core';
 import React from 'react';
 import { openDrawerVar } from '../../lib/apolloVars';
 import { ButtonMenu } from '../Buttons/ButtonMenu';
@@ -15,8 +15,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     paddingLeft: theme.spacing(1),
     paddingRight: theme.spacing(1),
-    gridTemplateColumns: '1fr minmax(auto, 700px) 1fr',
+    gridTemplateColumns: 'auto minmax(auto, 700px) auto',
     backgroundColor: theme.palette.background.paper,
+    [theme.breakpoints.down('sm')]: {
+      gridTemplateColumns: '1fr 1fr',
+    },
   },
   menu: {
     display: 'flex',
@@ -39,7 +42,9 @@ const NavBar = () => {
         </ButtonMenu>
         <Logo />
       </Box>
-      <Search />
+      <Hidden smDown>
+        <Search />
+      </Hidden>
       <NavBarLogin />
     </Box>
   );

@@ -1,4 +1,4 @@
-import { Box, Divider } from '@material-ui/core';
+import { Box, Divider, Hidden } from '@material-ui/core';
 import numbro from 'numbro';
 import { polishPlurals } from 'polish-plurals';
 import React from 'react';
@@ -64,9 +64,11 @@ const UserContentButtons = ({
             >
               {button.text}
             </ButtonRoomContent>
-            {index < buttons.length - 1 && (
-              <Divider orientation="vertical" flexItem />
-            )}
+            <Hidden xsDown>
+              {index < buttons.length - 1 && (
+                <Divider orientation="vertical" flexItem />
+              )}
+            </Hidden>
           </Box>
         );
       })}

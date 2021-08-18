@@ -1,11 +1,14 @@
-import { Menu, MenuProps, withStyles } from '@material-ui/core';
+import { Menu, MenuProps, Theme, withStyles } from '@material-ui/core';
 import React from 'react';
 
-const Dropdown = withStyles({
+const Dropdown = withStyles((theme: Theme) => ({
   paper: {
     maxWidth: 320,
+    [theme.breakpoints.down('xs')]: {
+      maxWidth: 300,
+    },
   },
-})((props: MenuProps) => (
+}))((props: MenuProps) => (
   <Menu
     elevation={8}
     getContentAnchorEl={null}

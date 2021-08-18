@@ -9,8 +9,9 @@ import {
 const useStyles = makeStyles<Theme, { isActive: boolean }>((theme: Theme) =>
   createStyles({
     root: (props) => ({
-      flex: '1 1',
+      flex: '1 1 auto',
       fontSize: 16,
+      height: '55px',
       fontWeight: 600,
       textTransform: 'initial',
       borderRadius: 0,

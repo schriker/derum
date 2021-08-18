@@ -1,4 +1,4 @@
-import { Box, Divider } from '@material-ui/core';
+import { Box, Divider, Hidden } from '@material-ui/core';
 import React from 'react';
 import RoomAddArticle from '../RoomAddArticle/RoomAddArticle';
 import useRoomAddContentButtonsStyles from './RoomAddContentButtonsStyles';
@@ -11,7 +11,9 @@ const RoomAddContentButtons = () => {
   return (
     <Box className={classes.wrapper}>
       <RoomAddArticle />
-      <Divider orientation="vertical" flexItem />
+      <Hidden xsDown>
+        <Divider orientation="vertical" flexItem />
+      </Hidden>
       <RoomAddLink />
       {/* <Divider orientation="vertical" flexItem />
       <RoomAddVideo /> */}

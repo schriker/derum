@@ -1,7 +1,7 @@
 import React from 'react';
 import useHeaderStyles from './RoomHeaderStyles';
 import useRoomData from '../../hooks/useRoomData';
-import { Box, Typography } from '@material-ui/core';
+import { Box, Hidden, Typography } from '@material-ui/core';
 import RoomHeaderJoinButton from './RoomHeaderJoinButton';
 import numbro from 'numbro';
 import UserIcon from '../Icons/UserIcon';
@@ -27,10 +27,12 @@ const RoomHeader = () => {
       <Box className={classes.content}>
         <Box className={classes.title}>
           <Typography variant="h4">{roomData.room.name}</Typography>
-          <Typography variant="body2" color="textSecondary">
-            {numbro(roomData.room.usersNumber).format({ average: true })}
-          </Typography>
-          <UserIcon className={classes.userIcon} />
+          <Hidden xsDown>
+            <Typography variant="body2" color="textSecondary">
+              {numbro(roomData.room.usersNumber).format({ average: true })}
+            </Typography>
+            <UserIcon className={classes.userIcon} />
+          </Hidden>
         </Box>
         {roomData.room.author && (
           <UsernameWithModal data={roomData.room.author} />

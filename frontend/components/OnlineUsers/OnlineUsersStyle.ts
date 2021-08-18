@@ -6,6 +6,10 @@ const useOnlineUsersStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     marginLeft: -theme.spacing(3),
     marginRight: -theme.spacing(3),
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: -theme.spacing(2),
+      marginRight: -theme.spacing(2),
+    },
   },
   icon: {
     fontSize: 18,

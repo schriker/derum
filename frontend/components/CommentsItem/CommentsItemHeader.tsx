@@ -47,6 +47,7 @@ const CommentsItemHeader = ({
           <UsernameWithModal photo data={data.author} />
           <NextLink href={url} passHref>
             <Link
+              className={classes.time}
               variant="subtitle2"
               color="textSecondary"
               title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
@@ -57,7 +58,7 @@ const CommentsItemHeader = ({
         </Box>
         {data.parentId && <CommentsItemResponseTo data={data} />}
       </Box>
-      <Box>
+      <Box className={classes.buttons}>
         {userdata && !entryIsDeleted && setParentId && (
           <ButtonDefault
             onClick={() => setParentId(data.id === parentId ? null : data.id)}

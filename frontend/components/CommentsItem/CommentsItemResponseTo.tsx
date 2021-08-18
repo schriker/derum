@@ -84,7 +84,7 @@ const CommentsItemResponseTo = ({ data }: { data: MapedComments }) => {
           )}
         </Popover>
       )}
-      <ButtonText style={{ marginLeft: 8 }} onClick={handleClick} size="small">
+      <ButtonText className={classes.responseToButton} style={{ marginLeft: 8 }} onClick={handleClick} size="small">
         #{data.parentId}
       </ButtonText>
     </>

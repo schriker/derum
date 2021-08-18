@@ -99,7 +99,7 @@ const Notifications = () => {
         <ButtonIcon onClick={handleClick} color="secondary">
           <StyledBadge
             badgeContent={
-              !userData.me.showNotifications || !newNotificationsNumber
+              !userData?.me.showNotifications || !newNotificationsNumber
                 ? 0
                 : newNotificationsNumber.newNotificationsNumber
             }

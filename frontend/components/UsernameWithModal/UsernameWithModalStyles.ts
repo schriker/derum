@@ -9,10 +9,12 @@ const useUsernameWithModalStyles = makeStyles<Theme, { userColor: string }>(
       '&:hover': {
         opacity: 0.75,
       },
+      [theme.breakpoints.down('xs')]: {
+        marginRight: 0,
+      },
     },
     userName: (props) => ({
       color: props.userColor,
-      marginRight: '5px',
       '&:hover': {
         cursor: 'pointer',
         textDecoration: 'underline',

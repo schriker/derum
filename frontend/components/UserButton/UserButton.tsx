@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@material-ui/core';
+import { Box, Button, Hidden, Typography } from '@material-ui/core';
 import React from 'react';
 import { useMeQuery } from '../../generated/graphql';
 import ArrowDropdown from '../Icons/ArrowDropdownIcon';
@@ -29,10 +29,14 @@ const UserButton = ({
           name={data.me.displayName}
           src={data.me.photo?.url}
         />
-        <Typography style={{ marginLeft: 10 }} variant="body1">
-          {data.me.displayName}
-        </Typography>
-        <ArrowDropdown style={{ fontSize: 22, marginLeft: 3, paddingTop: 3 }} />
+        <Hidden xsDown>
+          <Typography style={{ marginLeft: 10 }} variant="body1">
+            {data.me.displayName}
+          </Typography>
+          <ArrowDropdown
+            style={{ fontSize: 22, marginLeft: 3, paddingTop: 3 }}
+          />
+        </Hidden>
       </Button>
     </Box>
   ) : null;

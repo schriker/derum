@@ -1,7 +1,9 @@
-import { Box } from '@material-ui/core';
+import { Box, Hidden } from '@material-ui/core';
 import React from 'react';
+import ChatMobileButton from '../Chat/ChatMobileButton';
 import Notifications from '../Notifications/Notifications';
 import OnlineUsers from '../OnlineUsers/OnlineUsers';
+import SearchMobileButton from '../Search/SearchMobileButton';
 import UserDropdown from '../UserDropdown/UserDropdown';
 import UserSettings from '../UserSettings/UserSettings';
 
@@ -16,8 +18,14 @@ const NavBarUser = () => {
       <UserDropdown />
       <Box display="flex">
         <Notifications />
-        <OnlineUsers />
-        <UserSettings />
+        <Hidden xsDown>
+          <OnlineUsers />
+          <UserSettings />
+          <Hidden mdUp>
+            <ChatMobileButton />
+            <SearchMobileButton />
+          </Hidden>
+        </Hidden>
       </Box>
     </Box>
   );

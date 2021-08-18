@@ -76,7 +76,7 @@ const UserDropdown = () => {
   };
 
   return (
-    <Box mr={2}>
+    <Box>
       <UserButton onClick={handleClick} />
       <Dropdown
         id="user-menu"

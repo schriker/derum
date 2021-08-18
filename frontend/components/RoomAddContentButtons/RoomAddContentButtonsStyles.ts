@@ -8,6 +8,10 @@ const useRoomAddContentButtonsStyles = makeStyles((theme: Theme) => ({
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
     borderRadius: theme.shape.borderRadius,
+    [theme.breakpoints.down('xs')]: {
+      height: 'auto',
+      flexDirection: 'column',
+    },
   },
 }));
 

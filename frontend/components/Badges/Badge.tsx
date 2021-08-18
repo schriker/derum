@@ -11,7 +11,7 @@ const Badge = ({ title, image }: BadgePropsType) => {
       title={title}
       PopperProps={{ disablePortal: true }}
     >
-      <Box mx="2px" display="flex">
+      <Box mr="5px" display="flex">
         <Image width={16} height={16} src={image} alt={title} />
       </Box>
     </DarkTooltip>

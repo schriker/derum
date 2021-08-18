@@ -38,6 +38,7 @@ const UserSettingsColor = () => {
             style={{
               backgroundColor: color,
               marginRight: 8,
+              marginBottom: 5,
               border:
                 color === data?.me.color
                   ? '5px solid white'

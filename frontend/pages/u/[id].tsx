@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core';
+import { Box, Hidden, makeStyles, Theme } from '@material-ui/core';
 import { GetServerSideProps } from 'next';
 import React, { useState } from 'react';
 import EntriesWrapper from '../../components/EntriesWrapper/EntriesWrapper';
@@ -24,10 +24,23 @@ import useUserProfileData from '../../hooks/useUserData';
 import { addApolloState, initializeApollo } from '../../lib/apolloClient';
 import Custom404 from '../404';
 
+const styles = makeStyles((theme: Theme) => ({
+  contentWrapper: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    marginTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      display: 'block',
+    },
+  },
+}));
+
 export default function User() {
   useRoomData();
   const { data } = useUserProfileData();
   const [tabIndex, setTabIndex] = useState(0);
+  const classes = styles();
 
   return data ? (
     <Layout
@@ -42,9 +55,11 @@ export default function User() {
           tabIndex={tabIndex}
           data={data}
         />
-        <Box display="flex" mt={2} pb={2} alignItems="flex-start">
+        <Box className={classes.contentWrapper}>
           <UserProfileContent tabIndex={tabIndex} />
-          <UserProfileContentCreatedRooms data={data} />
+          <Hidden smDown>
+            <UserProfileContentCreatedRooms data={data} />
+          </Hidden>
         </Box>
       </EntriesWrapper>
     </Layout>
