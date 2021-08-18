@@ -10,6 +10,9 @@ const useUserProfileContentCreatedRoomsStyles = makeStyles((theme: Theme) => ({
     width: 400,
     backgroundColor: theme.palette.background.paper,
     borderRadius: theme.shape.borderRadius,
+    [theme.breakpoints.down('md')]: {
+      width: 350,
+    },
   },
 }));
 

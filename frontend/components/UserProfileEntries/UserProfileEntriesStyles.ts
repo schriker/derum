@@ -7,6 +7,9 @@ const useUserProfileEntriesStyles = makeStyles(() => ({
     flexDirection: 'column',
     paddingBottom: 15,
     marginRight: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      marginRight: 0,
+    },
   },
 }));
 

@@ -9,6 +9,9 @@ const useUserProfileCommentsStyles = makeStyles(() => ({
     backgroundColor: theme.palette.background.paper,
     borderRadius: theme.shape.borderRadius,
     overflow: 'hidden',
+    [theme.breakpoints.down('sm')]: {
+      marginRight: 0,
+    },
   },
 }));
 

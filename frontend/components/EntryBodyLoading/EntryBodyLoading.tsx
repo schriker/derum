@@ -8,7 +8,7 @@ const EntryBodyLoading = () => {
       alignItems="center"
       display="flex"
       bgcolor="background.paper"
-      borderRadius={3}
+      borderRadius={10}
       p={2}
     >
       <Box flex="1 1 auto">

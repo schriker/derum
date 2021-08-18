@@ -29,76 +29,80 @@ const EntriesItem = ({
       : data.url;
   return (
     <Card className={classes.wrapper} elevation={0}>
-      {!data.deleted && !searchView && (
-        <EntriesItemVote
-          data={data}
-          userVote={data.userVote}
-          voteScore={data.voteScore}
-          id={data.id}
-        />
-      )}
-      {data.photo && (
-        <EntriesItemPhoto
-          link={link}
-          title={data.title}
-          fullView={fullView}
-          image={data.photo.url}
-          searchView={searchView}
-        />
-      )}
-      <CardContent className={classes.content}>
-        {data.deleted ? (
-          <Box className={classes.deleted}>
-            <Typography variant="body2" color="textSecondary">
-              Wpis został usunięty.
-            </Typography>
-            <EntriesItemActions entryData={data} />
-          </Box>
-        ) : (
-          <>
-            <NextLink href={link} passHref>
-              <Link
-                target={fullView ? '_blank' : '_self'}
-                rel="noreferrer"
-                variant="h5"
-                className={classes.title}
-                color="textPrimary"
-              >
-                {data.title}
-              </Link>
-            </NextLink>
-            {!searchView && (
-              <Box className={classes.info}>
-                {data.author && <UsernameWithModal data={data.author} />}
-                <Typography
-                  variant="subtitle2"
-                  color="textSecondary"
-                  title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
-                >
-                  {dayjs().to(dayjs(data.createdAt))}
-                </Typography>
-                {data.publisher && (
-                  <EntiresItemPublisher
-                    publisher={data.publisher}
-                    url={data.url}
-                  />
-                )}
-                <EntriesItemActions entryData={data} />
-              </Box>
-            )}
-            {!searchView && (
-              <Typography variant="body2" className={classes.description}>
-                {data.description}
-              </Typography>
-            )}
-            <Box className={classes.info}>
-              <CommentsIcon className={classes.commentIcon} />
-              <EntriesItemComments data={data} />
-              <EntriesItemRoom link={roomLink} name={data.room.name} />
-            </Box>
-          </>
+      <Box className={classes.vote}>
+        {!data.deleted && !searchView && (
+          <EntriesItemVote
+            data={data}
+            userVote={data.userVote}
+            voteScore={data.voteScore}
+            id={data.id}
+          />
         )}
-      </CardContent>
+      </Box>
+      <Box className={classes.contentWrapper}>
+        {data.photo && (
+          <EntriesItemPhoto
+            link={link}
+            title={data.title}
+            fullView={fullView}
+            image={data.photo.url}
+            searchView={searchView}
+          />
+        )}
+        <CardContent className={classes.content}>
+          {data.deleted ? (
+            <Box className={classes.deleted}>
+              <Typography variant="body2" color="textSecondary">
+                Wpis został usunięty.
+              </Typography>
+              <EntriesItemActions entryData={data} />
+            </Box>
+          ) : (
+            <>
+              <NextLink href={link} passHref>
+                <Link
+                  target={fullView ? '_blank' : '_self'}
+                  rel="noreferrer"
+                  variant="h5"
+                  className={classes.title}
+                  color="textPrimary"
+                >
+                  {data.title}
+                </Link>
+              </NextLink>
+              {!searchView && (
+                <Box className={classes.info}>
+                  {data.author && <UsernameWithModal data={data.author} />}
+                  <Typography
+                    variant="subtitle2"
+                    color="textSecondary"
+                    title={dayjs(data.createdAt).format('DD.MM.YYYY - HH:mm')}
+                  >
+                    {dayjs().to(dayjs(data.createdAt))}
+                  </Typography>
+                  {data.publisher && (
+                    <EntiresItemPublisher
+                      publisher={data.publisher}
+                      url={data.url}
+                    />
+                  )}
+                  <EntriesItemActions entryData={data} />
+                </Box>
+              )}
+              {!searchView && (
+                <Typography variant="body2" className={classes.description}>
+                  {data.description}
+                </Typography>
+              )}
+              <Box className={classes.info}>
+                <CommentsIcon className={classes.commentIcon} />
+                <EntriesItemComments data={data} />
+                <EntriesItemRoom link={roomLink} name={data.room.name} />
+              </Box>
+            </>
+          )}
+        </CardContent>
+      </Box>
     </Card>
   );
 };

@@ -2,7 +2,7 @@ import { makeStyles, Theme } from '@material-ui/core';
 
 const useEmojisPickerStyles = makeStyles((theme: Theme) => ({
   emojisWrapper: {
-    width: 340,
+    maxWidth: 340,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
     paddingTop: theme.spacing(2),
