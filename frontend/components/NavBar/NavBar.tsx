@@ -42,7 +42,7 @@ const NavBar = () => {
         </ButtonMenu>
         <Logo />
       </Box>
-      <Hidden smDown>
+      <Hidden implementation="css" smDown>
         <Search />
       </Hidden>
       <NavBarLogin />

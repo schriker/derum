@@ -1,5 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
-import { Backdrop, Box, Drawer, Hidden, Slide } from '@material-ui/core';
+import { Box, Hidden, Slide } from '@material-ui/core';
 import React from 'react';
 import useChatSubscriptions from '../../hooks/useChatSubscriptions';
 import { openChatDrawer } from '../../lib/apolloVars';
@@ -21,8 +21,9 @@ const Chat = ({ roomId }: { roomId: number }) => {
 
   return (
     <>
-      <Hidden smDown>
+      <Hidden implementation="css" smDown>
         <Box
+          height="100%"
           width={400}
           display="flex"
           mr="5px"

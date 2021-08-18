@@ -14,9 +14,10 @@ const Sidebar = () => {
   });
 
   return (
-    <Hidden mdDown>
+    <Hidden mdDown implementation="css">
       <Box
         width={60}
+        height="100%"
         pt={1}
         flexShrink={0}
         bgcolor="background.paper"
