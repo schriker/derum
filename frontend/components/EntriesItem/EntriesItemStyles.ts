@@ -49,7 +49,11 @@ const useEntriesItemStyle = makeStyles<Theme, { searchView: boolean }>(
       marginRight: 5,
     },
     commentsNumber: {
+      display: 'flex',
       marginRight: 10,
+      '& div': {
+        marginLeft: 3,
+      },
     },
     description: {
       marginTop: theme.spacing(1),

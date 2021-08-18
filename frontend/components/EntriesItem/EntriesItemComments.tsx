@@ -21,11 +21,11 @@ const EntriesItemComments = ({ data }: { data: EntryFragmentFragment }) => {
         color="textSecondary"
       >
         {data.commentsNumber ? data.commentsNumber : 0}
-        <Hidden xsDown>
+        <Hidden implementation="css" xsDown>
           {polishPlurals(
-            ' komentarz',
-            ' komentarze',
-            ' komentarzy',
+            'komentarz',
+            'komentarze',
+            'komentarzy',
             data.commentsNumber
           )}
         </Hidden>
