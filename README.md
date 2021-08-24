@@ -33,7 +33,7 @@
 
 # Design
 
-Since I work on both the design and coding part of the project design files are only for guidance and might not look exactly the same on production. I like to tweaks and change some parts of the design directly when coding.
+Since I work on both the design and coding part of the project design files are only for guidance and might not look exactly the same on production. I like to tweak and change some parts of the design directly when coding.
 
 You can find the design on figma:
 - [Figma Project](https://www.figma.com/file/4FNOok2FZt2DetpgUZVkSG/Derum) 
