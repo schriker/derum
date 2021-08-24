@@ -107,6 +107,7 @@ export type Mutation = {
   verifyUserEmail: Scalars['Boolean'];
   createResetPasswordToken: Scalars['Boolean'];
   resetUserPassword: Scalars['Boolean'];
+  changeUserPassword: Scalars['Boolean'];
   loginUserWithFacebook: Scalars['Boolean'];
   loginUserWithGoogle: Scalars['Boolean'];
   loginUserWithEmail: Scalars['Boolean'];
@@ -158,6 +159,11 @@ export type MutationCreateResetPasswordTokenArgs = {
 
 export type MutationResetUserPasswordArgs = {
   resetPasswordData: ResetPasswordData;
+};
+
+
+export type MutationChangeUserPasswordArgs = {
+  changePasswordData: NewPasswordData;
 };
 
 
@@ -339,6 +345,12 @@ export type NewLinkData = {
 export type NewMessageInput = {
   roomId: Scalars['Int'];
   body: Scalars['String'];
+};
+
+export type NewPasswordData = {
+  password: Scalars['String'];
+  newPassword: Scalars['String'];
+  newPasswordConfirmation: Scalars['String'];
 };
 
 export type NewRoomInput = {
@@ -535,7 +547,7 @@ export type Room = {
   name: Scalars['String'];
   description: Scalars['String'];
   author?: Maybe<User>;
-  usersNumber: Scalars['Int'];
+  usersNumber?: Maybe<Scalars['Int']>;
   photo?: Maybe<Photo>;
 };
 
@@ -719,6 +731,16 @@ export type ChangeUserDisplayNameMutation = (
     { __typename?: 'User' }
     & AuthorFragmentFragment
   ) }
+);
+
+export type ChangeUserPasswordMutationVariables = Exact<{
+  changePasswordData: NewPasswordData;
+}>;
+
+
+export type ChangeUserPasswordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'changeUserPassword'>
 );
 
 export type CreateArticleMutationVariables = Exact<{
@@ -1717,6 +1739,37 @@ export function useChangeUserDisplayNameMutation(baseOptions?: Apollo.MutationHo
 export type ChangeUserDisplayNameMutationHookResult = ReturnType<typeof useChangeUserDisplayNameMutation>;
 export type ChangeUserDisplayNameMutationResult = Apollo.MutationResult<ChangeUserDisplayNameMutation>;
 export type ChangeUserDisplayNameMutationOptions = Apollo.BaseMutationOptions<ChangeUserDisplayNameMutation, ChangeUserDisplayNameMutationVariables>;
+export const ChangeUserPasswordDocument = gql`
+    mutation ChangeUserPassword($changePasswordData: NewPasswordData!) {
+  changeUserPassword(changePasswordData: $changePasswordData)
+}
+    `;
+export type ChangeUserPasswordMutationFn = Apollo.MutationFunction<ChangeUserPasswordMutation, ChangeUserPasswordMutationVariables>;
+
+/**
+ * __useChangeUserPasswordMutation__
+ *
+ * To run a mutation, you first call `useChangeUserPasswordMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeUserPasswordMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeUserPasswordMutation, { data, loading, error }] = useChangeUserPasswordMutation({
+ *   variables: {
+ *      changePasswordData: // value for 'changePasswordData'
+ *   },
+ * });
+ */
+export function useChangeUserPasswordMutation(baseOptions?: Apollo.MutationHookOptions<ChangeUserPasswordMutation, ChangeUserPasswordMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeUserPasswordMutation, ChangeUserPasswordMutationVariables>(ChangeUserPasswordDocument, options);
+      }
+export type ChangeUserPasswordMutationHookResult = ReturnType<typeof useChangeUserPasswordMutation>;
+export type ChangeUserPasswordMutationResult = Apollo.MutationResult<ChangeUserPasswordMutation>;
+export type ChangeUserPasswordMutationOptions = Apollo.BaseMutationOptions<ChangeUserPasswordMutation, ChangeUserPasswordMutationVariables>;
 export const CreateArticleDocument = gql`
     mutation CreateArticle($newArticleData: NewArticleData!, $photo: Upload) {
   createArticle(newArticleData: $newArticleData, photo: $photo) {

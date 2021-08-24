@@ -209,6 +209,7 @@ type Mutation {
   verifyUserEmail(token: String!): Boolean!
   createResetPasswordToken(email: String!): Boolean!
   resetUserPassword(resetPasswordData: ResetPasswordData!): Boolean!
+  changeUserPassword(changePasswordData: NewPasswordData!): Boolean!
   loginUserWithFacebook(access_token: String!): Boolean!
   loginUserWithGoogle(access_token: String!): Boolean!
   loginUserWithEmail(email: String!, password: String!): Boolean!
@@ -253,6 +254,12 @@ input ResetPasswordData {
   token: String!
   password: String!
   passwordConfirmation: String!
+}
+
+input NewPasswordData {
+  password: String!
+  newPassword: String!
+  newPasswordConfirmation: String!
 }
 
 input NewSettingsData {

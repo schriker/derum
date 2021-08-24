@@ -25,6 +25,7 @@ import { CurrentUser } from './decorators/currentUser.decorator';
 import { EmailLoginData } from './dto/email-login.input';
 import { NewUserColor } from './dto/new-color';
 import { NewDisplayNameData } from './dto/new-display-name';
+import { NewPasswordData } from './dto/new-password.input';
 import { NewSettingsData } from './dto/new-settings';
 import { NewUserData } from './dto/new-user.input';
 import { OnlineUser } from './dto/online-user';
@@ -114,6 +115,15 @@ export class UsersResolver {
     @Args('resetPasswordData') data: ResetPasswordData,
   ): Promise<boolean> {
     return this.usersEmailLoginService.resetPassword(data);
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GQLSessionGuard)
+  changeUserPassword(
+    @Args('changePasswordData') data: NewPasswordData,
+    @CurrentUser() user: User,
+  ): Promise<boolean> {
+    return this.usersEmailLoginService.changePassword(data, user);
   }
 
   @Mutation(() => Boolean)

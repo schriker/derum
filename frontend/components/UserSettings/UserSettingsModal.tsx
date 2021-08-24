@@ -11,6 +11,7 @@ import {
   useMeQuery,
   useUpdateUserSettingsMutation,
 } from '../../generated/graphql';
+import UserSettingsPasswordForm from '../UserSettingsForm/UserSettingsPasswordForm';
 
 const UserSettingsModal = () => {
   const openModal = useReactiveVar(openSettingsModal);
@@ -68,10 +69,10 @@ const UserSettingsModal = () => {
         Zmiana nazwy
       </Typography>
       <UserSettingsNameForm />
-      {/* <Typography style={{ margin: '20px 0 10px' }} variant="h5">
-    Zmiana hasła
-  </Typography>
-  <UserSettingsPasswordForm /> */}
+      <Typography style={{ margin: '20px 0 10px' }} variant="h5">
+        Zmiana hasła
+      </Typography>
+      <UserSettingsPasswordForm />
     </Modal>
   );
 };

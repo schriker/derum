@@ -12,6 +12,7 @@ import { ERROR_MESSAGES } from 'src/consts/error-messages';
 import { EmailsService } from 'src/emails/emails.service';
 import { Repository } from 'typeorm';
 import { EmailLoginData } from '../dto/email-login.input';
+import { NewPasswordData } from '../dto/new-password.input';
 import { NewUserData } from '../dto/new-user.input';
 import { ResetPasswordData } from '../dto/reset-password.input';
 import { User } from '../entities/user.entity';
@@ -163,5 +164,17 @@ export class UsersEmailLoginService {
         },
       );
     });
+  }
+
+  async changePassword(data: NewPasswordData, session: User): Promise<boolean> {
+    const user = await this.loginWithEmail({
+      email: session.email,
+      password: data.password,
+    });
+
+    const hashedPassword = await argon2.hash(data.newPassword);
+    user.password = hashedPassword;
+    await this.usersRepository.save(user);
+    return true;
   }
 }
