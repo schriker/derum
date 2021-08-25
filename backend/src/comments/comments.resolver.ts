@@ -62,6 +62,21 @@ export class CommentsResolver {
 
   @Mutation(() => Boolean)
   @UseGuards(GQLSessionGuard)
+  async toggleCommentSticky(
+    @Args('id', { type: () => Int }) id: number,
+    @CurrentUser() session: User,
+  ): Promise<boolean> {
+    const user = await this.usersService.getByIdBasic(session.id);
+    const comment = await this.commentsService.getByIdWithRoomAuthor(id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+    if (!ability.can(Action.Update, comment.entry.room))
+      throw new ForbiddenException();
+
+    return this.commentsService.toggleSticky(id);
+  }
+
+  @Mutation(() => Boolean)
+  @UseGuards(GQLSessionGuard)
   async deleteComment(
     @Args('commentId', { type: () => Int }) commentId: number,
     @CurrentUser() session: User,

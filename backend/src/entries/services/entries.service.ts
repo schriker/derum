@@ -144,6 +144,13 @@ export class EntriesService {
     return this.entryRepository.save(entry);
   }
 
+  async toggleSticky(id: number): Promise<boolean> {
+    const entry = await this.entriesQueryService.getById(id);
+    entry.sticky = !entry.sticky;
+    await this.entryRepository.save(entry);
+    return true;
+  }
+
   async markDeleted(id: number): Promise<boolean> {
     const entry = await this.entriesQueryService.getById(id);
     entry.deleted = true;

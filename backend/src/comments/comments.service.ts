@@ -70,6 +70,13 @@ export class CommentsService {
     return newComment;
   }
 
+  async toggleSticky(id: number): Promise<boolean> {
+    const comment = await this.getById(id);
+    comment.sticky = !comment.sticky;
+    await this.commentsRespository.save(comment);
+    return true;
+  }
+
   async markDeleted(id: number): Promise<boolean> {
     const comment = await this.getById(id);
     comment.deleted = true;

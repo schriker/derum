@@ -81,6 +81,20 @@ export class EntriesResolver {
     return this.entriesService.markDeleted(id);
   }
 
+  @Mutation(() => Boolean)
+  @UseGuards(GQLSessionGuard)
+  async toggleEntrySticky(
+    @Args('id', { type: () => Int }) id: number,
+    @CurrentUser() session: User,
+  ): Promise<boolean> {
+    const user = await this.usersService.getByIdBasic(session.id);
+    const entry = await this.entriesQueryService.getById(id);
+    const ability = this.caslAbilityFactory.createForUser(user);
+    if (!ability.can(Action.Update, entry.room)) throw new ForbiddenException();
+
+    return this.entriesService.toggleSticky(id);
+  }
+
   @ResolveField()
   body(@Parent() entry: Entry) {
     if (entry.deleted) return null;
