@@ -69,6 +69,10 @@ export class Comment {
   @Column({ type: Boolean, default: false })
   deleted: boolean;
 
+  @Field(() => Boolean)
+  @Column({ type: Boolean, default: false })
+  sticky: boolean;
+
   @Column('tsvector', { select: false, default: '' })
   document: any;
 }

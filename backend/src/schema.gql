@@ -107,6 +107,7 @@ type Entry {
   voteScore: Int
   userVote: VoteValueEnum
   deleted: Boolean!
+  sticky: Boolean!
 }
 
 enum EntryType {
@@ -133,6 +134,7 @@ type Comment {
   voteScore: Int
   userVote: VoteValueEnum
   deleted: Boolean!
+  sticky: Boolean!
 }
 
 type Emoji {
