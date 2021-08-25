@@ -76,8 +76,8 @@ export class EntriesQueryService {
       parseInt(this.configService.get<string>('HOME_ROOM_ID')) === room.id;
     const whereQuery =
       offset > 0
-        ? 'entry.roomId = :roomId AND entry.id < :offset AND entry.deleted = false'
-        : 'entry.roomId = :roomId AND entry.deleted = false';
+        ? 'entry.roomId = :roomId AND entry.id < :offset AND entry.deleted = false AND entry.sticky = false'
+        : 'entry.roomId = :roomId AND entry.deleted = false AND entry.sticky = false';
 
     const homeResult = await this.entryRepository.query(
       homeEntiresNewestQuery(offset > 0 ? 'AND ("entry"."id" < $3)' : ''),
@@ -135,7 +135,8 @@ export class EntriesQueryService {
     const isHomePage =
       parseInt(this.configService.get<string>('HOME_ROOM_ID')) === room.id;
 
-    let whereQuery = 'entry.roomId = :roomId AND entry.deleted = false';
+    let whereQuery =
+      'entry.roomId = :roomId AND entry.deleted = false AND entry.sticky = false';
     if (isHomePage) {
       whereQuery = 'entry.deleted = false';
     }
@@ -168,6 +169,46 @@ export class EntriesQueryService {
       }, 'entry_userVote')
       .skip(offset)
       .take(limit > 25 ? 25 : limit)
+      .leftJoinAndSelect('entry.author', 'author')
+      .leftJoinAndSelect('entry.photo', 'photo')
+      .leftJoinAndSelect('entry.room', 'room')
+      .addGroupBy('author.id')
+      .addGroupBy('photo.id')
+      .addGroupBy('room.id')
+      .getMany();
+  }
+
+  async getSticky(roomName: string, user: User): Promise<Entry[]> {
+    const room = await this.roomsService.findOneByName(roomName);
+
+    const whereQuery =
+      'entry.roomId = :roomId AND entry.sticky = true AND entry.deleted = false';
+
+    return this.entryRepository
+      .createQueryBuilder('entry')
+      .where(whereQuery, {
+        roomId: room.id,
+      })
+      .leftJoin('entry.votes', 'votes')
+      .addSelect('COALESCE(SUM(votes.value), 0)', 'score')
+      .leftJoin('entry.comments', 'comments')
+      .addSelect('COUNT(DISTINCT(comments.id))', 'entry_commentsNumber')
+      .groupBy('entry.id')
+      .orderBy('entry.createdAt', 'DESC')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('COALESCE(SUM(value), 0)')
+          .from(Vote, 'vote')
+          .where('vote.entryId = entry.id');
+      }, 'entry_voteScore')
+      .addSelect((subQuery) => {
+        return subQuery
+          .select('value')
+          .from(Vote, 'vote')
+          .where('vote.entryId = entry.id AND vote.userId = :userId', {
+            userId: user ? user.id : null,
+          });
+      }, 'entry_userVote')
       .leftJoinAndSelect('entry.author', 'author')
       .leftJoinAndSelect('entry.photo', 'photo')
       .leftJoinAndSelect('entry.room', 'room')

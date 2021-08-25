@@ -183,9 +183,10 @@ type Query {
   initialMessages(roomId: Int!): [Message!]!
   entry(entryId: Int!): Entry!
   entries(queryData: QueryEntriesInput!): [Entry!]!
+  stickyEntries(roomName: String!): [Entry!]!
   checkLinkExsits(linkId: Int!, roomId: Int!): [Entry!]!
   metadata(url: String!): Link!
-  comments(entryId: Int!): [Comment!]!
+  comments(sticky: Boolean = false, entryId: Int!): [Comment!]!
   comment(commentId: Int!): Comment!
   newNotificationsNumber: Int!
   notifications(offsetId: Int!): [Notification!]!

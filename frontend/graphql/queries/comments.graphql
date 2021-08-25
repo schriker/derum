@@ -1,5 +1,5 @@
-query Comments($entryId: Int!) {
-  comments(entryId: $entryId) {
+query Comments($entryId: Int!, $sticky: Boolean) {
+  comments(entryId: $entryId, sticky: $sticky) {
     ...CommentFragment
   }
 }

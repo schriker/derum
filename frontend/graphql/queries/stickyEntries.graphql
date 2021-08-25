@@ -1,0 +1,5 @@
+query StickyEntries($roomName: String!) {
+  stickyEntries(roomName: $roomName) {
+    ...EntryFragment
+  }
+}

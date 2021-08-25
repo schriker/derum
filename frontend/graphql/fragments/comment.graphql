@@ -5,6 +5,7 @@ fragment CommentFragment on Comment {
   parentId
   voteScore
   userVote
+  sticky
   author {
     ...AuthorFragment
     photo {

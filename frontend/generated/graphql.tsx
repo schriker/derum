@@ -30,6 +30,7 @@ export type Comment = {
   voteScore?: Maybe<Scalars['Int']>;
   userVote?: Maybe<VoteValueEnum>;
   deleted: Scalars['Boolean'];
+  sticky: Scalars['Boolean'];
 };
 
 
@@ -63,6 +64,7 @@ export type Entry = {
   voteScore?: Maybe<Scalars['Int']>;
   userVote?: Maybe<VoteValueEnum>;
   deleted: Scalars['Boolean'];
+  sticky: Scalars['Boolean'];
 };
 
 export enum EntrySort {
@@ -127,12 +129,14 @@ export type Mutation = {
   createLink: Entry;
   createArticle: Entry;
   deleteEntry: Scalars['Boolean'];
+  toggleEntrySticky: Scalars['Boolean'];
   uploadRoomPhoto: Photo;
   uploadUserPhoto: Photo;
   deletePhoto: Scalars['Boolean'];
   vote: VoteResult;
   voteComment: VoteResult;
   createComment: Comment;
+  toggleCommentSticky: Scalars['Boolean'];
   deleteComment: Scalars['Boolean'];
   readAllNotification: Scalars['Boolean'];
   readNotification: Notification;
@@ -259,6 +263,11 @@ export type MutationDeleteEntryArgs = {
 };
 
 
+export type MutationToggleEntryStickyArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type MutationUploadRoomPhotoArgs = {
   attachment: Scalars['Upload'];
   roomId: Scalars['Int'];
@@ -289,6 +298,11 @@ export type MutationVoteCommentArgs = {
 
 export type MutationCreateCommentArgs = {
   commentData: NewCommentData;
+};
+
+
+export type MutationToggleCommentStickyArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -427,6 +441,7 @@ export type Query = {
   initialMessages: Array<Message>;
   entry: Entry;
   entries: Array<Entry>;
+  stickyEntries: Array<Entry>;
   checkLinkExsits: Array<Entry>;
   metadata: Link;
   comments: Array<Comment>;
@@ -496,6 +511,11 @@ export type QueryEntriesArgs = {
 };
 
 
+export type QueryStickyEntriesArgs = {
+  roomName: Scalars['String'];
+};
+
+
 export type QueryCheckLinkExsitsArgs = {
   linkId: Scalars['Int'];
   roomId: Scalars['Int'];
@@ -508,6 +528,7 @@ export type QueryMetadataArgs = {
 
 
 export type QueryCommentsArgs = {
+  sticky?: Maybe<Scalars['Boolean']>;
   entryId: Scalars['Int'];
 };
 
@@ -621,7 +642,7 @@ export type AuthorFragmentFragment = (
 
 export type CommentFragmentFragment = (
   { __typename?: 'Comment' }
-  & Pick<Comment, 'id' | 'createdAt' | 'body' | 'parentId' | 'voteScore' | 'userVote'>
+  & Pick<Comment, 'id' | 'createdAt' | 'body' | 'parentId' | 'voteScore' | 'userVote' | 'sticky'>
   & { author: (
     { __typename?: 'User' }
     & { photo?: Maybe<(
@@ -634,7 +655,7 @@ export type CommentFragmentFragment = (
 
 export type EntryFragmentFragment = (
   { __typename?: 'Entry' }
-  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'voteScore' | 'userVote' | 'deleted' | 'commentsNumber' | 'type'>
+  & Pick<Entry, 'id' | 'createdAt' | 'url' | 'slug' | 'title' | 'publisher' | 'description' | 'voteScore' | 'userVote' | 'deleted' | 'commentsNumber' | 'type' | 'sticky'>
   & { author?: Maybe<(
     { __typename?: 'User' }
     & AuthorFragmentFragment
@@ -1099,6 +1120,7 @@ export type CommentQuery = (
 
 export type CommentsQueryVariables = Exact<{
   entryId: Scalars['Int'];
+  sticky?: Maybe<Scalars['Boolean']>;
 }>;
 
 
@@ -1340,6 +1362,19 @@ export type SearchRoomQuery = (
   )> }
 );
 
+export type StickyEntriesQueryVariables = Exact<{
+  roomName: Scalars['String'];
+}>;
+
+
+export type StickyEntriesQuery = (
+  { __typename?: 'Query' }
+  & { stickyEntries: Array<(
+    { __typename?: 'Entry' }
+    & EntryFragmentFragment
+  )> }
+);
+
 export type UserQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1510,6 +1545,7 @@ export const CommentFragmentFragmentDoc = gql`
   parentId
   voteScore
   userVote
+  sticky
   author {
     ...AuthorFragment
     photo {
@@ -1534,6 +1570,7 @@ export const EntryFragmentFragmentDoc = gql`
   commentsNumber
   type
   deleted
+  sticky
   author {
     ...AuthorFragment
   }
@@ -2773,8 +2810,8 @@ export type CommentQueryHookResult = ReturnType<typeof useCommentQuery>;
 export type CommentLazyQueryHookResult = ReturnType<typeof useCommentLazyQuery>;
 export type CommentQueryResult = Apollo.QueryResult<CommentQuery, CommentQueryVariables>;
 export const CommentsDocument = gql`
-    query Comments($entryId: Int!) {
-  comments(entryId: $entryId) {
+    query Comments($entryId: Int!, $sticky: Boolean) {
+  comments(entryId: $entryId, sticky: $sticky) {
     ...CommentFragment
   }
 }
@@ -2793,6 +2830,7 @@ export const CommentsDocument = gql`
  * const { data, loading, error } = useCommentsQuery({
  *   variables: {
  *      entryId: // value for 'entryId'
+ *      sticky: // value for 'sticky'
  *   },
  * });
  */
@@ -3393,6 +3431,41 @@ export function useSearchRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type SearchRoomQueryHookResult = ReturnType<typeof useSearchRoomQuery>;
 export type SearchRoomLazyQueryHookResult = ReturnType<typeof useSearchRoomLazyQuery>;
 export type SearchRoomQueryResult = Apollo.QueryResult<SearchRoomQuery, SearchRoomQueryVariables>;
+export const StickyEntriesDocument = gql`
+    query StickyEntries($roomName: String!) {
+  stickyEntries(roomName: $roomName) {
+    ...EntryFragment
+  }
+}
+    ${EntryFragmentFragmentDoc}`;
+
+/**
+ * __useStickyEntriesQuery__
+ *
+ * To run a query within a React component, call `useStickyEntriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useStickyEntriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useStickyEntriesQuery({
+ *   variables: {
+ *      roomName: // value for 'roomName'
+ *   },
+ * });
+ */
+export function useStickyEntriesQuery(baseOptions: Apollo.QueryHookOptions<StickyEntriesQuery, StickyEntriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<StickyEntriesQuery, StickyEntriesQueryVariables>(StickyEntriesDocument, options);
+      }
+export function useStickyEntriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<StickyEntriesQuery, StickyEntriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<StickyEntriesQuery, StickyEntriesQueryVariables>(StickyEntriesDocument, options);
+        }
+export type StickyEntriesQueryHookResult = ReturnType<typeof useStickyEntriesQuery>;
+export type StickyEntriesLazyQueryHookResult = ReturnType<typeof useStickyEntriesLazyQuery>;
+export type StickyEntriesQueryResult = Apollo.QueryResult<StickyEntriesQuery, StickyEntriesQueryVariables>;
 export const UserDocument = gql`
     query User($id: Int!) {
   user(id: $id) {

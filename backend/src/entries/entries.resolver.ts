@@ -48,6 +48,11 @@ export class EntriesResolver {
     return this.entriesQueryService.findMany(queryData, user);
   }
 
+  @Query(() => [Entry])
+  stickyEntries(@Args('roomName') roomName: string, @CurrentUser() user: User) {
+    return this.entriesQueryService.getSticky(roomName, user);
+  }
+
   @Mutation(() => Entry)
   @UseGuards(GQLSessionGuard, DerumGuard)
   createLink(

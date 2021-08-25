@@ -31,9 +31,10 @@ export class CommentsResolver {
   @Query(() => [Comment])
   comments(
     @Args('entryId', { type: () => Int }) entryId: number,
+    @Args('sticky', { defaultValue: false }) sticky: boolean,
     @CurrentUser() session: User,
   ): Promise<Comment[]> {
-    return this.commentsService.getByEntryId(entryId, session);
+    return this.commentsService.getByEntryId(entryId, session, sticky);
   }
 
   @Query(() => Comment)

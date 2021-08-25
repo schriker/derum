@@ -9,6 +9,7 @@ export const homeEntiresNewestQuery = (
 "entry"."publisher" AS "publisher",
 "entry"."description" AS "description",
 "entry"."body" AS "body",
+"entry"."sticky" AS "sticky",
 "entry"."type" AS "type",
 "entry"."deleted" AS "deleted",
 "entry"."authorId" AS "authorId",
@@ -54,7 +55,7 @@ COUNT(DISTINCT("comments"."id")) AS "commentsNumber",
 FROM (
   SELECT DISTINCT ON (coalesce("entry"."linkId", random())) *
   FROM "entry" "entry"
-  WHERE ("entry"."deleted" = false)
+  WHERE ("entry"."deleted" = false AND "entry"."sticky" = false)
   ${offset}
   ORDER BY coalesce("entry"."linkId", random()) desc, "entry"."createdAt" asc
 ) AS "entry"
@@ -62,7 +63,7 @@ LEFT JOIN "comment" "comments" ON "comments"."entryId" = "entry"."id"
 LEFT JOIN "user" "author" ON "author"."id" = "entry"."authorId"
 LEFT JOIN "photo" "photo" ON "photo"."id" = "entry"."photoId"
 LEFT JOIN "room" "room" ON "room"."id" = "entry"."roomId"
-WHERE ("entry"."deleted" = false)
+WHERE ("entry"."deleted" = false AND "entry"."sticky" = false)
 ${offset}
 GROUP BY "entry"."id",
 "entry"."createdAt",
@@ -73,6 +74,7 @@ GROUP BY "entry"."id",
 "entry"."publisher",
 "entry"."description",
 "entry"."body",
+"entry"."sticky",
 "entry"."type",
 "entry"."deleted",
 "entry"."authorId",

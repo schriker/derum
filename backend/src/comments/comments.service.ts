@@ -84,11 +84,16 @@ export class CommentsService {
     return true;
   }
 
-  async getByEntryId(entryId: number, user: User): Promise<Comment[]> {
+  async getByEntryId(
+    entryId: number,
+    user: User,
+    sticky: boolean,
+  ): Promise<Comment[]> {
     return this.commentsRespository
       .createQueryBuilder('comment')
-      .where('comment.entryId = :entryId', {
+      .where('comment.entryId = :entryId AND comment.sticky = :sticky', {
         entryId,
+        sticky,
       })
       .leftJoin('comment.votes', 'votes')
       .addSelect('COALESCE(SUM(votes.value), 0)', 'score')

@@ -12,6 +12,7 @@ fragment EntryFragment on Entry {
   commentsNumber
   type
   deleted
+  sticky
   author {
     ...AuthorFragment
   }
