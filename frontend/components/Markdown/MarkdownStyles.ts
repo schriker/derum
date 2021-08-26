@@ -42,8 +42,9 @@ const useMarkdownStyles = makeStyles<Theme, { isComment: boolean }>(
         },
       },
       '& img': {
+        width: '100%',
         display: 'inline-block',
-        maxWidth: '100%',
+        maxWidth: '600px',
       },
     },
   })
